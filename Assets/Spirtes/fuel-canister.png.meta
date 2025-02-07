@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fuel-canister_0: 303566864525062164
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
