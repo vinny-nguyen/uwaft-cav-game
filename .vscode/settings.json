@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "uwaft-ev-game.sln"
+    "dotnet.defaultSolution": "uwaft-cav-game.sln"
 }
