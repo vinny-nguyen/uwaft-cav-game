@@ -2143,6 +2143,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1097984090}
+  - component: {fileID: 1097984091}
+  - component: {fileID: 1097984093}
+  - component: {fileID: 1097984092}
   m_Layer: 0
   m_Name: HONDACIVIC
   m_TagString: Untagged
@@ -2166,10 +2169,87 @@ Transform:
   - {fileID: 1757172462}
   - {fileID: 230569866}
   - {fileID: 2048186420}
-  - {fileID: 1225513866}
   - {fileID: 1912525725}
+  - {fileID: 1225513866}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1097984091
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097984089}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 2
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!235 &1097984092
+WheelJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097984089}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 1225513868}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0.9883995, y: -0.04869999}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_Suspension:
+    m_DampingRatio: 0.35
+    m_Frequency: 3
+    m_Angle: 90
+  m_UseMotor: 0
+  m_Motor:
+    m_MotorSpeed: 0
+    m_MaximumMotorForce: 10000
+--- !u!235 &1097984093
+WheelJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097984089}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 1912525727}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 4.9849997, y: -0.037}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_Suspension:
+    m_DampingRatio: 0.35
+    m_Frequency: 3
+    m_Angle: 90
+  m_UseMotor: 0
+  m_Motor:
+    m_MotorSpeed: 0
+    m_MaximumMotorForce: 10000
 --- !u!1 &1183044752
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,8 +2485,8 @@ Transform:
   m_GameObject: {fileID: 1225513864}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.15, z: 0.03901749}
-  m_LocalScale: {x: 0.040780697, y: 0.040780697, z: 0.040780697}
+  m_LocalPosition: {x: 0.992, y: -0.0562, z: 0.03901749}
+  m_LocalScale: {x: 0.04215368, y: 0.04215368, z: 0.04215368}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1097984090}
@@ -2421,7 +2501,7 @@ CircleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f164cc56a78333d47a38e2807a730c16, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2776,13 +2856,16 @@ PolygonCollider2D:
       - {x: -12.358146, y: -3.5761726}
       - {x: -12.182364, y: -3.590821}
       - {x: -10.614982, y: -3.590821}
-      - {x: -10.614982, y: -3.620118}
-      - {x: -10.219474, y: -3.6054695}
-      - {x: -10.204825, y: -3.5615242}
-      - {x: -10.336661, y: -3.1660163}
-      - {x: -10.365958, y: -2.9755867}
-      - {x: -10.380607, y: -2.594727}
-      - {x: -10.365958, y: -2.5800786}
+      - {x: -10.567191, y: -3.583706}
+      - {x: -10.505878, y: -3.5691385}
+      - {x: -10.475193, y: -3.5317087}
+      - {x: -10.466233, y: -3.5028646}
+      - {x: -10.462065, y: -3.4437428}
+      - {x: -10.479761, y: -3.225941}
+      - {x: -10.487846, y: -2.9558303}
+      - {x: -10.472897, y: -2.805963}
+      - {x: -10.402987, y: -2.5835376}
+      - {x: -10.379945, y: -2.5157392}
       - {x: -10.263419, y: -2.125977}
       - {x: -10.102286, y: -1.8330083}
       - {x: -9.955802, y: -1.6132817}
@@ -3124,8 +3207,8 @@ Transform:
   m_GameObject: {fileID: 1912525724}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.9630003, y: -0.14999999, z: 0.03901749}
-  m_LocalScale: {x: 0.040780697, y: 0.040780697, z: 0.040780697}
+  m_LocalPosition: {x: 4.981, y: -0.075, z: 0.03901749}
+  m_LocalScale: {x: 0.04215368, y: 0.04215368, z: 0.04215368}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1097984090}
@@ -3140,7 +3223,7 @@ CircleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f164cc56a78333d47a38e2807a730c16, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
