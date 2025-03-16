@@ -1,3 +1,22 @@
+# Ignore buggy scripts created on March 15, 2025 (Vince)
+Assets/Scripts/March 8 2025
+Assets/Scripts/CarConfiguration.cs
+Assets/Scripts/GameUIManager.cs
+Assets/Scripts/LevelConfiguration.cs
+Assets/Scripts/LevelManager.cs
+Assets/Scripts/ProgressionManager.cs
+Assets/Scripts/LevelManager.cs
+
+# .meta files
+Assets/Scripts/March 8 2025.meta
+Assets/Scripts/CarConfiguration.cs.meta
+Assets/Scripts/GameUIManager.cs.meta
+Assets/Scripts/LevelConfiguration.cs.meta
+Assets/Scripts/LevelManager.cs.meta
+Assets/Scripts/ProgressionManager.cs.meta
+Assets/Scripts/LevelManager.cs.meta
+# Assets/Scripts/SwapCar.cs
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
