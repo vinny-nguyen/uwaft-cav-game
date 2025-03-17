@@ -31,6 +31,6 @@ public class FuelController : MonoBehaviour {
 
     private void UpdateUI() {
         _Fuel_Image.fillAmount = (_Current_Fuel_Amount / _Max_Fuel_Amount); // .fillAmount for Amount of Fuel Bar shown
-        _Fuel_Image.color = _Fuel_Gradient.Evaluate(_Fuel_Image.fillAmount);
+        _Fuel_Image.color = _Fuel_Gradient.Evaluate(_Fuel_Image.fillAmount); // Gradient colours for Fuel Bar
     }
 }
