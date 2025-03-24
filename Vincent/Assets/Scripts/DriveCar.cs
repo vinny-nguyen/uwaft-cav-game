@@ -10,8 +10,10 @@ public class DriveCar: MonoBehaviour
     [SerializeField] private float _Speed = 150f;
     [SerializeField] private float _Rotation_Speed = 300f;
     private float _Move_Input;
+    public bool _Can_Control = true;
 
     private void Update() {
+        if (!_Can_Control) return; // Disables input when false
         _Move_Input = Input.GetAxisRaw("Horizontal");
     }
 

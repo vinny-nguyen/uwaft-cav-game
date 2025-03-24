@@ -16,10 +16,15 @@ public class GameManager : MonoBehaviour {
         Time.timeScale = 1f;
     }
 
-    public void GameOver() {
+    private IEnumerator DelayedGameOver() {
+        
+        yield return new WaitForSecondsRealtime(2.5f);
         _Game_Over_Canvas.SetActive(true);
         Time.timeScale = 0f;
+    }
 
+    public void GameOver() {
+        StartCoroutine(DelayedGameOver());
     }
 
     public void RestartGame() {
