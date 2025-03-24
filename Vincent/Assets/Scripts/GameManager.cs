@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private IEnumerator DelayedGameOver() {
-        
-        yield return new WaitForSecondsRealtime(2.5f);
+
+        yield return new WaitForSecondsRealtime(3.0f);
         _Game_Over_Canvas.SetActive(true);
         Time.timeScale = 0f;
     }
