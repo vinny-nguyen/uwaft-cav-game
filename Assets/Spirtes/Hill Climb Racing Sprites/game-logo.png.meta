@@ -222,7 +222,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      game-logo_0: -1941055047710487978
+      game-logo_1: 8140257348360022502
+      game-logo_2: -1107775780966384184
+      game-logo_3: -4325527818965283487
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

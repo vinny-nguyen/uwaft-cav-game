@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-terrain-alien-surface_0: 8881024626190456483
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

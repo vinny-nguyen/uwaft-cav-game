@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-arctic-cave_0: 7891944627705828787
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

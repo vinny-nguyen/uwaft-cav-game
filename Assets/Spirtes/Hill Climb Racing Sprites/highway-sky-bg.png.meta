@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      highway-sky-bg_0: -8793329956273643372
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

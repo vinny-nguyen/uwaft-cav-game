@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sky-bg-forest_0: -8371185912855447233
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

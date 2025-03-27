@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-highway_0: -434154398373062300
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-highway-ground_0: -7022470992480227985
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

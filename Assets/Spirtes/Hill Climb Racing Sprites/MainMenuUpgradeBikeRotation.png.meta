@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MainMenuUpgradeBikeRotation_0: 7989524923099502089
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

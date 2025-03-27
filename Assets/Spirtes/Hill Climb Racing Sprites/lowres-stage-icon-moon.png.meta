@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-moon_0: -3815872599254593153
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

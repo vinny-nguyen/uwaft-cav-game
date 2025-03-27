@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pedal-gas-pressed_0: -6834226558091823580
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

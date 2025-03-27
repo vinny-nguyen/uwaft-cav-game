@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-desert_0: -1568463059020681729
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -372,7 +372,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      alien-slime_0: 8776135712002266352
+      alien-slime_1: -8802177350625305746
+      alien-slime_2: -8818797418493910849
+      alien-slime_3: -4027891308694506653
+      alien-slime_4: -6772530587463687713
+      alien-slime_5: 2424679967418679243
+      alien-slime_6: 6474169778021240779
+      alien-slime_7: -4851776840832387882
+      alien-slime_8: 8392434340890085613
+      alien-slime_9: 2285273796901914643
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

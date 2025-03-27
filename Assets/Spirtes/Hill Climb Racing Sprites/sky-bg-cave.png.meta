@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sky-bg-cave_0: -4484752273208758094
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

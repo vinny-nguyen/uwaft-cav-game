@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      button-music-disabled_0: 3874956836041184621
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

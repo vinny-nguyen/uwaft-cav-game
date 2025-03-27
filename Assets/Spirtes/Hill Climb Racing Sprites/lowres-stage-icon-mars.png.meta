@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-mars_0: 1616566648430983526
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -497,7 +497,22 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      rocks-mars_0: -6862677968048946028
+      rocks-mars_1: -8587887433426435590
+      rocks-mars_10: 6985618830563378741
+      rocks-mars_11: -6997940915972364730
+      rocks-mars_12: 2501875418550906292
+      rocks-mars_13: -5410117496652829970
+      rocks-mars_14: 7544421952707449762
+      rocks-mars_2: -8105396769542919516
+      rocks-mars_3: -8079804591642831163
+      rocks-mars_4: 840464337565028935
+      rocks-mars_5: 2752930286285534619
+      rocks-mars_6: 8714300100006567526
+      rocks-mars_7: -5077619533334112470
+      rocks-mars_8: 8641281020082170631
+      rocks-mars_9: 3107862891534330750
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

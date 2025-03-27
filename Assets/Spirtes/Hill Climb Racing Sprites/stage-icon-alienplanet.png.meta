@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-alienplanet_0: 1156009879435126557
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

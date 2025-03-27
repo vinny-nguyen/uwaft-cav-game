@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-moon_0: 8113705242924579611
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

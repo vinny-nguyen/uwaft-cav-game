@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-terrain-mars-surface_0: 5042492302983751307
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

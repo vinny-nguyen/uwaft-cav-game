@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-desert-ground_0: -1882786097893840619
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

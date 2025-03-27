@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bike-driver-leg-part2_0: 5855992377559402288
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

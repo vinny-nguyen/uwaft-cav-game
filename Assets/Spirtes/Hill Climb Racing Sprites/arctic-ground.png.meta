@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      arctic-ground_0: -5084684391241676520
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

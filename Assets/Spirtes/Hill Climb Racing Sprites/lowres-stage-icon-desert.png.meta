@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-desert_0: 3529838507623934798
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

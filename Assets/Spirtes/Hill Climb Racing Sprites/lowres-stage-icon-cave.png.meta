@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-cave_0: -424896715964479991
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

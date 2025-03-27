@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-arctic_0: -6999637429427420209
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-arctic-cave_0: -2979381354496545854
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
