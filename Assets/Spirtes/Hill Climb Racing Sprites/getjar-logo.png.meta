@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      getjar-logo_0: -6206718233598997753
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

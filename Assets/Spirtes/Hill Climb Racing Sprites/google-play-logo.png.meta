@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      google-play-logo_0: -8196482057134631053
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

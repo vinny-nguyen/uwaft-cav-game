@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-meter-rpm_0: 7353399965243949111
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

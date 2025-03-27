@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-arctic-ground_0: -5465650250468914780
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

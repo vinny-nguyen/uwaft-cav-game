@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      car-icon-rallycar_0: 2377729787419860286
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

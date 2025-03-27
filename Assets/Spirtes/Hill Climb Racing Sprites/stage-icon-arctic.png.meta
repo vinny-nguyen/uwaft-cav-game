@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-arctic_0: 2559665057316090568
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sky-bg-arctic-cave_0: -3808087803068078576
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

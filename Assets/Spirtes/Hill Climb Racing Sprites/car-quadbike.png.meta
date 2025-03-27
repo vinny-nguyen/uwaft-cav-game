@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      car-quadbike_0: 3634971118833123015
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

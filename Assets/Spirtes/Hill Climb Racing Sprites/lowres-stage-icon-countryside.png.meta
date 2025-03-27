@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-countryside_0: -14560015180320041
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

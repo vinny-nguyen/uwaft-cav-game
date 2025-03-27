@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-locked_0: 4177582863571465546
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

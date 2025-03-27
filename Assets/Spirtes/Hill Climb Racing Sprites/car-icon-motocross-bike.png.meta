@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      car-icon-motocross-bike_0: -2146115131503240213
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

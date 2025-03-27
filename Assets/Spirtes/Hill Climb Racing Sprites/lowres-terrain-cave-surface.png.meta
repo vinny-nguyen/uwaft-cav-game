@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-terrain-cave-surface_0: -2917070775088205489
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

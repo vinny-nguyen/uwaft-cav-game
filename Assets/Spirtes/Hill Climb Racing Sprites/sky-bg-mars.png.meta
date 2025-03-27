@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sky-bg-mars_0: 6889549758077608275
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pedal-brake-normal_0: -4476777066623948429
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      car-icon-jeep_0: -1703466410450583450
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

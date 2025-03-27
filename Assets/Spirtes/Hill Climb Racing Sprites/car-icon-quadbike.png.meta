@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      car-icon-quadbike_0: -3650751246856967421
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

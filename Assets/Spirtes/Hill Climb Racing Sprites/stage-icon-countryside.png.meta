@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-countryside_0: 7911407533480649160
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

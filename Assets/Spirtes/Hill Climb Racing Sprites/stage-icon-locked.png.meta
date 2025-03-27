@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stage-icon-locked_0: 906716467646087518
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

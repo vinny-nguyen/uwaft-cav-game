@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-forest_0: -8938184930421999710
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

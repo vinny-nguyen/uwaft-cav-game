@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      car-snowmobile-body_0: 6519666860117297141
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

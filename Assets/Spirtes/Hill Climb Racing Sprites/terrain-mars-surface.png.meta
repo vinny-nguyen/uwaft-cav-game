@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      terrain-mars-surface_0: -6201972734697658903
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

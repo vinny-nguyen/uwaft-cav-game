@@ -322,7 +322,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fuel-warning_0: 5430776494951336936
+      fuel-warning_1: -2893538086528145774
+      fuel-warning_2: 2784777557240353319
+      fuel-warning_3: -6804371279434040636
+      fuel-warning_4: 3327216254732462748
+      fuel-warning_5: -4042856119191696723
+      fuel-warning_6: -8693928324154342037
+      fuel-warning_7: 4198393340431076318
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

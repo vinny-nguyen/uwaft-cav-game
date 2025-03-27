@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lowres-stage-icon-alienplanet_0: 4665584889649312823
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
