@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerPrefs.Save();
 
         // Load the driving scene
-        SceneManager.LoadScene("SampleScene"); // Replace with your actual scene name
+        SceneManager.LoadScene("DrivingScene"); // Replace with your actual scene name
     }
 
     void InitializeNodes()
