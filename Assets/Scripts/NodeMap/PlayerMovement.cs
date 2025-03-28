@@ -1,23 +1,29 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // Add this for scene management
-
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Path Settings")]
     public LineRenderer path;
     public Transform mainNodesParent;
+    public float speed = 3f;
+
+    [Header("UI References")]
     public PopupManager popupManager;
     public SlideManager slideManager;
     public Button showPopupButton;
-    public Button driveButton; // Assign this in Inspector
+    public Button driveButton;
 
+    [Header("Car Components")]
+    public WheelLogic frontWheel;
+    public WheelLogic rearWheel;
+    public float wheelSpinSpeed = 200f;
 
     private int currentNode = 0;
     private bool isMoving = false;
-    public float speed = 3f;
-
+    private bool isMovingForward = true; // Track movement direction
     private Transform[] mainNodes;
     private int[] mainNodeIndices;
 
@@ -26,8 +32,6 @@ public class PlayerMovement : MonoBehaviour
         InitializeNodes();
         showPopupButton.onClick.AddListener(ShowCurrentNodePopup);
         driveButton.onClick.AddListener(StartDrivingGame);
-
-        // Show both buttons at start
         showPopupButton.gameObject.SetActive(true);
         driveButton.gameObject.SetActive(true);
     }
@@ -39,23 +43,14 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.RightArrow)) MoveToNode(currentNode + 1);
             if (Input.GetKeyDown(KeyCode.LeftArrow)) MoveToNode(currentNode - 1);
         }
-    }
-
-    void StartDrivingGame()
-    {
-        // Save the current node (upgrade level) to PlayerPrefs
-        PlayerPrefs.SetInt("CurrentUpgrade", currentNode);
-        PlayerPrefs.Save();
-
-        // Load the driving scene
-        SceneManager.LoadScene("DrivingScene"); // Replace with your actual scene name
+        UpdateButtonVisibility(); // Add this line
     }
 
     void InitializeNodes()
     {
         if (mainNodesParent == null)
         {
-            UnityEngine.Debug.LogError("MainNodesParent is not assigned!");
+            Debug.LogError("MainNodesParent is not assigned!");
             return;
         }
 
@@ -76,17 +71,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (targetNode < 0 || targetNode >= mainNodes.Length || isMoving) return;
 
-        StartCoroutine(targetNode > currentNode ?
-            MoveToNextNode(targetNode) :
-            MoveToPreviousNode(targetNode));
+        // Set movement direction (forward if target > current, backward otherwise)
+        isMovingForward = targetNode > currentNode;
+        StartCoroutine(isMovingForward ? MoveToNextNode(targetNode) : MoveToPreviousNode(targetNode));
     }
 
     IEnumerator MoveToNextNode(int targetNode)
     {
         isMoving = true;
-        // Hide both buttons while moving
         showPopupButton.gameObject.SetActive(false);
         driveButton.gameObject.SetActive(false);
+        UpdateButtonVisibility();
 
         int startIndex = mainNodeIndices[currentNode];
         int targetIndex = mainNodeIndices[targetNode];
@@ -98,17 +93,17 @@ public class PlayerMovement : MonoBehaviour
 
         currentNode = targetNode;
         isMoving = false;
-        // Show both buttons when movement completes
         showPopupButton.gameObject.SetActive(true);
         driveButton.gameObject.SetActive(true);
+        UpdateButtonVisibility();
     }
 
     IEnumerator MoveToPreviousNode(int targetNode)
     {
         isMoving = true;
-        // Hide both buttons while moving
         showPopupButton.gameObject.SetActive(false);
         driveButton.gameObject.SetActive(false);
+        UpdateButtonVisibility();
 
         int startIndex = mainNodeIndices[currentNode];
         int targetIndex = mainNodeIndices[targetNode];
@@ -120,9 +115,33 @@ public class PlayerMovement : MonoBehaviour
 
         currentNode = targetNode;
         isMoving = false;
-        // Show both buttons when movement completes
         showPopupButton.gameObject.SetActive(true);
         driveButton.gameObject.SetActive(true);
+        UpdateButtonVisibility();
+    }
+
+    IEnumerator MoveAlongPath(int pointIndex)
+    {
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = path.GetPosition(pointIndex);
+        float distance = Vector3.Distance(startPos, targetPos);
+        float duration = distance / speed;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = EaseInOut(time / duration);
+            transform.position = Vector3.Lerp(startPos, targetPos, t);
+
+            // Rotate wheels based on movement direction
+            float direction = isMovingForward ? 1 : -1;
+            float rotationAmount = wheelSpinSpeed * Time.deltaTime * -direction;
+            frontWheel.transform.Rotate(Vector3.forward, rotationAmount);
+            rearWheel.transform.Rotate(Vector3.forward, rotationAmount);
+
+            yield return null;
+        }
     }
 
     void ShowCurrentNodePopup()
@@ -131,23 +150,18 @@ public class PlayerMovement : MonoBehaviour
         popupManager.ShowPopup();
     }
 
-    IEnumerator MoveAlongPath(int pointIndex)
+    public void UpdateButtonVisibility()
     {
-        Vector3 start = transform.position;
-        Vector3 target = path.GetPosition(pointIndex);
-        float distance = Vector3.Distance(start, target);
-        float duration = distance / speed;
-        float time = 0f;
+        bool shouldShowButtons = !popupManager.IsPopupOpen && !isMoving;
+        showPopupButton.gameObject.SetActive(shouldShowButtons);
+        driveButton.gameObject.SetActive(shouldShowButtons);
+    }
 
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float t = EaseInOut(time / duration);
-            transform.position = Vector3.Lerp(start, target, t);
-            yield return null;
-        }
-
-        transform.position = target;
+    void StartDrivingGame()
+    {
+        PlayerPrefs.SetInt("CurrentUpgrade", currentNode);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("DrivingScene"); // Change to your scene name
     }
 
     float EaseInOut(float t) => t * t * (3f - 2f * t);
@@ -156,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (path.positionCount == 0)
         {
-            UnityEngine.Debug.LogError("LineRenderer has no points!");
+            Debug.LogError("LineRenderer has no points!");
             return -1;
         }
 
@@ -172,7 +186,6 @@ public class PlayerMovement : MonoBehaviour
                 closestIndex = i;
             }
         }
-
         return closestIndex;
     }
 }
