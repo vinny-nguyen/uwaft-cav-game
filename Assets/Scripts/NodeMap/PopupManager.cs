@@ -36,6 +36,7 @@ public class PopupManager : MonoBehaviour
             {
                 popupCanvas.SetActive(false);
                 isPopupOpen = false;
+                FindAnyObjectByType<PlayerMovement>().UpdateButtonVisibility();
             }));
         }
     }
