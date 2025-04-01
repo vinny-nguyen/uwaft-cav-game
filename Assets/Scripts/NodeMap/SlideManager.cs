@@ -7,23 +7,23 @@ using System.Collections;
 public class SlideManager : MonoBehaviour
 {
     [Header("UI References")]
-    public TextMeshProUGUI slideTitle;  // Title will show topic name
-    public TextMeshProUGUI slideText;   // Content will show slide-specific text
+    public TextMeshProUGUI slideTitle;
+    public TextMeshProUGUI slideText;
     public Button leftArrowButton;
     public Button rightArrowButton;
-    public RectTransform slideContainer;
+    public RectTransform slideContainer; // Assign EducationPanel here
     public float slideDuration = 0.5f;
 
+    // NEW: Add Viewport reference
+    public RectTransform viewport; // Assign the Viewport panel (child of BodyPanel)
+
     [System.Serializable]
-    public class Slide
-    {
-        public string content;  // Only content changes per slide
-    }
+    public class Slide { public string content; }
 
     [System.Serializable]
     public class Topic
     {
-        public string topicName;  // This will be our consistent title
+        public string topicName;
         public List<Slide> slides = new List<Slide>();
     }
 
@@ -37,8 +37,39 @@ public class SlideManager : MonoBehaviour
         InitializeSlideContent();
         UpdateSlideContent();
 
-        leftArrowButton.onClick.AddListener(ShowPreviousSlide);
-        rightArrowButton.onClick.AddListener(ShowNextSlide);
+        leftArrowButton.onClick.AddListener(() => {
+            if (!isAnimating)
+            {
+                ShowPreviousSlide();
+                StartCoroutine(ButtonPressEffect(leftArrowButton));
+            }
+        });
+
+        rightArrowButton.onClick.AddListener(() => {
+            if (!isAnimating)
+            {
+                ShowNextSlide();
+                StartCoroutine(ButtonPressEffect(rightArrowButton));
+            }
+        });
+    }
+
+    // Moved outside of Start() as a regular class method
+    IEnumerator ButtonPressEffect(Button btn)
+    {
+        RectTransform rt = btn.GetComponent<RectTransform>();
+        Vector3 originalScale = rt.localScale;
+        float duration = 0.15f;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = EaseOutBack(time / duration);
+            rt.localScale = originalScale * Mathf.Lerp(0.9f, 1.1f, t);
+            yield return null;
+        }
+        rt.localScale = originalScale;
     }
 
     void InitializeSlideContent()
@@ -174,15 +205,33 @@ public class SlideManager : MonoBehaviour
     IEnumerator SlideAnimation(int direction)
     {
         isAnimating = true;
-        Vector2 startPos = slideContainer.anchoredPosition;
-        Vector2 endPos = startPos + new Vector2(-direction * slideContainer.rect.width, 0);
 
-        // Slide out
+        // Motion blur setup
+        CanvasGroup slideCanvas = slideContainer.GetComponent<CanvasGroup>();
+        if (slideCanvas == null) slideCanvas = slideContainer.gameObject.AddComponent<CanvasGroup>();
+
+        // Animation setup
+        float slideDistance = viewport.rect.width;
+        Vector2 startPos = Vector2.zero;
+        Vector2 endPos = new Vector2(-direction * slideDistance, 0);
+
+        // Slide out current content
         float time = 0f;
         while (time < slideDuration)
         {
             time += Time.deltaTime;
-            slideContainer.anchoredPosition = Vector2.Lerp(startPos, endPos, time / slideDuration);
+            float t = time / slideDuration;
+
+            // Motion blur effect
+            float blurAmount = Mathf.Abs(slideContainer.anchoredPosition.x) / slideDistance;
+            slideCanvas.alpha = Mathf.Lerp(1f, 0.92f, blurAmount * 0.5f);
+
+            // Replace ... with your actual Lerp parameters
+            slideContainer.anchoredPosition = Vector2.Lerp(
+                startPos,
+                endPos,
+                EaseOutCubic(t) // Using easing function for smoother motion
+            );
             yield return null;
         }
 
@@ -190,17 +239,49 @@ public class SlideManager : MonoBehaviour
         currentSlideIndex += direction;
         UpdateSlideContent();
 
-        // Slide in from opposite direction
-        slideContainer.anchoredPosition = startPos + new Vector2(direction * slideContainer.rect.width, 0);
+        // Slide in new content
+        slideContainer.anchoredPosition = new Vector2(direction * slideDistance, 0);
         time = 0f;
         while (time < slideDuration)
         {
             time += Time.deltaTime;
-            slideContainer.anchoredPosition = Vector2.Lerp(slideContainer.anchoredPosition, startPos, time / slideDuration);
+            float t = time / slideDuration;
+
+            // Motion blur effect
+            float blurAmount = Mathf.Abs(slideContainer.anchoredPosition.x) / slideDistance;
+            slideCanvas.alpha = Mathf.Lerp(1f, 0.92f, blurAmount * 0.5f);
+
+            slideContainer.anchoredPosition = Vector2.Lerp(
+                slideContainer.anchoredPosition,
+                startPos,
+                EaseOutElastic(t) // Different easing for slide-in
+            );
             yield return null;
         }
 
+        // Reset final state
+        slideCanvas.alpha = 1f;
         slideContainer.anchoredPosition = startPos;
         isAnimating = false;
+    }
+
+    float EaseOutBack(float t)
+    {
+        float c1 = 1.70158f;
+        float c3 = c1 + 1f;
+        return 1 + c3 * Mathf.Pow(t - 1, 3) + c1 * Mathf.Pow(t - 1, 2);
+    }
+
+    float EaseOutCubic(float t)
+    {
+        return 1f - Mathf.Pow(1f - t, 3);
+    }
+
+    float EaseOutElastic(float t)
+    {
+        float c4 = (2f * Mathf.PI) / 3f;
+        return t == 0f ? 0f :
+               t == 1f ? 1f :
+               Mathf.Pow(2f, -10f * t) * Mathf.Sin((t * 10f - 0.75f) * c4) + 1f;
     }
 }
