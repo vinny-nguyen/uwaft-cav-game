@@ -7,8 +7,8 @@ using System.Collections;
 public class SlideManager : MonoBehaviour
 {
     [Header("UI References")]
-    public TextMeshProUGUI slideTitle;  // Assign a TMP text element for the title
-    public TextMeshProUGUI slideText;
+    public TextMeshProUGUI slideTitle;  // Title will show topic name
+    public TextMeshProUGUI slideText;   // Content will show slide-specific text
     public Button leftArrowButton;
     public Button rightArrowButton;
     public RectTransform slideContainer;
@@ -17,14 +17,13 @@ public class SlideManager : MonoBehaviour
     [System.Serializable]
     public class Slide
     {
-        public string title;
-        public string content;
+        public string content;  // Only content changes per slide
     }
 
     [System.Serializable]
     public class Topic
     {
-        public string topicName;
+        public string topicName;  // This will be our consistent title
         public List<Slide> slides = new List<Slide>();
     }
 
@@ -49,11 +48,11 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Tires",
             slides = {
-            new Slide { title = "Primary Contact Point", content = "Tires are the only contact point between the car and the road." },
-            new Slide { title = "Low Rolling Resistance", content = "Electric car tires are designed for low rolling resistance to maximize range." },
-            new Slide { title = "Torque Handling", content = "Special compounds handle the instant torque of electric motors." },
-            new Slide { title = "Pressure Monitoring", content = "Tire pressure monitoring is crucial for efficiency and safety." },
-            new Slide { title = "Regenerative Braking Effects", content = "Regenerative braking affects tire wear patterns differently." }
+            new Slide { content = "Tires are the only contact point between the car and the road." },
+            new Slide { content = "Electric car tires are designed for low rolling resistance to maximize range." },
+            new Slide { content = "Special compounds handle the instant torque of electric motors." },
+            new Slide { content = "Tire pressure monitoring is crucial for efficiency and safety." },
+            new Slide { content = "Regenerative braking affects tire wear patterns differently." }
         }
         };
         topics.Add(tires);
@@ -63,11 +62,11 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Aerodynamics",
             slides = {
-            new Slide { title = "Range Impact", content = "Aerodynamics significantly impact an EV's range at high speeds." },
-            new Slide { title = "Underbody Design", content = "Smooth underbody panels reduce drag and improve efficiency." },
-            new Slide { title = "Active Grille Shutters", content = "Active grille shutters optimize cooling with minimal drag." },
-            new Slide { title = "Camera Mirrors", content = "Side mirrors are being replaced with cameras to reduce drag." },
-            new Slide { title = "Wind Tunnel Testing", content = "Wind tunnel testing helps perfect the car's aerodynamic profile." }
+            new Slide { content = "Aerodynamics significantly impact an EV's range at high speeds." },
+            new Slide { content = "Smooth underbody panels reduce drag and improve efficiency." },
+            new Slide { content = "Active grille shutters optimize cooling with minimal drag." },
+            new Slide { content = "Side mirrors are being replaced with cameras to reduce drag." },
+            new Slide { content = "Wind tunnel testing helps perfect the car's aerodynamic profile." }
         }
         };
         topics.Add(aero);
@@ -77,11 +76,11 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Suspension",
             slides = {
-            new Slide { title = "Battery Load Capacity", content = "EV suspensions must handle heavy battery packs." },
-            new Slide { title = "Air Suspension", content = "Air suspensions are common to adjust for varying loads." },
-            new Slide { title = "Low Center of Gravity", content = "Low center of gravity improves handling and stability." },
-            new Slide { title = "Braking System Effects", content = "Regenerative braking affects suspension tuning requirements." },
-            new Slide { title = "Adaptive Damping", content = "Some EVs feature adaptive damping for different driving modes." }
+            new Slide { content = "EV suspensions must handle heavy battery packs." },
+            new Slide { content = "Air suspensions are common to adjust for varying loads." },
+            new Slide { content = "Low center of gravity improves handling and stability." },
+            new Slide { content = "Regenerative braking affects suspension tuning requirements." },
+            new Slide { content = "Some EVs feature adaptive damping for different driving modes." }
         }
         };
         topics.Add(suspension);
@@ -91,11 +90,11 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Battery",
             slides = {
-            new Slide { title = "Lithium-Ion Standard", content = "Lithium-ion batteries are the current standard for EVs." },
-            new Slide { title = "Cooling Systems", content = "Battery cooling systems prevent overheating and maintain efficiency." },
-            new Slide { title = "Weight Consideration", content = "The battery pack is the heaviest single component in an EV." },
-            new Slide { title = "Charging Speed", content = "Charging speed decreases as the battery reaches full capacity." },
-            new Slide { title = "Management Systems", content = "Battery management systems optimize performance and longevity." }
+            new Slide { content = "Lithium-ion batteries are the current standard for EVs." },
+            new Slide { content = "Battery cooling systems prevent overheating and maintain efficiency." },
+            new Slide { content = "The battery pack is the heaviest single component in an EV." },
+            new Slide { content = "Charging speed decreases as the battery reaches full capacity." },
+            new Slide { content = "Battery management systems optimize performance and longevity." }
         }
         };
         topics.Add(battery);
@@ -105,11 +104,11 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Electric Motors",
             slides = {
-            new Slide { title = "Motor Types", content = "EVs use AC induction or permanent magnet motors." },
-            new Slide { title = "Instant Torque", content = "Motors deliver instant torque for quick acceleration." },
-            new Slide { title = "Simplified Transmissions", content = "Most EVs don't need multi-speed transmissions." },
-            new Slide { title = "High Efficiency", content = "Motor efficiency often exceeds 90%, far better than ICE engines." },
-            new Slide { title = "AWD Configurations", content = "Some EVs use multiple motors for all-wheel drive." }
+            new Slide { content = "EVs use AC induction or permanent magnet motors." },
+            new Slide { content = "Motors deliver instant torque for quick acceleration." },
+            new Slide { content = "Most EVs don't need multi-speed transmissions." },
+            new Slide { content = "Motor efficiency often exceeds 90%, far better than ICE engines." },
+            new Slide { content = "Some EVs use multiple motors for all-wheel drive." }
         }
         };
         topics.Add(motors);
@@ -119,11 +118,11 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Regenerative Braking",
             slides = {
-            new Slide { title = "Energy Conversion", content = "Converts kinetic energy back into electrical energy." },
-            new Slide { title = "Brake Wear Reduction", content = "Reduces wear on traditional friction brakes." },
-            new Slide { title = "One-Pedal Driving", content = "Can often enable 'one-pedal' driving in EVs." },
-            new Slide { title = "Battery Dependency", content = "Effectiveness depends on battery state of charge." },
-            new Slide { title = "Adjustable Levels", content = "Different regeneration levels can usually be selected." }
+            new Slide { content = "Converts kinetic energy back into electrical energy." },
+            new Slide { content = "Reduces wear on traditional friction brakes." },
+            new Slide { content = "Can often enable 'one-pedal' driving in EVs." },
+            new Slide { content = "Effectiveness depends on battery state of charge." },
+            new Slide { content = "Different regeneration levels can usually be selected." }
         }
         };
         topics.Add(regenBraking);
@@ -149,9 +148,10 @@ public class SlideManager : MonoBehaviour
         if (currentTopicIndex >= 0 && currentTopicIndex < topics.Count &&
             currentSlideIndex >= 0 && currentSlideIndex < topics[currentTopicIndex].slides.Count)
         {
-            var currentSlide = topics[currentTopicIndex].slides[currentSlideIndex];
-            slideTitle.text = currentSlide.title;
-            slideText.text = currentSlide.content;
+            // Always show the topic name as the title
+            slideTitle.text = topics[currentTopicIndex].topicName;
+            // Show slide-specific content
+            slideText.text = topics[currentTopicIndex].slides[currentSlideIndex].content;
         }
     }
 

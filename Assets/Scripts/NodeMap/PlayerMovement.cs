@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
     private int currentNode = 0;
     private bool isMoving = false;
-    private bool isMovingForward = true; // Track movement direction
+    private bool isMovingForward = true;
     private Transform[] mainNodes;
     private int[] mainNodeIndices;
 
@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.RightArrow)) MoveToNode(currentNode + 1);
             if (Input.GetKeyDown(KeyCode.LeftArrow)) MoveToNode(currentNode - 1);
         }
-        UpdateButtonVisibility(); // Add this line
+        UpdateButtonVisibility();
     }
 
     void InitializeNodes()
@@ -70,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
     void MoveToNode(int targetNode)
     {
         if (targetNode < 0 || targetNode >= mainNodes.Length || isMoving) return;
-
-        // Set movement direction (forward if target > current, backward otherwise)
         isMovingForward = targetNode > currentNode;
         StartCoroutine(isMovingForward ? MoveToNextNode(targetNode) : MoveToPreviousNode(targetNode));
     }
@@ -81,7 +79,6 @@ public class PlayerMovement : MonoBehaviour
         isMoving = true;
         showPopupButton.gameObject.SetActive(false);
         driveButton.gameObject.SetActive(false);
-        UpdateButtonVisibility();
 
         int startIndex = mainNodeIndices[currentNode];
         int targetIndex = mainNodeIndices[targetNode];
@@ -95,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
         isMoving = false;
         showPopupButton.gameObject.SetActive(true);
         driveButton.gameObject.SetActive(true);
-        UpdateButtonVisibility();
     }
 
     IEnumerator MoveToPreviousNode(int targetNode)
@@ -103,7 +99,6 @@ public class PlayerMovement : MonoBehaviour
         isMoving = true;
         showPopupButton.gameObject.SetActive(false);
         driveButton.gameObject.SetActive(false);
-        UpdateButtonVisibility();
 
         int startIndex = mainNodeIndices[currentNode];
         int targetIndex = mainNodeIndices[targetNode];
@@ -117,7 +112,6 @@ public class PlayerMovement : MonoBehaviour
         isMoving = false;
         showPopupButton.gameObject.SetActive(true);
         driveButton.gameObject.SetActive(true);
-        UpdateButtonVisibility();
     }
 
     IEnumerator MoveAlongPath(int pointIndex)
@@ -134,9 +128,9 @@ public class PlayerMovement : MonoBehaviour
             float t = EaseInOut(time / duration);
             transform.position = Vector3.Lerp(startPos, targetPos, t);
 
-            // Rotate wheels based on movement direction
-            float direction = isMovingForward ? 1 : -1;
-            float rotationAmount = wheelSpinSpeed * Time.deltaTime * -direction;
+            // Wheel rotation only (no directional rotation)
+            float wheelDirection = isMovingForward ? 1 : -1;
+            float rotationAmount = wheelSpinSpeed * Time.deltaTime * -wheelDirection;
             frontWheel.transform.Rotate(Vector3.forward, rotationAmount);
             rearWheel.transform.Rotate(Vector3.forward, rotationAmount);
 
@@ -161,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerPrefs.SetInt("CurrentUpgrade", currentNode);
         PlayerPrefs.Save();
-        SceneManager.LoadScene("DrivingScene"); // Change to your scene name
+        SceneManager.LoadScene("DrivingScene");
     }
 
     float EaseInOut(float t) => t * t * (3f - 2f * t);
