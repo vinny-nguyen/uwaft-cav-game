@@ -2213,15 +2213,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -7921649188387484213, guid: 81d3fec7a34c2d843a86bae5521b7cc4, type: 3}
   m_Color: {r: 0.7294118, g: 0.5568628, b: 0.26666668, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.53, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &537986527
@@ -2280,7 +2280,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 2.53, y: 1.02}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 2.53, y: 1.02}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -2343,7 +2343,6 @@ MonoBehaviour:
   shakeMagnitude: 0.1
   mainMenuButton: {fileID: 739351926}
   mainMenuSceneName: MainMenu
-  carUpgrade: {fileID: 0}
 --- !u!1 &538893901
 GameObject:
   m_ObjectHideFlags: 0
