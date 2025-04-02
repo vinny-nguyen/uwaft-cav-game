@@ -39,10 +39,21 @@ public class PlayerMovement : MonoBehaviour
     private int[] mainNodeIndices;
     private HashSet<int> completedNodes = new HashSet<int>();
 
+   
+    [Header("Main Menu")]
+    public Button mainMenuButton;
+    public string mainMenuSceneName = "MainMenu"; // Set this to your actual main menu scene name
+
     public int CurrentNode { get; private set; }
 
     void Start()
     {
+
+        if (mainMenuButton != null)
+        {
+            mainMenuButton.onClick.AddListener(GoToMainMenu);
+        }
+
         CurrentNode = 0;
         InitializeNodes();
         showPopupButton.onClick.AddListener(ShowCurrentNodePopup);
@@ -72,6 +83,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         UpdateButtonVisibility();
+    }
+
+    public void GoToMainMenu()
+    {
+        // Optional: Save progress if needed
+        PlayerPrefs.Save();
+
+        // Load main menu scene
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
     void TryMoveToNode(int targetNode)

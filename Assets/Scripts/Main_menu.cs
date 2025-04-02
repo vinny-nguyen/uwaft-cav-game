@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 public class Main_menu : MonoBehaviour
 {
     [Header("Scene Names")]
-    [SerializeField] private string loadingSceneName = "Loading Screen";
+    [SerializeField] private string loadingSceneName = "LoadingScreen";
     [SerializeField] private string gameSceneName = "NodeMap";
-    [SerializeField] private string settingsSceneName = "Settings Menu";
+    [SerializeField] private string settingsSceneName = "SettingsMenu";
 
     public void PlayGame()
     {
