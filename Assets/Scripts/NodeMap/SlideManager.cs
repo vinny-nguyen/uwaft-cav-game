@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
+using Image = UnityEngine.UI.Image; // Add this line
 
 public class SlideManager : MonoBehaviour
 {
@@ -17,6 +19,12 @@ public class SlideManager : MonoBehaviour
     [Header("Completion Settings")]
     public Button completeNodeButton; // Drag your button in Inspector
     public PlayerMovement playerMovement; // Reference to your player script
+
+    [Header("Slide Indicators")]
+    public Transform slideIndicatorsParent; // Empty GameObject to hold the indicators
+    public GameObject darkCirclePrefab; // Assign in Inspector
+    public GameObject lightCirclePrefab; // Assign in Inspector
+    private List<GameObject> slideIndicators = new List<GameObject>();
 
 
     // NEW: Add Viewport reference
@@ -40,6 +48,7 @@ public class SlideManager : MonoBehaviour
     void Start()
     {
         InitializeSlideContent();
+        CreateSlideIndicators(); // Add this line
         UpdateSlideContent();
 
         leftArrowButton.onClick.AddListener(() => {
@@ -185,16 +194,51 @@ public class SlideManager : MonoBehaviour
     void UpdateSlideContent()
     {
         if (currentTopicIndex >= 0 && currentTopicIndex < topics.Count &&
-       currentSlideIndex >= 0 && currentSlideIndex < topics[currentTopicIndex].slides.Count)
+            currentSlideIndex >= 0 && currentSlideIndex < topics[currentTopicIndex].slides.Count)
         {
-            // Always show the topic name as the title
+            // Update slide content
             slideTitle.text = topics[currentTopicIndex].topicName;
-            // Show slide-specific content
             slideText.text = topics[currentTopicIndex].slides[currentSlideIndex].content;
+
+            // Update indicators
+            for (int i = 0; i < slideIndicators.Count; i++)
+            {
+                bool isCurrentSlide = (i == currentSlideIndex);
+                Image indicatorImage = slideIndicators[i].GetComponent<Image>();
+
+                indicatorImage.sprite = isCurrentSlide
+                    ? lightCirclePrefab.GetComponent<Image>().sprite
+                    : darkCirclePrefab.GetComponent<Image>().sprite;
+
+                if (isCurrentSlide)
+                {
+                    StartCoroutine(PulseIndicator(slideIndicators[i].transform));
+                }
+                else
+                {
+                    slideIndicators[i].transform.localScale = Vector3.one;
+                }
+            }
 
             bool isLastSlide = currentSlideIndex == topics[currentTopicIndex].slides.Count - 1;
             completeNodeButton.gameObject.SetActive(isLastSlide);
         }
+    }
+
+    IEnumerator PulseIndicator(Transform indicator)
+    {
+        float duration = 0.5f;
+        float elapsed = 0f;
+        Vector3 originalScale = indicator.localScale;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.PingPong(elapsed * 2, 1f);
+            indicator.localScale = originalScale * (1f + t * 0.2f);
+            yield return null;
+        }
+        indicator.localScale = originalScale;
     }
 
     public void ShowNextSlide()
@@ -210,6 +254,23 @@ public class SlideManager : MonoBehaviour
         if (!isAnimating && currentSlideIndex > 0)
         {
             StartCoroutine(SlideAnimation(-1));
+        }
+    }
+
+    void CreateSlideIndicators()
+    {
+        // Clear any existing indicators
+        foreach (Transform child in slideIndicatorsParent)
+        {
+            Destroy(child.gameObject);
+        }
+        slideIndicators.Clear();
+
+        // Create new indicators
+        for (int i = 0; i < topics[currentTopicIndex].slides.Count; i++)
+        {
+            GameObject indicator = Instantiate(darkCirclePrefab, slideIndicatorsParent);
+            slideIndicators.Add(indicator);
         }
     }
 
