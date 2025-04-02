@@ -14,7 +14,6 @@ public class SlideManager : MonoBehaviour
     public RectTransform viewport;
     public Button leftArrowButton;
     public Button rightArrowButton;
-    public Button completeNodeButton;
     public PlayerMovement playerMovement;
 
     [Header("Quiz Settings")]
@@ -41,11 +40,21 @@ public class SlideManager : MonoBehaviour
     [Header("Animation Settings")]
     public float slideAnimationDuration = 0.2f;
 
+    [Header("Completion UI")]
+    public GameObject congratsPanel;
+    public TextMeshProUGUI congratsText;
+    public Button completeNodeButton; // Make sure this is assigned
+
     private int savedQuestionIndex = 0;
     private bool wasInQuizMode = false;
 
     [Header("Debug")]
     public bool enableDebugLogging = true;
+
+    private bool _returningFromContent = false;
+    private int _lastQuizQuestionIndex = 0;
+    private bool _isViewingContent = false;
+    private int _lastQuizPosition = 0;
 
     // Private state
     private List<GameObject> contentIndicators = new List<GameObject>();
@@ -83,10 +92,13 @@ public class SlideManager : MonoBehaviour
 
     void Start()
     {
+        congratsPanel.SetActive(false);
+        completeNodeButton.gameObject.SetActive(false);
         InitializeSlideContent();
         leftArrowButton.onClick.AddListener(ShowPrevious);
         rightArrowButton.onClick.AddListener(ShowNext);
         completeNodeButton.onClick.AddListener(CompleteCurrentNode);
+
     }
 
     void InitializeSlideContent()
@@ -478,19 +490,17 @@ public class SlideManager : MonoBehaviour
 
     void StartQuiz()
     {
-        if (!isAnimating)
+        if (!isAnimating && topics != null && currentTopicIndex < topics.Count)
         {
-            // Only reset if this is a fresh start (not just returning to quiz)
-            if (!wasInQuizMode || currentQuestionIndex >= topics[currentTopicIndex].quizQuestions.Count)
+            // Only reset position if starting fresh
+            if (!_isViewingContent)
             {
-                savedQuestionIndex = 0;
-                wasInQuizMode = true;
+                _lastQuizPosition = 0;
+                currentQuestionIndex = 0;
             }
             StartCoroutine(TransitionToQuiz());
         }
     }
-
-
 
     void ShowQuizQuestion()
     {
@@ -512,15 +522,16 @@ public class SlideManager : MonoBehaviour
             btn.onClick.AddListener(() => OnAnswerSelected(index));
             activeAnswerButtons.Add(btn);
         }
+
+        rightArrowButton.interactable = answeredQuestions[currentQuestionIndex];
+        UpdateNavigationButtons();
+
     }
 
     void OnAnswerSelected(int selectedIndex)
     {
-
         var question = topics[currentTopicIndex].quizQuestions[currentQuestionIndex];
         bool isCorrect = (selectedIndex == 0);
-
-        answeredQuestions[currentQuestionIndex] = true; // Mark as answer
 
         // Visual feedback
         Image buttonImg = activeAnswerButtons[selectedIndex].GetComponent<Image>();
@@ -528,12 +539,15 @@ public class SlideManager : MonoBehaviour
 
         if (isCorrect)
         {
+            answeredQuestions[currentQuestionIndex] = true;
+            _returningFromContent = false; // Clear return flag
+            UpdateNavigationButtons();
             StartCoroutine(NextQuestionAfterDelay(1f));
         }
         else
         {
-            StartCoroutine(ShakeButton(activeAnswerButtons[selectedIndex].transform));
             StartCoroutine(ResetButtonColor(buttonImg, 1f));
+            // Wrong answer - don't modify navigation state
         }
     }
 
@@ -606,43 +620,35 @@ public class SlideManager : MonoBehaviour
 
     void CompleteQuiz()
     {
-        // Check if all questions were answered
-        bool allAnswered = true;
-        for (int i = 0; i < answeredQuestions.Length; i++)
-        {
-            if (!answeredQuestions[i])
-            {
-                allAnswered = false;
-                break;
-            }
-        }
+        // Hide quiz elements
+        quizPanel.SetActive(false);
+        slideContainer.gameObject.SetActive(false);
 
-        if (allAnswered)
-        {
-            quizPanel.SetActive(false);
-            completeNodeButton.gameObject.SetActive(true);
-            wasInQuizMode = false; // Reset for next time
-        }
-        else
-        {
-            // Find first unanswered question
-            for (int i = 0; i < answeredQuestions.Length; i++)
-            {
-                if (!answeredQuestions[i])
-                {
-                    currentQuestionIndex = i;
-                    ShowQuizQuestion();
-                    break;
-                }
-            }
-        }
+        // Show congratulations
+        congratsPanel.SetActive(true);
+        congratsText.text = $"Congratulations!\nYou've completed the {topics[currentTopicIndex].topicName} module!";
+
+        // Position complete button
+        completeNodeButton.gameObject.SetActive(true);
+        completeNodeButton.transform.SetParent(congratsPanel.transform, false);
+        completeNodeButton.onClick.RemoveAllListeners();
+        completeNodeButton.onClick.AddListener(CompleteCurrentNode);
     }
 
     void CompleteCurrentNode()
     {
+        // Hide congratulations panel
+        congratsPanel.SetActive(false);
+
+        // Complete the node (existing functionality)
         playerMovement.CompleteNode(playerMovement.CurrentNode);
         FindAnyObjectByType<PopupManager>()?.ClosePopup();
+
+        // Reset quiz state
+        _isViewingContent = false;
+        _lastQuizPosition = 0;
     }
+
 
     IEnumerator PulseIndicator(Transform indicator)
     {
@@ -659,62 +665,13 @@ public class SlideManager : MonoBehaviour
         indicator.localScale = originalScale;
     }
 
-    IEnumerator TransitionToQuiz()
-    {
-        isAnimating = true;
-
-        // Slide out content
-        float duration = slideAnimationDuration;
-        float time = 0f;
-        Vector2 startPos = Vector2.zero;
-        Vector2 endPos = new Vector2(-viewport.rect.width, 0);
-
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            slideContainer.anchoredPosition = Vector2.Lerp(startPos, endPos, time / duration);
-            yield return null;
-        }
-
-        // Initialize quiz mode
-        isInQuizMode = true;
-        wasInQuizMode = true;
-
-        // Restore position if resuming, otherwise start fresh
-        currentQuestionIndex = (wasInQuizMode && savedQuestionIndex < topics[currentTopicIndex].quizQuestions.Count)
-            ? savedQuestionIndex
-            : 0;
-
-        // Initialize answer tracking if needed
-        if (answeredQuestions == null || answeredQuestions.Length != topics[currentTopicIndex].quizQuestions.Count)
-        {
-            answeredQuestions = new bool[topics[currentTopicIndex].quizQuestions.Count];
-        }
-
-        completeNodeButton.gameObject.SetActive(false);
-        slideContainer.anchoredPosition = new Vector2(viewport.rect.width, 0);
-        UpdateDisplay();
-
-        // Slide in quiz
-        time = 0f;
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            slideContainer.anchoredPosition = Vector2.Lerp(slideContainer.anchoredPosition, Vector2.zero, time / duration);
-            yield return null;
-        }
-
-        isAnimating = false;
-    }
-
     IEnumerator TransitionToContent()
     {
         isAnimating = true;
+        _lastQuizPosition = currentQuestionIndex; // Remember where we were
+        _isViewingContent = true;
 
-        // Save current quiz position
-        savedQuestionIndex = currentQuestionIndex;
-
-        // Slide out quiz
+        // Slide out animation
         float duration = slideAnimationDuration;
         float time = 0f;
         Vector2 startPos = Vector2.zero;
@@ -742,6 +699,66 @@ public class SlideManager : MonoBehaviour
             yield return null;
         }
 
+        UpdateNavigationButtons();
         isAnimating = false;
+    }
+
+    // 2. QUIZ TRANSITION (Restore position)
+    IEnumerator TransitionToQuiz()
+    {
+        isAnimating = true;
+        _isViewingContent = false;
+
+        // Slide out content
+        float duration = slideAnimationDuration;
+        float time = 0f;
+        Vector2 startPos = Vector2.zero;
+        Vector2 endPos = new Vector2(-viewport.rect.width, 0);
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            slideContainer.anchoredPosition = Vector2.Lerp(startPos, endPos, time / duration);
+            yield return null;
+        }
+
+        // Restore quiz position
+        isInQuizMode = true;
+        currentQuestionIndex = _lastQuizPosition; // Return to where we left off
+
+        // Initialize answer tracking if needed
+        if (answeredQuestions == null || answeredQuestions.Length != topics[currentTopicIndex].quizQuestions.Count)
+        {
+            answeredQuestions = new bool[topics[currentTopicIndex].quizQuestions.Count];
+        }
+
+        slideContainer.anchoredPosition = new Vector2(viewport.rect.width, 0);
+        UpdateDisplay();
+
+        // Slide in quiz
+        time = 0f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            slideContainer.anchoredPosition = Vector2.Lerp(slideContainer.anchoredPosition, Vector2.zero, time / duration);
+            yield return null;
+        }
+
+        UpdateNavigationButtons();
+        isAnimating = false;
+    }
+
+    // 3. BUTTON CONTROL (Simple rules)
+    void UpdateNavigationButtons()
+    {
+        if (leftArrowButton == null || rightArrowButton == null) return;
+
+        leftArrowButton.interactable = true;
+
+        rightArrowButton.interactable =
+            _isViewingContent || // Always enabled in content
+            (answeredQuestions != null &&
+             currentQuestionIndex < answeredQuestions.Length &&
+             answeredQuestions[currentQuestionIndex]); // Only enabled if answered
     }
 }
