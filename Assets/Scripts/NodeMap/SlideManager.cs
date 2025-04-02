@@ -14,6 +14,11 @@ public class SlideManager : MonoBehaviour
     public RectTransform slideContainer; // Assign EducationPanel here
     public float slideDuration = 0.5f;
 
+    [Header("Completion Settings")]
+    public Button completeNodeButton; // Drag your button in Inspector
+    public PlayerMovement playerMovement; // Reference to your player script
+
+
     // NEW: Add Viewport reference
     public RectTransform viewport; // Assign the Viewport panel (child of BodyPanel)
 
@@ -52,6 +57,9 @@ public class SlideManager : MonoBehaviour
                 StartCoroutine(ButtonPressEffect(rightArrowButton));
             }
         });
+
+        completeNodeButton.onClick.AddListener(CompleteCurrentNode);
+        completeNodeButton.gameObject.SetActive(false);
     }
 
     // Moved outside of Start() as a regular class method
@@ -177,12 +185,15 @@ public class SlideManager : MonoBehaviour
     void UpdateSlideContent()
     {
         if (currentTopicIndex >= 0 && currentTopicIndex < topics.Count &&
-            currentSlideIndex >= 0 && currentSlideIndex < topics[currentTopicIndex].slides.Count)
+       currentSlideIndex >= 0 && currentSlideIndex < topics[currentTopicIndex].slides.Count)
         {
             // Always show the topic name as the title
             slideTitle.text = topics[currentTopicIndex].topicName;
             // Show slide-specific content
             slideText.text = topics[currentTopicIndex].slides[currentSlideIndex].content;
+
+            bool isLastSlide = currentSlideIndex == topics[currentTopicIndex].slides.Count - 1;
+            completeNodeButton.gameObject.SetActive(isLastSlide);
         }
     }
 
@@ -199,6 +210,16 @@ public class SlideManager : MonoBehaviour
         if (!isAnimating && currentSlideIndex > 0)
         {
             StartCoroutine(SlideAnimation(-1));
+        }
+    }
+
+    public void CompleteCurrentNode()
+    {
+        if (playerMovement != null &&
+            currentSlideIndex == topics[currentTopicIndex].slides.Count - 1)
+        {
+            playerMovement.CompleteNode(playerMovement.CurrentNode); // Now using the property
+            FindAnyObjectByType<PopupManager>()?.ClosePopup();
         }
     }
 
