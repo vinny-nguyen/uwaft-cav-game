@@ -103,36 +103,53 @@ public class SlideManager : MonoBehaviour
 
     void InitializeSlideContent()
     {
-
         // Topic 1: Tires
         Topic tires = new Topic
         {
             topicName = "Tires",
             learningSlides = {
-            new Slide { content = "Tires are the only contact point between the car and the road." },
-            new Slide { content = "EV tires are designed for low rolling resistance to maximize range." },
-            new Slide { content = "Special compounds handle instant torque without wearing quickly." }
+            new Slide { content = "Tires are rubber components mounted on wheels, designed to provide traction, support, and cushioning between a vehicle and the road." },
+            new Slide { content = "Functions of Tires:\n- Traction & Grip\n- Shock Absorption\n- Load Support\n- Steering & Stability\n- Fuel Efficiency" },
+            new Slide { content = "Main types of tires:\n- All-season tires\n- Summer tires\n- Winter tires\n- Off-road tires\n- Touring Tires" },
+            new Slide { content = "Key parts of a tire:\n- Tread\n- Sipes\n- Grooves\n- Sidewall\n- Shoulder\n- Bead\n- Inner Liner\n- Belts" },
+            new Slide { content = "Rolling resistance is the force that opposes the motion of a tire as it rolls on a surface. It accounts for 5-15% of a vehicle's total energy consumption." }
         },
             quizQuestions = {
             new QuizQuestion {
-                question = "What's special about EV tires?",
+                question = "Properly inflated tires:",
                 answers = new string[] {
-                    "Optimized for weight and instant torque",
-                    "They're identical to regular tires",
-                    "Made from recycled materials",
-                    "Only need replacing every 100,000 miles"
-                },
-                
+                    "Improve efficiency and safety of the car",
+                    "Improve colour and smell of the car",
+                    "Don't matter",
+                    "Only affect winter performance"
+                }
             },
             new QuizQuestion {
-                question = "Why do EV tires have low rolling resistance?",
+                question = "How much total vehicle energy consumption does rolling resistance account for?",
                 answers = new string[] {
-                    "To maximize battery range",
-                    "To make them cheaper",
-                    "For better winter performance",
-                    "It's required by law"
-                },
-                
+                    "5-15%",
+                    "1-3%",
+                    "50-54%",
+                    "25-30%"
+                }
+            },
+            new QuizQuestion {
+                question = "What is NOT a function of tires?",
+                answers = new string[] {
+                    "Generating electricity",
+                    "Shock absorption",
+                    "Load support",
+                    "Providing traction"
+                }
+            },
+            new QuizQuestion {
+                question = "Low rolling resistance tires reduce energy use in:",
+                answers = new string[] {
+                    "Both gas and electric cars",
+                    "Only gas cars",
+                    "Only electric cars",
+                    "Neither type of car"
+                }
             }
         }
         };
@@ -144,175 +161,265 @@ public class SlideManager : MonoBehaviour
         {
             topicName = "Aerodynamics",
             learningSlides = {
-            new Slide { content = "Aerodynamics significantly impact range at high speeds." },
-            new Slide { content = "Smooth underbodies and covered wheels reduce drag." },
-            new Slide { content = "Active grille shutters optimize cooling with minimal drag." }
+            new Slide { content = "Drag is a force that pushes against something moving through air or water. We measure it using the drag coefficient (Cd)." },
+            new Slide { content = "Why aerodynamics matter for EVs:\n- Less drag means less energy needed\n- Smoother shape helps car slide through air\n- EVs can have sealed front ends for better aerodynamics" },
+            new Slide { content = "Efficiency boost:\nReducing drag by 10% can improve energy efficiency by up to 5%!" },
+            new Slide { content = "Design tricks to reduce drag:\n- Smooth, flat underbodies\n- Tapered backs\n- Smaller or hidden grilles\n- Pop-out door handles" },
+            new Slide { content = "EVs are typically more aerodynamic than gas cars because:\n- Electric motors generate less waste heat\n- Don't need large air intakes\n- Can have smoother front ends" }
         },
             quizQuestions = {
             new QuizQuestion {
-                question = "When does aerodynamics matter most?",
+                question = "What is Drag?",
                 answers = new string[] {
-                    "At highway speeds (45+ mph)",
-                    "During city driving",
-                    "Only when accelerating",
-                    "All speeds equally"
-                },
-                
+                    "A force that pushes against something moving through air",
+                    "The name of a specific part of the car",
+                    "The ability to create a car that is very light",
+                    "A type of makeup"
+                }
             },
             new QuizQuestion {
-                question = "What feature helps reduce drag while cooling?",
+                question = "The less drag, the ______ the car needs to move.",
                 answers = new string[] {
-                    "Active grille shutters",
-                    "Larger side mirrors",
-                    "Open wheel wells",
-                    "Roof-mounted spoilers"
-                },
-                
+                    "Less energy",
+                    "More energy",
+                    "More time",
+                    "More gas"
+                }
+            },
+            new QuizQuestion {
+                question = "If you reduce drag by 10%, it can improve energy efficiency by up to:",
+                answers = new string[] {
+                    "5%",
+                    "10%",
+                    "1%",
+                    "50%"
+                }
+            },
+            new QuizQuestion {
+                question = "Why are EVs typically more aerodynamic than gas cars?",
+                answers = new string[] {
+                    "They generate less waste heat and need smaller air intakes",
+                    "They are required by law to be more aerodynamic",
+                    "They are always smaller in size",
+                    "They don't have windows"
+                }
             }
         }
         };
         aero.answeredCorrectly = new List<bool>(new bool[aero.quizQuestions.Count]);
         topics.Add(aero);
 
-        // Topic 3: Battery
-        Topic battery = new Topic
+        // Topic 3: Suspension
+        Topic suspension = new Topic
         {
-            topicName = "Battery",
+            topicName = "Suspension",
             learningSlides = {
-            new Slide { content = "Lithium-ion batteries are the current standard for EVs." },
-            new Slide { content = "Battery cooling systems prevent overheating and maintain efficiency." },
-            new Slide { content = "The battery pack is the heaviest single component in an EV." }
+            new Slide { content = "Suspension connects the wheels to the vehicle and helps maintain a smooth and safe ride." },
+            new Slide { content = "Components of suspension:\n- Springs\n- Shock absorbers\n- Control arms and joints\n- Anti-roll bars" },
+            new Slide { content = "How suspension affects cars:\n1. Absorbs bumps\n2. Keeps tires on the road\n3. Supports handling and steering" },
+            new Slide { content = "Suspension affects energy use by:\n- Keeping wheels in contact with ground\n- Reducing energy loss from bouncing\n- Modern adaptive systems optimize energy use" },
+            new Slide { content = "Real-world innovations:\n- Air suspension (like in GM Cadillac)\n- Regenerative suspension systems (in development)" }
         },
             quizQuestions = {
             new QuizQuestion {
-                question = "Why do EV batteries need cooling?",
+                question = "What is suspension?",
                 answers = new string[] {
-                    "To maintain efficiency and prevent overheating",
-                    "To make them charge slower",
-                    "Because they work better when cold",
-                    "It's just for looks"
-                },
-                
+                    "The part that connects wheels to the vehicle",
+                    "A type of engine component",
+                    "A braking system",
+                    "An aerodynamic feature"
+                }
             },
             new QuizQuestion {
-                question = "What's true about EV battery weight?",
+                question = "Which component is NOT part of a suspension system?",
                 answers = new string[] {
-                    "It's the heaviest single component",
-                    "It weighs less than the seats",
-                    "Weight doesn't affect performance",
-                    "Most weight is in the casing"
-                },
-                
+                    "Steering wheel",
+                    "Springs",
+                    "Shock absorbers",
+                    "Anti-roll bars"
+                }
+            },
+            new QuizQuestion {
+                question = "Complete: Poor suspension wastes ______, making the car less ______.",
+                answers = new string[] {
+                    "Energy, efficient",
+                    "Money, expensive",
+                    "Time, valuable",
+                    "Air, aerodynamic"
+                }
+            },
+            new QuizQuestion {
+                question = "What is NOT an example of suspension innovation?",
+                answers = new string[] {
+                    "Tomatoes",
+                    "Air suspension",
+                    "Regenerative braking",
+                    "Adaptive suspension"
+                }
             }
         }
         };
-        battery.answeredCorrectly = new List<bool>(new bool[battery.quizQuestions.Count]);
-        topics.Add(battery);
+        suspension.answeredCorrectly = new List<bool>(new bool[suspension.quizQuestions.Count]);
+        topics.Add(suspension);
 
-        // Topic 4: Regenerative Braking
-        Topic regenBraking = new Topic
-        {
-            topicName = "Regenerative Braking",
-            learningSlides = {
-            new Slide { content = "Converts kinetic energy back into electrical energy." },
-            new Slide { content = "Reduces wear on traditional friction brakes." },
-            new Slide { content = "Can enable 'one-pedal' driving in EVs." }
-        },
-            quizQuestions = {
-            new QuizQuestion {
-                question = "What does regenerative braking do?",
-                answers = new string[] {
-                    "Converts motion to electricity",
-                    "Makes brakes last forever",
-                    "Only works at high speeds",
-                    "Is just for emergency stops"
-                },
-                
-            },
-            new QuizQuestion {
-                question = "What's 'one-pedal' driving?",
-                answers = new string[] {
-                    "Using accelerator to both speed up and slow down",
-                    "A special type of brake pedal",
-                    "Only using the left foot",
-                    "A racing technique"
-                },
-                
-            }
-        }
-        };
-        regenBraking.answeredCorrectly = new List<bool>(new bool[regenBraking.quizQuestions.Count]);
-        topics.Add(regenBraking);
-
-        // Topic 5: Electric Motors
+        // Topic 4: Electric Motors
         Topic motors = new Topic
         {
             topicName = "Electric Motors",
             learningSlides = {
-            new Slide { content = "EVs use AC induction or permanent magnet motors." },
-            new Slide { content = "Motors deliver instant torque for quick acceleration." },
-            new Slide { content = "Most EVs don't need multi-speed transmissions." }
+            new Slide { content = "An electric motor turns electricity into motion by using electromagnetism." },
+            new Slide { content = "How it works:\n1. Electricity flows into motor\n2. Creates magnetic field\n3. Interacts with magnets\n4. Causes rotor to spin\n5. Turns wheels directly" },
+            new Slide { content = "Efficiency comparison:\n- Gas engines: 25-30% efficient\n- Electric motors: 90-95% efficient" },
+            new Slide { content = "Torque is a measure of rotational force. EVs provide instant torque, resulting in quick acceleration from stop." },
+            new Slide { content = "Key advantages:\n- Much more efficient than gas engines\n- Instant torque for quick acceleration\n- Zero emissions" }
         },
             quizQuestions = {
             new QuizQuestion {
-                question = "Why don't most EVs need multi-speed transmissions?",
+                question = "What is an electric motor?",
                 answers = new string[] {
-                    "Electric motors have wide power bands",
-                    "They're too expensive",
-                    "EVs don't go fast enough",
-                    "It's illegal"
-                },
-                
+                    "A machine that turns electricity into motion",
+                    "A type of battery",
+                    "A suspension component",
+                    "A braking system"
+                }
             },
             new QuizQuestion {
-                question = "What's special about EV torque?",
+                question = "Which statement about electromagnetism is FALSE?",
                 answers = new string[] {
-                    "Available instantly from zero RPM",
-                    "Only at high speeds",
-                    "Less than gas engines",
-                    "Hard to control"
-                },
-                
+                    "Electric vehicles don't need electromagnetism",
+                    "Moving electric charges create magnetic fields",
+                    "Changing magnetic fields can create electric current",
+                    "It's the interaction between electricity and magnetism"
+                }
+            },
+            new QuizQuestion {
+                question = "Complete: Gas engines are 20-30% efficient, electric motors are ______.",
+                answers = new string[] {
+                    "90-95% efficient",
+                    "10% efficient",
+                    "50% efficient",
+                    "5% efficient"
+                }
+            },
+            new QuizQuestion {
+                question = "What is torque?",
+                answers = new string[] {
+                    "A measure of rotational force",
+                    "How fast a car can go from stop to speed",
+                    "When there is no twisting",
+                    "A type of energy"
+                }
             }
         }
         };
         motors.answeredCorrectly = new List<bool>(new bool[motors.quizQuestions.Count]);
         topics.Add(motors);
 
-        // Topic 6: Charging
-        Topic charging = new Topic
+        // Topic 5: Battery Pack
+        Topic battery = new Topic
         {
-            topicName = "Charging",
+            topicName = "Battery Pack",
             learningSlides = {
-            new Slide { content = "Level 1 charging uses standard 120V outlets." },
-            new Slide { content = "Level 2 chargers (240V) are most common for home use." },
-            new Slide { content = "DC fast charging can charge to 80% in 30-45 minutes." }
+            new Slide { content = "A battery pack is the EV's energy source, storing electric energy to power the motor." },
+            new Slide { content = "Inside a battery pack:\n- Cells (small individual batteries)\n- Modules (groups of cells)\n- Cooling system\n- Wiring\n- Protective casing" },
+            new Slide { content = "How EV batteries work:\n- Use lithium ions storing chemical potential energy\n- Energy measured in kilowatt-hours (kWh)" },
+            new Slide { content = "Charging levels:\n1. Level 1 (120V) - slowest (40+ hours)\n2. Level 2 (240V) - faster (4-12 hours)\n3. Level 3 (400V+) - fastest (20-40 mins)" },
+            new Slide { content = "Battery degradation:\n- Lose 2-3% capacity per year\n- Last 10-15 years\n- Can be recycled for materials" }
         },
             quizQuestions = {
             new QuizQuestion {
-                question = "What's true about DC fast charging?",
+                question = "What is a battery pack?",
                 answers = new string[] {
-                    "Charges to 80% in 30-45 minutes",
-                    "Can safely charge to 100% quickly",
-                    "Works on all EVs the same",
-                    "Is the cheapest option"
-                },
-                
+                    "The EV's energy source",
+                    "A storage for wheels",
+                    "The gas tank",
+                    "The suspension"
+                }
             },
             new QuizQuestion {
-                question = "Which charger type is best for home use?",
+                question = "Which statement is FALSE?",
                 answers = new string[] {
-                    "Level 2 (240V)",
-                    "Level 1 (120V)",
-                    "DC fast charging",
-                    "Wireless charging"
-                },
-                
+                    "Electric vehicles don't need battery packs",
+                    "Battery packs contain cells and modules",
+                    "Packs include cooling systems",
+                    "You can think of it like LEGO blocks"
+                }
+            },
+            new QuizQuestion {
+                question = "How is energy measured?",
+                answers = new string[] {
+                    "Kilowatt-hours (kWh)",
+                    "Joules",
+                    "Volts",
+                    "Amps"
+                }
+            },
+            new QuizQuestion {
+                question = "How many charging levels are there?",
+                answers = new string[] {
+                    "3",
+                    "1",
+                    "2",
+                    "4"
+                }
             }
         }
         };
-        charging.answeredCorrectly = new List<bool>(new bool[charging.quizQuestions.Count]);
-        topics.Add(charging);
+        battery.answeredCorrectly = new List<bool>(new bool[battery.quizQuestions.Count]);
+        topics.Add(battery);
+
+        // Topic 6: Regenerative Braking
+        Topic regenBraking = new Topic
+        {
+            topicName = "Regenerative Braking",
+            learningSlides = {
+            new Slide { content = "Regenerative braking captures energy when slowing down and sends it back to the battery instead of wasting it as heat." },
+            new Slide { content = "How it works:\n1. Electric motor runs in reverse\n2. Acts like a generator\n3. Turns kinetic energy into electrical energy\n4. Stores energy in battery" },
+            new Slide { content = "Energy recovery:\n- Can recover up to 70% of braking energy\n- Increases range by 20-30% in city driving" },
+            new Slide { content = "One-pedal driving:\n- Lets you accelerate and slow with just accelerator pedal\n- Reduces brake wear\n- Often comes to full stop without brakes" },
+            new Slide { content = "Key benefits:\n- Extends range\n- Reduces brake wear\n- Important for maximizing energy efficiency" }
+        },
+            quizQuestions = {
+            new QuizQuestion {
+                question = "What is regenerative braking?",
+                answers = new string[] {
+                    "A system that captures braking energy for the battery",
+                    "Constant braking",
+                    "A type of drag",
+                    "Only for combustion cars"
+                }
+            },
+            new QuizQuestion {
+                question = "How much energy can be recovered?",
+                answers = new string[] {
+                    "Up to 70%",
+                    "Up to 10%",
+                    "None",
+                    "Up to 50%"
+                }
+            },
+            new QuizQuestion {
+                question = "What is NOT true about one-pedal driving?",
+                answers = new string[] {
+                    "It uses two pedals",
+                    "It reduces brake wear",
+                    "It lets you slow with just accelerator",
+                    "It can bring car to full stop"
+                }
+            },
+            new QuizQuestion {
+                question = "Which statement is FALSE?",
+                answers = new string[] {
+                    "EVs use more gas",
+                    "Regenerative braking converts energy to battery power",
+                    "EVs use it to extend range",
+                    "Controlled braking maximizes efficiency"
+                }
+            }
+        }
+        };
+        regenBraking.answeredCorrectly = new List<bool>(new bool[regenBraking.quizQuestions.Count]);
+        topics.Add(regenBraking);
 
         CreateIndicators();
         UpdateDisplay();
