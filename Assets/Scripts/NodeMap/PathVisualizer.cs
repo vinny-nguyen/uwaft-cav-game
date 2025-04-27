@@ -24,44 +24,63 @@ public class SplineCurvedLine : MonoBehaviour
     }
 
     void OnDrawGizmos()
+{
+    // Only draw Gizmos if the flag is enabled
+    if (!showGizmos)
     {
-        // Only draw Gizmos if the flag is enabled
-        if (!showGizmos)
-        {
-            return;
-        }
+        return;
+    }
 
-        // Initialize arrays if they are not already initialized
-        if (mainNodes == null || controlPoints == null)
-        {
-            InitializeNodesAndControlPoints();
-        }
+    // Initialize arrays if they are not already initialized
+    if (mainNodes == null || controlPoints == null)
+    {
+        InitializeNodesAndControlPoints();
+    }
 
-        // Draw the curved path in the Scene view
-        if (mainNodes != null && controlPoints != null)
+    // Draw the curved path in the Scene view
+    if (mainNodes != null && controlPoints != null)
+    {
+        Transform[] allNodes = CombineNodesAndControlPoints(mainNodes, controlPoints);
+        if (allNodes != null && allNodes.Length >= 2)
         {
-            Transform[] allNodes = CombineNodesAndControlPoints(mainNodes, controlPoints);
-            if (allNodes != null && allNodes.Length >= 2)
+            for (int i = 0; i < allNodes.Length - 1; i++)
             {
-                for (int i = 0; i < allNodes.Length - 1; i++)
-                {
-                    Vector3 p0 = i == 0 ? allNodes[i].position : allNodes[i - 1].position;
-                    Vector3 p1 = allNodes[i].position;
-                    Vector3 p2 = allNodes[i + 1].position;
-                    Vector3 p3 = i == allNodes.Length - 2 ? allNodes[i + 1].position : allNodes[i + 2].position;
+                Vector3 p0 = i == 0 ? allNodes[i].position : allNodes[i - 1].position;
+                Vector3 p1 = allNodes[i].position;
+                Vector3 p2 = allNodes[i + 1].position;
+                Vector3 p3 = i == allNodes.Length - 2 ? allNodes[i + 1].position : allNodes[i + 2].position;
 
-                    Vector3 previousPoint = p1;
-                    for (int j = 1; j <= curveResolution; j++)
+                Vector3 previousPoint = p1;
+                for (int j = 1; j <= curveResolution; j++)
+                {
+                    float t = j / (float)curveResolution;
+                    Vector3 point = CalculateCatmullRomPoint(p0, p1, p2, p3, t);
+                    Gizmos.DrawLine(previousPoint, point);
+                    previousPoint = point;
+                }
+            }
+        }
+
+        // Draw control points as small red spheres
+        Gizmos.color = Color.red;
+        if (controlPoints != null)
+        {
+            foreach (var segment in controlPoints)
+            {
+                if (segment != null)
+                {
+                    foreach (var controlPoint in segment)
                     {
-                        float t = j / (float)curveResolution;
-                        Vector3 point = CalculateCatmullRomPoint(p0, p1, p2, p3, t);
-                        Gizmos.DrawLine(previousPoint, point);
-                        previousPoint = point;
+                        if (controlPoint != null)
+                        {
+                            Gizmos.DrawSphere(controlPoint.position, 0.1f); // Adjust the size (0.1f) as needed
+                        }
                     }
                 }
             }
         }
     }
+}
 
     void GenerateCurvedLine()
     {
