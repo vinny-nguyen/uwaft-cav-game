@@ -192,25 +192,33 @@ public class PlayerSplineMovement : MonoBehaviour
             if (marker != null)
             {
                 SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
+
                 if (sr != null && activeNodeSprites[nodeIndex] != null)
                 {
                     StartCoroutine(AnimateToActive(sr, activeNodeSprites[nodeIndex]));
                     currentActiveNode = nodeIndex;
+                }
+
+                if (handler != null)
+                {
+                    handler.SetClickable(true); // 🔥 Make node clickable
                 }
             }
         }
     }
 
 
+
     private IEnumerator AnimateToActive(SpriteRenderer sr, Sprite activeSprite)
     {
-        float popUpDuration = 0.15f;   // Faster pop up
-        float popDownDuration = 0.25f; // Slower settle back
+        float popUpDuration = 0.1f;   // Faster pop up
+        float popDownDuration = 0.15f; // Slower settle back
         float t = 0f;
 
         Transform markerTransform = sr.transform;
         Vector3 originalScale = markerTransform.localScale;
-        Vector3 poppedScale = originalScale * 1.2f;
+        Vector3 poppedScale = originalScale * 1.1f;
 
         // Fast Pop Up
         while (t < popUpDuration)
@@ -240,13 +248,13 @@ public class PlayerSplineMovement : MonoBehaviour
 
     private IEnumerator AnimateToNormal(SpriteRenderer sr, Sprite normalSprite)
     {
-        float popUpDuration = 0.15f;
-        float popDownDuration = 0.25f;
+        float popUpDuration = 0.1f;
+        float popDownDuration = 0.15f;
         float t = 0f;
 
         Transform markerTransform = sr.transform;
         Vector3 originalScale = markerTransform.localScale;
-        Vector3 poppedScale = originalScale * 1.2f;
+        Vector3 poppedScale = originalScale * 1.1f;
 
         // Fast Pop Up
         while (t < popUpDuration)
