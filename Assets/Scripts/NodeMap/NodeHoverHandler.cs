@@ -15,6 +15,7 @@ public class NodeHoverHandler : MonoBehaviour
     private bool isHovered = false;
     private bool isClickable = false;
     private SpriteRenderer spriteRenderer;
+    public int nodeIndex;
 
     private void Start()
     {
@@ -61,18 +62,13 @@ public class NodeHoverHandler : MonoBehaviour
     {
         if (!isClickable)
         {
-            // 🔥 Play shake animation if inactive
             StartCoroutine(ShakeNode());
             return;
         }
 
         if (PopupManager.Instance != null)
         {
-            PopupManager.Instance.OpenPopup();
-        }
-        else
-        {
-            Debug.LogWarning("PopupManager instance not found!");
+            PopupManager.Instance.OpenPopupForNode(nodeIndex);
         }
     }
 
