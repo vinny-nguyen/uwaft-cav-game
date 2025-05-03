@@ -114,6 +114,7 @@ public class PopupManager : MonoBehaviour
 
         GenerateSlideIndicators();
 
+        lastSlideIndex = -1;
         currentSlideIndex = 0;
         ShowSlide(currentSlideIndex);
         StartCoroutine(AnimatePopupOpen());
