@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 
 public class PopupManager : MonoBehaviour
 {
@@ -18,7 +20,7 @@ public class PopupManager : MonoBehaviour
     [SerializeField] private List<string> nodeHeaders; // Fill in from Inspector
 
     [Header("Slide Container")]
-    [SerializeField] private Transform slidesParent; // Points to "Slides" container in hierarchy
+    // [SerializeField] private Transform slidesParent; // Points to "Slides" container in hierarchy
 
     [Header("Slide Indicators")]
     [SerializeField] private GameObject slideDotPrefab;
@@ -30,6 +32,17 @@ public class PopupManager : MonoBehaviour
     [SerializeField] private GameObject finalSlidePrefab;
     [SerializeField] private GameObject finalSlideObject; // assign in Inspector
 
+    private QuizData quizData;
+    private List<QuizQuestion> currentQuizQuestions;
+    private int currentQuizQuestionIndex = 0;
+    [SerializeField] private TMP_Text questionText;
+    [SerializeField] private Button[] optionButtons;
+    [SerializeField] private GameObject slidesParent;
+    [SerializeField] private GameObject quizPanel;
+    [SerializeField] private GameObject failurePanel;
+
+    private HashSet<int> unlockedQuizQuestions = new HashSet<int>();
+
     private List<GameObject> currentNodeSlides = new List<GameObject>();
     private List<GameObject> spawnedDots = new List<GameObject>();
     private int currentSlideIndex = 0;
@@ -38,6 +51,7 @@ public class PopupManager : MonoBehaviour
 
     private Color enabledColor = Color.white;
     private Color disabledColor = new Color(1f, 1f, 1f, 0.4f);
+    private bool inQuizMode = false;
 
     private void Awake()
     {
@@ -49,6 +63,7 @@ public class PopupManager : MonoBehaviour
         Instance = this;
 
         gameObject.SetActive(true);
+        LoadQuizData();
     }
 
     private void Start()
@@ -76,7 +91,7 @@ public class PopupManager : MonoBehaviour
         currentNodeSlides.Clear();
 
         // Find node container
-        Transform nodeContainer = slidesParent.Find($"Node{nodeIndex}");
+        Transform nodeContainer = slidesParent.transform.Find($"Node{nodeIndex}");
         if (nodeContainer == null)
         {
             Debug.LogWarning($"Node{nodeIndex} slides not found!");
@@ -112,21 +127,12 @@ public class PopupManager : MonoBehaviour
             ? nodeHeaders[nodeIndex - 1]
             : $"Node {nodeIndex}";
 
-        GenerateSlideIndicators();
+        GenerateSlideIndicators(currentNodeSlides.Count);
 
         lastSlideIndex = -1;
         currentSlideIndex = 0;
         ShowSlide(currentSlideIndex);
         StartCoroutine(AnimatePopupOpen());
-    }
-
-
-    private void StartQuizForNode(int nodeIndex)
-    {
-        Debug.Log($"Starting quiz for Node {nodeIndex}");
-
-        // TODO: Replace this with your actual quiz system call
-        // e.g., QuizManager.Instance.StartQuiz(nodeIndex);
     }
 
     public void ClosePopup()
@@ -181,7 +187,7 @@ public class PopupManager : MonoBehaviour
             StartCoroutine(AnimateSlideIn(activeSlide));
         }
 
-        UpdateSlideIndicators();
+        UpdateSlideIndicators(currentSlideIndex);
         UpdateArrows();
 
         lastSlideIndex = index;
@@ -190,37 +196,74 @@ public class PopupManager : MonoBehaviour
 
     private void NextSlide()
     {
-        if (currentSlideIndex < currentNodeSlides.Count - 1)
+        if (inQuizMode)
         {
-            currentSlideIndex++;
-            ShowSlide(currentSlideIndex);
-            StartCoroutine(BounceButton(rightArrowButton.transform));
+            if (currentQuizQuestionIndex < currentQuizQuestions.Count - 1)
+            {
+                currentQuizQuestionIndex++;
+                LoadQuizQuestion(currentQuizQuestionIndex);
+                UpdateSlideIndicators(currentQuizQuestionIndex);
+                StartCoroutine(BounceButton(rightArrowButton.transform));
+            }
+        }
+        else
+        {
+            if (currentSlideIndex < currentNodeSlides.Count - 1)
+            {
+                currentSlideIndex++;
+                ShowSlide(currentSlideIndex);
+                StartCoroutine(BounceButton(rightArrowButton.transform));
+            }
         }
     }
 
     private void PreviousSlide()
     {
-        if (currentSlideIndex > 0)
+        if (inQuizMode)
         {
-            currentSlideIndex--;
-            ShowSlide(currentSlideIndex);
-            StartCoroutine(BounceButton(leftArrowButton.transform));
+            if (currentQuizQuestionIndex > 0)
+            {
+                currentQuizQuestionIndex--;
+                LoadQuizQuestion(currentQuizQuestionIndex);
+                UpdateSlideIndicators(currentQuizQuestionIndex);
+                StartCoroutine(BounceButton(leftArrowButton.transform));
+            }
+        }
+        else
+        {
+            if (currentSlideIndex > 0)
+            {
+                currentSlideIndex--;
+                ShowSlide(currentSlideIndex);
+                StartCoroutine(BounceButton(leftArrowButton.transform));
+            }
         }
     }
 
     private void UpdateArrows()
     {
-        leftArrowButton.interactable = currentSlideIndex > 0;
-        leftArrowButton.image.color = leftArrowButton.interactable ? enabledColor : disabledColor;
+        if (inQuizMode)
+        {
+            leftArrowButton.interactable = currentQuizQuestionIndex > 0;
+            leftArrowButton.image.color = leftArrowButton.interactable ? enabledColor : disabledColor;
 
-        rightArrowButton.interactable = currentSlideIndex < currentNodeSlides.Count - 1;
-        rightArrowButton.image.color = rightArrowButton.interactable ? enabledColor : disabledColor;
+            rightArrowButton.interactable = unlockedQuizQuestions.Contains(currentQuizQuestionIndex + 1);
+            rightArrowButton.image.color = rightArrowButton.interactable ? enabledColor : disabledColor;
+        }
+        else
+        {
+            leftArrowButton.interactable = currentSlideIndex > 0;
+            leftArrowButton.image.color = leftArrowButton.interactable ? enabledColor : disabledColor;
+
+            rightArrowButton.interactable = currentSlideIndex < currentNodeSlides.Count - 1;
+            rightArrowButton.image.color = rightArrowButton.interactable ? enabledColor : disabledColor;
+        }
     }
 
     // -------------------------------
     // Slide Indicators
     // -------------------------------
-    private void GenerateSlideIndicators()
+    private void GenerateSlideIndicators(int count)
     {
         foreach (var dot in spawnedDots)
         {
@@ -228,18 +271,16 @@ public class PopupManager : MonoBehaviour
         }
         spawnedDots.Clear();
 
-        if (currentNodeSlides.Count == 0 || slideDotPrefab == null) return;
-
-        for (int i = 0; i < currentNodeSlides.Count; i++)
+        for (int i = 0; i < count; i++)
         {
             GameObject dot = Instantiate(slideDotPrefab, slideIndicatorsParent);
             spawnedDots.Add(dot);
         }
 
-        UpdateSlideIndicators();
+        UpdateSlideIndicators(0);
     }
 
-    private void UpdateSlideIndicators()
+    private void UpdateSlideIndicators(int activeIndex)
     {
         if (spawnedDots.Count == 0) return;
 
@@ -256,10 +297,10 @@ public class PopupManager : MonoBehaviour
             Image img = dotVisual.GetComponent<Image>();
             if (img != null)
             {
-                img.sprite = (i == currentSlideIndex) ? activeDotSprite : inactiveDotSprite;
+                img.sprite = (i == activeIndex) ? activeDotSprite : inactiveDotSprite;
             }
 
-            if (i == currentSlideIndex)
+            if (i == activeIndex)
             {
                 if (activeDotBreathing != null)
                     StopCoroutine(activeDotBreathing);
@@ -286,6 +327,200 @@ public class PopupManager : MonoBehaviour
             yield return null;
         }
     }
+
+    // -------------------------------
+    // Quiz Controller
+    // -------------------------------
+
+    private void LoadQuizData()
+    {
+        TextAsset jsonText = Resources.Load<TextAsset>("quiz_data");
+        if (jsonText != null)
+        {
+            quizData = JsonUtility.FromJson<QuizData>(jsonText.text);
+            Debug.Log("Quiz data loaded successfully.");
+        }
+        else
+        {
+            Debug.LogError("Failed to load quiz_data.json from Resources.");
+        }
+    }
+
+    public void StartQuizForNode(int nodeIndex)
+    {
+        inQuizMode = true;
+        unlockedQuizQuestions.Clear();
+        unlockedQuizQuestions.Add(0); // first question always unlocked
+
+        foreach (var slide in currentNodeSlides)
+        {
+            if (slide != null)
+                slide.SetActive(false);
+        }
+
+        Debug.Log($"[QUIZ] Starting quiz for Node {nodeIndex}");
+
+        NodeQuiz nodeQuiz = quizData.nodes.FirstOrDefault(n => n.nodeId == nodeIndex);
+        if (nodeQuiz == null)
+        {
+            Debug.LogError($"No quiz data found for Node {nodeIndex}.");
+            return;
+        }
+
+        currentQuizQuestions = nodeQuiz.questions.ToList();
+        currentQuizQuestionIndex = 0;
+
+        StartCoroutine(TransitionToQuiz());
+
+        GenerateSlideIndicators(currentQuizQuestions.Count);
+        UpdateSlideIndicators(0);
+
+        LoadQuizQuestion(currentQuizQuestionIndex);
+    }
+
+    private void LoadQuizQuestion(int index)
+    {
+        var question = currentQuizQuestions[index];
+        questionText.text = question.questionText;
+
+        for (int i = 0; i < optionButtons.Length; i++)
+        {
+            int capturedIndex = i;
+            optionButtons[i].GetComponentInChildren<TMP_Text>().text = question.options[i];
+            optionButtons[i].onClick.RemoveAllListeners();
+            optionButtons[i].onClick.AddListener(() => OnOptionSelected(capturedIndex));
+        }
+
+        StartCoroutine(AnimateSlideIn(quizPanel.transform));
+        UpdateArrows();
+    }
+
+    private void OnOptionSelected(int selectedIndex)
+    {
+        var question = currentQuizQuestions[currentQuizQuestionIndex];
+
+        if (selectedIndex == question.correctAnswerIndex)
+        {
+            Debug.Log("[QUIZ] Correct!");
+
+            unlockedQuizQuestions.Add(currentQuizQuestionIndex + 1);
+
+            UpdateArrows();
+
+            currentQuizQuestionIndex++;
+            if (currentQuizQuestionIndex < currentQuizQuestions.Count)
+            {
+                LoadQuizQuestion(currentQuizQuestionIndex);
+            }
+            else
+            {
+                Debug.Log("[QUIZ] Quiz Complete!");
+                inQuizMode = false;
+                NodeMapGameManager.Instance.AdvanceToNextNode();
+                ClosePopup();
+            }
+        }
+        else
+        {
+            Debug.Log("[QUIZ] Incorrect — try again!");
+
+            // Find the clicked button and shake it
+            StartCoroutine(ShakeButton(optionButtons[selectedIndex].transform));
+            StartCoroutine(TransitionToFailurePanel());
+        }
+    }
+
+    private IEnumerator ShakeButton(Transform buttonTransform)
+    {
+        float duration = 0.3f;
+        float magnitude = 10f;
+        float elapsed = 0f;
+        Vector3 originalPos = buttonTransform.localPosition;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float x = Mathf.Sin(elapsed * 40f) * magnitude * (1f - elapsed / duration);
+            buttonTransform.localPosition = originalPos + new Vector3(x, 0f, 0f);
+            yield return null;
+        }
+
+        buttonTransform.localPosition = originalPos;
+    }
+
+    private IEnumerator TransitionToFailurePanel()
+    {
+        float duration = 0.5f;
+        CanvasGroup quizGroup = quizPanel.GetComponent<CanvasGroup>();
+        CanvasGroup failureGroup = failurePanel.GetComponent<CanvasGroup>();
+
+        // Fade out quiz
+        if (quizGroup != null)
+        {
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                quizGroup.alpha = Mathf.Lerp(1f, 0f, t / duration);
+                yield return null;
+            }
+            quizGroup.alpha = 0f;
+            quizPanel.SetActive(false);
+        }
+
+        // Hide indicators and arrows
+        slideIndicatorsParent.gameObject.SetActive(false);
+        leftArrowButton.interactable = false;
+        rightArrowButton.interactable = false;
+
+        // Fade in failure panel
+        failurePanel.SetActive(true);
+        if (failureGroup != null)
+        {
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                failureGroup.alpha = Mathf.Lerp(0f, 1f, t / duration);
+                yield return null;
+            }
+            failureGroup.alpha = 1f;
+        }
+    }
+
+    public void RestartQuizForNode()
+    {
+        Debug.Log("[QUIZ] Restarting quiz.");
+
+        failurePanel.SetActive(false);
+        slideIndicatorsParent.gameObject.SetActive(true);
+
+        inQuizMode = true;
+        currentQuizQuestionIndex = 0;
+        unlockedQuizQuestions.Clear();
+        unlockedQuizQuestions.Add(0);
+
+        GenerateSlideIndicators(currentQuizQuestions.Count);
+        UpdateSlideIndicators(0);
+
+        quizPanel.SetActive(true);
+        LoadQuizQuestion(currentQuizQuestionIndex);
+    }
+
+    public void ReturnToSlides()
+    {
+        Debug.Log("[QUIZ] Returning to educational slides.");
+
+        failurePanel.SetActive(false);
+        slideIndicatorsParent.gameObject.SetActive(true);
+
+        inQuizMode = false;
+        currentSlideIndex = 0;
+
+        ShowSlide(currentSlideIndex);
+        slidesParent.SetActive(true);
+
+        GenerateSlideIndicators(currentNodeSlides.Count);
+        UpdateSlideIndicators(0);
+        UpdateArrows();
+    }
+
 
     // -------------------------------
     // UI Animations
@@ -399,8 +634,6 @@ public class PopupManager : MonoBehaviour
             slideIndicatorsCanvasGroup.alpha = 1f;
     }
 
-
-
     private IEnumerator AnimateSlideOut(GameObject slide)
     {
         Transform slideTransform = slide.transform;
@@ -436,6 +669,37 @@ public class PopupManager : MonoBehaviour
 
         if (slideIndicatorsCanvasGroup != null)
             slideIndicatorsCanvasGroup.alpha = 0f;
+    }
+
+    private IEnumerator TransitionToQuiz()
+    {
+        float duration = 0.5f;
+        CanvasGroup slidesGroup = slidesParent.GetComponent<CanvasGroup>();
+        CanvasGroup quizGroup = quizPanel.GetComponent<CanvasGroup>();
+
+        // Fade out slides
+        if (slidesGroup != null)
+        {
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                slidesGroup.alpha = Mathf.Lerp(1f, 0f, t / duration);
+                yield return null;
+            }
+            slidesGroup.alpha = 0f;
+            slidesParent.SetActive(false);
+        }
+
+        // Fade in quiz
+        quizPanel.SetActive(true);
+        if (quizGroup != null)
+        {
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                quizGroup.alpha = Mathf.Lerp(0f, 1f, t / duration);
+                yield return null;
+            }
+            quizGroup.alpha = 1f;
+        }
     }
 
 
