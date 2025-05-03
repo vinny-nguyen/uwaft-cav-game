@@ -11,11 +11,14 @@ public class NodeHoverHandler : MonoBehaviour
     [SerializeField] private Color inactiveHoverColor = new Color(0.9f, 0.9f, 0.9f, 1f); // Slightly darker
     [SerializeField] private Color normalColor = Color.white;
 
+    [Header("Node Info")]
+    public int nodeIndex;
+
     private Vector3 originalScale;
     private bool isHovered = false;
-    private bool isClickable = false;
     private SpriteRenderer spriteRenderer;
-    public int nodeIndex;
+    private bool isClickable = false;
+
 
     private void Start()
     {
@@ -25,10 +28,30 @@ public class NodeHoverHandler : MonoBehaviour
             spriteRenderer.color = normalColor;
     }
 
+    private void Update()
+    {
+        bool isClickable = NodeMapGameManager.Instance.CurrentActiveNodeIndex == nodeIndex;
+
+        if (!isHovered)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
+            return;
+        }
+
+        if (isClickable)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale * hoverScaleMultiplier, Time.deltaTime * scaleSpeed);
+        }
+        else
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
+        }
+    }
+
     private void OnMouseEnter()
     {
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return; // Ignore if over UI
+            return;
 
         isHovered = true;
 
@@ -36,31 +59,35 @@ public class NodeHoverHandler : MonoBehaviour
         {
             Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
         }
-        else
-        {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        }
+
+        bool isClickable = NodeMapGameManager.Instance.CurrentActiveNodeIndex == nodeIndex;
 
         if (!isClickable && spriteRenderer != null)
         {
-            spriteRenderer.color = inactiveHoverColor; // 🔥 Darken if not clickable
+            spriteRenderer.color = inactiveHoverColor; // Darken if not clickable
         }
     }
 
     private void OnMouseExit()
     {
         isHovered = false;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); // Reset cursor
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         if (spriteRenderer != null)
         {
-            spriteRenderer.color = normalColor; // 🔥 Restore normal color
+            spriteRenderer.color = normalColor;
         }
     }
 
     private void OnMouseDown()
     {
-        if (!isClickable)
+        if (NodeMapGameManager.Instance == null)
+        {
+            Debug.LogWarning("NodeMapGameManager instance missing!");
+            return;
+        }
+
+        if (NodeMapGameManager.Instance == null || NodeMapGameManager.Instance.CurrentActiveNodeIndex != nodeIndex)
         {
             StartCoroutine(ShakeNode());
             return;
@@ -70,34 +97,13 @@ public class NodeHoverHandler : MonoBehaviour
         {
             PopupManager.Instance.OpenPopupForNode(nodeIndex);
         }
-    }
 
-
-    private void Update()
-    {
-        if (!isHovered)
-        {
-            // If not hovered, return smoothly to original scale
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
-            return;
-        }
-
-        if (isClickable)
-        {
-            // 🔥 Only scale if clickable
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale * hoverScaleMultiplier, Time.deltaTime * scaleSpeed);
-        }
-        else
-        {
-            // 🔥 If not clickable, don't scale even if hovered
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
-        }
     }
 
     private IEnumerator ShakeNode()
     {
-        float shakeDuration = 0.15f; // 🔥 Much shorter
-        float shakeMagnitude = 0.15f;   // 🔥 Much smaller side movement
+        float shakeDuration = 0.15f;
+        float shakeMagnitude = 0.15f;
         float time = 0f;
 
         Vector3 originalPosition = transform.localPosition;
@@ -107,17 +113,15 @@ public class NodeHoverHandler : MonoBehaviour
             time += Time.deltaTime;
             float offsetX = Mathf.Sin(time * 50f) * shakeMagnitude * (1f - time / shakeDuration);
             transform.localPosition = originalPosition + new Vector3(offsetX, 0f, 0f);
-
             yield return null;
         }
 
         transform.localPosition = originalPosition;
     }
 
-
-
     public void SetClickable(bool value)
     {
         isClickable = value;
     }
+
 }

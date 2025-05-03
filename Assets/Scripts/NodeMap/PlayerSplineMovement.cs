@@ -64,6 +64,8 @@ public class PlayerSplineMovement : MonoBehaviour
         // After arriving at first node
         currentStopIndex = 0;
         SetNodeToActive(currentStopIndex);
+        NodeMapGameManager.Instance.SetActiveNode(1);
+
     }
 
 
@@ -95,6 +97,11 @@ public class PlayerSplineMovement : MonoBehaviour
     {
         isMoving = true;
 
+        if (NodeMapGameManager.Instance != null)
+        {
+            NodeMapGameManager.Instance.SetActiveNode(-1); // -1 = no active node
+        }
+
         if (currentActiveNode != -1)
             SetNodeToNormal(currentActiveNode);
 
@@ -112,6 +119,9 @@ public class PlayerSplineMovement : MonoBehaviour
         isMoving = false;
 
         SetNodeToActive(currentStopIndex);
+
+        NodeMapGameManager.Instance.SetActiveNode(currentStopIndex + 1);
+
     }
 
     IEnumerator MoveAlongSpline(float startT, float endT)
