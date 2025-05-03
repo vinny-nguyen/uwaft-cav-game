@@ -5,7 +5,7 @@ public class NodeMapGameManager : MonoBehaviour
     public static NodeMapGameManager Instance { get; private set; }
 
     [Header("Node Progression")]
-    public int CurrentActiveNodeIndex { get; private set; } = 1; // starts at Node 1
+    public int CurrentNodeIndex { get; private set; } = 1; // starts at Node 1
 
     private void Awake()
     {
@@ -18,21 +18,21 @@ public class NodeMapGameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        CurrentActiveNodeIndex = -1; // start with no active node
+        CurrentNodeIndex = -1; // start with no active node
 
     }
 
     // Call this after quiz completion to unlock next node
     public void AdvanceToNextNode()
     {
-        CurrentActiveNodeIndex++;
-        Debug.Log($"Advanced to Node {CurrentActiveNodeIndex}");
+        CurrentNodeIndex++;
+        Debug.Log($"Advanced to Node {CurrentNodeIndex}");
     }
 
     // Optional: manually set the active node (e.g., from a save file)
-    public void SetActiveNode(int nodeIndex)
+    public void SetCurrentNode(int nodeIndex)
     {
-        CurrentActiveNodeIndex = nodeIndex;
-        Debug.Log($"Set active node to {CurrentActiveNodeIndex}");
+        CurrentNodeIndex = nodeIndex;
+        Debug.Log($"Set current node to {CurrentNodeIndex}");
     }
 }

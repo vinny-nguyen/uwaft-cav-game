@@ -568,7 +568,7 @@ public class PopupManager : MonoBehaviour
         PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
         if (playerMover != null)
         {
-            int completedNodeIndex = NodeMapGameManager.Instance.CurrentActiveNodeIndex - 1;
+            int completedNodeIndex = NodeMapGameManager.Instance.CurrentNodeIndex - 1;
             playerMover.SetNodeToComplete(completedNodeIndex);
         }
 

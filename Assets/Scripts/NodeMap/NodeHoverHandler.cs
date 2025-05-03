@@ -30,7 +30,7 @@ public class NodeHoverHandler : MonoBehaviour
 
     private void Update()
     {
-        bool isClickable = NodeMapGameManager.Instance.CurrentActiveNodeIndex == nodeIndex;
+        bool isClickable = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex;
 
         if (!isHovered)
         {
@@ -60,7 +60,7 @@ public class NodeHoverHandler : MonoBehaviour
             Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
         }
 
-        bool isClickable = NodeMapGameManager.Instance.CurrentActiveNodeIndex == nodeIndex;
+        bool isClickable = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex;
 
         if (!isClickable && spriteRenderer != null)
         {
@@ -87,7 +87,7 @@ public class NodeHoverHandler : MonoBehaviour
             return;
         }
 
-        if (NodeMapGameManager.Instance == null || NodeMapGameManager.Instance.CurrentActiveNodeIndex != nodeIndex)
+        if (NodeMapGameManager.Instance == null || NodeMapGameManager.Instance.CurrentNodeIndex != nodeIndex)
         {
             StartCoroutine(ShakeNode());
             return;

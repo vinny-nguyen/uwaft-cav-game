@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 
 public class PlayerSplineMovement : MonoBehaviour
 {
@@ -27,10 +28,10 @@ public class PlayerSplineMovement : MonoBehaviour
 
 
     private List<SplineStop> stops = new List<SplineStop>();
-    private int currentStopIndex = 0;
+    // private int currentStopIndex = 0;
     private bool isMoving = false;
     private bool isMovingForward = true;
-    private int currentActiveNode = -1;
+    // private int currentActiveNode = -1;
     private ParticleSystem.MainModule smokeMain;
 
     private void Awake()
@@ -64,9 +65,8 @@ public class PlayerSplineMovement : MonoBehaviour
         yield return MoveAlongSpline(0f, stops[0].splinePercent);
 
         // After arriving at first node
-        currentStopIndex = 0;
-        SetNodeToActive(currentStopIndex);
-        NodeMapGameManager.Instance.SetActiveNode(1);
+        SetNodeToActive(0);
+        NodeMapGameManager.Instance.SetCurrentNode(1);
 
     }
 
@@ -77,21 +77,24 @@ public class PlayerSplineMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                TryMoveToNode(currentStopIndex + 1);
+                TryMoveToNode(NodeMapGameManager.Instance.CurrentNodeIndex + 1);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                TryMoveToNode(currentStopIndex - 1);
+                TryMoveToNode(NodeMapGameManager.Instance.CurrentNodeIndex - 1);
             }
         }
     }
 
     void TryMoveToNode(int targetNode)
     {
+        targetNode = targetNode - 1; // Adjust for zero-based index
+
         if (targetNode < 0 || targetNode >= stops.Count || isMoving)
             return;
 
-        isMovingForward = targetNode > currentStopIndex;
+        isMovingForward = targetNode > NodeMapGameManager.Instance.CurrentNodeIndex - 1;
+        Debug.Log($"Moving to node {targetNode} (isMovingForward: {isMovingForward})");
         StartCoroutine(MoveToNode(targetNode));
     }
 
@@ -99,15 +102,10 @@ public class PlayerSplineMovement : MonoBehaviour
     {
         isMoving = true;
 
-        if (NodeMapGameManager.Instance != null)
-        {
-            NodeMapGameManager.Instance.SetActiveNode(-1); // -1 = no active node
-        }
+        if (NodeMapGameManager.Instance.CurrentNodeIndex != -1)
+            SetNodeToNormal(NodeMapGameManager.Instance.CurrentNodeIndex);
 
-        if (currentActiveNode != -1)
-            SetNodeToNormal(currentActiveNode);
-
-        float startT = stops[currentStopIndex].splinePercent;
+        float startT = stops[NodeMapGameManager.Instance.CurrentNodeIndex - 1].splinePercent;
         float targetT = stops[targetNode].splinePercent;
 
         Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
@@ -115,14 +113,20 @@ public class PlayerSplineMovement : MonoBehaviour
 
         yield return null;
 
+        if (NodeMapGameManager.Instance != null)
+        {
+            NodeMapGameManager.Instance.SetCurrentNode(-1); // -1 = no active node
+        }
+
         yield return MoveAlongSpline(startT, targetT);
 
-        currentStopIndex = targetNode;
         isMoving = false;
 
-        SetNodeToActive(currentStopIndex);
+        NodeMapGameManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
 
-        NodeMapGameManager.Instance.SetActiveNode(currentStopIndex + 1);
+        SetNodeToActive(NodeMapGameManager.Instance.CurrentNodeIndex - 1);
+
+        // NodeMapGameManager.Instance.SetCurrentNode(NodeMapGameManager.Instance.CurrentNodeIndex);
 
     }
 
@@ -205,6 +209,9 @@ public class PlayerSplineMovement : MonoBehaviour
 
     private void SetNodeToNormal(int nodeIndex)
     {
+
+        nodeIndex = nodeIndex - 1; // Adjust for zero-based index
+
         if (nodeMarkers.Count > nodeIndex && normalNodeSprites.Count > nodeIndex)
         {
             GameObject marker = nodeMarkers[nodeIndex];
@@ -233,7 +240,7 @@ public class PlayerSplineMovement : MonoBehaviour
                 if (sr != null && activeNodeSprites[nodeIndex] != null)
                 {
                     StartCoroutine(AnimateToActive(sr, activeNodeSprites[nodeIndex]));
-                    currentActiveNode = nodeIndex;
+                    // NodeMapGameManager.Instance.SetCurrentNode(nodeIndex); // Set current node in GameManager
                 }
 
                 if (handler != null)
