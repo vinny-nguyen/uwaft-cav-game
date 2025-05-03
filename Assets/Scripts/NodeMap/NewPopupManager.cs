@@ -40,6 +40,8 @@ public class PopupManager : MonoBehaviour
     [SerializeField] private GameObject slidesParent;
     [SerializeField] private GameObject quizPanel;
     [SerializeField] private GameObject failurePanel;
+    [SerializeField] private GameObject successPanel;
+
 
     private HashSet<int> unlockedQuizQuestions = new HashSet<int>();
 
@@ -416,8 +418,7 @@ public class PopupManager : MonoBehaviour
             {
                 Debug.Log("[QUIZ] Quiz Complete!");
                 inQuizMode = false;
-                NodeMapGameManager.Instance.AdvanceToNextNode();
-                ClosePopup();
+                StartCoroutine(TransitionToSuccessPanel());
             }
         }
         else
@@ -519,6 +520,59 @@ public class PopupManager : MonoBehaviour
         GenerateSlideIndicators(currentNodeSlides.Count);
         UpdateSlideIndicators(0);
         UpdateArrows();
+    }
+
+    private IEnumerator TransitionToSuccessPanel()
+    {
+        float duration = 0.5f;
+        CanvasGroup quizGroup = quizPanel.GetComponent<CanvasGroup>();
+        CanvasGroup successGroup = successPanel.GetComponent<CanvasGroup>();
+
+        // Fade out quiz
+        if (quizGroup != null)
+        {
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                quizGroup.alpha = Mathf.Lerp(1f, 0f, t / duration);
+                yield return null;
+            }
+            quizGroup.alpha = 0f;
+            quizPanel.SetActive(false);
+        }
+
+        // Hide indicators and arrows
+        slideIndicatorsParent.gameObject.SetActive(false);
+        leftArrowButton.interactable = false;
+        rightArrowButton.interactable = false;
+
+        // Fade in success panel
+        successPanel.SetActive(true);
+        if (successGroup != null)
+        {
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                successGroup.alpha = Mathf.Lerp(0f, 1f, t / duration);
+                yield return null;
+            }
+            successGroup.alpha = 1f;
+        }
+    }
+
+    public void CompleteCurrentNode()
+    {
+        Debug.Log("[QUIZ] Completing current node and advancing.");
+
+        successPanel.SetActive(false);
+        ClosePopup();
+
+        PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
+        if (playerMover != null)
+        {
+            int completedNodeIndex = NodeMapGameManager.Instance.CurrentActiveNodeIndex - 1;
+            playerMover.SetNodeToComplete(completedNodeIndex);
+        }
+
+        NodeMapGameManager.Instance.AdvanceToNextNode();
     }
 
 

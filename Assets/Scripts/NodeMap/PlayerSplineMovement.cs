@@ -23,6 +23,8 @@ public class PlayerSplineMovement : MonoBehaviour
     [SerializeField] private List<GameObject> nodeMarkers = new List<GameObject>();
     [SerializeField] private List<Sprite> normalNodeSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> activeNodeSprites = new List<Sprite>();
+    [SerializeField] private List<Sprite> completeNodeSprites;
+
 
     private List<SplineStop> stops = new List<SplineStop>();
     private int currentStopIndex = 0;
@@ -163,6 +165,30 @@ public class PlayerSplineMovement : MonoBehaviour
             smokeParticles.Stop();
     }
 
+    public void SetNodeToComplete(int nodeIndex)
+    {
+        if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
+        {
+            GameObject marker = nodeMarkers[nodeIndex];
+            if (marker != null)
+            {
+                SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
+
+                if (sr != null && completeNodeSprites[nodeIndex] != null)
+                {
+                    StartCoroutine(AnimateToComplete(sr, completeNodeSprites[nodeIndex]));
+                }
+
+                if (handler != null)
+                {
+                    handler.SetClickable(false); // ✅ Mark node as no longer clickable after completion
+                }
+            }
+        }
+    }
+
+
     private void RotateWheels(float direction)
     {
         if (frontWheel != null)
@@ -279,6 +305,41 @@ public class PlayerSplineMovement : MonoBehaviour
         sr.sprite = normalSprite;
 
         // Slow Settle Down
+        t = 0f;
+        while (t < popDownDuration)
+        {
+            t += Time.deltaTime;
+            float scaleT = Mathf.Lerp(0f, 1f, t / popDownDuration);
+            markerTransform.localScale = Vector3.Lerp(poppedScale, originalScale, scaleT);
+            yield return null;
+        }
+
+        markerTransform.localScale = originalScale;
+    }
+
+    private IEnumerator AnimateToComplete(SpriteRenderer sr, Sprite completeSprite)
+    {
+        float popUpDuration = 0.1f;
+        float popDownDuration = 0.15f;
+        float t = 0f;
+
+        Transform markerTransform = sr.transform;
+        Vector3 originalScale = markerTransform.localScale;
+        Vector3 poppedScale = originalScale * 1.1f;
+
+        // Fast pop up
+        while (t < popUpDuration)
+        {
+            t += Time.deltaTime;
+            float scaleT = Mathf.Lerp(0f, 1f, t / popUpDuration);
+            markerTransform.localScale = Vector3.Lerp(originalScale, poppedScale, scaleT);
+            yield return null;
+        }
+
+        // Swap to complete sprite
+        sr.sprite = completeSprite;
+
+        // Slow settle down
         t = 0f;
         while (t < popDownDuration)
         {
