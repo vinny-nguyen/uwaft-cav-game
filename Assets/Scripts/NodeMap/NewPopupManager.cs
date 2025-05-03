@@ -27,6 +27,9 @@ public class PopupManager : MonoBehaviour
     [SerializeField] private Sprite inactiveDotSprite;
     [SerializeField] private CanvasGroup slideIndicatorsCanvasGroup;
 
+    [SerializeField] private GameObject finalSlidePrefab;
+    [SerializeField] private GameObject finalSlideObject; // assign in Inspector
+
     private List<GameObject> currentNodeSlides = new List<GameObject>();
     private List<GameObject> spawnedDots = new List<GameObject>();
     private int currentSlideIndex = 0;
@@ -64,8 +67,15 @@ public class PopupManager : MonoBehaviour
     // -------------------------------
     public void OpenPopupForNode(int nodeIndex)
     {
+        // Deactivate and clear old slides
+        foreach (var slide in currentNodeSlides)
+        {
+            if (slide != null)
+                slide.SetActive(false);
+        }
         currentNodeSlides.Clear();
 
+        // Find node container
         Transform nodeContainer = slidesParent.Find($"Node{nodeIndex}");
         if (nodeContainer == null)
         {
@@ -73,18 +83,31 @@ public class PopupManager : MonoBehaviour
             return;
         }
 
+        // Add learning slides
         foreach (Transform slide in nodeContainer)
         {
             currentNodeSlides.Add(slide.gameObject);
             slide.gameObject.SetActive(false);
+
+            // If this is the FinalSlide, set its header + button
+            if (slide.name == "StartQuiz")
+            {
+                TMP_Text finalHeader = slide.GetComponentInChildren<TMP_Text>();
+                if (finalHeader != null)
+                {
+                    finalHeader.text = $"Congratulations for completing the {nodeHeaders[nodeIndex - 1]} node!";
+                }
+
+                Button quizButton = slide.GetComponentInChildren<Button>();
+                if (quizButton != null)
+                {
+                    quizButton.onClick.RemoveAllListeners();
+                    quizButton.onClick.AddListener(() => StartQuizForNode(nodeIndex));
+                }
+            }
         }
 
-        if (currentNodeSlides.Count == 0)
-        {
-            Debug.LogWarning($"Node{nodeIndex} has no slides!");
-            return;
-        }
-
+        // Set header
         headerText.text = (nodeIndex - 1 >= 0 && nodeIndex - 1 < nodeHeaders.Count)
             ? nodeHeaders[nodeIndex - 1]
             : $"Node {nodeIndex}";
@@ -96,9 +119,17 @@ public class PopupManager : MonoBehaviour
         StartCoroutine(AnimatePopupOpen());
     }
 
+
+    private void StartQuizForNode(int nodeIndex)
+    {
+        Debug.Log($"Starting quiz for Node {nodeIndex}");
+
+        // TODO: Replace this with your actual quiz system call
+        // e.g., QuizManager.Instance.StartQuiz(nodeIndex);
+    }
+
     public void ClosePopup()
     {
-        // Deactivate all current slides
         foreach (var slide in currentNodeSlides)
         {
             if (slide != null)
@@ -108,19 +139,53 @@ public class PopupManager : MonoBehaviour
         StartCoroutine(AnimatePopupClose());
     }
 
+
     // -------------------------------
     // Slide Navigation
     // -------------------------------
     private void ShowSlide(int index)
     {
+        // Animate out previous slide (if any)
+        if (lastSlideIndex >= 0 && lastSlideIndex < currentNodeSlides.Count)
+        {
+            GameObject lastSlide = currentNodeSlides[lastSlideIndex];
+            if (lastSlide != null)
+                StartCoroutine(AnimateSlideOut(lastSlide));
+        }
+
+        // Activate only the new target slide
         for (int i = 0; i < currentNodeSlides.Count; i++)
         {
-            currentNodeSlides[i].SetActive(i == index);
+            bool isActive = i == index;
+            currentNodeSlides[i].SetActive(isActive);
+        }
+
+        Transform activeSlide = currentNodeSlides[index].transform;
+        CanvasGroup slideCg = activeSlide.GetComponent<CanvasGroup>();
+        if (slideCg == null)
+            slideCg = activeSlide.gameObject.AddComponent<CanvasGroup>();
+
+        if (lastSlideIndex < 0)
+        {
+            // First open → skip extra animation; set visible
+            activeSlide.localScale = Vector3.one;
+            slideCg.alpha = 1f;
+
+            if (slideIndicatorsCanvasGroup != null)
+                slideIndicatorsCanvasGroup.alpha = 1f;
+        }
+        else
+        {
+            // Normal slide switch → use animation
+            StartCoroutine(AnimateSlideIn(activeSlide));
         }
 
         UpdateSlideIndicators();
         UpdateArrows();
+
+        lastSlideIndex = index;
     }
+
 
     private void NextSlide()
     {
@@ -129,7 +194,6 @@ public class PopupManager : MonoBehaviour
             currentSlideIndex++;
             ShowSlide(currentSlideIndex);
             StartCoroutine(BounceButton(rightArrowButton.transform));
-            StartCoroutine(NudgeUIElements());
         }
     }
 
@@ -140,7 +204,6 @@ public class PopupManager : MonoBehaviour
             currentSlideIndex--;
             ShowSlide(currentSlideIndex);
             StartCoroutine(BounceButton(leftArrowButton.transform));
-            StartCoroutine(NudgeUIElements());
         }
     }
 
@@ -177,8 +240,6 @@ public class PopupManager : MonoBehaviour
 
     private void UpdateSlideIndicators()
     {
-        Debug.Log($"[DEBUG] Running UpdateSlideIndicators, currentSlideIndex: {currentSlideIndex}");
-
         if (spawnedDots.Count == 0) return;
 
         for (int i = 0; i < spawnedDots.Count; i++)
@@ -186,9 +247,12 @@ public class PopupManager : MonoBehaviour
             GameObject dotContainer = spawnedDots[i];
             Transform dotVisual = dotContainer.transform.Find("DotVisual");
             if (dotVisual == null)
+            {
                 Debug.LogWarning("DotVisual child not found!");
+                continue;
+            }
 
-            Image img = dotVisual?.GetComponent<Image>();
+            Image img = dotVisual.GetComponent<Image>();
             if (img != null)
             {
                 img.sprite = (i == currentSlideIndex) ? activeDotSprite : inactiveDotSprite;
@@ -199,25 +263,19 @@ public class PopupManager : MonoBehaviour
                 if (activeDotBreathing != null)
                     StopCoroutine(activeDotBreathing);
 
-                if (dotVisual != null)
-                {
-                    activeDotBreathing = StartCoroutine(BreatheDot(dotVisual));
-                }
+                activeDotBreathing = StartCoroutine(BreatheDot(dotVisual));
             }
             else if (i == lastSlideIndex)
             {
-                if (dotVisual != null)
-                    dotVisual.localScale = Vector3.one;
+                dotVisual.localScale = Vector3.one;
             }
         }
-
-        lastSlideIndex = currentSlideIndex;
     }
 
     private IEnumerator BreatheDot(Transform dotTransform)
     {
-        float breatheDuration = 1.5f;
-        float breatheMagnitude = 0.1f;
+        float breatheDuration = 1f;
+        float breatheMagnitude = 0.2f;
         float timer = 0f;
         while (dotTransform != null && spawnedDots.Contains(dotTransform.parent.gameObject))
         {
@@ -227,9 +285,6 @@ public class PopupManager : MonoBehaviour
             yield return null;
         }
     }
-
-
-
 
     // -------------------------------
     // UI Animations
@@ -302,6 +357,86 @@ public class PopupManager : MonoBehaviour
         popupCanvasGroup.blocksRaycasts = false;
     }
 
+    private IEnumerator AnimateSlideIn(Transform slideTransform)
+    {
+        CanvasGroup slideCg = slideTransform.GetComponent<CanvasGroup>();
+        if (slideCg == null)
+        {
+            slideCg = slideTransform.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        float fadeDuration = 0.2f;
+        float pulseScale = 0.9f;
+        Vector3 smallScale = Vector3.one * pulseScale;
+        Vector3 originalScale = Vector3.one;
+
+        slideTransform.localScale = smallScale;
+        slideCg.alpha = 0f;
+
+        if (slideIndicatorsCanvasGroup != null)
+            slideIndicatorsCanvasGroup.alpha = 0f;
+
+        float time = 0f;
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / fadeDuration;
+
+            slideTransform.localScale = Vector3.Lerp(smallScale, originalScale, t);
+            slideCg.alpha = t;
+
+            if (slideIndicatorsCanvasGroup != null)
+                slideIndicatorsCanvasGroup.alpha = t;
+
+            yield return null;
+        }
+
+        slideTransform.localScale = originalScale;
+        slideCg.alpha = 1f;
+
+        if (slideIndicatorsCanvasGroup != null)
+            slideIndicatorsCanvasGroup.alpha = 1f;
+    }
+
+
+
+    private IEnumerator AnimateSlideOut(GameObject slide)
+    {
+        Transform slideTransform = slide.transform;
+        CanvasGroup slideCg = slide.GetComponent<CanvasGroup>();
+        if (slideCg == null)
+        {
+            slideCg = slide.AddComponent<CanvasGroup>();
+        }
+
+        float fadeDuration = 0.2f;
+        float pulseScale = 0.9f;
+        Vector3 originalScale = Vector3.one;
+        Vector3 smallScale = originalScale * pulseScale;
+
+        float time = 0f;
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / fadeDuration;
+
+            slideTransform.localScale = Vector3.Lerp(originalScale, smallScale, t);
+            slideCg.alpha = 1f - t;
+
+            if (slideIndicatorsCanvasGroup != null)
+                slideIndicatorsCanvasGroup.alpha = 1f - t;
+
+            yield return null;
+        }
+
+        slideCg.alpha = 0f;
+        slideTransform.localScale = smallScale;
+        slide.SetActive(false);
+
+        if (slideIndicatorsCanvasGroup != null)
+            slideIndicatorsCanvasGroup.alpha = 0f;
+    }
+
 
     private IEnumerator BounceButton(Transform buttonTransform)
     {
@@ -331,37 +466,5 @@ public class PopupManager : MonoBehaviour
         }
 
         buttonTransform.localScale = originalScale;
-    }
-
-    private IEnumerator NudgeUIElements()
-    {
-        float duration = 0.25f;
-        float magnitude = 10f;
-        float frequency = 20f;
-
-        Vector3 originalPosIndicators = slideIndicatorsParent.localPosition;
-        Transform activeSlide = currentNodeSlides.Count > currentSlideIndex ? currentNodeSlides[currentSlideIndex].transform : null;
-        Vector3 originalPosSlide = activeSlide != null ? activeSlide.localPosition : Vector3.zero;
-
-        float time = 0f;
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float offset = Mathf.Sin(time * frequency) * magnitude * (1f - time / duration);
-
-            if (slideIndicatorsParent != null)
-                slideIndicatorsParent.localPosition = originalPosIndicators + new Vector3(offset, 0f, 0f);
-
-            if (activeSlide != null)
-                activeSlide.localPosition = originalPosSlide + new Vector3(offset, 0f, 0f);
-
-            yield return null;
-        }
-
-        if (slideIndicatorsParent != null)
-            slideIndicatorsParent.localPosition = originalPosIndicators;
-
-        if (activeSlide != null)
-            activeSlide.localPosition = originalPosSlide;
     }
 }
