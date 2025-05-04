@@ -26,6 +26,9 @@ public class PlayerSplineMovement : MonoBehaviour
     [SerializeField] private List<Sprite> activeNodeSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> completeNodeSprites;
 
+    private HashSet<int> completedNodes = new HashSet<int>();
+
+
 
     private List<SplineStop> stops = new List<SplineStop>();
     // private int currentStopIndex = 0;
@@ -86,14 +89,34 @@ public class PlayerSplineMovement : MonoBehaviour
         }
     }
 
-    void TryMoveToNode(int targetNode)
+    public void TryMoveToNode(int targetNode)
     {
         targetNode = targetNode - 1; // Adjust for zero-based index
 
         if (targetNode < 0 || targetNode >= stops.Count || isMoving)
             return;
 
-        isMovingForward = targetNode > NodeMapGameManager.Instance.CurrentNodeIndex - 1;
+        int currentNode = NodeMapGameManager.Instance.CurrentNodeIndex - 1; // zero-based
+
+        // ✅ Prevent forward movement if current node is not complete
+        if (targetNode > currentNode && !IsNodeCompleted(currentNode))
+        {
+            Debug.Log($"Cannot move forward: Node {currentNode + 1} is not yet complete.");
+
+            // 🔥 Shake current node to give feedback
+            if (nodeMarkers.Count > currentNode)
+            {
+                NodeHoverHandler handler = nodeMarkers[currentNode].GetComponent<NodeHoverHandler>();
+                if (handler != null)
+                {
+                    handler.StartShake();
+                }
+            }
+
+            return;
+        }
+
+        isMovingForward = targetNode > currentNode;
         Debug.Log($"Moving to node {targetNode} (isMovingForward: {isMovingForward})");
         StartCoroutine(MoveToNode(targetNode));
     }
@@ -169,29 +192,6 @@ public class PlayerSplineMovement : MonoBehaviour
             smokeParticles.Stop();
     }
 
-    public void SetNodeToComplete(int nodeIndex)
-    {
-        if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
-        {
-            GameObject marker = nodeMarkers[nodeIndex];
-            if (marker != null)
-            {
-                SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
-
-                if (sr != null && completeNodeSprites[nodeIndex] != null)
-                {
-                    StartCoroutine(AnimateToComplete(sr, completeNodeSprites[nodeIndex]));
-                }
-
-                if (handler != null)
-                {
-                    handler.SetClickable(false); // ✅ Mark node as no longer clickable after completion
-                }
-            }
-        }
-    }
-
 
     private void RotateWheels(float direction)
     {
@@ -212,6 +212,13 @@ public class PlayerSplineMovement : MonoBehaviour
 
         nodeIndex = nodeIndex - 1; // Adjust for zero-based index
 
+        if (completedNodes.Contains(nodeIndex))
+        {
+            // Skip — leave as complete (green)
+            return;
+        }
+
+
         if (nodeMarkers.Count > nodeIndex && normalNodeSprites.Count > nodeIndex)
         {
             GameObject marker = nodeMarkers[nodeIndex];
@@ -229,6 +236,12 @@ public class PlayerSplineMovement : MonoBehaviour
 
     private void SetNodeToActive(int nodeIndex)
     {
+        if (completedNodes.Contains(nodeIndex))
+        {
+            // Skip — leave as complete (green)
+            return;
+        }
+
         if (nodeMarkers.Count > nodeIndex && activeNodeSprites.Count > nodeIndex)
         {
             GameObject marker = nodeMarkers[nodeIndex];
@@ -250,6 +263,38 @@ public class PlayerSplineMovement : MonoBehaviour
             }
         }
     }
+
+
+    public void SetNodeToComplete(int nodeIndex)
+    {
+        if (!completedNodes.Contains(nodeIndex))
+        {
+            completedNodes.Add(nodeIndex);
+        }
+
+        if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
+        {
+            GameObject marker = nodeMarkers[nodeIndex];
+            if (marker != null)
+            {
+                SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
+
+                if (sr != null && completeNodeSprites[nodeIndex] != null)
+                {
+                    StartCoroutine(AnimateToComplete(sr, completeNodeSprites[nodeIndex]));
+                    NodeMapGameManager.Instance.SetCurrentNode(nodeIndex + 1); // Set current node in GameManager
+                    TryMoveToNode(NodeMapGameManager.Instance.CurrentNodeIndex + 1); // Move to next node after completion
+                }
+
+                if (handler != null)
+                {
+                    handler.SetClickable(true); // ✅ Keep completed nodes clickable for review
+                }
+            }
+        }
+    }
+
 
 
 
@@ -326,8 +371,8 @@ public class PlayerSplineMovement : MonoBehaviour
 
     private IEnumerator AnimateToComplete(SpriteRenderer sr, Sprite completeSprite)
     {
-        float popUpDuration = 0.1f;
-        float popDownDuration = 0.15f;
+        float popUpDuration = 0.15f;
+        float popDownDuration = 0.2f;
         float t = 0f;
 
         Transform markerTransform = sr.transform;
@@ -386,4 +431,10 @@ public class PlayerSplineMovement : MonoBehaviour
     {
         return spline;
     }
+
+    public bool IsNodeCompleted(int nodeIndex)
+    {
+        return completedNodes.Contains(nodeIndex);
+    }
+
 }

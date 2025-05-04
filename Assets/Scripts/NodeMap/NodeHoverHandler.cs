@@ -30,7 +30,7 @@ public class NodeHoverHandler : MonoBehaviour
 
     private void Update()
     {
-        bool isClickable = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex;
+        bool shouldScale = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex || isClickable;
 
         if (!isHovered)
         {
@@ -38,7 +38,7 @@ public class NodeHoverHandler : MonoBehaviour
             return;
         }
 
-        if (isClickable)
+        if (shouldScale)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, originalScale * hoverScaleMultiplier, Time.deltaTime * scaleSpeed);
         }
@@ -47,6 +47,7 @@ public class NodeHoverHandler : MonoBehaviour
             transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
         }
     }
+
 
     private void OnMouseEnter()
     {
@@ -60,7 +61,9 @@ public class NodeHoverHandler : MonoBehaviour
             Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
         }
 
-        bool isClickable = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex;
+        PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
+        bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex);
+        bool isClickable = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted;
 
         if (!isClickable && spriteRenderer != null)
         {
@@ -87,7 +90,10 @@ public class NodeHoverHandler : MonoBehaviour
             return;
         }
 
-        if (NodeMapGameManager.Instance == null || NodeMapGameManager.Instance.CurrentNodeIndex != nodeIndex)
+        PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
+        bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex - 1); // ✅ Adjust for zero-based index
+
+        if (NodeMapGameManager.Instance.CurrentNodeIndex != nodeIndex && !isCompleted)
         {
             StartCoroutine(ShakeNode());
             return;
@@ -97,8 +103,8 @@ public class NodeHoverHandler : MonoBehaviour
         {
             PopupManager.Instance.OpenPopupForNode(nodeIndex);
         }
-
     }
+
 
     private IEnumerator ShakeNode()
     {
@@ -122,6 +128,11 @@ public class NodeHoverHandler : MonoBehaviour
     public void SetClickable(bool value)
     {
         isClickable = value;
+    }
+
+    public void StartShake()
+    {
+        StartCoroutine(ShakeNode());
     }
 
 }

@@ -41,6 +41,8 @@ public class PopupManager : MonoBehaviour
     [SerializeField] private GameObject quizPanel;
     [SerializeField] private GameObject failurePanel;
     [SerializeField] private GameObject successPanel;
+    private int openedNodeIndex = -1;
+
 
 
     private HashSet<int> unlockedQuizQuestions = new HashSet<int>();
@@ -76,7 +78,7 @@ public class PopupManager : MonoBehaviour
 
         leftArrowButton.onClick.AddListener(PreviousSlide);
         rightArrowButton.onClick.AddListener(NextSlide);
-        closeButton.onClick.AddListener(ClosePopup);
+        closeButton.onClick.AddListener(() => StartCoroutine(ClosePopup()));
     }
 
     // -------------------------------
@@ -84,6 +86,9 @@ public class PopupManager : MonoBehaviour
     // -------------------------------
     public void OpenPopupForNode(int nodeIndex)
     {
+
+        openedNodeIndex = nodeIndex; // ✅ Track which node the popup is for
+
         // Deactivate and clear old slides
         foreach (var slide in currentNodeSlides)
         {
@@ -137,15 +142,17 @@ public class PopupManager : MonoBehaviour
         StartCoroutine(AnimatePopupOpen());
     }
 
-    public void ClosePopup()
+    public IEnumerator ClosePopup()
     {
+
         foreach (var slide in currentNodeSlides)
         {
             if (slide != null)
                 slide.SetActive(false);
         }
 
-        StartCoroutine(AnimatePopupClose());
+        // Start closing animation
+        yield return StartCoroutine(AnimatePopupClose());
     }
 
 
@@ -562,17 +569,35 @@ public class PopupManager : MonoBehaviour
     {
         Debug.Log("[QUIZ] Completing current node and advancing.");
 
+        PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
+        int completedNodeIndex = openedNodeIndex - 1; // ✅ Use opened node, not global current
+
+        if (playerMover != null && playerMover.IsNodeCompleted(completedNodeIndex))
+        {
+            // ✅ Already completed — just close the popup
+            Debug.Log("[QUIZ] Node already completed. Closing popup only.");
+            successPanel.SetActive(false);
+            StartCoroutine(ClosePopup());
+            return;
+        }
+
+        // ✅ Node not yet completed — mark as complete
         successPanel.SetActive(false);
-        ClosePopup();
+        StartCoroutine(CompleteAfterPopupCloses(completedNodeIndex));
+        
+    }
+
+
+
+    private IEnumerator CompleteAfterPopupCloses(int nodeIndexToComplete)
+    {
+        yield return StartCoroutine(ClosePopup());
 
         PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
         if (playerMover != null)
         {
-            int completedNodeIndex = NodeMapGameManager.Instance.CurrentNodeIndex - 1;
-            playerMover.SetNodeToComplete(completedNodeIndex);
+            playerMover.SetNodeToComplete(nodeIndexToComplete);
         }
-
-        NodeMapGameManager.Instance.AdvanceToNextNode();
     }
 
 
