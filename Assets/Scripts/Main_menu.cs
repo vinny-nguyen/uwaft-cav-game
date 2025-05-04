@@ -7,6 +7,7 @@ public class Main_menu : MonoBehaviour
     [SerializeField] private string loadingSceneName = "LoadingScreen";
     [SerializeField] private string gameSceneName = "NodeMap";
     [SerializeField] private string settingsSceneName = "SettingsMenu";
+    [SerializeField] private string tutorialSceneName = "GameStart";
 
     public void PlayGame()
     {
@@ -15,6 +16,11 @@ public class Main_menu : MonoBehaviour
         SceneManager.LoadScene(loadingSceneName);
     }
 
+    public void OpenTutorial()
+    {
+        PlayerPrefs.SetString("TargetScene", gameSceneName);
+        SceneManager.LoadScene(tutorialSceneName);
+    }
     public void OpenSettings()
     {
         PlayerPrefs.SetString("PreviousScene", SceneManager.GetActiveScene().name);
