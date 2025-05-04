@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3569520702400294767}
   - component: {fileID: -8851102538227576220}
   - component: {fileID: 354660298895098759}
+  - component: {fileID: 6253346868535568618}
   m_Layer: 0
   m_Name: NodeMarker
   m_TagString: Untagged
@@ -104,6 +105,9 @@ MonoBehaviour:
   hoverScaleMultiplier: 1.1
   scaleSpeed: 10
   pointerCursorTexture: {fileID: 0}
+  inactiveHoverColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  nodeIndex: 0
 --- !u!60 &354660298895098759
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -171,3 +175,18 @@ PolygonCollider2D:
       - {x: 0.42263746, y: 0.012028962}
       - {x: 0.405, y: 0.114999995}
   m_UseDelaunayMesh: 0
+--- !u!114 &6253346868535568618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888835348061749661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8802055caf1ae2f4c9dc3f2e5befc5ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popUpDuration: 0.1
+  popDownDuration: 0.15
+  popScale: 1.1

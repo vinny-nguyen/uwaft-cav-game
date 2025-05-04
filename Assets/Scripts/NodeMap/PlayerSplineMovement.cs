@@ -2,439 +2,419 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 
-public class PlayerSplineMovement : MonoBehaviour
+namespace NodeMap
 {
-    [Header("Spline Setup")]
-    [SerializeField] private SplineContainer spline;
-
-    [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 2f;
-
-    [Header("Wheel Setup")]
-    [SerializeField] private Transform frontWheel;
-    [SerializeField] private Transform rearWheel;
-    [SerializeField] private float wheelSpinSpeed = 360f;
-
-    [Header("Smoke VFX")]
-    [SerializeField] private ParticleSystem smokeParticles;
-
-    [Header("Node Setup")]
-    [SerializeField] private List<GameObject> nodeMarkers = new List<GameObject>();
-    [SerializeField] private List<Sprite> normalNodeSprites = new List<Sprite>();
-    [SerializeField] private List<Sprite> activeNodeSprites = new List<Sprite>();
-    [SerializeField] private List<Sprite> completeNodeSprites;
-
-    private HashSet<int> completedNodes = new HashSet<int>();
-
-
-
-    private List<SplineStop> stops = new List<SplineStop>();
-    // private int currentStopIndex = 0;
-    private bool isMoving = false;
-    private bool isMovingForward = true;
-    // private int currentActiveNode = -1;
-    private ParticleSystem.MainModule smokeMain;
-
-    private void Awake()
+    /// <summary>
+    /// Handles player movement along a spline path between nodes
+    /// </summary>
+    public class PlayerSplineMovement : MonoBehaviour
     {
+        #region Inspector Fields
+        [Header("Spline Setup")]
+        [SerializeField] private SplineContainer spline;
+
+        [Header("Movement Settings")]
+        [SerializeField] private float moveSpeed = 2f;
+
+        [Header("Wheel Setup")]
+        [SerializeField] private Transform frontWheel;
+        [SerializeField] private Transform rearWheel;
+        [SerializeField] private float wheelSpinSpeed = 360f;
+
+        [Header("Smoke VFX")]
+        [SerializeField] private ParticleSystem smokeParticles;
+
+        [Header("Node Setup")]
+        [SerializeField] private List<GameObject> nodeMarkers = new List<GameObject>();
+        [SerializeField] private List<Sprite> normalNodeSprites = new List<Sprite>();
+        [SerializeField] private List<Sprite> activeNodeSprites = new List<Sprite>();
+        [SerializeField] private List<Sprite> completeNodeSprites;
+        #endregion
+
+        #region Private Fields
+        private List<SplineStop> stops = new List<SplineStop>();
+        private bool isMoving = false;
+        private bool isMovingForward = true;
+        private ParticleSystem.MainModule smokeMain;
+        private HashSet<int> completedNodes = new HashSet<int>();
+        #endregion
+
+        #region Unity Lifecycle
+        private void Awake()
+        {
+            InitializeStops();
+        }
+
+        void Start()
+        {
+            InitializeParticles();
+            InitializePosition();
+
+            if (stops.Count > 0)
+            {
+                StartCoroutine(StartSequence());
+            }
+        }
+
+        void Update()
+        {
+            HandleKeyboardInput();
+        }
+        #endregion
+
+        #region Initialization
+        private void InitializeStops()
+        {
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            ForceGenerateStops();
-            return;
-        }
+            if (!Application.isPlaying)
+            {
+                ForceGenerateStops();
+                return;
+            }
 #endif
-        GenerateStops();
-    }
-
-    void Start()
-    {
-        if (smokeParticles != null)
-            smokeMain = smokeParticles.main;
-
-        transform.position = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(0f));
-
-        if (stops.Count > 0)
-        {
-            StartCoroutine(StartSequence());
+            GenerateStops();
         }
-    }
 
-    private IEnumerator StartSequence()
-    {
-        // Move car from spline start (T=0) to first node (1/7)
-        yield return MoveAlongSpline(0f, stops[0].splinePercent);
-
-        // After arriving at first node
-        SetNodeToActive(0);
-        NodeMapGameManager.Instance.SetCurrentNode(1);
-
-    }
-
-
-    void Update()
-    {
-        if (!isMoving)
+        private void InitializeParticles()
         {
+            if (smokeParticles != null)
+                smokeMain = smokeParticles.main;
+        }
+
+        private void InitializePosition()
+        {
+            transform.position = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(0f));
+        }
+        #endregion
+
+        #region Input Handling
+        private void HandleKeyboardInput()
+        {
+            if (isMoving)
+                return;
+
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                TryMoveToNode(NodeMapGameManager.Instance.CurrentNodeIndex + 1);
+                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                TryMoveToNode(NodeMapGameManager.Instance.CurrentNodeIndex - 1);
+                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex - 1);
             }
         }
-    }
+        #endregion
 
-    public void TryMoveToNode(int targetNode)
-    {
-        targetNode = targetNode - 1; // Adjust for zero-based index
-
-        if (targetNode < 0 || targetNode >= stops.Count || isMoving)
-            return;
-
-        int currentNode = NodeMapGameManager.Instance.CurrentNodeIndex - 1; // zero-based
-
-        // ✅ Prevent forward movement if current node is not complete
-        if (targetNode > currentNode && !IsNodeCompleted(currentNode))
+        #region Node Movement
+        /// <summary>
+        /// Initial sequence to move player to first node
+        /// </summary>
+        private IEnumerator StartSequence()
         {
-            Debug.Log($"Cannot move forward: Node {currentNode + 1} is not yet complete.");
+            // Move car from spline start (T=0) to first node (1/7)
+            yield return MoveAlongSpline(0f, stops[0].splinePercent);
 
-            // 🔥 Shake current node to give feedback
-            if (nodeMarkers.Count > currentNode)
+            // After arriving at first node
+            SetNodeToActive(0);
+            NopeMapManager.Instance.SetCurrentNode(1);
+        }
+
+        /// <summary>
+        /// Attempts to move to a specific node if conditions allow
+        /// </summary>
+        public void TryMoveToNode(int targetNode)
+        {
+            targetNode = targetNode - 1; // Adjust for zero-based index
+
+            if (targetNode < 0 || targetNode >= stops.Count || isMoving)
+                return;
+
+            int currentNode = NopeMapManager.Instance.CurrentNodeIndex - 1; // zero-based
+
+            // Prevent forward movement if current node is not complete
+            if (targetNode > currentNode && !IsNodeCompleted(currentNode))
             {
-                NodeHoverHandler handler = nodeMarkers[currentNode].GetComponent<NodeHoverHandler>();
-                if (handler != null)
-                {
-                    handler.StartShake();
-                }
+                Debug.Log($"Cannot move forward: Node {currentNode + 1} is not yet complete.");
+                ShakeCurrentNode(currentNode);
+                return;
             }
 
-            return;
+            isMovingForward = targetNode > currentNode;
+            Debug.Log($"Moving to node {targetNode} (isMovingForward: {isMovingForward})");
+            StartCoroutine(MoveToNode(targetNode));
         }
 
-        isMovingForward = targetNode > currentNode;
-        Debug.Log($"Moving to node {targetNode} (isMovingForward: {isMovingForward})");
-        StartCoroutine(MoveToNode(targetNode));
-    }
-
-    IEnumerator MoveToNode(int targetNode)
-    {
-        isMoving = true;
-
-        if (NodeMapGameManager.Instance.CurrentNodeIndex != -1)
-            SetNodeToNormal(NodeMapGameManager.Instance.CurrentNodeIndex);
-
-        float startT = stops[NodeMapGameManager.Instance.CurrentNodeIndex - 1].splinePercent;
-        float targetT = stops[targetNode].splinePercent;
-
-        Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
-        transform.position = startPos;
-
-        yield return null;
-
-        if (NodeMapGameManager.Instance != null)
+        /// <summary>
+        /// Coroutine that handles the actual movement to a node
+        /// </summary>
+        private IEnumerator MoveToNode(int targetNode)
         {
-            NodeMapGameManager.Instance.SetCurrentNode(-1); // -1 = no active node
+            isMoving = true;
+
+            if (NopeMapManager.Instance.CurrentNodeIndex != -1)
+                SetNodeToNormal(NopeMapManager.Instance.CurrentNodeIndex);
+
+            float startT = stops[NopeMapManager.Instance.CurrentNodeIndex - 1].splinePercent;
+            float targetT = stops[targetNode].splinePercent;
+
+            Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
+            transform.position = startPos;
+
+            yield return null;
+
+            if (NopeMapManager.Instance != null)
+            {
+                NopeMapManager.Instance.SetCurrentNode(-1); // -1 = no active node
+            }
+
+            yield return MoveAlongSpline(startT, targetT);
+
+            isMoving = false;
+
+            NopeMapManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
+            SetNodeToActive(NopeMapManager.Instance.CurrentNodeIndex - 1);
         }
 
-        yield return MoveAlongSpline(startT, targetT);
-
-        isMoving = false;
-
-        NodeMapGameManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
-
-        SetNodeToActive(NodeMapGameManager.Instance.CurrentNodeIndex - 1);
-
-        // NodeMapGameManager.Instance.SetCurrentNode(NodeMapGameManager.Instance.CurrentNodeIndex);
-
-    }
-
-    IEnumerator MoveAlongSpline(float startT, float endT)
-    {
-        if (smokeParticles != null && !smokeParticles.isPlaying)
-            smokeParticles.Play();
-
-        Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
-        Vector3 endPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(endT));
-        float distance = Vector3.Distance(startPos, endPos);
-        float duration = distance / moveSpeed;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
+        /// <summary>
+        /// Moves the player along the spline from one percentage to another
+        /// </summary>
+        private IEnumerator MoveAlongSpline(float startT, float endT)
         {
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsed / duration);
-            float easedProgress = EaseInOut(progress);
-            float splineT = Mathf.Lerp(startT, endT, easedProgress);
+            StartSmokeEffect();
 
+            Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
+            Vector3 endPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(endT));
+            float distance = Vector3.Distance(startPos, endPos);
+            float duration = distance / moveSpeed;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsed / duration);
+                float easedProgress = EaseInOut(progress);
+                float splineT = Mathf.Lerp(startT, endT, easedProgress);
+
+                UpdatePlayerPosition(splineT);
+                UpdatePlayerRotation(splineT);
+                RotateWheels(isMovingForward ? 1f : -1f);
+
+                yield return null;
+            }
+
+            StopSmokeEffect();
+        }
+        #endregion
+
+        #region Movement Helpers
+        private void StartSmokeEffect()
+        {
+            if (smokeParticles != null && !smokeParticles.isPlaying)
+                smokeParticles.Play();
+        }
+
+        private void StopSmokeEffect()
+        {
+            if (smokeParticles != null && smokeParticles.isPlaying)
+                smokeParticles.Stop();
+        }
+
+        private void UpdatePlayerPosition(float splineT)
+        {
             Vector3 worldPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(splineT));
-            Vector3 tangent = spline.transform.TransformDirection((Vector3)spline.EvaluateTangent(splineT)).normalized;
-
             float bounce = Mathf.Sin(Time.time * 5f) * 0.05f;
             worldPos.y += bounce;
-
             transform.position = worldPos;
+        }
 
+        private void UpdatePlayerRotation(float splineT)
+        {
+            Vector3 tangent = spline.transform.TransformDirection((Vector3)spline.EvaluateTangent(splineT)).normalized;
             float angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
-            float wheelDirection = isMovingForward ? 1f : -1f;
-            RotateWheels(wheelDirection);
-
-            yield return null;
         }
 
-        if (smokeParticles != null && smokeParticles.isPlaying)
-            smokeParticles.Stop();
-    }
-
-
-    private void RotateWheels(float direction)
-    {
-        if (frontWheel != null)
-            frontWheel.Rotate(Vector3.forward, -wheelSpinSpeed * Time.deltaTime * direction);
-
-        if (rearWheel != null)
-            rearWheel.Rotate(Vector3.forward, -wheelSpinSpeed * Time.deltaTime * direction);
-    }
-
-    float EaseInOut(float t)
-    {
-        return t * t * (3f - 2f * t);
-    }
-
-    private void SetNodeToNormal(int nodeIndex)
-    {
-
-        nodeIndex = nodeIndex - 1; // Adjust for zero-based index
-
-        if (completedNodes.Contains(nodeIndex))
+        private void RotateWheels(float direction)
         {
-            // Skip — leave as complete (green)
-            return;
+            if (frontWheel != null)
+                frontWheel.Rotate(Vector3.forward, -wheelSpinSpeed * Time.deltaTime * direction);
+
+            if (rearWheel != null)
+                rearWheel.Rotate(Vector3.forward, -wheelSpinSpeed * Time.deltaTime * direction);
         }
 
-
-        if (nodeMarkers.Count > nodeIndex && normalNodeSprites.Count > nodeIndex)
+        private void ShakeCurrentNode(int nodeIndex)
         {
-            GameObject marker = nodeMarkers[nodeIndex];
-            if (marker != null)
+            if (nodeMarkers.Count <= nodeIndex)
+                return;
+
+            NodeHoverHandler handler = nodeMarkers[nodeIndex].GetComponent<NodeHoverHandler>();
+            if (handler != null)
             {
-                SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                if (sr != null && normalNodeSprites[nodeIndex] != null)
+                handler.StartShake();
+            }
+        }
+
+        private float EaseInOut(float t)
+        {
+            return t * t * (3f - 2f * t);
+        }
+        #endregion
+
+        #region Node State Management
+        private void SetNodeToNormal(int nodeIndex)
+        {
+            nodeIndex = nodeIndex - 1; // Adjust for zero-based index
+
+            if (completedNodes.Contains(nodeIndex))
+                return; // Skip — leave as complete (green)
+
+            if (nodeMarkers.Count > nodeIndex && normalNodeSprites.Count > nodeIndex)
+            {
+                GameObject marker = nodeMarkers[nodeIndex];
+                if (marker != null)
                 {
-                    StartCoroutine(AnimateToNormal(sr, normalNodeSprites[nodeIndex]));
+                    NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
+                    if (visualController != null)
+                    {
+                        visualController.TransitionToNormal(normalNodeSprites[nodeIndex]);
+                    }
+                    else
+                    {
+                        SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                        if (sr != null && normalNodeSprites[nodeIndex] != null)
+                        {
+                            sr.sprite = normalNodeSprites[nodeIndex];
+                        }
+                    }
                 }
             }
         }
-    }
 
-
-    private void SetNodeToActive(int nodeIndex)
-    {
-        if (completedNodes.Contains(nodeIndex))
+        private void SetNodeToActive(int nodeIndex)
         {
-            // Skip — leave as complete (green)
-            return;
-        }
+            if (completedNodes.Contains(nodeIndex))
+                return; // Skip — leave as complete (green)
 
-        if (nodeMarkers.Count > nodeIndex && activeNodeSprites.Count > nodeIndex)
-        {
-            GameObject marker = nodeMarkers[nodeIndex];
-            if (marker != null)
+            if (nodeMarkers.Count > nodeIndex && activeNodeSprites.Count > nodeIndex)
             {
-                SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
-
-                if (sr != null && activeNodeSprites[nodeIndex] != null)
+                GameObject marker = nodeMarkers[nodeIndex];
+                if (marker != null)
                 {
-                    StartCoroutine(AnimateToActive(sr, activeNodeSprites[nodeIndex]));
-                    // NodeMapGameManager.Instance.SetCurrentNode(nodeIndex); // Set current node in GameManager
-                }
+                    NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
+                    NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
 
-                if (handler != null)
-                {
-                    handler.SetClickable(true); // 🔥 Make node clickable
+                    if (visualController != null)
+                    {
+                        visualController.TransitionToActive(activeNodeSprites[nodeIndex]);
+                    }
+                    else
+                    {
+                        SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                        if (sr != null && activeNodeSprites[nodeIndex] != null)
+                        {
+                            sr.sprite = activeNodeSprites[nodeIndex];
+                        }
+                    }
+
+                    if (handler != null)
+                    {
+                        handler.SetClickable(true);
+                    }
                 }
             }
         }
-    }
 
-
-    public void SetNodeToComplete(int nodeIndex)
-    {
-        if (!completedNodes.Contains(nodeIndex))
+        /// <summary>
+        /// Sets a node to the completed state
+        /// </summary>
+        public void SetNodeToComplete(int nodeIndex)
         {
-            completedNodes.Add(nodeIndex);
-        }
-
-        if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
-        {
-            GameObject marker = nodeMarkers[nodeIndex];
-            if (marker != null)
+            if (!completedNodes.Contains(nodeIndex))
             {
-                SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
+                completedNodes.Add(nodeIndex);
+                NopeMapManager.Instance.CompleteNode(nodeIndex);
+            }
 
-                if (sr != null && completeNodeSprites[nodeIndex] != null)
+            if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
+            {
+                GameObject marker = nodeMarkers[nodeIndex];
+                if (marker != null)
                 {
-                    StartCoroutine(AnimateToComplete(sr, completeNodeSprites[nodeIndex]));
-                    NodeMapGameManager.Instance.SetCurrentNode(nodeIndex + 1); // Set current node in GameManager
-                    TryMoveToNode(NodeMapGameManager.Instance.CurrentNodeIndex + 1); // Move to next node after completion
-                }
+                    NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
+                    NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
 
-                if (handler != null)
-                {
-                    handler.SetClickable(true); // ✅ Keep completed nodes clickable for review
+                    if (visualController != null)
+                    {
+                        visualController.TransitionToComplete(completeNodeSprites[nodeIndex]);
+                    }
+                    else
+                    {
+                        SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                        if (sr != null && completeNodeSprites[nodeIndex] != null)
+                        {
+                            sr.sprite = completeNodeSprites[nodeIndex];
+                        }
+                    }
+
+                    if (handler != null)
+                    {
+                        handler.SetClickable(true); // Keep completed nodes clickable for review
+                    }
                 }
             }
+
+            // Update game manager and move to next node
+            NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
+            TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
         }
-    }
+        #endregion
 
-
-
-
-    private IEnumerator AnimateToActive(SpriteRenderer sr, Sprite activeSprite)
-    {
-        float popUpDuration = 0.1f;   // Faster pop up
-        float popDownDuration = 0.15f; // Slower settle back
-        float t = 0f;
-
-        Transform markerTransform = sr.transform;
-        Vector3 originalScale = markerTransform.localScale;
-        Vector3 poppedScale = originalScale * 1.1f;
-
-        // Fast Pop Up
-        while (t < popUpDuration)
+        #region Stops Management
+        private void GenerateStops()
         {
-            t += Time.deltaTime;
-            float scaleT = Mathf.Lerp(0f, 1f, t / popUpDuration);
-            markerTransform.localScale = Vector3.Lerp(originalScale, poppedScale, scaleT);
-            yield return null;
+            stops.Clear();
+            int numberOfStops = 6;
+            for (int i = 1; i <= numberOfStops; i++)
+            {
+                float percent = i / 7f;
+                stops.Add(new SplineStop { splinePercent = percent });
+            }
         }
-
-        // Swap to active sprite
-        sr.sprite = activeSprite;
-
-        // Slower Settle Down
-        t = 0f;
-        while (t < popDownDuration)
-        {
-            t += Time.deltaTime;
-            float scaleT = Mathf.Lerp(0f, 1f, t / popDownDuration);
-            markerTransform.localScale = Vector3.Lerp(poppedScale, originalScale, scaleT);
-            yield return null;
-        }
-
-        markerTransform.localScale = originalScale;
-    }
-
-
-    private IEnumerator AnimateToNormal(SpriteRenderer sr, Sprite normalSprite)
-    {
-        float popUpDuration = 0.1f;
-        float popDownDuration = 0.15f;
-        float t = 0f;
-
-        Transform markerTransform = sr.transform;
-        Vector3 originalScale = markerTransform.localScale;
-        Vector3 poppedScale = originalScale * 1.1f;
-
-        // Fast Pop Up
-        while (t < popUpDuration)
-        {
-            t += Time.deltaTime;
-            float scaleT = Mathf.Lerp(0f, 1f, t / popUpDuration);
-            markerTransform.localScale = Vector3.Lerp(originalScale, poppedScale, scaleT);
-            yield return null;
-        }
-
-        // Swap to normal sprite
-        sr.sprite = normalSprite;
-
-        // Slow Settle Down
-        t = 0f;
-        while (t < popDownDuration)
-        {
-            t += Time.deltaTime;
-            float scaleT = Mathf.Lerp(0f, 1f, t / popDownDuration);
-            markerTransform.localScale = Vector3.Lerp(poppedScale, originalScale, scaleT);
-            yield return null;
-        }
-
-        markerTransform.localScale = originalScale;
-    }
-
-    private IEnumerator AnimateToComplete(SpriteRenderer sr, Sprite completeSprite)
-    {
-        float popUpDuration = 0.15f;
-        float popDownDuration = 0.2f;
-        float t = 0f;
-
-        Transform markerTransform = sr.transform;
-        Vector3 originalScale = markerTransform.localScale;
-        Vector3 poppedScale = originalScale * 1.1f;
-
-        // Fast pop up
-        while (t < popUpDuration)
-        {
-            t += Time.deltaTime;
-            float scaleT = Mathf.Lerp(0f, 1f, t / popUpDuration);
-            markerTransform.localScale = Vector3.Lerp(originalScale, poppedScale, scaleT);
-            yield return null;
-        }
-
-        // Swap to complete sprite
-        sr.sprite = completeSprite;
-
-        // Slow settle down
-        t = 0f;
-        while (t < popDownDuration)
-        {
-            t += Time.deltaTime;
-            float scaleT = Mathf.Lerp(0f, 1f, t / popDownDuration);
-            markerTransform.localScale = Vector3.Lerp(poppedScale, originalScale, scaleT);
-            yield return null;
-        }
-
-        markerTransform.localScale = originalScale;
-    }
-
-    private void GenerateStops()
-    {
-        stops.Clear();
-        int numberOfStops = 6;
-        for (int i = 1; i <= numberOfStops; i++)
-        {
-            float percent = i / 7f;
-            stops.Add(new SplineStop { splinePercent = percent });
-        }
-    }
 
 #if UNITY_EDITOR
-    public void ForceGenerateStops()
-    {
-        GenerateStops();
-    }
+        /// <summary>
+        /// Forces stop generation in editor mode
+        /// </summary>
+        public void ForceGenerateStops()
+        {
+            GenerateStops();
+        }
 #endif
 
-    public List<SplineStop> GetStops()
-    {
-        return stops;
-    }
+        /// <summary>
+        /// Returns all spline stops for external tools
+        /// </summary>
+        public List<SplineStop> GetStops()
+        {
+            return stops;
+        }
 
-    public SplineContainer GetSpline()
-    {
-        return spline;
-    }
+        /// <summary>
+        /// Returns the spline container for external tools
+        /// </summary>
+        public SplineContainer GetSpline()
+        {
+            return spline;
+        }
 
-    public bool IsNodeCompleted(int nodeIndex)
-    {
-        return completedNodes.Contains(nodeIndex);
+        /// <summary>
+        /// Checks if a node is completed
+        /// </summary>
+        public bool IsNodeCompleted(int nodeIndex)
+        {
+            return completedNodes.Contains(nodeIndex);
+        }
+        #endregion
     }
-
 }

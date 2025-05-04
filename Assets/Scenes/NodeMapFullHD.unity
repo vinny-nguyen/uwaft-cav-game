@@ -1170,7 +1170,6 @@ GameObject:
   - component: {fileID: 105653184}
   - component: {fileID: 105653183}
   - component: {fileID: 105653188}
-  - component: {fileID: 105653189}
   m_Layer: 5
   m_Name: PopupCanvas
   m_TagString: Untagged
@@ -1274,48 +1273,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &105653189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105653182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 871ff7f51713e4d4f8d31974b398719b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupCanvasGroup: {fileID: 105653188}
-  backgroundOverlay: {fileID: 1631916118}
-  headerText: {fileID: 979601526}
-  leftArrowButton: {fileID: 1146365064}
-  rightArrowButton: {fileID: 1387865609}
-  closeButton: {fileID: 1537922785}
-  nodeHeaders:
-  - asdf
-  - wert
-  - zxcv
-  - fghj
-  - rtyu
-  - hjkl
-  slideDotPrefab: {fileID: 803932974476197269, guid: 0a14ce014f0d0b44ea830135fed528eb, type: 3}
-  slideIndicatorsParent: {fileID: 1967091421}
-  activeDotSprite: {fileID: 1747843013659402779, guid: a55250d6017884c4db8506711ebf7d16, type: 3}
-  inactiveDotSprite: {fileID: 5677458557214616210, guid: 15e2ed41856a26a4eb7f48a06d55c0e1, type: 3}
-  slideIndicatorsCanvasGroup: {fileID: 1967091423}
-  finalSlidePrefab: {fileID: 1374896256255027737, guid: 672d1ffb23b1fa8499e5f08d702689a0, type: 3}
-  finalSlideObject: {fileID: 0}
-  questionText: {fileID: 1426460578}
-  optionButtons:
-  - {fileID: 1913595724}
-  - {fileID: 848111520}
-  - {fileID: 112010957}
-  - {fileID: 904021175}
-  slidesParent: {fileID: 254864006}
-  quizPanel: {fileID: 1998057741}
-  failurePanel: {fileID: 400288973}
-  successPanel: {fileID: 265458516}
 --- !u!1 &105800189
 GameObject:
   m_ObjectHideFlags: 0
@@ -2343,7 +2300,7 @@ GameObject:
   m_Component:
   - component: {fileID: 254864007}
   m_Layer: 5
-  m_Name: SlidesPanel
+  m_Name: SlidesParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2698,6 +2655,69 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
   m_PrefabInstance: {fileID: 20725195}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &350366801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 350366803}
+  - component: {fileID: 350366802}
+  m_Layer: 0
+  m_Name: PopupManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &350366802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350366801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871ff7f51713e4d4f8d31974b398719b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popupCanvasGroup: {fileID: 105653188}
+  backgroundOverlay: {fileID: 1631916118}
+  headerText: {fileID: 979601526}
+  leftArrowButton: {fileID: 1146365064}
+  rightArrowButton: {fileID: 1387865609}
+  closeButton: {fileID: 1537922785}
+  nodeHeaders:
+  - asdf
+  - wert
+  - zxcv
+  - fghj
+  - rtyu
+  - hjkl
+  slidesParent: {fileID: 254864006}
+  quizPanel: {fileID: 1998057741}
+  failurePanel: {fileID: 400288973}
+  successPanel: {fileID: 265458516}
+  indicatorManager: {fileID: 1517808550}
+  quizManager: {fileID: 1684459979}
+--- !u!4 &350366803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350366801}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.3459806, y: 0.40277335, z: 7.1856375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &367869518
 GameObject:
   m_ObjectHideFlags: 0
@@ -4338,8 +4358,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 105653189}
-        m_TargetAssemblyTypeName: PopupManager, Assembly-CSharp
+      - m_Target: {fileID: 1684459979}
+        m_TargetAssemblyTypeName: NodeMap.QuizManager, Assembly-CSharp
         m_MethodName: CompleteCurrentNode
         m_Mode: 1
         m_Arguments:
@@ -4588,9 +4608,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 105653189}
-        m_TargetAssemblyTypeName: PopupManager, Assembly-CSharp
-        m_MethodName: RestartQuizForNode
+      - m_Target: {fileID: 1684459979}
+        m_TargetAssemblyTypeName: NodeMap.QuizManager, Assembly-CSharp
+        m_MethodName: RestartQuiz
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13718,8 +13738,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 105653189}
-        m_TargetAssemblyTypeName: PopupManager, Assembly-CSharp
+      - m_Target: {fileID: 350366802}
+        m_TargetAssemblyTypeName: NodeMap.PopupManager, Assembly-CSharp
         m_MethodName: ReturnToSlides
         m_Mode: 1
         m_Arguments:
@@ -13980,6 +14000,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1506346631}
   m_CullTransparentMesh: 1
+--- !u!1 &1517808549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1517808551}
+  - component: {fileID: 1517808550}
+  m_Layer: 0
+  m_Name: SlideIndicatorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1517808550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517808549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24b36ee952a3f2b4b847b30422873d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slideDotPrefab: {fileID: 803932974476197269, guid: 0a14ce014f0d0b44ea830135fed528eb, type: 3}
+  slideIndicatorsParent: {fileID: 1967091421}
+  activeDotSprite: {fileID: 1747843013659402779, guid: a55250d6017884c4db8506711ebf7d16, type: 3}
+  inactiveDotSprite: {fileID: 5677458557214616210, guid: 15e2ed41856a26a4eb7f48a06d55c0e1, type: 3}
+  slideIndicatorsCanvasGroup: {fileID: 1967091423}
+  transitionDuration: 0.2
+  scaleAmount: 0.9
+--- !u!4 &1517808551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517808549}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.3459806, y: 0.40277335, z: 7.1856375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1537922784
 GameObject:
   m_ObjectHideFlags: 0
@@ -14498,7 +14569,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 105653189}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PopupManager, Assembly-CSharp
         m_MethodName: ClosePopup
         m_Mode: 1
@@ -14670,6 +14741,60 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -125}
   m_SizeDelta: {x: -100, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1684459978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1684459980}
+  - component: {fileID: 1684459979}
+  m_Layer: 0
+  m_Name: QuizManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1684459979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684459978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3581269933a5fd4dbd26257391856d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quizPanel: {fileID: 1998057741}
+  successPanel: {fileID: 265458516}
+  failurePanel: {fileID: 400288973}
+  questionText: {fileID: 1426460578}
+  optionButtons:
+  - {fileID: 1913595724}
+  - {fileID: 848111520}
+  - {fileID: 112010957}
+  - {fileID: 904021175}
+  indicatorManager: {fileID: 1517808550}
+--- !u!4 &1684459980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684459978}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.3459806, y: 0.40277335, z: 7.1856375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1701940595
 GameObject:
   m_ObjectHideFlags: 0
@@ -17998,9 +18123,12 @@ SceneRoots:
   - {fileID: 796520079}
   - {fileID: 1701940598}
   - {fileID: 202265678}
-  - {fileID: 797682165}
   - {fileID: 1988037150}
+  - {fileID: 797682165}
   - {fileID: 2065531345}
   - {fileID: 105653186}
   - {fileID: 788974782}
   - {fileID: 1916213547}
+  - {fileID: 1684459980}
+  - {fileID: 1517808551}
+  - {fileID: 350366803}

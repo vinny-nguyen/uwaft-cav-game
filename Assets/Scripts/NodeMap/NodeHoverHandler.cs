@@ -2,137 +2,177 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class NodeHoverHandler : MonoBehaviour
+namespace NodeMap
 {
-    [Header("Hover Settings")]
-    [SerializeField] private float hoverScaleMultiplier = 1.2f;
-    [SerializeField] private float scaleSpeed = 5f;
-    [SerializeField] private Texture2D pointerCursorTexture;
-    [SerializeField] private Color inactiveHoverColor = new Color(0.9f, 0.9f, 0.9f, 1f); // Slightly darker
-    [SerializeField] private Color normalColor = Color.white;
-
-    [Header("Node Info")]
-    public int nodeIndex;
-
-    private Vector3 originalScale;
-    private bool isHovered = false;
-    private SpriteRenderer spriteRenderer;
-    private bool isClickable = false;
-
-
-    private void Start()
+    /// <summary>
+    /// Handles node hover and click interactions
+    /// </summary>
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class NodeHoverHandler : MonoBehaviour
     {
-        originalScale = transform.localScale;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
-            spriteRenderer.color = normalColor;
-    }
+        #region Inspector Fields
+        [Header("Hover Settings")]
+        [SerializeField] private float hoverScaleMultiplier = 1.2f;
+        [SerializeField] private float scaleSpeed = 5f;
+        [SerializeField] private Texture2D pointerCursorTexture;
+        [SerializeField] private Color inactiveHoverColor = new Color(0.9f, 0.9f, 0.9f, 1f);
+        [SerializeField] private Color normalColor = Color.white;
 
-    private void Update()
-    {
-        bool shouldScale = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex || isClickable;
+        [Header("Node Info")]
+        public int nodeIndex;
+        #endregion
 
-        if (!isHovered)
+        #region Private Fields
+        private Vector3 originalScale;
+        private bool isHovered = false;
+        private SpriteRenderer spriteRenderer;
+        private bool isClickable = false;
+        #endregion
+
+        #region Unity Lifecycle
+        private void Start()
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
-            return;
+            Initialize();
         }
 
-        if (shouldScale)
+        private void Update()
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale * hoverScaleMultiplier, Time.deltaTime * scaleSpeed);
+            UpdateScale();
         }
-        else
+        #endregion
+
+        #region Mouse Interaction
+        private void OnMouseEnter()
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
-        }
-    }
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return;
 
-
-    private void OnMouseEnter()
-    {
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        isHovered = true;
-
-        if (pointerCursorTexture != null)
-        {
-            Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
+            isHovered = true;
+            UpdateCursor(true);
+            UpdateNodeAppearance();
         }
 
-        PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
-        bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex);
-        bool isClickable = NodeMapGameManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted;
-
-        if (!isClickable && spriteRenderer != null)
+        private void OnMouseExit()
         {
-            spriteRenderer.color = inactiveHoverColor; // Darken if not clickable
-        }
-    }
-
-    private void OnMouseExit()
-    {
-        isHovered = false;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.color = normalColor;
-        }
-    }
-
-    private void OnMouseDown()
-    {
-        if (NodeMapGameManager.Instance == null)
-        {
-            Debug.LogWarning("NodeMapGameManager instance missing!");
-            return;
+            isHovered = false;
+            UpdateCursor(false);
+            ResetNodeAppearance();
         }
 
-        PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
-        bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex - 1); // ✅ Adjust for zero-based index
+        private void OnMouseDown()
+        {
+            HandleNodeClick();
+        }
+        #endregion
 
-        if (NodeMapGameManager.Instance.CurrentNodeIndex != nodeIndex && !isCompleted)
+        #region Public Methods
+        /// <summary>
+        /// Sets whether this node can be clicked
+        /// </summary>
+        public void SetClickable(bool value)
+        {
+            isClickable = value;
+        }
+
+        /// <summary>
+        /// Starts the shake animation to indicate invalid interaction
+        /// </summary>
+        public void StartShake()
         {
             StartCoroutine(ShakeNode());
-            return;
         }
+        #endregion
 
-        if (PopupManager.Instance != null)
+        #region Private Methods
+        private void Initialize()
         {
-            PopupManager.Instance.OpenPopupForNode(nodeIndex);
+            originalScale = transform.localScale;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            
+            if (spriteRenderer != null)
+                spriteRenderer.color = normalColor;
         }
-    }
 
-
-    private IEnumerator ShakeNode()
-    {
-        float shakeDuration = 0.15f;
-        float shakeMagnitude = 0.15f;
-        float time = 0f;
-
-        Vector3 originalPosition = transform.localPosition;
-
-        while (time < shakeDuration)
+        private void UpdateScale()
         {
-            time += Time.deltaTime;
-            float offsetX = Mathf.Sin(time * 50f) * shakeMagnitude * (1f - time / shakeDuration);
-            transform.localPosition = originalPosition + new Vector3(offsetX, 0f, 0f);
-            yield return null;
+            bool shouldScale = NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isClickable;
+            Vector3 targetScale = originalScale;
+
+            if (isHovered && shouldScale)
+                targetScale *= hoverScaleMultiplier;
+
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
         }
 
-        transform.localPosition = originalPosition;
-    }
+        private void UpdateCursor(bool showCustomCursor)
+        {
+            if (showCustomCursor && pointerCursorTexture != null)
+                Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
+            else
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
 
-    public void SetClickable(bool value)
-    {
-        isClickable = value;
-    }
+        private void UpdateNodeAppearance()
+        {
+            if (spriteRenderer == null) return;
 
-    public void StartShake()
-    {
-        StartCoroutine(ShakeNode());
-    }
+            bool canInteract = IsNodeInteractable();
+            if (!canInteract)
+                spriteRenderer.color = inactiveHoverColor;
+        }
 
+        private void ResetNodeAppearance()
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.color = normalColor;
+        }
+
+        private bool IsNodeInteractable()
+        {
+            PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
+            bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex - 1);
+            return NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted || isClickable;
+        }
+
+        private void HandleNodeClick()
+        {
+            if (NopeMapManager.Instance == null)
+            {
+                Debug.LogWarning("NopeMapManager instance missing!");
+                return;
+            }
+
+            bool canInteract = IsNodeInteractable();
+
+            if (!canInteract)
+            {
+                StartCoroutine(ShakeNode());
+                return;
+            }
+
+            if (PopupManager.Instance != null)
+                PopupManager.Instance.OpenPopupForNode(nodeIndex);
+        }
+        #endregion
+
+        #region Animations
+        private IEnumerator ShakeNode()
+        {
+            float shakeDuration = 0.15f;
+            float shakeMagnitude = 0.15f;
+            float time = 0f;
+            Vector3 originalPosition = transform.localPosition;
+
+            while (time < shakeDuration)
+            {
+                time += Time.deltaTime;
+                float offsetX = Mathf.Sin(time * 50f) * shakeMagnitude * (1f - time / shakeDuration);
+                transform.localPosition = originalPosition + new Vector3(offsetX, 0f, 0f);
+                yield return null;
+            }
+
+            transform.localPosition = originalPosition;
+        }
+        #endregion
+    }
 }
