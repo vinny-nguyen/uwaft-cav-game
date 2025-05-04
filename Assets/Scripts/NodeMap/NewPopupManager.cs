@@ -86,8 +86,14 @@ public class PopupManager : MonoBehaviour
     // -------------------------------
     public void OpenPopupForNode(int nodeIndex)
     {
+        // 🔥 Reset popup mode + panels
+        inQuizMode = false;
+        quizPanel.SetActive(false);
+        failurePanel.SetActive(false);
+        successPanel.SetActive(false);
+        slideIndicatorsParent.gameObject.SetActive(true);
 
-        openedNodeIndex = nodeIndex; // ✅ Track which node the popup is for
+        openedNodeIndex = nodeIndex; // Track the opened node
 
         // Deactivate and clear old slides
         foreach (var slide in currentNodeSlides)
@@ -111,7 +117,7 @@ public class PopupManager : MonoBehaviour
             currentNodeSlides.Add(slide.gameObject);
             slide.gameObject.SetActive(false);
 
-            // If this is the FinalSlide, set its header + button
+            // Setup quiz start button if present
             if (slide.name == "StartQuiz")
             {
                 TMP_Text finalHeader = slide.GetComponentInChildren<TMP_Text>();
@@ -135,6 +141,8 @@ public class PopupManager : MonoBehaviour
             : $"Node {nodeIndex}";
 
         GenerateSlideIndicators(currentNodeSlides.Count);
+        UpdateSlideIndicators(0);
+        UpdateArrows();
 
         lastSlideIndex = -1;
         currentSlideIndex = 0;
@@ -142,16 +150,24 @@ public class PopupManager : MonoBehaviour
         StartCoroutine(AnimatePopupOpen());
     }
 
+
     public IEnumerator ClosePopup()
     {
-
         foreach (var slide in currentNodeSlides)
         {
             if (slide != null)
                 slide.SetActive(false);
         }
 
-        // Start closing animation
+        // 🔥 Clear indicators and reset panels
+        inQuizMode = false;
+        currentNodeSlides.Clear();
+        spawnedDots.Clear();
+        foreach (Transform child in slideIndicatorsParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         yield return StartCoroutine(AnimatePopupClose());
     }
 
@@ -497,6 +513,7 @@ public class PopupManager : MonoBehaviour
         Debug.Log("[QUIZ] Restarting quiz.");
 
         failurePanel.SetActive(false);
+        successPanel.SetActive(false);
         slideIndicatorsParent.gameObject.SetActive(true);
 
         inQuizMode = true;
@@ -506,6 +523,7 @@ public class PopupManager : MonoBehaviour
 
         GenerateSlideIndicators(currentQuizQuestions.Count);
         UpdateSlideIndicators(0);
+        UpdateArrows();
 
         quizPanel.SetActive(true);
         LoadQuizQuestion(currentQuizQuestionIndex);
@@ -515,19 +533,21 @@ public class PopupManager : MonoBehaviour
     {
         Debug.Log("[QUIZ] Returning to educational slides.");
 
-        failurePanel.SetActive(false);
-        slideIndicatorsParent.gameObject.SetActive(true);
-
         inQuizMode = false;
-        currentSlideIndex = 0;
+        quizPanel.SetActive(false);
+        slideIndicatorsParent.gameObject.SetActive(true);
+        failurePanel.SetActive(false);
+        successPanel.SetActive(false);
 
-        ShowSlide(currentSlideIndex);
-        slidesParent.SetActive(true);
+        currentSlideIndex = 0;
 
         GenerateSlideIndicators(currentNodeSlides.Count);
         UpdateSlideIndicators(0);
         UpdateArrows();
+
+        ShowSlide(currentSlideIndex);
     }
+
 
     private IEnumerator TransitionToSuccessPanel()
     {
@@ -584,7 +604,7 @@ public class PopupManager : MonoBehaviour
         // ✅ Node not yet completed — mark as complete
         successPanel.SetActive(false);
         StartCoroutine(CompleteAfterPopupCloses(completedNodeIndex));
-        
+
     }
 
 
