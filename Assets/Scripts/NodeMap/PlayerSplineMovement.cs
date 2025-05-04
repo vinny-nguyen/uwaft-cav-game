@@ -30,6 +30,10 @@ namespace NodeMap
         [SerializeField] private List<Sprite> normalNodeSprites = new List<Sprite>();
         [SerializeField] private List<Sprite> activeNodeSprites = new List<Sprite>();
         [SerializeField] private List<Sprite> completeNodeSprites;
+
+        [Header("Tutorial")]
+        [SerializeField] private TutorialManager tutorialManager;
+        [SerializeField] private int firstNodeIndex = 0; // The index of the first tutorial node
         #endregion
 
         #region Private Fields
@@ -117,6 +121,10 @@ namespace NodeMap
             // After arriving at first node
             SetNodeToActive(0);
             NopeMapManager.Instance.SetCurrentNode(1);
+            if (tutorialManager != null && !tutorialManager.HasCompletedTutorial())
+            {
+                tutorialManager.TriggerNodeReachedTutorial();
+            }
         }
 
         /// <summary>
@@ -367,6 +375,17 @@ namespace NodeMap
             // Update game manager and move to next node
             NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
             TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
+        }
+        #endregion
+
+        #region Tutorial Management
+        private void CheckForTutorialTrigger(int nodeIndex)
+        {
+            // Check if this is the first node and tutorial should be shown
+            if (nodeIndex == firstNodeIndex && tutorialManager != null && !tutorialManager.HasCompletedTutorial())
+            {
+                tutorialManager.TriggerNodeReachedTutorial();
+            }
         }
         #endregion
 
