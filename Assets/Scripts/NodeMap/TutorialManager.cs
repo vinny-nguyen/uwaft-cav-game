@@ -18,7 +18,7 @@ namespace NodeMap
         [SerializeField] private TextMeshProUGUI continueText;
 
         [Header("Arrow Settings")]
-        [SerializeField] private float arrowBobAmount = 20f;
+        [SerializeField] private float arrowBobAmount = 10f;
         [SerializeField] private float arrowBobSpeed = 2f;
 
         [Header("Target References")]
@@ -29,6 +29,11 @@ namespace NodeMap
         [SerializeField] private bool showTutorialOnStart = true;
         [SerializeField] private string playerPrefKey = "CompletedTutorial";
         [SerializeField] private float fadeInDuration = 0.5f;
+
+        [Header("Spotlight Effect")]
+        [SerializeField] private Image dimmerPanel;
+        [SerializeField] private float spotlightRadius = 100f;
+        [SerializeField] private Material spotlightMaterial;
 
         [SerializeField] private RectTransform messagePanel;
 
@@ -52,6 +57,12 @@ namespace NodeMap
             }
 
             SetupTutorialSteps();
+
+            if (dimmerPanel != null && spotlightMaterial != null)
+            {
+                dimmerPanel.material = Instantiate(spotlightMaterial);
+                dimmerPanel.gameObject.SetActive(false);
+            }
         }
 
         private void Start()
@@ -137,6 +148,13 @@ namespace NodeMap
         {
             tutorialCanvasGroup.alpha = 0f;
 
+            // Enable spotlight dimmer
+            if (dimmerPanel != null)
+            {
+                dimmerPanel.gameObject.SetActive(true);
+                dimmerPanel.color = new Color(0, 0, 0, 0);
+            }
+
             // Make sure text is set before showing anything
             if (currentStep < tutorialSteps.Count && messageText != null)
             {
@@ -148,13 +166,22 @@ namespace NodeMap
             while (timer < fadeInDuration)
             {
                 timer += Time.deltaTime;
-                tutorialCanvasGroup.alpha = Mathf.Lerp(0f, 1f, timer / fadeInDuration);
+                float t = timer / fadeInDuration;
+                tutorialCanvasGroup.alpha = Mathf.Lerp(0f, 1f, t);
+
+                // Also fade in the dimmer
+                if (dimmerPanel != null)
+                {
+                    dimmerPanel.color = new Color(0, 0, 0, Mathf.Lerp(0, 0.7f, t));
+                }
+
                 yield return null;
             }
 
             tutorialCanvasGroup.alpha = 1f;
             ShowCurrentStep();
         }
+
         /// <summary>
         /// Display the current tutorial step
         /// </summary>
@@ -249,6 +276,43 @@ namespace NodeMap
                 Vector3 worldPosition = target.position + new Vector3(0, 1f, 0); // Add offset in world space
                 arrowImage.position = worldPosition;
             }
+
+            UpdateSpotlight(target);
+
+        }
+
+        private void UpdateSpotlight(Transform target)
+        {
+            if (dimmerPanel == null || dimmerPanel.material == null || target == null || mainCamera == null)
+                return;
+
+            // Get screen position of target
+            Vector2 viewportPosition = mainCamera.WorldToViewportPoint(target.position);
+
+            // Calculate the aspect ratio correction
+            float aspectRatio = (float)Screen.width / Screen.height;
+
+            // Adjust the X coordinate to account for aspect ratio
+            // This makes a viewport circle stay circular on screen
+            Vector4 correctedCenter = new Vector4(
+                viewportPosition.x,  // No change to x position 
+                viewportPosition.y,
+                0,
+                0
+            );
+
+            dimmerPanel.material.SetVector("_Center", correctedCenter);
+
+            // Calculate radius based on screen height and account for aspect ratio
+            float screenHeight = Screen.height;
+            float normalizedRadius = spotlightRadius / screenHeight;
+
+            // Set the radius with aspect ratio correction factor
+            dimmerPanel.material.SetFloat("_Radius", normalizedRadius);
+            dimmerPanel.material.SetFloat("_SoftEdge", normalizedRadius * 0.2f);
+
+            // Set the aspect ratio as a shader property to correct the circle in the fragment shader
+            dimmerPanel.material.SetFloat("_AspectRatio", aspectRatio);
         }
 
         private bool IsTargetVisible(Transform target)
@@ -398,12 +462,26 @@ namespace NodeMap
             while (timer < duration)
             {
                 timer += Time.deltaTime;
-                tutorialCanvasGroup.alpha = Mathf.Lerp(1f, 0f, timer / duration);
+                float t = timer / duration;
+                tutorialCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
+
+                // Also fade out the dimmer
+                if (dimmerPanel != null)
+                {
+                    dimmerPanel.color = new Color(0, 0, 0, Mathf.Lerp(0.7f, 0, t));
+                }
+
                 yield return null;
             }
 
             tutorialCanvasGroup.alpha = 0f;
             tutorialCanvasGroup.gameObject.SetActive(false);
+
+            // Disable spotlight dimmer
+            if (dimmerPanel != null)
+            {
+                dimmerPanel.gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
