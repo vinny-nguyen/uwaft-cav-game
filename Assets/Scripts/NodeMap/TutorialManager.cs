@@ -113,12 +113,18 @@ namespace NodeMap
         {
             if (tutorialSteps.Count == 0)
             {
-                Debug.LogWarning("No tutorial steps defined!");
+                Debug.LogWarning("No tutorial steps have been defined!");
                 return;
             }
 
             tutorialActive = true;
             currentStep = 0;
+
+            // Pre-populate the text before showing the canvas
+            if (currentStep < tutorialSteps.Count && messageText != null)
+            {
+                messageText.text = tutorialSteps[currentStep].Message;
+            }
 
             // Enable the tutorial canvas
             tutorialCanvasGroup.gameObject.SetActive(true);
@@ -130,6 +136,13 @@ namespace NodeMap
         private IEnumerator FadeInTutorial()
         {
             tutorialCanvasGroup.alpha = 0f;
+
+            // Make sure text is set before showing anything
+            if (currentStep < tutorialSteps.Count && messageText != null)
+            {
+                messageText.text = tutorialSteps[currentStep].Message;
+            }
+
             float timer = 0f;
 
             while (timer < fadeInDuration)
@@ -142,7 +155,9 @@ namespace NodeMap
             tutorialCanvasGroup.alpha = 1f;
             ShowCurrentStep();
         }
-
+        /// <summary>
+        /// Display the current tutorial step
+        /// </summary>
         /// <summary>
         /// Display the current tutorial step
         /// </summary>
@@ -157,7 +172,10 @@ namespace NodeMap
             TutorialStep step = tutorialSteps[currentStep];
 
             // Update text
-            messageText.text = step.Message;
+            if (messageText != null)
+            {
+                messageText.text = step.Message;
+            }
 
             // Position arrow and panel
             if (step.Target != null)
