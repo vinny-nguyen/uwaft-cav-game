@@ -2831,7 +2831,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3023,11 +3023,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: b4ead5a79b8bc7c4d8689f7479575c47, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5.373107
+      value: 8.6336
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: b4ead5a79b8bc7c4d8689f7479575c47, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.8958755
+      value: 8.6336
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: b4ead5a79b8bc7c4d8689f7479575c47, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 8.6336
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: b4ead5a79b8bc7c4d8689f7479575c47, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3355,7 +3359,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 8
+    OrthographicSize: 6
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -3425,19 +3429,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.373933
+      value: 9.5802
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.3021197
+      value: 9.5802
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 9.5802
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.05
+      value: -1.67
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.45
+      value: -0.82
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3563,11 +3571,11 @@ WheelJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: 0.987, y: -0.45000005}
+  m_Anchor: {x: 1.6499996, y: -0.7499999}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_Suspension:
     m_DampingRatio: 0.35
-    m_Frequency: 3
+    m_Frequency: 4
     m_Angle: 90
   m_UseMotor: 0
   m_Motor:
@@ -3588,11 +3596,11 @@ WheelJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: -1.05, y: -0.45000005}
+  m_Anchor: {x: -1.6499996, y: -0.7499999}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_Suspension:
     m_DampingRatio: 0.35
-    m_Frequency: 3
+    m_Frequency: 4
     m_Angle: 90
   m_UseMotor: 0
   m_Motor:
@@ -3613,7 +3621,7 @@ MonoBehaviour:
   _Front_TireRB: {fileID: 852283503}
   _Rear_TireRB: {fileID: 101367726}
   _CarRB: {fileID: 1293554635}
-  _Speed: 40
+  _Speed: 50
   _Rotation_Speed: 100
   _Can_Control: 1
 --- !u!1 &1359406766
@@ -4200,19 +4208,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.373933
+      value: 9.5802
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.3021197
+      value: 9.5802
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 9.5892
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.987
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.45
+      value: -0.82
       objectReference: {fileID: 0}
     - target: {fileID: 8742538545776668643, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_LocalPosition.z
