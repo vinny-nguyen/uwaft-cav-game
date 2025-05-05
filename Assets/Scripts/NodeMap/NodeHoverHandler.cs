@@ -95,7 +95,7 @@ namespace NodeMap
 
         private void UpdateScale()
         {
-            bool shouldScale = NodeMapManager.Instance.CurrentNodeIndex == nodeIndex || isClickable;
+            bool shouldScale = NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isClickable;
             Vector3 targetScale = originalScale;
 
             if (isHovered && shouldScale)
@@ -131,14 +131,14 @@ namespace NodeMap
         {
             PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
             bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex - 1);
-            return NodeMapManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted || isClickable;
+            return NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted || isClickable;
         }
 
         private void HandleNodeClick()
         {
-            if (NodeMapManager.Instance == null)
+            if (NopeMapManager.Instance == null)
             {
-                Debug.LogWarning("NodeMapManager instance missing!");
+                Debug.LogWarning("NopeMapManager instance missing!");
                 return;
             }
 

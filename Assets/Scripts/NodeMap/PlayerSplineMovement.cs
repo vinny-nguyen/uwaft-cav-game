@@ -48,40 +48,46 @@ namespace NodeMap
         private void Awake()
         {
             InitializeStops();
+            Debug.Log("Awake is running in PlayerSplineMovement.");
         }
 
-        void Start()
+        private void Start()
         {
-            StartCoroutine(DelayedInitialization());
-        }
+            Debug.Log("Start is running in PlayerSplineMovement.");
 
-        public void StartInitialSequence()
-        {
-            if (stops.Count > 0)
+            // Validate critical components
+            if (spline == null)
             {
-                StartCoroutine(StartSequence());
+                Debug.LogError("Spline Container is missing!");
             }
-        }
 
-        private IEnumerator DelayedInitialization()
-        {
-            // Wait for next frame to ensure other objects are initialized
-            yield return null;
+            if (smokeParticles == null)
+            {
+                Debug.LogError("Smoke particle system is missing!");
+            }
+            else
+            {
+                Debug.Log($"Smoke particles found: {smokeParticles.gameObject.name}, Is active: {smokeParticles.gameObject.activeSelf}");
+            }
+
+            if (frontWheel == null || rearWheel == null)
+            {
+                Debug.LogError("One or more wheel transforms are missing!");
+            }
 
             InitializeParticles();
             InitializePosition();
 
-            // Make sure NodeMapManager is available
-            if (NodeMapManager.Instance == null)
-            {
-                Debug.LogError("NodeMapManager is not available. Waiting one more frame...");
-                yield return null;
-            }
-
             if (stops.Count > 0)
             {
+                Debug.Log($"Starting sequence to move to first node. Stop count: {stops.Count}");
                 StartCoroutine(StartSequence());
             }
+            else
+            {
+                Debug.LogError("No stops available to move to!");
+            }
+            Time.timeScale = 1;
         }
 
         void Update()
@@ -103,57 +109,16 @@ namespace NodeMap
             GenerateStops();
         }
 
-        private void OnEnable()
-        {
-            // Reset state on enable/reenable
-            if (!isMoving && transform.position == Vector3.zero)
-            {
-                // We might be in a fresh scene load state
-                if (NodeMapManager.Instance != null)
-                {
-                    NodeMapManager.Instance.SetCurrentNode(-1);
-                }
-                else
-                {
-                    Debug.LogWarning("NodeMapManager instance is null on OnEnable");
-                }
-                ResetPosition();
-            }
-        }
-
-        public void ResetPosition()
-        {
-            if (spline == null)
-            {
-                Debug.LogWarning("Spline is null in ResetPosition");
-                return;
-            }
-
-            if (spline.Splines == null || spline.Splines.Count == 0)
-            {
-                Debug.LogWarning("Spline has no data in ResetPosition");
-                return;
-            }
-
-            // Position at the start of the spline
-            transform.position = spline.EvaluatePosition(0);
-
-            // Optional: set rotation based on spline
-            Vector3 forward = spline.EvaluateTangent(0);
-            if (forward != Vector3.zero)
-            {
-                transform.forward = forward;
-            }
-        }
-
         private void InitializeParticles()
         {
+            Debug.Log("Initializing smoke particles.");
             if (smokeParticles != null)
                 smokeMain = smokeParticles.main;
         }
 
         private void InitializePosition()
         {
+            Debug.Log("Initializing player position.");
             transform.position = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(0f));
         }
         #endregion
@@ -166,11 +131,11 @@ namespace NodeMap
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex + 1);
+                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex - 1);
+                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex - 1);
             }
         }
         #endregion
@@ -181,12 +146,13 @@ namespace NodeMap
         /// </summary>
         private IEnumerator StartSequence()
         {
+            Debug.Log("Starting sequence to move player to first node.");
             // Move car from spline start (T=0) to first node (1/7)
             yield return MoveAlongSpline(0f, stops[0].splinePercent);
 
             // After arriving at first node
             SetNodeToActive(0);
-            NodeMapManager.Instance.SetCurrentNode(1);
+            NopeMapManager.Instance.SetCurrentNode(1);
             if (tutorialManager != null && !tutorialManager.HasCompletedTutorial())
             {
                 tutorialManager.TriggerNodeReachedTutorial();
@@ -203,7 +169,7 @@ namespace NodeMap
             if (targetNode < 0 || targetNode >= stops.Count || isMoving)
                 return;
 
-            int currentNode = NodeMapManager.Instance.CurrentNodeIndex - 1; // zero-based
+            int currentNode = NopeMapManager.Instance.CurrentNodeIndex - 1; // zero-based
 
             // Prevent forward movement if current node is not complete
             if (targetNode > currentNode && !IsNodeCompleted(currentNode))
@@ -221,14 +187,14 @@ namespace NodeMap
         /// <summary>
         /// Coroutine that handles the actual movement to a node
         /// </summary>
-        public IEnumerator MoveToNode(int targetNode)
+        private IEnumerator MoveToNode(int targetNode)
         {
             isMoving = true;
 
-            if (NodeMapManager.Instance.CurrentNodeIndex != -1)
-                SetNodeToNormal(NodeMapManager.Instance.CurrentNodeIndex);
+            if (NopeMapManager.Instance.CurrentNodeIndex != -1)
+                SetNodeToNormal(NopeMapManager.Instance.CurrentNodeIndex);
 
-            float startT = stops[NodeMapManager.Instance.CurrentNodeIndex - 1].splinePercent;
+            float startT = stops[NopeMapManager.Instance.CurrentNodeIndex - 1].splinePercent;
             float targetT = stops[targetNode].splinePercent;
 
             Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
@@ -236,17 +202,17 @@ namespace NodeMap
 
             yield return null;
 
-            if (NodeMapManager.Instance != null)
+            if (NopeMapManager.Instance != null)
             {
-                NodeMapManager.Instance.SetCurrentNode(-1); // -1 = no active node
+                NopeMapManager.Instance.SetCurrentNode(-1); // -1 = no active node
             }
 
             yield return MoveAlongSpline(startT, targetT);
 
             isMoving = false;
 
-            NodeMapManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
-            SetNodeToActive(NodeMapManager.Instance.CurrentNodeIndex - 1);
+            NopeMapManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
+            SetNodeToActive(NopeMapManager.Instance.CurrentNodeIndex - 1);
         }
 
         /// <summary>
@@ -254,7 +220,14 @@ namespace NodeMap
         /// </summary>
         private IEnumerator MoveAlongSpline(float startT, float endT)
         {
+            Debug.Log($"Moving along spline from {startT} to {endT}");
             StartSmokeEffect();
+
+            if (spline == null)
+            {
+                Debug.LogError("Cannot move - spline is null!");
+                yield break;
+            }
 
             Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
             Vector3 endPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(endT));
@@ -262,8 +235,18 @@ namespace NodeMap
             float duration = distance / moveSpeed;
             float elapsed = 0f;
 
+            Debug.Log($"Start position: {startPos}, End position: {endPos}, Distance: {distance}, Duration: {duration}, Speed: {moveSpeed}");
+
+            // Force minimum duration
+            if (duration < 0.1f)
+            {
+                Debug.LogWarning($"Duration too short: {duration}. Setting to minimum value.");
+                duration = 0.1f;
+            }
+
             while (elapsed < duration)
             {
+                Debug.Log($"Animation progress: {elapsed}/{duration} - {elapsed / duration * 100}%");
                 elapsed += Time.deltaTime;
                 float progress = Mathf.Clamp01(elapsed / duration);
                 float easedProgress = EaseInOut(progress);
@@ -276,6 +259,11 @@ namespace NodeMap
                 yield return null;
             }
 
+            // Ensure we end at exactly the target position
+            UpdatePlayerPosition(endT);
+            UpdatePlayerRotation(endT);
+
+            Debug.Log("Movement along spline complete!");
             StopSmokeEffect();
         }
         #endregion
@@ -283,8 +271,29 @@ namespace NodeMap
         #region Movement Helpers
         private void StartSmokeEffect()
         {
-            if (smokeParticles != null && !smokeParticles.isPlaying)
-                smokeParticles.Play();
+            Debug.Log("Starting smoke effect.");
+            if (smokeParticles != null)
+            {
+                if (!smokeParticles.gameObject.activeSelf)
+                {
+                    smokeParticles.gameObject.SetActive(true);
+                    Debug.Log("Smoke particles game object activated");
+                }
+
+                if (!smokeParticles.isPlaying)
+                {
+                    smokeParticles.Play();
+                    Debug.Log("Smoke particles started playing");
+                }
+                else
+                {
+                    Debug.Log("Smoke particles were already playing");
+                }
+            }
+            else
+            {
+                Debug.LogError("Cannot start smoke effect - particle system is null");
+            }
         }
 
         private void StopSmokeEffect()
@@ -299,6 +308,7 @@ namespace NodeMap
             float bounce = Mathf.Sin(Time.time * 5f) * 0.05f;
             worldPos.y += bounce;
             transform.position = worldPos;
+            Debug.Log($"Updated position to: {worldPos}");
         }
 
         private void UpdatePlayerRotation(float splineT)
@@ -407,7 +417,7 @@ namespace NodeMap
             if (!completedNodes.Contains(nodeIndex))
             {
                 completedNodes.Add(nodeIndex);
-                NodeMapManager.Instance.CompleteNode(nodeIndex);
+                NopeMapManager.Instance.CompleteNode(nodeIndex);
             }
 
             if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
@@ -439,8 +449,8 @@ namespace NodeMap
             }
 
             // Update game manager and move to next node
-            NodeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
-            TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex + 1);
+            NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
+            TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
         }
         #endregion
 

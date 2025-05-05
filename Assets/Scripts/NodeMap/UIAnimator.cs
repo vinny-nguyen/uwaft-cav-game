@@ -152,21 +152,21 @@ namespace NodeMap.UI
         {
             CanvasGroup fromGroup = fromPanel.GetComponent<CanvasGroup>();
             if (fromGroup == null) fromGroup = fromPanel.AddComponent<CanvasGroup>();
-            
+
             CanvasGroup toGroup = toPanel.GetComponent<CanvasGroup>();
             if (toGroup == null) toGroup = toPanel.AddComponent<CanvasGroup>();
-            
+
             // Prepare the panels
             fromGroup.alpha = 1f;
             toPanel.SetActive(true);
             toGroup.alpha = 0f;
-            
+
             // Add a subtle scale animation to coordinate with dot indicators
             Vector3 fromOriginalScale = fromPanel.transform.localScale;
             Vector3 toOriginalScale = toPanel.transform.localScale;
             Vector3 fromSmallScale = fromOriginalScale * 0.95f;
             Vector3 toStartScale = toOriginalScale * 0.95f;
-            
+
             // Fade out fromPanel with slight scale down
             float halfDuration = duration / 2f;
             for (float t = 0; t < halfDuration; t += Time.deltaTime)
@@ -176,14 +176,14 @@ namespace NodeMap.UI
                 fromPanel.transform.localScale = Vector3.Lerp(fromOriginalScale, fromSmallScale, progress);
                 yield return null;
             }
-            
+
             fromGroup.alpha = 0f;
             fromPanel.transform.localScale = fromOriginalScale; // Reset scale
             fromPanel.SetActive(false);
-            
+
             // Prepare toPanel with smaller scale
             toPanel.transform.localScale = toStartScale;
-            
+
             // Fade in toPanel with scale up
             for (float t = 0; t < halfDuration; t += Time.deltaTime)
             {
@@ -192,7 +192,7 @@ namespace NodeMap.UI
                 toPanel.transform.localScale = Vector3.Lerp(toStartScale, toOriginalScale, progress);
                 yield return null;
             }
-            
+
             toGroup.alpha = 1f;
             toPanel.transform.localScale = toOriginalScale;
         }

@@ -54,7 +54,7 @@ namespace NodeMap
             }
 
             // Subscribe to node completion events
-            NodeMapManager gameManager = FindFirstObjectByType<NodeMapManager>();
+            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
             if (gameManager != null)
             {
                 gameManager.OnNodeCompleted += HandleNodeCompleted;

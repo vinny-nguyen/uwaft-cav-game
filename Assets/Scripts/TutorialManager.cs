@@ -33,6 +33,7 @@ public class TutorialManager : MonoBehaviour
 
     public void SendtoNodeMap()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("NodeMapFullHD");
     }
 }

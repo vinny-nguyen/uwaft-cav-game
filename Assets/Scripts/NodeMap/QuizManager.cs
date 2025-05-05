@@ -169,7 +169,7 @@ namespace NodeMap
                 Debug.Log("[QUIZ] Quiz Complete!");
                 ShowSuccessPanel();
 
-                NodeMapManager gameManager = FindFirstObjectByType<NodeMapManager>();
+                NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
                 if (gameManager != null)
                 {
                     // Notify via direct method call
