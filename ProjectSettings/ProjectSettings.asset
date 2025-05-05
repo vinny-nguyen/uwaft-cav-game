@@ -665,7 +665,13 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -687,11 +693,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: f11d6f8d-e187-45a5-94a5-48920be1e3c4
+  cloudProjectId: d28081b4-0b3e-4763-8b56-2e34d7f19653
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: UWAFT EV Game
-  organizationId: phucvn166
+  projectName: UWAFT CAV Game
+  organizationId: umairsahi
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
