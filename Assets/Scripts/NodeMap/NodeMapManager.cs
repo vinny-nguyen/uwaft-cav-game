@@ -6,13 +6,20 @@ namespace NodeMap
     /// <summary>
     /// Core manager for node-based game progression
     /// </summary>
+    /// 
     public class NopeMapManager : MonoBehaviour
     {
+        // Define event delegate
+        public delegate void NodeCompletedHandler(int nodeIndex);
+
+        // Add event
+        public event NodeCompletedHandler OnNodeCompleted;
+        
         public static NopeMapManager Instance { get; private set; }
 
         [Header("Node Progression")]
         public int CurrentNodeIndex { get; private set; } = -1; // starts with no active node
-        
+
         // Track completion status
         private HashSet<int> completedNodes = new HashSet<int>();
 
@@ -26,7 +33,7 @@ namespace NodeMap
         #endregion
 
         #region Singleton Setup
-        
+
         private void SetupSingleton()
         {
             if (Instance != null && Instance != this)
@@ -42,7 +49,7 @@ namespace NodeMap
         #endregion
 
         #region Node Progression Management
-        
+
         /// <summary>
         /// Advances to the next node in sequence
         /// </summary>
@@ -60,7 +67,7 @@ namespace NodeMap
             CurrentNodeIndex = nodeIndex;
             Debug.Log($"Set current node to {CurrentNodeIndex}");
         }
-        
+
         /// <summary>
         /// Marks a node as completed
         /// </summary>
@@ -71,8 +78,10 @@ namespace NodeMap
                 completedNodes.Add(nodeIndex);
                 Debug.Log($"Node {nodeIndex} marked as completed");
             }
+
+            OnNodeCompleted?.Invoke(nodeIndex);
         }
-        
+
         /// <summary>
         /// Checks if a node is completed
         /// </summary>
@@ -80,7 +89,7 @@ namespace NodeMap
         {
             return completedNodes.Contains(nodeIndex);
         }
-        
+
         #endregion
     }
 }

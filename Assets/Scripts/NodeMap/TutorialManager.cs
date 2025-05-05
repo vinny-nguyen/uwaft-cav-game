@@ -208,7 +208,7 @@ namespace NodeMap
                 // Position arrow with some offset
                 arrowImage.anchoredPosition = localPosition + new Vector2(100, 200);
 
-                Debug.Log($"Positioning arrow - World: {target.position}, Screen: {screenPosition}, UI: {localPosition}");
+                // Debug.Log($"Positioning arrow - World: {target.position}, Screen: {screenPosition}, UI: {localPosition}");
             }
             else if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
             {

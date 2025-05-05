@@ -33,19 +33,19 @@ namespace NodeMap
         private HashSet<int> unlockedQuizQuestions = new HashSet<int>();
         private int currentNodeIndex = -1;
         #endregion
-        
+
         #region Public Properties
         /// <summary>
         /// Gets the index of the current quiz question
         /// </summary>
         public int CurrentQuestionIndex => currentQuizQuestionIndex;
-        
+
         /// <summary>
         /// Gets the list of current quiz questions (read-only)
         /// </summary>
         public IReadOnlyList<QuizQuestion> CurrentQuizQuestions => currentQuizQuestions;
         #endregion
-        
+
         #region Events
         public delegate void QuizCompletedHandler(int nodeIndex);
         public event QuizCompletedHandler OnQuizCompleted;
@@ -83,7 +83,7 @@ namespace NodeMap
             unlockedQuizQuestions.Clear();
             unlockedQuizQuestions.Add(0); // First question always unlocked
             currentQuizQuestionIndex = 0;
-            
+
             // Load questions for the node
             NodeQuiz nodeQuiz = quizData.FindNodeQuizById(nodeIndex);
             if (nodeQuiz == null)
@@ -91,13 +91,13 @@ namespace NodeMap
                 Debug.LogError($"No quiz data found for Node {nodeIndex}.");
                 return;
             }
-            
+
             currentQuizQuestions = nodeQuiz.questions.ToList();
             Debug.Log($"[QUIZ] Starting quiz for Node {nodeIndex} with {currentQuizQuestions.Count} questions");
-            
+
             // Setup UI
             LoadQuizQuestion(currentQuizQuestionIndex);
-            
+
             // Update indicators
             if (indicatorManager != null)
             {
@@ -113,7 +113,7 @@ namespace NodeMap
         {
             var question = currentQuizQuestions[index];
             questionText.text = question.questionText;
-            
+
             for (int i = 0; i < optionButtons.Length; i++)
             {
                 int capturedIndex = i;
@@ -121,17 +121,17 @@ namespace NodeMap
                 optionButtons[i].onClick.RemoveAllListeners();
                 optionButtons[i].onClick.AddListener(() => OnOptionSelected(capturedIndex));
             }
-            
+
             StartCoroutine(UIAnimator.AnimateSlideIn(quizPanel.transform));
         }
-        
+
         /// <summary>
         /// Called when a quiz answer option is selected
         /// </summary>
         private void OnOptionSelected(int selectedIndex)
         {
             var question = currentQuizQuestions[currentQuizQuestionIndex];
-            
+
             if (question.IsCorrectAnswer(selectedIndex))
             {
                 HandleCorrectAnswer();
@@ -141,17 +141,17 @@ namespace NodeMap
                 HandleIncorrectAnswer(selectedIndex);
             }
         }
-        
+
         /// <summary>
         /// Processes a correct answer
         /// </summary>
         private void HandleCorrectAnswer()
         {
             Debug.Log("[QUIZ] Correct!");
-            
+
             // Unlock next question
             unlockedQuizQuestions.Add(currentQuizQuestionIndex + 1);
-            
+
             // Move to next question or complete quiz
             currentQuizQuestionIndex++;
             if (currentQuizQuestionIndex < currentQuizQuestions.Count)
@@ -168,21 +168,31 @@ namespace NodeMap
                 // Quiz completed
                 Debug.Log("[QUIZ] Quiz Complete!");
                 ShowSuccessPanel();
+
+                NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
+                if (gameManager != null)
+                {
+                    // Notify via direct method call
+                    gameManager.SendMessage("NodeCompleted", currentNodeIndex, SendMessageOptions.DontRequireReceiver);
+
+                    // Or if you've implemented the event system:
+                    // gameManager.TriggerNodeCompleted(currentNodeIndex);
+                }
             }
         }
-        
+
         /// <summary>
         /// Processes an incorrect answer
         /// </summary>
         private void HandleIncorrectAnswer(int selectedIndex)
         {
             Debug.Log("[QUIZ] Incorrect — try again!");
-            
+
             // Shake the selected button
             StartCoroutine(UIAnimator.ShakeElement(optionButtons[selectedIndex].transform));
             ShowFailurePanel();
         }
-        
+
         /// <summary>
         /// Shows the success panel
         /// </summary>
@@ -190,7 +200,7 @@ namespace NodeMap
         {
             StartCoroutine(UIAnimator.TransitionBetweenPanels(quizPanel, successPanel));
         }
-        
+
         /// <summary>
         /// Shows the failure panel
         /// </summary>
@@ -210,14 +220,14 @@ namespace NodeMap
             {
                 currentQuizQuestionIndex++;
                 LoadQuizQuestion(currentQuizQuestionIndex);
-                
+
                 if (indicatorManager != null)
                 {
                     indicatorManager.UpdateActiveIndicator(currentQuizQuestionIndex);
                 }
             }
         }
-        
+
         /// <summary>
         /// Moves to the previous question if available
         /// </summary>
@@ -227,14 +237,14 @@ namespace NodeMap
             {
                 currentQuizQuestionIndex--;
                 LoadQuizQuestion(currentQuizQuestionIndex);
-                
+
                 if (indicatorManager != null)
                 {
                     indicatorManager.UpdateActiveIndicator(currentQuizQuestionIndex);
                 }
             }
         }
-        
+
         /// <summary>
         /// Checks if the next button should be enabled
         /// </summary>
@@ -242,7 +252,7 @@ namespace NodeMap
         {
             return unlockedQuizQuestions.Contains(currentQuizQuestionIndex + 1);
         }
-        
+
         /// <summary>
         /// Checks if the previous button should be enabled
         /// </summary>
@@ -260,37 +270,37 @@ namespace NodeMap
         {
             // First, make sure the quiz panel will be active
             quizPanel.SetActive(true);
-            
+
             // Hide result panels with direct SetActive instead of transitions
             failurePanel.SetActive(false);
             successPanel.SetActive(false);
-            
+
             // Reset quiz state
             currentQuizQuestionIndex = 0;
             unlockedQuizQuestions.Clear();
             unlockedQuizQuestions.Add(0);
-            
+
             // Load the first question immediately
             LoadQuizQuestion(currentQuizQuestionIndex);
-            
+
             // Update indicators
             if (indicatorManager != null)
             {
                 indicatorManager.GenerateIndicators(currentQuizQuestions.Count);
                 indicatorManager.UpdateActiveIndicator(0);
             }
-            
+
             // Log that we're restarting
             Debug.Log("[QUIZ] Quiz restarted. Current question index: 0");
         }
-        
+
         /// <summary>
         /// Completes the current node and triggers completion events
         /// </summary>
         public void CompleteCurrentNode()
         {
             Debug.Log("[QUIZ] Completing current node and advancing.");
-            
+
             // Notify listeners
             OnQuizCompleted?.Invoke(currentNodeIndex);
         }
