@@ -52,8 +52,31 @@ namespace NodeMap
 
         void Start()
         {
+            StartCoroutine(DelayedInitialization());
+        }
+
+        public void StartInitialSequence()
+        {
+            if (stops.Count > 0)
+            {
+                StartCoroutine(StartSequence());
+            }
+        }
+
+        private IEnumerator DelayedInitialization()
+        {
+            // Wait for next frame to ensure other objects are initialized
+            yield return null;
+
             InitializeParticles();
             InitializePosition();
+
+            // Make sure NodeMapManager is available
+            if (NodeMapManager.Instance == null)
+            {
+                Debug.LogError("NodeMapManager is not available. Waiting one more frame...");
+                yield return null;
+            }
 
             if (stops.Count > 0)
             {
@@ -80,6 +103,49 @@ namespace NodeMap
             GenerateStops();
         }
 
+        private void OnEnable()
+        {
+            // Reset state on enable/reenable
+            if (!isMoving && transform.position == Vector3.zero)
+            {
+                // We might be in a fresh scene load state
+                if (NodeMapManager.Instance != null)
+                {
+                    NodeMapManager.Instance.SetCurrentNode(-1);
+                }
+                else
+                {
+                    Debug.LogWarning("NodeMapManager instance is null on OnEnable");
+                }
+                ResetPosition();
+            }
+        }
+
+        public void ResetPosition()
+        {
+            if (spline == null)
+            {
+                Debug.LogWarning("Spline is null in ResetPosition");
+                return;
+            }
+
+            if (spline.Splines == null || spline.Splines.Count == 0)
+            {
+                Debug.LogWarning("Spline has no data in ResetPosition");
+                return;
+            }
+
+            // Position at the start of the spline
+            transform.position = spline.EvaluatePosition(0);
+
+            // Optional: set rotation based on spline
+            Vector3 forward = spline.EvaluateTangent(0);
+            if (forward != Vector3.zero)
+            {
+                transform.forward = forward;
+            }
+        }
+
         private void InitializeParticles()
         {
             if (smokeParticles != null)
@@ -100,11 +166,11 @@ namespace NodeMap
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
+                TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex + 1);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex - 1);
+                TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex - 1);
             }
         }
         #endregion
@@ -120,7 +186,7 @@ namespace NodeMap
 
             // After arriving at first node
             SetNodeToActive(0);
-            NopeMapManager.Instance.SetCurrentNode(1);
+            NodeMapManager.Instance.SetCurrentNode(1);
             if (tutorialManager != null && !tutorialManager.HasCompletedTutorial())
             {
                 tutorialManager.TriggerNodeReachedTutorial();
@@ -137,7 +203,7 @@ namespace NodeMap
             if (targetNode < 0 || targetNode >= stops.Count || isMoving)
                 return;
 
-            int currentNode = NopeMapManager.Instance.CurrentNodeIndex - 1; // zero-based
+            int currentNode = NodeMapManager.Instance.CurrentNodeIndex - 1; // zero-based
 
             // Prevent forward movement if current node is not complete
             if (targetNode > currentNode && !IsNodeCompleted(currentNode))
@@ -155,14 +221,14 @@ namespace NodeMap
         /// <summary>
         /// Coroutine that handles the actual movement to a node
         /// </summary>
-        private IEnumerator MoveToNode(int targetNode)
+        public IEnumerator MoveToNode(int targetNode)
         {
             isMoving = true;
 
-            if (NopeMapManager.Instance.CurrentNodeIndex != -1)
-                SetNodeToNormal(NopeMapManager.Instance.CurrentNodeIndex);
+            if (NodeMapManager.Instance.CurrentNodeIndex != -1)
+                SetNodeToNormal(NodeMapManager.Instance.CurrentNodeIndex);
 
-            float startT = stops[NopeMapManager.Instance.CurrentNodeIndex - 1].splinePercent;
+            float startT = stops[NodeMapManager.Instance.CurrentNodeIndex - 1].splinePercent;
             float targetT = stops[targetNode].splinePercent;
 
             Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
@@ -170,17 +236,17 @@ namespace NodeMap
 
             yield return null;
 
-            if (NopeMapManager.Instance != null)
+            if (NodeMapManager.Instance != null)
             {
-                NopeMapManager.Instance.SetCurrentNode(-1); // -1 = no active node
+                NodeMapManager.Instance.SetCurrentNode(-1); // -1 = no active node
             }
 
             yield return MoveAlongSpline(startT, targetT);
 
             isMoving = false;
 
-            NopeMapManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
-            SetNodeToActive(NopeMapManager.Instance.CurrentNodeIndex - 1);
+            NodeMapManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
+            SetNodeToActive(NodeMapManager.Instance.CurrentNodeIndex - 1);
         }
 
         /// <summary>
@@ -341,7 +407,7 @@ namespace NodeMap
             if (!completedNodes.Contains(nodeIndex))
             {
                 completedNodes.Add(nodeIndex);
-                NopeMapManager.Instance.CompleteNode(nodeIndex);
+                NodeMapManager.Instance.CompleteNode(nodeIndex);
             }
 
             if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
@@ -373,8 +439,8 @@ namespace NodeMap
             }
 
             // Update game manager and move to next node
-            NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
-            TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
+            NodeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
+            TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex + 1);
         }
         #endregion
 

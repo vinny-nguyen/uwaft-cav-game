@@ -5,7 +5,7 @@ public class Main_menu : MonoBehaviour
 {
     [Header("Scene Names")]
     [SerializeField] private string loadingSceneName = "LoadingScreen";
-    [SerializeField] private string gameSceneName = "NodeMap";
+    [SerializeField] private string gameSceneName = "NodeMapFullHD";
     [SerializeField] private string leaderSceneName = "LeaderBoard";
     [SerializeField] private string tutorialSceneName = "GameStart";
 

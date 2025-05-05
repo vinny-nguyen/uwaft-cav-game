@@ -26,7 +26,7 @@ namespace NodeMap
         [SerializeField] private Transform finalNodeTransform;  // Final node to highlight
 
         [Header("Tutorial Settings")]
-        [SerializeField] private bool showTutorialOnStart = true;
+        // [SerializeField] private bool showTutorialOnStart = true;
         [SerializeField] private string playerPrefKey = "CompletedTutorial";
         [SerializeField] private float fadeInDuration = 0.5f;
 

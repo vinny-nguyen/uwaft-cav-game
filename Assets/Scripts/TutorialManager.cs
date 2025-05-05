@@ -33,6 +33,6 @@ public class TutorialManager : MonoBehaviour
 
     public void SendtoNodeMap()
     {
-        SceneManager.LoadScene("NodeMap");
+        SceneManager.LoadScene("NodeMapFullHD");
     }
 }

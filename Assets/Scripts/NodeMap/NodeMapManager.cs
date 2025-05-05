@@ -7,7 +7,7 @@ namespace NodeMap
     /// Core manager for node-based game progression
     /// </summary>
     /// 
-    public class NopeMapManager : MonoBehaviour
+    public class NodeMapManager : MonoBehaviour
     {
         // Define event delegate
         public delegate void NodeCompletedHandler(int nodeIndex);
@@ -15,7 +15,7 @@ namespace NodeMap
         // Add event
         public event NodeCompletedHandler OnNodeCompleted;
         
-        public static NopeMapManager Instance { get; private set; }
+        public static NodeMapManager Instance { get; private set; }
 
         [Header("Node Progression")]
         public int CurrentNodeIndex { get; private set; } = -1; // starts with no active node

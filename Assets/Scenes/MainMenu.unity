@@ -409,7 +409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingSceneName: Loading Screen
-  gameSceneName: NodeMap
+  gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard
   tutorialSceneName: GameStart
 --- !u!114 &312343970
@@ -1522,7 +1522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingSceneName: Loading Screen
-  gameSceneName: NodeMap
+  gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard
   tutorialSceneName: GameStart
 --- !u!1 &1441185076
@@ -1591,7 +1591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingSceneName: Loading Screen
-  gameSceneName: NodeMap
+  gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard
   tutorialSceneName: GameStart
 --- !u!1 &1459641785
@@ -1856,7 +1856,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingSceneName: Loading Screen
-  gameSceneName: NodeMap
+  gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard
   tutorialSceneName: GameStart
 --- !u!114 &1551496386
@@ -1884,7 +1884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingSceneName: Loading Screen
-  gameSceneName: NodeMap
+  gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard
   tutorialSceneName: GameStart
 --- !u!1660057539 &9223372036854775807
