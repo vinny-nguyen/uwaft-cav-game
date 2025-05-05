@@ -1418,7 +1418,7 @@ MonoBehaviour:
   viewport: {fileID: 1299869376}
   leftArrowButton: {fileID: 19693327}
   rightArrowButton: {fileID: 580278438}
-  playerMovement: {fileID: 537986530}
+  playerMovement: {fileID: 0}
   quizPanel: {fileID: 132287551}
   questionText: {fileID: 820687744}
   answersParent: {fileID: 757764946}
@@ -2161,6 +2161,9 @@ GameObject:
   - component: {fileID: 537986526}
   - component: {fileID: 537986528}
   - component: {fileID: 537986529}
+  - component: {fileID: 537986533}
+  - component: {fileID: 537986532}
+  - component: {fileID: 537986531}
   - component: {fileID: 537986530}
   m_Layer: 0
   m_Name: Player
@@ -2323,26 +2326,78 @@ MonoBehaviour:
   m_GameObject: {fileID: 537986524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf304530c2818d54b8e271ae65aa4f94, type: 3}
+  m_Script: {fileID: 11500000, guid: 60ba97d89aa4ee345b98bada6497621a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: {fileID: 2017460229}
-  mainNodesParent: {fileID: 797041209}
-  speed: 1
-  popupManager: {fileID: 776312447}
-  slideManager: {fileID: 335084057}
-  showPopupButton: {fileID: 383736068}
-  driveButton: {fileID: 754456136}
-  frontWheel: {fileID: 376623286}
-  rearWheel: {fileID: 1243882086}
-  wheelSpinSpeed: 700
   completionParticles: {fileID: 0}
   pulseIntensity: 0.2
   pulseSpeed: 5
   shakeDuration: 0.5
   shakeMagnitude: 0.1
+--- !u!114 &537986531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537986524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7793b4419b2a9440b0d442931f9b678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showPopupButton: {fileID: 383736068}
+  driveButton: {fileID: 754456136}
   mainMenuButton: {fileID: 739351926}
   mainMenuSceneName: MainMenu
+  drivingSceneName: DrivingScene
+  playerController: {fileID: 0}
+--- !u!114 &537986532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537986524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf304530c2818d54b8e271ae65aa4f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: {fileID: 2017460229}
+  mainNodesParent: {fileID: 797041209}
+  speed: 3
+  popupManager: {fileID: 0}
+  slideManager: {fileID: 0}
+  showPopupButton: {fileID: 0}
+  driveButton: {fileID: 0}
+  frontWheel: {fileID: 376623286}
+  rearWheel: {fileID: 1243882086}
+  wheelSpinSpeed: 200
+  completionParticles: {fileID: 0}
+  pulseIntensity: 0.2
+  pulseSpeed: 5
+  shakeDuration: 0.5
+  shakeMagnitude: 0.1
+  mainMenuButton: {fileID: 0}
+  mainMenuSceneName: MainMenu
+--- !u!114 &537986533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537986524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b837f52f51b3b7242b850782fb9ff2a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: {fileID: 537986532}
+  nodeManager: {fileID: 537986530}
+  uiHandler: {fileID: 537986531}
+  popupManager: {fileID: 776312447}
+  slideManager: {fileID: 335084057}
 --- !u!1 &538893901
 GameObject:
   m_ObjectHideFlags: 0
@@ -2902,7 +2957,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 70}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 70, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &707214870
 MonoBehaviour:
@@ -3246,7 +3301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &747832788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3499,7 +3554,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 705, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &757764947
 MonoBehaviour:
@@ -4282,7 +4337,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1242517716
 MonoBehaviour:
@@ -5776,7 +5831,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.021850586, y: -197.26}
+  m_AnchoredPosition: {x: 0.021850586, y: -197.26001}
   m_SizeDelta: {x: 0.043823, y: 394.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1881047119
@@ -6542,7 +6597,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -20}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2136792405
 MonoBehaviour:

@@ -1,0 +1,174 @@
+{
+  "nodes": [
+    {
+      "nodeId": 1,
+      "questions": [
+        {
+          "questionText": "What stores electric energy in an EV?",
+          "options": ["Battery", "Motor", "Brakes", "Gas Tank"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which part converts electricity to motion?",
+          "options": ["Battery", "Motor", "Wheels", "Controller"],
+          "correctAnswerIndex": 1
+        },
+        {
+          "questionText": "What delivers power to the wheels?",
+          "options": ["Axle", "Motor", "Battery", "Controller"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which component is key for storing charge?",
+          "options": ["Battery Pack", "Tires", "Dashboard", "Seats"],
+          "correctAnswerIndex": 0
+        }
+      ]
+    },
+    {
+      "nodeId": 2,
+      "questions": [
+        {
+          "questionText": "What does regenerative braking do?",
+          "options": ["Lose energy", "Store energy", "Heat up", "Charge tires"],
+          "correctAnswerIndex": 1
+        },
+        {
+          "questionText": "Which part captures braking energy?",
+          "options": ["Battery", "Motor", "Brakes", "Regenerative System"],
+          "correctAnswerIndex": 3
+        },
+        {
+          "questionText": "Regenerative braking reduces wear on what?",
+          "options": ["Brakes", "Battery", "Motor", "Controller"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which system helps recover energy?",
+          "options": ["Motor", "Regen Brakes", "Wheels", "Cooling"],
+          "correctAnswerIndex": 1
+        }
+      ]
+    },
+    {
+      "nodeId": 3,
+      "questions": [
+        {
+          "questionText": "What part controls power flow?",
+          "options": ["Controller", "Battery", "Motor", "Charger"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which component manages the EV systems?",
+          "options": ["Controller", "Dashboard", "Wheels", "Seats"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "What ensures smooth acceleration?",
+          "options": ["Motor", "Controller", "Battery", "Brakes"],
+          "correctAnswerIndex": 1
+        },
+        {
+          "questionText": "Which part adjusts power levels?",
+          "options": ["Battery", "Controller", "Axle", "Brakes"],
+          "correctAnswerIndex": 1
+        }
+      ]
+    },
+    {
+      "nodeId": 4,
+      "questions": [
+        {
+          "questionText": "What keeps the battery cool?",
+          "options": ["Cooling System", "Heater", "Brakes", "Axle"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "What ensures safe battery temperatures?",
+          "options": ["Cooling System", "Brakes", "Motor", "Lights"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "What prevents overheating?",
+          "options": ["Cooling Fans", "Battery Pack", "Brakes", "Seats"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which system manages heat dissipation?",
+          "options": ["Cooling System", "Charger", "Controller", "Dashboard"],
+          "correctAnswerIndex": 0
+        }
+      ]
+    },
+    {
+      "nodeId": 5,
+      "questions": [
+        {
+          "questionText": "Which connector charges the EV fastest?",
+          "options": ["AC Type 1", "AC Type 2", "DC Fast", "USB"],
+          "correctAnswerIndex": 2
+        },
+        {
+          "questionText": "What type of charging gives most range quickly?",
+          "options": ["DC Fast", "AC Slow", "AC Medium", "Solar"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "What should you use for overnight charging?",
+          "options": ["AC Charger", "DC Fast Charger", "USB", "Solar"],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which connector is used in public stations?",
+          "options": ["DC Fast", "USB", "Phone Charger", "Laptop Plug"],
+          "correctAnswerIndex": 0
+        }
+      ]
+    },
+    {
+      "nodeId": 6,
+      "questions": [
+        {
+          "questionText": "What improves vehicle range?",
+          "options": [
+            "Efficient driving",
+            "Hard braking",
+            "Overloading",
+            "Flat tires"
+          ],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "What reduces energy waste?",
+          "options": [
+            "Smooth acceleration",
+            "Rapid stops",
+            "Overloading",
+            "Aggressive driving"
+          ],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "Which behavior saves battery?",
+          "options": [
+            "Eco driving",
+            "Racing",
+            "Sudden braking",
+            "Revving motor"
+          ],
+          "correctAnswerIndex": 0
+        },
+        {
+          "questionText": "What should you avoid for max range?",
+          "options": [
+            "Overloading",
+            "Smooth driving",
+            "Eco mode",
+            "Low speeds"
+          ],
+          "correctAnswerIndex": 0
+        }
+      ]
+    }
+  ]
+}
