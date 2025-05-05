@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\",
+  "WorkspaceRootPath": ".\\uwaft-cav-game\\",
   "Documents": [
     {
       "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|c:\\users\\umair\\documents\\github\\uwaft-cav-game\\assets\\scripts\\leaderboardmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,6 +13,18 @@
     {
       "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\assets\\scripts\\main_menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\main_menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|<MiscFiles>|C:\\Users\\amanz\\Downloads\\Programming\\demonstration\\uwaft-cav-game\\Assets\\Scripts\\NodeMap\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|<MiscFiles>|solutionrelative:Assets\\Scripts\\NodeMap\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|<MiscFiles>|C:\\Users\\amanz\\Downloads\\Programming\\demonstration\\uwaft-cav-game\\Assets\\Scripts\\NodeMap\\SlideManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|<MiscFiles>|solutionrelative:Assets\\Scripts\\NodeMap\\SlideManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|<MiscFiles>|C:\\Users\\amanz\\Downloads\\Programming\\demonstration\\uwaft-cav-game\\Assets\\Scripts\\NodeMap\\CarManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|<MiscFiles>|solutionrelative:Assets\\Scripts\\NodeMap\\CarManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,9 +40,9 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "LeaderboardManager.cs",
-              "DocumentMoniker": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\LeaderboardManager.cs",
+              "DocumentMoniker": "Assets\\Scripts\\LeaderboardManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\LeaderboardManager.cs",
-              "ToolTip": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\LeaderboardManager.cs",
+              "ToolTip": "Assets\\Scripts\\LeaderboardManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\LeaderboardManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -41,9 +53,9 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "AuthManager.cs",
-              "DocumentMoniker": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\AuthManager.cs",
+              "DocumentMoniker": "Assets\\Scripts\\AuthManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\AuthManager.cs",
-              "ToolTip": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\AuthManager.cs",
+              "ToolTip": "Assets\\Scripts\\AuthManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\AuthManager.cs",
               "ViewState": "AgIAAD4AAAAAAAAAAAAuwEkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -54,13 +66,53 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Main_menu.cs",
-              "DocumentMoniker": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\Main_menu.cs",
+              "DocumentMoniker": "Assets\\Scripts\\Main_menu.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Main_menu.cs",
-              "ToolTip": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\Main_menu.cs",
+              "ToolTip": "Assets\\Scripts\\Main_menu.cs",
               "RelativeToolTip": "Assets\\Scripts\\Main_menu.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAYwBsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T21:03:38.335Z"
+              "WhenOpened": "2025-05-04T21:03:38.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PlayerMovement.cs",
+              "DocumentMoniker": "Assets\\Scripts\\NodeMap\\PlayerMovement.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\NodeMap\\PlayerMovement.cs",
+              "ToolTip": "Assets\\Scripts\\NodeMap\\PlayerMovement.cs",
+              "RelativeToolTip": "Assets\\Scripts\\NodeMap\\PlayerMovement.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T19:54:08.757Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CarManager.cs",
+              "DocumentMoniker": "Assets\\Scripts\\NodeMap\\CarManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\NodeMap\\CarManager.cs",
+              "ToolTip": "Assets\\Scripts\\NodeMap\\CarManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\NodeMap\\CarManager.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAAADAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T19:50:26.334Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SlideManager.cs",
+              "DocumentMoniker": "Assets\\Scripts\\NodeMap\\SlideManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\NodeMap\\SlideManager.cs",
+              "ToolTip": "Assets\\Scripts\\NodeMap\\SlideManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\NodeMap\\SlideManager.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAmwDUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T18:48:18.964Z",
+              "EditorCaption": ""
             }
           ]
         }
