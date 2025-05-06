@@ -56,6 +56,7 @@ public class AuthManager : MonoBehaviour
         if (string.IsNullOrEmpty(username))
         {
             username = GenerateRandomUsername();
+            AuthenticationService.Instance.UpdatePlayerNameAsync(username); // updating the leaderboard ID to username
             PlayerPrefs.SetString("GeneratedUsername", username);
         }
         return username;
