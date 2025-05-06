@@ -10,7 +10,7 @@
 //public class LeaderboardManager : MonoBehaviour
 //{
 //    // Player score script
-//    // [HideInInspector] public playerControls playerControls;
+//    [HideInInspector] public LeaderDist LeaderDist;
 
 //    [SerializeField] private GameObject leaderboardParent;
 //    [SerializeField] private Transform leaderboardContentParent;
@@ -51,7 +51,7 @@
 //            LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardURL); // Replace with your actual leaderboard URL
 //            foreach (Transform t in leaderboardContentParent)
 //            {
-//                Destroy(t.gameObject);  
+//                Destroy(t.gameObject);
 //            }
 //            foreach (LeaderboardEntry entry in leaderboardScoresPage.Results)
 //            {
@@ -90,7 +90,7 @@ public class LeaderboardManager : MonoBehaviour
 
     private async void Start()
     {
-       if(isInitialized)
+        if (isInitialized)
         {
             await AddScoreAsync(100);
             await UpdateLeaderboard();
