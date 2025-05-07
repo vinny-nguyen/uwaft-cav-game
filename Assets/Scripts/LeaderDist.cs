@@ -39,6 +39,8 @@ public class LeaderDist : MonoBehaviour
         }
         catch (System.Exception e)
         {
+            Debug.Log($"Player ID: {AuthenticationService.Instance.PlayerId}");
+            Debug.Log($"Is Signed In: {AuthenticationService.Instance.IsSignedIn}");
             Debug.LogError($"Initialization failed: {e.Message}");
         }
     }
