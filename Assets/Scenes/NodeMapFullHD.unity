@@ -1238,7 +1238,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!224 &105653186
 RectTransform:
@@ -16254,7 +16254,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_TargetDisplay: 0
 --- !u!4 &1719805150 stripped
 Transform:
@@ -19698,8 +19698,8 @@ SceneRoots:
   - {fileID: 797682165}
   - {fileID: 2065531345}
   - {fileID: 365376991}
-  - {fileID: 105653186}
   - {fileID: 1708417691}
+  - {fileID: 105653186}
   - {fileID: 788974782}
   - {fileID: 1916213547}
   - {fileID: 1684459980}
