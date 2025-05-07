@@ -73,54 +73,60 @@ using Unity.Services.Leaderboards;
 using Unity.Services.Leaderboards.Models;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class LeaderboardManager : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private GameObject leaderboardParent;
-    [SerializeField] private Transform leaderboardContentParent;
-    [SerializeField] private GameObject leaderboardItemPrefab;
+    [SerializeField] private GameObject leaderboardPanel;
+    [SerializeField] private RectTransform entriesParent; // Changed to RectTransform for better UI control
+    [SerializeField] private GameObject entryPrefab;
 
     [Header("Settings")]
     [SerializeField] private string leaderboardID = "UWAFT_CAV_Game";
-    [SerializeField] private int entriesToShow = 10;
+    [SerializeField] private int maxEntries = 10;
+    [SerializeField] private float refreshCooldown = 2f;
 
-    private bool isInitialized = false;
-    private bool isUpdating = false;
+    private bool isReady = false;
+    private float lastRefreshTime;
 
-    private async void Start()
+#if UNITY_EDITOR
+    private void OnValidate()
     {
-        if (isInitialized)
+        // Auto-find prefab if missing in editor
+        if (entryPrefab == null)
         {
-            await AddScoreAsync(100);
-            await UpdateLeaderboard();
+            var guids = UnityEditor.AssetDatabase.FindAssets("t:Prefab Rows");
+            if (guids.Length > 0)
+            {
+                var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                entryPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (entryPrefab != null)
+                {
+                    UnityEditor.EditorUtility.SetDirty(this);
+                    Debug.LogWarning("Auto-assigned missing prefab reference. Please save this change.");
+                }
+            }
         }
     }
+#endif
+
     private async void Awake()
     {
-        Debug.Log("Initializing Unity Services...");
-
         try
         {
-            // Initialize Unity Services
-            await UnityServices.InitializeAsync();
-            Debug.Log("Unity Services initialized successfully");
-
-            // Setup authentication event handlers
-            AuthenticationService.Instance.SignedIn += OnSignedIn;
-            AuthenticationService.Instance.SignInFailed += OnSignInFailed;
-
-            // Sign in anonymously if not already signed in
-            if (!AuthenticationService.Instance.IsSignedIn)
+            if (UnityServices.State != ServicesInitializationState.Initialized)
             {
-                Debug.Log("Attempting anonymous sign in...");
+                await UnityServices.InitializeAsync();
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
-            else
-            {
-                isInitialized = true;
-                Debug.Log("Already signed in as: " + AuthenticationService.Instance.PlayerId);
-            }
+            isReady = true;
+
+            // Initialize UI components
+            EnsureLayoutComponents();
+            leaderboardPanel.SetActive(false);
+
+            Debug.Log("Leaderboard services ready");
         }
         catch (Exception e)
         {
@@ -128,140 +134,190 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    private void OnSignedIn()
+    private void EnsureLayoutComponents()
     {
-        isInitialized = true;
-        Debug.Log($"Signed in successfully as: {AuthenticationService.Instance.PlayerId}");
-    }
-
-    private void OnSignInFailed(RequestFailedException error)
-    {
-        Debug.LogError($"Sign in failed: {error.Message}");
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // Ensure parent has required layout components
+        if (!entriesParent.TryGetComponent(out VerticalLayoutGroup _))
         {
-            ToggleLeaderboard();
+            var vlg = entriesParent.gameObject.AddComponent<VerticalLayoutGroup>();
+            vlg.childControlHeight = false;
+            vlg.childForceExpandHeight = false;
+        }
+
+        if (!entriesParent.TryGetComponent(out ContentSizeFitter _))
+        {
+            var csf = entriesParent.gameObject.AddComponent<ContentSizeFitter>();
+            csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
     }
 
-    private async void ToggleLeaderboard()
+    public async void ToggleLeaderboard()
     {
-        if (!isInitialized)
+        if (!isReady)
         {
-            Debug.LogWarning("Cannot toggle leaderboard - services not initialized");
+            Debug.LogWarning("Services not ready");
             return;
         }
 
-        if (leaderboardParent.activeSelf)
+        leaderboardPanel.SetActive(!leaderboardPanel.activeSelf);
+
+        if (leaderboardPanel.activeSelf && Time.time > lastRefreshTime + refreshCooldown)
         {
-            leaderboardParent.SetActive(false);
-        }
-        else
-        {
-            leaderboardParent.SetActive(true);
-            await UpdateLeaderboard();
+            await RefreshLeaderboard();
         }
     }
 
-    public async Task AddScoreAsync(double score)
+    private async Task RefreshLeaderboard()
     {
-        if (!isInitialized)
-        {
-            Debug.LogWarning("Cannot add score - services not initialized");
-            return;
-        }
+        if (!VerifyPrefabReference()) return;
+
+        ClearEntries();
+        lastRefreshTime = Time.time;
 
         try
         {
-            Debug.Log($"Attempting to add score: {score}");
-            await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, score);
-            Debug.Log("Score added successfully");
+            var scores = await LeaderboardsService.Instance.GetScoresAsync(
+                leaderboardID,
+                new GetScoresOptions { Limit = maxEntries }
+            );
+
+            Debug.Log($"Received {scores.Results.Count} entries");
+
+            if (scores.Results.Count == 0)
+            {
+                CreatePlaceholderEntry("No scores yet!");
+                return;
+            }
+
+            foreach (var entry in scores.Results)
+            {
+                CreateLeaderboardEntry(entry);
+            }
+
+            // Force UI update
+            LayoutRebuilder.ForceRebuildLayoutImmediate(entriesParent);
+            await Task.Yield();
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to add score: {e.Message}");
+            Debug.LogError($"Refresh failed: {e.Message}");
+            CreatePlaceholderEntry("Connection error");
         }
     }
 
-    private async Task UpdateLeaderboard()
+    private bool VerifyPrefabReference()
     {
-        if (!isInitialized)
-        {
-            Debug.LogWarning("Cannot update leaderboard - services not initialized");
-            return;
-        }
+        if (entryPrefab != null) return true;
 
-        if (isUpdating)
-        {
-            Debug.LogWarning("Leaderboard update already in progress");
-            return;
-        }
+        Debug.LogError("Prefab reference is null! Attempting recovery...");
 
-        isUpdating = true;
-        Debug.Log("Updating leaderboard...");
+#if UNITY_EDITOR
+        OnValidate(); // Try to auto-recover in editor
+#endif
+
+        if (entryPrefab == null)
+        {
+            Debug.LogError("Prefab recovery failed. Please reassign in Inspector.");
+            return false;
+        }
+        return true;
+    }
+
+    private void CreateLeaderboardEntry(LeaderboardEntry entry)
+    {
+        if (!VerifyPrefabReference()) return;
 
         try
         {
-            // Clear existing entries
-            foreach (Transform child in leaderboardContentParent)
+            var row = Instantiate(entryPrefab, entriesParent, false);
+            row.SetActive(true);
+            row.name = $"Entry_{entry.Rank}";
+
+            // Add debug background
+            var debugBg = row.AddComponent<Image>();
+            debugBg.color = new Color(0, 1, 0, 0.1f);
+
+            // SAFE COMPONENT LOOKUP
+            TMP_Text FindTextComponent(string name)
             {
-                Destroy(child.gameObject);
+                var child = row.transform.Find(name);
+                return child?.GetComponent<TMP_Text>();
             }
 
-            // Get scores with options
-            var options = new GetScoresOptions { Limit = entriesToShow };
-            var scoresResponse = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID, options);
-            Debug.Log($"Received {scoresResponse.Results.Count} leaderboard entries");
+            var positionText = FindTextComponent("Position");
+            var playerText = FindTextComponent("Player");
+            var scoreText = FindTextComponent("Score");
 
-            // Create new entries
-            foreach (LeaderboardEntry entry in scoresResponse.Results)
+            if (positionText == null || playerText == null || scoreText == null)
             {
-                var leaderboardItem = Instantiate(leaderboardItemPrefab, leaderboardContentParent);
+                debugBg.color = Color.red;
+                Debug.LogError("Missing text components in prefab!");
+                DestroyImmediate(row);
+                return;
+            }
 
-                // Set the text components - adjust indices if needed
-                var texts = leaderboardItem.GetComponentsInChildren<TMP_Text>();
-                if (texts.Length >= 3)
-                {
-                    texts[0].text = entry.Rank.ToString();
-                    texts[1].text = string.IsNullOrEmpty(entry.PlayerName) ? "Anonymous" : entry.PlayerName;
-                    texts[2].text = entry.Score.ToString();
-                }
-                else
-                {
-                    Debug.LogError("Leaderboard item prefab doesn't have enough text components");
-                }
+            positionText.text = entry.Rank.ToString();
+            playerText.text = string.IsNullOrEmpty(entry.PlayerName) ? "Anonymous" : entry.PlayerName;
+            scoreText.text = $"{entry.Score:F2}m";
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Entry creation failed: {e.Message}");
+        }
+    }
+
+    private void CreatePlaceholderEntry(string message)
+    {
+        if (!VerifyPrefabReference()) return;
+
+        var entry = Instantiate(entryPrefab, entriesParent);
+        var text = entry.GetComponentInChildren<TMP_Text>();
+        if (text != null) text.text = message;
+    }
+
+    private void ClearEntries()
+    {
+        for (int i = entriesParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(entriesParent.GetChild(i).gameObject);
+        }
+    }
+
+    [ContextMenu("Debug Leaderboard Data")]
+    public async void DebugLeaderboardData()
+    {
+        try
+        {
+            var scores = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
+            Debug.Log($"Fetched {scores.Results.Count} entries from cloud:");
+
+            foreach (var entry in scores.Results)
+            {
+                Debug.Log($"{entry.Rank}. {entry.PlayerName}: {entry.Score}");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to update leaderboard: {e.Message}");
-
-            // Show error message
-            var errorItem = Instantiate(leaderboardItemPrefab, leaderboardContentParent);
-            var errorTexts = errorItem.GetComponentsInChildren<TMP_Text>();
-            if (errorTexts.Length > 0)
-            {
-                errorTexts[0].text = "Error";
-                if (errorTexts.Length > 1) errorTexts[1].text = "Failed to load";
-                if (errorTexts.Length > 2) errorTexts[2].text = e.Message;
-            }
-        }
-        finally
-        {
-            isUpdating = false;
+            Debug.LogError($"Fetch failed: {e.Message}");
         }
     }
-
-    private void OnDestroy()
+    [ContextMenu("Visual Test")]
+    public async Task VisualTest()
     {
-        // Clean up event handlers
-        if (AuthenticationService.Instance != null)
+        ClearEntries();
+        await RefreshLeaderboard();
+
+        // Highlight parent
+        var img = entriesParent.gameObject.AddComponent<Image>();
+        img.color = new Color(1, 0, 0, 0.2f);
+    }
+
+    [ContextMenu("Test Prefab Reference")]
+    public void TestPrefabReference()
+    {
+        if (VerifyPrefabReference())
         {
-            AuthenticationService.Instance.SignedIn -= OnSignedIn;
-            AuthenticationService.Instance.SignInFailed -= OnSignInFailed;
+            Debug.Log($"Prefab reference valid: {entryPrefab.name}");
         }
     }
 }
