@@ -7,7 +7,7 @@ public class TutorialFuel : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             FuelTest.instance.FillFuel();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

@@ -33,6 +33,7 @@ public class AuthManager : MonoBehaviour
 
         // Update both displays
         usernameDisplay.text = $"Welcome:\n{username}";
+        AuthenticationService.Instance.UpdatePlayerNameAsync(username); // updating the leaderboard ID to username
         playerIdDisplay.text = $"ID:\n{AuthenticationService.Instance.PlayerId}";
         playerIdDisplay.gameObject.SetActive(true); // Show Player ID
 
@@ -56,7 +57,7 @@ public class AuthManager : MonoBehaviour
         if (string.IsNullOrEmpty(username))
         {
             username = GenerateRandomUsername();
-            AuthenticationService.Instance.UpdatePlayerNameAsync(username); // updating the leaderboard ID to username
+            //AuthenticationService.Instance.UpdatePlayerNameAsync(username); // updating the leaderboard ID to username
             PlayerPrefs.SetString("GeneratedUsername", username);
         }
         return username;
