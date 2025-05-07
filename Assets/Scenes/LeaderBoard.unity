@@ -870,7 +870,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -1000,6 +1000,7 @@ MonoBehaviour:
   entryPrefab: {fileID: 868756746}
   leaderboardID: UWAFT_CAV_Game
   maxEntries: 10
+  refreshCooldown: 2
 --- !u!4 &933106955
 Transform:
   m_ObjectHideFlags: 0

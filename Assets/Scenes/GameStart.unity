@@ -4361,7 +4361,9 @@ MonoBehaviour:
   _Speed: 50
   _Rotation_Speed: 100
   _Can_Control: 1
+  _totalDistance: 0
   _distanceUpdateInterval: 5
+  _leaderboardId: UWAFT_CAV_Game
 --- !u!1001 &1764938612
 PrefabInstance:
   m_ObjectHideFlags: 0

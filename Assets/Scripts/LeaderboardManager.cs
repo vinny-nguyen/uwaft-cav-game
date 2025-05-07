@@ -1,70 +1,3 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using System.Runtime.CompilerServices;
-//using Unity.Services.Core;
-//using UnityEngine;
-//using System.Threading.Tasks;
-//using Unity.Services.Leaderboards;
-//using Unity.Services.Leaderboards.Models;
-
-//public class LeaderboardManager : MonoBehaviour
-//{
-//    // Player score script
-//    [HideInInspector] public LeaderDist LeaderDist;
-
-//    [SerializeField] private GameObject leaderboardParent;
-//    [SerializeField] private Transform leaderboardContentParent;
-//    [SerializeField] private Transform leaderboardItemPrefab;
-
-//    private string leaderboardURL = "UWAFT_CAV_Game"; // Replace with your actual leaderboard URL
-
-//    private async void Start()
-//    {
-//        await UnityServices.InitializeAsync();
-//        // need to sign in - already handeled by the AuthManager
-//        // await AuthenticatiinService.Instance.SignInAnonymouslyAsync();
-
-//        LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardURL, 0); // Replace with your actual score
-//        leaderboardParent.SetActive(false);
-//    }
-
-//    private async void Update()
-//    {
-//        if (Input.GetKeyDown(KeyCode.Escape))
-//        {
-//            if (leaderboardParent.activeInHierarchy)
-//            {
-//                leaderboardParent.SetActive(false);
-//            }
-//            else
-//            {
-//                leaderboardParent.SetActive(true);
-//                UpdateLeaderboard();
-//            }
-//        }
-//    }
-
-//    private async void UpdateLeaderboard()
-//    {
-//        while (Application.isPlaying && leaderboardParent.activeInHierarchy)
-//        {
-//            LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardURL); // Replace with your actual leaderboard URL
-//            foreach (Transform t in leaderboardContentParent)
-//            {
-//                Destroy(t.gameObject);
-//            }
-//            foreach (LeaderboardEntry entry in leaderboardScoresPage.Results)
-//            {
-//                Transform leaderboardItem = Instantiate(leaderboardItemPrefab, leaderboardContentParent);
-//                leaderboardItem.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = entry.PlayerId;
-//                leaderboardItem.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = entry.Score.ToString();
-//                leaderboardItem.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = entry.Rank.ToString();
-//            }
-//            await Task.Delay(500);
-//        }
-//    }
-//}
-
 using UnityEngine;
 using System.Threading.Tasks;
 using Unity.Services.Core;
@@ -124,7 +57,12 @@ public class LeaderboardManager : MonoBehaviour
 
             // Initialize UI components
             EnsureLayoutComponents();
-            // leaderboardPanel.SetActive(false);
+            ClearEntries();
+            await RefreshLeaderboard();
+
+            // Highlight parent
+            var img = entriesParent.gameObject.AddComponent<Image>();
+            img.color = new Color(1, 0, 0, 0.2f);
 
             Debug.Log("Leaderboard services ready");
         }
