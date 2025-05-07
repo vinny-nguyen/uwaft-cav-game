@@ -124,7 +124,7 @@ public class LeaderboardManager : MonoBehaviour
 
             // Initialize UI components
             EnsureLayoutComponents();
-            leaderboardPanel.SetActive(false);
+            // leaderboardPanel.SetActive(false);
 
             Debug.Log("Leaderboard services ready");
         }
