@@ -449,8 +449,8 @@ namespace NodeMap
             }
 
             // Update game manager and move to next node
-            NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
-            TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
+            // NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
+            // TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
         }
         #endregion
 

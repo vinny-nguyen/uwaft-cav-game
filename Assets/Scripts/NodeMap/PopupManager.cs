@@ -184,6 +184,7 @@ namespace NodeMap
                 GameObject lastSlide = currentNodeSlides[lastSlideIndex];
                 if (lastSlide != null)
                     StartCoroutine(UIAnimator.AnimateSlideOut(lastSlide));
+                indicatorManager.UpdateActiveIndicator(currentSlideIndex, animate: true);
             }
 
             // Make sure target slide exists
@@ -224,12 +225,6 @@ namespace NodeMap
                 // Normal transition → animate
                 Debug.Log($"Animating slide transition to index {index}");
                 StartCoroutine(UIAnimator.AnimateSlideIn(activeSlide));
-            }
-
-            // Update UI state
-            if (indicatorManager != null)
-            {
-                indicatorManager.UpdateActiveIndicator(currentSlideIndex);
             }
 
             UpdateArrows();

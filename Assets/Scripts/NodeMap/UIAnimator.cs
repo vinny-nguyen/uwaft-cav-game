@@ -148,7 +148,10 @@ namespace NodeMap.UI
         /// <summary>
         /// Animates a transition between UI panels
         /// </summary>
-        public static IEnumerator TransitionBetweenPanels(GameObject fromPanel, GameObject toPanel, float duration = 0.5f)
+        /// <summary>
+        /// Animates a transition between UI panels using the same effect as slides
+        /// </summary>
+        public static IEnumerator TransitionBetweenPanels(GameObject fromPanel, GameObject toPanel, float duration = 0.4f)
         {
             CanvasGroup fromGroup = fromPanel.GetComponent<CanvasGroup>();
             if (fromGroup == null) fromGroup = fromPanel.AddComponent<CanvasGroup>();
@@ -156,43 +159,52 @@ namespace NodeMap.UI
             CanvasGroup toGroup = toPanel.GetComponent<CanvasGroup>();
             if (toGroup == null) toGroup = toPanel.AddComponent<CanvasGroup>();
 
-            // Prepare the panels
-            fromGroup.alpha = 1f;
+            // Make sure the destination panel is active but invisible
             toPanel.SetActive(true);
             toGroup.alpha = 0f;
 
-            // Add a subtle scale animation to coordinate with dot indicators
+            // First, animate the current panel out (same as AnimateSlideOut)
+            float fadeDuration = duration * 0.5f;
+            float pulseScale = 0.9f;
             Vector3 fromOriginalScale = fromPanel.transform.localScale;
-            Vector3 toOriginalScale = toPanel.transform.localScale;
-            Vector3 fromSmallScale = fromOriginalScale * 0.95f;
-            Vector3 toStartScale = toOriginalScale * 0.95f;
+            Vector3 fromSmallScale = fromOriginalScale * pulseScale;
 
-            // Fade out fromPanel with slight scale down
-            float halfDuration = duration / 2f;
-            for (float t = 0; t < halfDuration; t += Time.deltaTime)
+            float time = 0f;
+            while (time < fadeDuration)
             {
-                float progress = t / halfDuration;
-                fromGroup.alpha = Mathf.Lerp(1f, 0f, progress);
-                fromPanel.transform.localScale = Vector3.Lerp(fromOriginalScale, fromSmallScale, progress);
+                time += Time.deltaTime;
+                float t = time / fadeDuration;
+
+                fromPanel.transform.localScale = Vector3.Lerp(fromOriginalScale, fromSmallScale, t);
+                fromGroup.alpha = Mathf.Lerp(1f, 0f, t);
+
                 yield return null;
             }
 
+            // Ensure the panel is fully hidden and reset scale
             fromGroup.alpha = 0f;
-            fromPanel.transform.localScale = fromOriginalScale; // Reset scale
+            fromPanel.transform.localScale = fromOriginalScale;
             fromPanel.SetActive(false);
 
-            // Prepare toPanel with smaller scale
-            toPanel.transform.localScale = toStartScale;
+            // Now animate the new panel in (same as AnimateSlideIn)
+            Vector3 toOriginalScale = Vector3.one;
+            Vector3 toSmallScale = toOriginalScale * pulseScale;
 
-            // Fade in toPanel with scale up
-            for (float t = 0; t < halfDuration; t += Time.deltaTime)
+            toPanel.transform.localScale = toSmallScale;
+            time = 0f;
+
+            while (time < fadeDuration)
             {
-                float progress = t / halfDuration;
-                toGroup.alpha = Mathf.Lerp(0f, 1f, progress);
-                toPanel.transform.localScale = Vector3.Lerp(toStartScale, toOriginalScale, progress);
+                time += Time.deltaTime;
+                float t = time / fadeDuration;
+
+                toPanel.transform.localScale = Vector3.Lerp(toSmallScale, toOriginalScale, t);
+                toGroup.alpha = Mathf.Lerp(0f, 1f, t);
+
                 yield return null;
             }
 
+            // Ensure the panel is fully visible and has the correct scale
             toGroup.alpha = 1f;
             toPanel.transform.localScale = toOriginalScale;
         }
