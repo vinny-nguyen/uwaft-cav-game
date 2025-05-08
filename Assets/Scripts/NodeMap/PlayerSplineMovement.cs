@@ -126,7 +126,12 @@ namespace NodeMap
         #region Input Handling
         private void HandleKeyboardInput()
         {
+            // Skip input handling if player is already moving
             if (isMoving)
+                return;
+
+            // Skip input handling if a popup is currently active
+            if (PopupManager.Instance != null && PopupManager.Instance.IsPopupActive())
                 return;
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -511,5 +516,7 @@ namespace NodeMap
             return completedNodes.Contains(nodeIndex);
         }
         #endregion
+
+        // Add this to the PopupManager class
     }
 }

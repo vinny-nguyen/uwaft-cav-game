@@ -24,6 +24,12 @@ namespace NodeMap
 
         [Header("Components")]
         [SerializeField] private SlideIndicatorManager indicatorManager;
+
+        // Add these fields to the Inspector Fields region
+        [Header("Feedback UI")]
+        [SerializeField] private GameObject correctFeedbackPanel;
+        [SerializeField] private GameObject incorrectFeedbackPanel;
+        [SerializeField] private float feedbackDisplayTime = 1.5f; // Time in seconds to show feedback
         #endregion
 
         #region Private Fields
@@ -111,6 +117,7 @@ namespace NodeMap
         /// </summary>
         private void LoadQuizQuestion(int index)
         {
+            quizPanel.SetActive(true);
             var question = currentQuizQuestions[index];
             questionText.text = question.questionText;
 
@@ -145,6 +152,9 @@ namespace NodeMap
         /// <summary>
         /// Processes a correct answer
         /// </summary>
+        /// <summary>
+        /// Processes a correct answer
+        /// </summary>
         private void HandleCorrectAnswer()
         {
             Debug.Log("[QUIZ] Correct!");
@@ -152,11 +162,40 @@ namespace NodeMap
             // Unlock next question
             unlockedQuizQuestions.Add(currentQuizQuestionIndex + 1);
 
+            // Show "Correct!" feedback temporarily
+            if (correctFeedbackPanel != null)
+            {
+                Debug.Log("[QUIZ] Showing correct feedback panel.");
+                StartCoroutine(ShowTemporaryFeedback(correctFeedbackPanel, () =>
+                {
+                    ProceedAfterCorrectAnswer();
+                }));
+            }
+            else
+            {
+                // If no feedback panel, proceed immediately
+                ProceedAfterCorrectAnswer();
+            }
+        }
+
+        /// <summary>
+        /// Processes an incorrect answer
+        /// </summary>
+        // Replace the HandleCorrectAnswer method with this version
+
+        /// <summary>
+        /// Processes a correct answer
+        /// </summary>
+
+        // Add this new helper method
+        private void ProceedAfterCorrectAnswer()
+        {
             // Move to next question or complete quiz
             currentQuizQuestionIndex++;
             if (currentQuizQuestionIndex < currentQuizQuestions.Count)
             {
                 // Move to next question
+                Debug.Log($"[QUIZ] Moving to question {currentQuizQuestionIndex}");
                 LoadQuizQuestion(currentQuizQuestionIndex);
                 if (indicatorManager != null)
                 {
@@ -174,13 +213,11 @@ namespace NodeMap
                 {
                     // Notify via direct method call
                     gameManager.SendMessage("NodeCompleted", currentNodeIndex, SendMessageOptions.DontRequireReceiver);
-
-                    // Or if you've implemented the event system:
-                    // gameManager.TriggerNodeCompleted(currentNodeIndex);
                 }
             }
         }
 
+        // Replace the HandleIncorrectAnswer method with this version
         /// <summary>
         /// Processes an incorrect answer
         /// </summary>
@@ -190,7 +227,78 @@ namespace NodeMap
 
             // Shake the selected button
             StartCoroutine(UIAnimator.ShakeElement(optionButtons[selectedIndex].transform));
-            ShowFailurePanel();
+
+            // Show "Incorrect!" feedback temporarily
+            if (incorrectFeedbackPanel != null)
+            {
+                Debug.Log("[QUIZ] Showing incorrect feedback panel.");
+                StartCoroutine(ShowTemporaryFeedback(incorrectFeedbackPanel, () =>
+                {
+                    ShowFailurePanel();
+                }));
+            }
+            else
+            {
+                // If no feedback panel, proceed immediately
+                ShowFailurePanel();
+            }
+        }
+
+        // Add this new coroutine for showing temporary feedback
+        /// <summary>
+        /// Shows a feedback panel temporarily and then executes a callback
+        /// </summary>
+        // Fix the ShowTemporaryFeedback method
+
+        private IEnumerator ShowTemporaryFeedback(GameObject feedbackPanel, System.Action onComplete)
+        {
+            // Hide quiz panel
+            quizPanel.SetActive(false);
+
+            // Show feedback panel
+            feedbackPanel.SetActive(true);
+
+            // Animate panel in
+            CanvasGroup feedbackCanvasGroup = feedbackPanel.GetComponent<CanvasGroup>();
+            if (feedbackCanvasGroup != null)
+            {
+                // Fade in
+                feedbackCanvasGroup.alpha = 0f;
+                float elapsed = 0f;
+                float fadeInTime = 0.3f;
+
+                while (elapsed < fadeInTime)
+                {
+                    elapsed += Time.deltaTime;
+                    feedbackCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsed / fadeInTime);
+                    yield return null;
+                }
+
+                // Hold at full visibility
+                yield return new WaitForSeconds(feedbackDisplayTime - 0.6f); // Adjust for fade times
+
+                // Fade out - FIXED THIS SECTION
+                elapsed = 0f;  // Reset elapsed time for fade out
+                float fadeOutTime = 0.3f;
+
+                while (elapsed < fadeOutTime)
+                {
+                    elapsed += Time.deltaTime;  // This line wasn't incrementing elapsed time
+                    feedbackCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsed / fadeOutTime);
+                    yield return null;
+                }
+            }
+            else
+            {
+                // No canvas group, just wait
+                yield return new WaitForSeconds(feedbackDisplayTime);
+            }
+
+            // Hide feedback panel
+            feedbackPanel.SetActive(false);
+
+            // Execute callback
+            onComplete?.Invoke();
         }
 
         /// <summary>

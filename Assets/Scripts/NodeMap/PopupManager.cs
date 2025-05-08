@@ -35,6 +35,12 @@ namespace NodeMap
         [Header("Components")]
         [SerializeField] private SlideIndicatorManager indicatorManager;
         [SerializeField] private QuizManager quizManager;
+
+        // Add this to the Inspector Fields region
+        [Header("Popup Styles")]
+        [SerializeField] private Image popupPanel; // Reference to the popup panel image
+        [SerializeField] private Sprite normalPopupSprite; // Purple sprite (default)
+        [SerializeField] private Sprite completedPopupSprite; // Green sprite for completed nodes
         #endregion
 
         #region Private Fields
@@ -61,6 +67,11 @@ namespace NodeMap
         private void Start()
         {
             InitializeUI();
+        }
+
+        private void Update()
+        {
+            HandleKeyboardInput();
         }
         #endregion
 
@@ -94,6 +105,18 @@ namespace NodeMap
                 quizManager.OnQuizCompleted += HandleQuizCompleted;
             }
         }
+
+        private void HandleKeyboardInput()
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                NextSlide();
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                PreviousSlide();
+            }
+        }
         #endregion
 
         #region Public Entry Points
@@ -109,12 +132,30 @@ namespace NodeMap
             // Track the opened node
             openedNodeIndex = nodeIndex;
 
+            // Check if the node is completed and set appropriate panel sprite
+            PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
+            bool isNodeCompleted = false;
+
+            if (playerMover != null)
+            {
+                // Convert to zero-based index for the player movement system
+                int zeroBasedNodeIndex = nodeIndex - 1;
+                isNodeCompleted = playerMover.IsNodeCompleted(zeroBasedNodeIndex);
+
+                // Set the appropriate sprite based on completion status
+                if (popupPanel != null)
+                {
+                    popupPanel.sprite = isNodeCompleted ? completedPopupSprite : normalPopupSprite;
+                }
+            }
+
             // Load node slides
             LoadNodeSlides(nodeIndex);
 
             // Set node header
             UpdateNodeHeader(nodeIndex);
 
+            // Rest of existing code...
             // Initialize indicators
             if (indicatorManager != null)
             {
@@ -454,8 +495,11 @@ namespace NodeMap
                 return;
             }
 
-            // Node not yet completed — mark as complete
+            // Node not yet completed — mark as complete and update panel color
             successPanel.SetActive(false);
+
+            // Update the popup panel to the completed color
+
             StartCoroutine(CompleteNodeAfterClosing(completedNodeIndex));
         }
 
@@ -625,6 +669,16 @@ namespace NodeMap
             failurePanel.SetActive(false);
             successPanel.SetActive(false);
             slidesParent.SetActive(true);
+        }
+        #endregion
+
+        #region Public Status Checks
+        /// <summary>
+        /// Returns whether a popup is currently active
+        /// </summary>
+        public bool IsPopupActive()
+        {
+            return popupCanvasGroup.alpha > 0f && popupCanvasGroup.interactable;
         }
         #endregion
     }

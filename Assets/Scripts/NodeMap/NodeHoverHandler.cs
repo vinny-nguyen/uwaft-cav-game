@@ -88,7 +88,7 @@ namespace NodeMap
         {
             originalScale = transform.localScale;
             spriteRenderer = GetComponent<SpriteRenderer>();
-            
+
             if (spriteRenderer != null)
                 spriteRenderer.color = normalColor;
         }
@@ -134,8 +134,18 @@ namespace NodeMap
             return NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted || isClickable;
         }
 
+        // Add to the private methods section, updating the HandleNodeClick method
+
         private void HandleNodeClick()
         {
+            // Check if tutorial is active - if yes, ignore clicks on nodes
+            TutorialManager tutorialManager = FindFirstObjectByType<TutorialManager>();
+            if (tutorialManager != null && tutorialManager.IsTutorialActive())
+            {
+                // Skip interaction while tutorial is active
+                return;
+            }
+
             if (NopeMapManager.Instance == null)
             {
                 Debug.LogWarning("NopeMapManager instance missing!");
