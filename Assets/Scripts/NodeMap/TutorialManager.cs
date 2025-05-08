@@ -16,6 +16,7 @@ namespace NodeMap
         [SerializeField] private RectTransform arrowImage;
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] private TextMeshProUGUI continueText;
+        [SerializeField] private Image clickBlocker;
 
         [Header("Arrow Settings")]
         [SerializeField] private float arrowBobAmount = 20f;
@@ -154,6 +155,14 @@ namespace NodeMap
 
             // Enable the tutorial canvas
             tutorialCanvasGroup.gameObject.SetActive(true);
+
+            // Enable click blocker to prevent clicking underlying UI elements
+            if (clickBlocker != null)
+            {
+                clickBlocker.gameObject.SetActive(true);
+                // Make it invisible but raycast blocking
+                clickBlocker.color = new Color(0, 0, 0, 0.01f);
+            }
 
             // Show first step
             StartCoroutine(FadeInTutorial());
@@ -504,6 +513,12 @@ namespace NodeMap
             if (arrowAnimationCoroutine != null)
                 StopCoroutine(arrowAnimationCoroutine);
 
+            // Disable click blocker
+            if (clickBlocker != null)
+            {
+                clickBlocker.gameObject.SetActive(false);
+            }
+
             // Fade out and hide
             StartCoroutine(FadeOutTutorial());
 
@@ -551,6 +566,11 @@ namespace NodeMap
         public void ForceStartTutorial()
         {
             StartTutorial();
+        }
+
+        public bool IsTutorialActive()
+        {
+            return tutorialActive;
         }
     }
 
