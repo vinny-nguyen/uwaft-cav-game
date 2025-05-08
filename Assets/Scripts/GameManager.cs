@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(DelayedGameOver());
     }
 
+    public void SendtoNodeMap() {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("NodeMapFullHD");
+    }
+
     public void RestartGame() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
