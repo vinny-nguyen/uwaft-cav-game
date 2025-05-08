@@ -4973,6 +4973,8 @@ MonoBehaviour:
   arrowBobSpeed: 2
   firstNodeTransform: {fileID: 343780605}
   finalNodeTransform: {fileID: 1658079462}
+  driveButton: {fileID: 1225086862}
+  homeButton: {fileID: 1020558458}
   showTutorialOnStart: 1
   playerPrefKey: CompletedTutorial
   fadeInDuration: 0.5
@@ -7556,7 +7558,7 @@ GameObject:
   - component: {fileID: 963065710}
   - component: {fileID: 963065709}
   m_Layer: 5
-  m_Name: Background
+  m_Name: DimmerPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

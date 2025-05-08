@@ -18,12 +18,14 @@ namespace NodeMap
         [SerializeField] private TextMeshProUGUI continueText;
 
         [Header("Arrow Settings")]
-        [SerializeField] private float arrowBobAmount = 10f;
+        [SerializeField] private float arrowBobAmount = 20f;
         [SerializeField] private float arrowBobSpeed = 2f;
 
         [Header("Target References")]
         [SerializeField] private Transform firstNodeTransform;  // First node to highlight
         [SerializeField] private Transform finalNodeTransform;  // Final node to highlight
+        [SerializeField] private Transform driveButton;    // UI button to highlight
+        [SerializeField] private Transform homeButton;     // UI button to highlight
 
         [Header("Tutorial Settings")]
         [SerializeField] private bool showTutorialOnStart = true;
@@ -76,10 +78,14 @@ namespace NodeMap
             if (tutorialActive && currentStep < tutorialSteps.Count)
             {
                 // Update arrow position every frame if the target exists
-                Transform currentTarget = tutorialSteps[currentStep].Target;
-                if (currentTarget != null)
+                TutorialStep currentTutorialStep = tutorialSteps[currentStep];
+                if (currentTutorialStep.Target != null)
                 {
-                    PositionArrowAtTarget(currentTarget);
+                    PositionArrowAtTarget(
+                        currentTutorialStep.Target,
+                        currentTutorialStep.IsUIElement,
+                        currentTutorialStep.ArrowOffset
+                    );
                 }
             }
         }
@@ -91,17 +97,32 @@ namespace NodeMap
         {
             tutorialSteps.Clear();
 
-            // Step 1: Introduction to nodes
+            // Step 1: Introduction to nodes with default positioning
             tutorialSteps.Add(new TutorialStep(
                 "These are nodes. Click on them to learn about cars!",
-                firstNodeTransform));
+                firstNodeTransform,
+                false,
+                new Vector2(0, 0))); // Offset arrow 50 pixels up
 
-            // Step 2: Show the goal
+            // Step 2: Show the goal with custom offset
             tutorialSteps.Add(new TutorialStep(
                 "This is your goal. Complete all nodes to reach the final destination!",
-                finalNodeTransform));
+                finalNodeTransform,
+                false,
+                new Vector2(0, 0))); // Position arrow to the left and higher
 
-            // Add more steps as needed
+            // Step 3: UI Button with custom offset
+            tutorialSteps.Add(new TutorialStep(
+                "Click this button to drive when you have completed a node!",
+                driveButton,
+                true,
+                new Vector2(30, 60))); // Position arrow higher above the UI button
+
+            tutorialSteps.Add(new TutorialStep(
+            "Click this button to go back to the main menu.",
+            homeButton,
+            true,
+            new Vector2(50, 60))); // Position arrow higher above the UI button
         }
 
         /// <summary>
@@ -124,18 +145,12 @@ namespace NodeMap
         {
             if (tutorialSteps.Count == 0)
             {
-                Debug.LogWarning("No tutorial steps have been defined!");
+                Debug.LogWarning("No tutorial steps defined!");
                 return;
             }
 
             tutorialActive = true;
             currentStep = 0;
-
-            // Pre-populate the text before showing the canvas
-            if (currentStep < tutorialSteps.Count && messageText != null)
-            {
-                messageText.text = tutorialSteps[currentStep].Message;
-            }
 
             // Enable the tutorial canvas
             tutorialCanvasGroup.gameObject.SetActive(true);
@@ -147,8 +162,8 @@ namespace NodeMap
         private IEnumerator FadeInTutorial()
         {
             tutorialCanvasGroup.alpha = 0f;
+            float timer = 0f;
 
-            // Enable spotlight dimmer
             if (dimmerPanel != null)
             {
                 dimmerPanel.gameObject.SetActive(true);
@@ -161,8 +176,6 @@ namespace NodeMap
                 messageText.text = tutorialSteps[currentStep].Message;
             }
 
-            float timer = 0f;
-
             while (timer < fadeInDuration)
             {
                 timer += Time.deltaTime;
@@ -174,7 +187,6 @@ namespace NodeMap
                 {
                     dimmerPanel.color = new Color(0, 0, 0, Mathf.Lerp(0, 0.7f, t));
                 }
-
                 yield return null;
             }
 
@@ -182,9 +194,6 @@ namespace NodeMap
             ShowCurrentStep();
         }
 
-        /// <summary>
-        /// Display the current tutorial step
-        /// </summary>
         /// <summary>
         /// Display the current tutorial step
         /// </summary>
@@ -199,16 +208,12 @@ namespace NodeMap
             TutorialStep step = tutorialSteps[currentStep];
 
             // Update text
-            if (messageText != null)
-            {
-                messageText.text = step.Message;
-            }
+            messageText.text = step.Message;
 
             // Position arrow and panel
             if (step.Target != null)
             {
-                PositionArrowAtTarget(step.Target);
-                // PositionMessagePanelNearTarget(step.Target);
+                PositionArrowAtTarget(step.Target, step.IsUIElement, step.ArrowOffset);
 
                 if (arrowAnimationCoroutine != null)
                 {
@@ -224,7 +229,7 @@ namespace NodeMap
         /// <summary>
         /// Positions the arrow to point at a world target
         /// </summary>
-        private void PositionArrowAtTarget(Transform target)
+        private void PositionArrowAtTarget(Transform target, bool isUIElement = false, Vector2 customOffset = default)
         {
             if (target == null || mainCamera == null || arrowImage == null)
             {
@@ -236,66 +241,121 @@ namespace NodeMap
             Canvas canvas = tutorialCanvasGroup.GetComponentInParent<Canvas>();
             RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
 
-            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            if (isUIElement)
             {
-                // For Screen Space - Overlay canvas
-                Vector2 viewportPosition = mainCamera.WorldToViewportPoint(target.position);
-                Vector2 screenPosition = new Vector2(
-                    viewportPosition.x * Screen.width,
-                    viewportPosition.y * Screen.height
-                );
+                // UI Element positioning
+                RectTransform targetRect = target.GetComponent<RectTransform>();
+                if (targetRect != null)
+                {
+                    // Get the center position of the UI element in canvas space
+                    Vector3[] corners = new Vector3[4];
+                    targetRect.GetWorldCorners(corners);
+                    Vector3 targetCenter = (corners[0] + corners[2]) / 2; // Center of the UI element
 
-                // Convert screen position to local position in canvas
-                Vector2 localPosition;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    canvasRectTransform, screenPosition, null, out localPosition);
+                    // Convert world position to screen position
+                    Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, targetCenter);
 
-                // Position arrow with some offset
-                arrowImage.anchoredPosition = localPosition + new Vector2(100, 200);
+                    // Convert screen position to local position in tutorial canvas
+                    Vector2 localPosition;
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        canvasRectTransform, screenPoint, canvas.worldCamera, out localPosition);
 
-                // Debug.Log($"Positioning arrow - World: {target.position}, Screen: {screenPosition}, UI: {localPosition}");
-            }
-            else if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                // For Screen Space - Camera canvas
-                Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, target.position);
+                    // Position arrow with default offset + custom offset
+                    Vector2 defaultOffset = new Vector2(0, 100); // Default position above the UI element
+                    arrowImage.anchoredPosition = localPosition + defaultOffset + customOffset;
 
-                // Convert screen position to local position in canvas
-                Vector2 localPosition;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    canvasRectTransform, screenPoint, canvas.worldCamera, out localPosition);
-
-                // Position arrow with some offset
-                arrowImage.anchoredPosition = localPosition + new Vector2(100, 200);
-
-                Debug.Log($"Positioning arrow - World: {target.position}, Screen: {screenPoint}, UI: {localPosition}");
+                    Debug.Log($"Positioning arrow at UI element: {target.name}, Position: {localPosition}, With offset: {customOffset}");
+                }
             }
             else
             {
-                // For World Space canvas (unlikely in this case but included for completeness)
-                Vector3 worldPosition = target.position + new Vector3(0, 1f, 0); // Add offset in world space
-                arrowImage.position = worldPosition;
+                // World object positioning
+                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                {
+                    // For Screen Space - Overlay canvas
+                    Vector2 viewportPosition = mainCamera.WorldToViewportPoint(target.position);
+                    Vector2 screenPosition = new Vector2(
+                        viewportPosition.x * Screen.width,
+                        viewportPosition.y * Screen.height
+                    );
+
+                    // Convert screen position to local position in canvas
+                    Vector2 localPosition;
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        canvasRectTransform, screenPosition, null, out localPosition);
+
+                    // Position arrow with default offset + custom offset
+                    Vector2 defaultOffset = new Vector2(100, 200);
+                    arrowImage.anchoredPosition = localPosition + defaultOffset + customOffset;
+                }
+                else if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
+                {
+                    // For Screen Space - Camera canvas
+                    Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, target.position);
+
+                    // Convert screen position to local position in canvas
+                    Vector2 localPosition;
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        canvasRectTransform, screenPoint, canvas.worldCamera, out localPosition);
+
+                    // Position arrow with default offset + custom offset
+                    Vector2 defaultOffset = new Vector2(100, 200);
+                    arrowImage.anchoredPosition = localPosition + defaultOffset + customOffset;
+                }
+                else
+                {
+                    // For World Space canvas
+                    Vector3 worldPosition = target.position + new Vector3(0, 1f, 0);
+                    arrowImage.position = worldPosition + new Vector3(customOffset.x, customOffset.y, 0);
+                }
             }
 
-            UpdateSpotlight(target);
-
+            UpdateSpotlight(target, isUIElement);
         }
 
-        private void UpdateSpotlight(Transform target)
+        private void UpdateSpotlight(Transform target, bool isUIElement = false)
         {
             if (dimmerPanel == null || dimmerPanel.material == null || target == null || mainCamera == null)
                 return;
 
-            // Get screen position of target
-            Vector2 viewportPosition = mainCamera.WorldToViewportPoint(target.position);
+            Vector2 viewportPosition;
+
+            if (isUIElement)
+            {
+                // For UI elements, we need to convert UI position to viewport position
+                RectTransform targetRect = target.GetComponent<RectTransform>();
+                if (targetRect == null) return;
+
+                // Get the center position of the UI element in world space
+                Vector3[] corners = new Vector3[4];
+                targetRect.GetWorldCorners(corners);
+                Vector3 targetCenter = (corners[0] + corners[2]) / 2; // Center of the UI element
+
+                // Get screen position
+                Canvas canvas = tutorialCanvasGroup.GetComponentInParent<Canvas>();
+                Camera uiCamera = canvas.renderMode == RenderMode.ScreenSpaceCamera ? canvas.worldCamera : null;
+                Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(uiCamera, targetCenter);
+
+                // Convert screen position to viewport position (0-1 range)
+                viewportPosition = new Vector2(
+                    screenPoint.x / Screen.width,
+                    screenPoint.y / Screen.height
+                );
+
+                Debug.Log($"UI Element spotlight at viewport: {viewportPosition}");
+            }
+            else
+            {
+                // For world objects, use the existing approach
+                viewportPosition = mainCamera.WorldToViewportPoint(target.position);
+            }
 
             // Calculate the aspect ratio correction
             float aspectRatio = (float)Screen.width / Screen.height;
 
-            // Adjust the X coordinate to account for aspect ratio
-            // This makes a viewport circle stay circular on screen
+            // Update shader properties with the viewport position
             Vector4 correctedCenter = new Vector4(
-                viewportPosition.x,  // No change to x position 
+                viewportPosition.x,
                 viewportPosition.y,
                 0,
                 0
@@ -303,7 +363,7 @@ namespace NodeMap
 
             dimmerPanel.material.SetVector("_Center", correctedCenter);
 
-            // Calculate radius based on screen height and account for aspect ratio
+            // Calculate radius based on screen height
             float screenHeight = Screen.height;
             float normalizedRadius = spotlightRadius / screenHeight;
 
@@ -311,7 +371,7 @@ namespace NodeMap
             dimmerPanel.material.SetFloat("_Radius", normalizedRadius);
             dimmerPanel.material.SetFloat("_SoftEdge", normalizedRadius * 0.2f);
 
-            // Set the aspect ratio as a shader property to correct the circle in the fragment shader
+            // Set the aspect ratio as a shader property
             dimmerPanel.material.SetFloat("_AspectRatio", aspectRatio);
         }
 
@@ -321,9 +381,7 @@ namespace NodeMap
                 return false;
 
             Vector3 viewportPoint = mainCamera.WorldToViewportPoint(target.position);
-            return (viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
-                    viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
-                    viewportPoint.z > 0);
+            return viewportPoint.y >= 0 && viewportPoint.y <= 1 && viewportPoint.z > 0;
         }
 
         /// <summary>
@@ -462,26 +520,12 @@ namespace NodeMap
             while (timer < duration)
             {
                 timer += Time.deltaTime;
-                float t = timer / duration;
-                tutorialCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
-
-                // Also fade out the dimmer
-                if (dimmerPanel != null)
-                {
-                    dimmerPanel.color = new Color(0, 0, 0, Mathf.Lerp(0.7f, 0, t));
-                }
-
+                tutorialCanvasGroup.alpha = Mathf.Lerp(1f, 0f, timer / duration);
                 yield return null;
             }
 
             tutorialCanvasGroup.alpha = 0f;
             tutorialCanvasGroup.gameObject.SetActive(false);
-
-            // Disable spotlight dimmer
-            if (dimmerPanel != null)
-            {
-                dimmerPanel.gameObject.SetActive(false);
-            }
         }
 
         /// <summary>
@@ -510,6 +554,8 @@ namespace NodeMap
         }
     }
 
+    // Modify the TutorialStep class at the bottom of the file
+
     /// <summary>
     /// Represents a single step in the tutorial sequence
     /// </summary>
@@ -518,11 +564,23 @@ namespace NodeMap
     {
         public string Message;
         public Transform Target;
+        public bool IsUIElement; // Flag to indicate if the target is a UI element
+        public Vector2 ArrowOffset = Vector2.zero; // Custom offset for arrow positioning
 
-        public TutorialStep(string message, Transform target)
+        public TutorialStep(string message, Transform target, bool isUIElement = false)
         {
             Message = message;
             Target = target;
+            IsUIElement = isUIElement;
+            ArrowOffset = Vector2.zero;
+        }
+
+        public TutorialStep(string message, Transform target, bool isUIElement, Vector2 arrowOffset)
+        {
+            Message = message;
+            Target = target;
+            IsUIElement = isUIElement;
+            ArrowOffset = arrowOffset;
         }
     }
 }
