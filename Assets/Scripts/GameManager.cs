@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
     
-    [SerializeField] private GameObject _Game_Over_Canvas;
+    [SerializeField] private GameObject _GameOver;
 
     private void Awake() {
         if (instance == null) {
@@ -18,21 +18,23 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator DelayedGameOver() {
 
-        yield return new WaitForSecondsRealtime(3.0f);
-        _Game_Over_Canvas.SetActive(true);
+        yield return new WaitForSecondsRealtime(1.0f);
+        _GameOver.SetActive(true);
         Time.timeScale = 0f;
     }
 
     public void GameOver() {
+        Debug.Log("GameOver method called");
         StartCoroutine(DelayedGameOver());
     }
 
     public void SendtoNodeMap() {
+        Debug.Log("SendtoNodeMap method called");
         Time.timeScale = 1f;
         SceneManager.LoadScene("NodeMapFullHD");
     }
 
-    public void RestartGame() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+    // public void RestartGame() {
+    //     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    // }
 }
