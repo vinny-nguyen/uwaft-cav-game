@@ -2935,6 +2935,9 @@ MonoBehaviour:
   successPanel: {fileID: 265458516}
   indicatorManager: {fileID: 1517808550}
   quizManager: {fileID: 1684459979}
+  popupPanel: {fileID: 561059875}
+  normalPopupSprite: {fileID: -7922815710990514042, guid: 13332865258c3574689fbbca970280d5, type: 3}
+  completedPopupSprite: {fileID: 5609578479215284551, guid: 8b24d7697cdd9cf4aac087d7a3bcdeda, type: 3}
 --- !u!4 &350366803
 Transform:
   m_ObjectHideFlags: 0
