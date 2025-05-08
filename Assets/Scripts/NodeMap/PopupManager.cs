@@ -62,6 +62,11 @@ namespace NodeMap
         {
             InitializeUI();
         }
+
+        private void Update()
+        {
+            HandleKeyboardInput();
+        }
         #endregion
 
         #region Initialization
@@ -92,6 +97,18 @@ namespace NodeMap
             if (quizManager != null)
             {
                 quizManager.OnQuizCompleted += HandleQuizCompleted;
+            }
+        }
+
+        private void HandleKeyboardInput()
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                NextSlide();
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                PreviousSlide();
             }
         }
         #endregion
@@ -625,6 +642,16 @@ namespace NodeMap
             failurePanel.SetActive(false);
             successPanel.SetActive(false);
             slidesParent.SetActive(true);
+        }
+        #endregion
+
+        #region Public Status Checks
+        /// <summary>
+        /// Returns whether a popup is currently active
+        /// </summary>
+        public bool IsPopupActive()
+        {
+            return popupCanvasGroup.alpha > 0f && popupCanvasGroup.interactable;
         }
         #endregion
     }
