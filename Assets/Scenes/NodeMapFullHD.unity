@@ -401,7 +401,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8851102538227576220, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: nodeIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -445,7 +445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6888835348061749661, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_Name
-      value: Node1
+      value: Node0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1616,7 +1616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 123411482}
   m_Layer: 5
-  m_Name: Node5
+  m_Name: Node4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1657,7 +1657,7 @@ GameObject:
   m_Component:
   - component: {fileID: 124727640}
   m_Layer: 5
-  m_Name: Node1
+  m_Name: Node0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1857,7 +1857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 155538516}
   m_Layer: 5
-  m_Name: Node3
+  m_Name: Node2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1974,7 +1974,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8851102538227576220, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: nodeIndex
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2022,7 +2022,7 @@ PrefabInstance:
       objectReference: {fileID: 4513700634576113434, guid: 3d62def5b7349024e9d900a04f7e49cf, type: 3}
     - target: {fileID: 6888835348061749661, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_Name
-      value: Node3
+      value: Node2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2250,7 +2250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 200490434}
   m_Layer: 5
-  m_Name: Node2
+  m_Name: Node1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4997,7 +4997,7 @@ GameObject:
   m_Component:
   - component: {fileID: 578082719}
   m_Layer: 5
-  m_Name: Node4
+  m_Name: Node3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7053,7 +7053,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8851102538227576220, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: nodeIndex
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7101,7 +7101,7 @@ PrefabInstance:
       objectReference: {fileID: 4984451156583207167, guid: 8c2ad6e8587cdf74d93db51a88b60d34, type: 3}
     - target: {fileID: 6888835348061749661, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_Name
-      value: Node6
+      value: Node5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8412,7 +8412,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8851102538227576220, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: nodeIndex
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8460,7 +8460,7 @@ PrefabInstance:
       objectReference: {fileID: -2498231920495746965, guid: b887aa9015728de43a30e69ada2d5873, type: 3}
     - target: {fileID: 6888835348061749661, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_Name
-      value: Node5
+      value: Node4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8851,7 +8851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1124781475}
   m_Layer: 5
-  m_Name: Node6
+  m_Name: Node5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14597,7 +14597,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8851102538227576220, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: nodeIndex
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14645,7 +14645,7 @@ PrefabInstance:
       objectReference: {fileID: 6454483105599200479, guid: ca6e8122a4e769b4b8a7336f9cac2765, type: 3}
     - target: {fileID: 6888835348061749661, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_Name
-      value: Node4
+      value: Node3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15950,7 +15950,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8851102538227576220, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: nodeIndex
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2204535091217470649, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15998,7 +15998,7 @@ PrefabInstance:
       objectReference: {fileID: 9145213704845536802, guid: 508fb0e7f7e468f42b6c6f56aa64e71f, type: 3}
     - target: {fileID: 6888835348061749661, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
       propertyPath: m_Name
-      value: Node2
+      value: Node1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

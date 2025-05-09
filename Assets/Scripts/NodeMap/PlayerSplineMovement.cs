@@ -131,13 +131,12 @@ namespace NodeMap
         /// </summary>
         private IEnumerator StartSequence()
         {
-            // Debug.Log("Starting sequence to move player to first node.");
             // Move car from spline start (T=0) to first node (1/7)
             yield return MoveAlongSpline(0f, stops[0].splinePercent);
 
             // After arriving at first node
             SetNodeToActive(0);
-            NopeMapManager.Instance.SetCurrentNode(1);
+            NopeMapManager.Instance.SetCurrentNode(0); // Change from 1 to 0
             if (tutorialManager != null && !tutorialManager.HasCompletedTutorial())
             {
                 tutorialManager.TriggerNodeReachedTutorial();
@@ -149,17 +148,17 @@ namespace NodeMap
         /// </summary>
         public void TryMoveToNode(int targetNode)
         {
-            targetNode = targetNode - 1; // Adjust for zero-based index
+            // Remove this conversion
+            // targetNode = targetNode - 1; // Adjust for zero-based index
 
             if (targetNode < 0 || targetNode >= stops.Count || isMoving)
                 return;
 
-            int currentNode = NopeMapManager.Instance.CurrentNodeIndex - 1; // zero-based
+            int currentNode = NopeMapManager.Instance.CurrentNodeIndex; // No need to subtract 1
 
             // Prevent forward movement if current node is not complete
             if (targetNode > currentNode && !IsNodeCompleted(currentNode))
             {
-                // Debug.Log($"Cannot move forward: Node {currentNode + 1} is not yet complete.");
                 ShakeCurrentNode(currentNode);
                 return;
             }
@@ -179,7 +178,18 @@ namespace NodeMap
             if (NopeMapManager.Instance.CurrentNodeIndex != -1)
                 SetNodeToNormal(NopeMapManager.Instance.CurrentNodeIndex);
 
-            float startT = stops[NopeMapManager.Instance.CurrentNodeIndex - 1].splinePercent;
+            // Calculate start position based on current node index
+            float startT;
+            if (NopeMapManager.Instance.CurrentNodeIndex < 0 || NopeMapManager.Instance.CurrentNodeIndex >= stops.Count)
+            {
+                // Handle special case when not on a valid node (e.g., initial state or initialization)
+                startT = 0f;
+            }
+            else
+            {
+                startT = stops[NopeMapManager.Instance.CurrentNodeIndex].splinePercent;
+            }
+
             float targetT = stops[targetNode].splinePercent;
 
             Vector3 startPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(startT));
@@ -196,8 +206,8 @@ namespace NodeMap
 
             isMoving = false;
 
-            NopeMapManager.Instance.SetCurrentNode(targetNode + 1); // +1 to match the node index in GameManager
-            SetNodeToActive(NopeMapManager.Instance.CurrentNodeIndex - 1);
+            NopeMapManager.Instance.SetCurrentNode(targetNode);
+            SetNodeToActive(NopeMapManager.Instance.CurrentNodeIndex);
         }
 
         /// <summary>
@@ -333,7 +343,7 @@ namespace NodeMap
         #region Node State Management
         private void SetNodeToNormal(int nodeIndex)
         {
-            nodeIndex = nodeIndex - 1; // Adjust for zero-based index
+            // nodeIndex = nodeIndex - 1; // Adjust for zero-based index
 
             if (completedNodes.Contains(nodeIndex))
                 return; // Skip — leave as complete (green)

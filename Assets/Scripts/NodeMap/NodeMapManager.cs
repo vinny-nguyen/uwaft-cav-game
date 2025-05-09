@@ -9,16 +9,16 @@ namespace NodeMap
     /// 
     public class NopeMapManager : MonoBehaviour
     {
-        // Define event delegate
         public delegate void NodeCompletedHandler(int nodeIndex);
 
         // Add event
         public event NodeCompletedHandler OnNodeCompleted;
-        
+
         public static NopeMapManager Instance { get; private set; }
 
         [Header("Node Progression")]
-        public int CurrentNodeIndex { get; private set; } = -1; // starts with no active node
+        // Changed from -1 to 0, representing no active node
+        public int CurrentNodeIndex { get; private set; } = -1;
 
         // Track completion status
         private HashSet<int> completedNodes = new HashSet<int>();

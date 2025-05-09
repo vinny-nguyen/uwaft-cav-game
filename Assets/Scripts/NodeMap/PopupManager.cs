@@ -138,9 +138,8 @@ namespace NodeMap
 
             if (playerMover != null)
             {
-                // Convert to zero-based index for the player movement system
-                int zeroBasedNodeIndex = nodeIndex - 1;
-                isNodeCompleted = playerMover.IsNodeCompleted(zeroBasedNodeIndex);
+                // No need to convert to zero-based index
+                isNodeCompleted = playerMover.IsNodeCompleted(nodeIndex);
 
                 // Set the appropriate sprite based on completion status
                 if (popupPanel != null)
@@ -274,26 +273,6 @@ namespace NodeMap
         /// <summary>
         /// Debug method to log info about all slides - call from ReturnToSlides or other places
         /// </summary>
-        private void LogSlidesState()
-        {
-            // Debug.Log($"-------- Slides State ({currentNodeSlides.Count} slides) --------");
-            for (int i = 0; i < currentNodeSlides.Count; i++)
-            {
-                if (currentNodeSlides[i] != null)
-                {
-                    GameObject slide = currentNodeSlides[i];
-                    CanvasGroup cg = slide.GetComponent<CanvasGroup>();
-                    string cgInfo = cg != null ? $"CanvasGroup alpha: {cg.alpha}, interactable: {cg.interactable}" : "No CanvasGroup";
-
-                    // Debug.Log($"Slide {i}: {slide.name}, Active: {slide.activeInHierarchy}, Scale: {slide.transform.localScale}, {cgInfo}");
-                }
-                else
-                {
-                    // Debug.Log($"Slide {i}: NULL");
-                }
-            }
-            // Debug.Log("---------------------------------------");
-        }
 
         /// <summary>
         /// Loads slide content for the specified node
@@ -308,6 +287,12 @@ namespace NodeMap
             if (nodeContainer == null)
             {
                 Debug.LogWarning($"Node{nodeIndex} slides not found!");
+
+                // Log all node containers found in slidesParent
+                foreach (Transform child in slidesParent.transform)
+                {
+                    Debug.Log($"Found node container: {child.name}");
+                }
                 return;
             }
 
@@ -334,8 +319,8 @@ namespace NodeMap
             TMP_Text finalHeader = slide.GetComponentInChildren<TMP_Text>();
             if (finalHeader != null)
             {
-                string headerText = (nodeIndex - 1 >= 0 && nodeIndex - 1 < nodeHeaders.Count)
-                    ? nodeHeaders[nodeIndex - 1]
+                string headerText = (nodeIndex >= 0 && nodeIndex < nodeHeaders.Count)
+                    ? nodeHeaders[nodeIndex]
                     : $"Node {nodeIndex}";
 
                 finalHeader.text = $"Congratulations for completing the {headerText} node!";
@@ -368,8 +353,8 @@ namespace NodeMap
         /// </summary>
         private void UpdateNodeHeader(int nodeIndex)
         {
-            headerText.text = (nodeIndex - 1 >= 0 && nodeIndex - 1 < nodeHeaders.Count)
-                ? nodeHeaders[nodeIndex - 1]
+            headerText.text = (nodeIndex >= 0 && nodeIndex < nodeHeaders.Count)
+                ? nodeHeaders[nodeIndex]
                 : $"Node {nodeIndex}";
         }
         #endregion
@@ -392,7 +377,7 @@ namespace NodeMap
             }
             else
             {
-                if (currentSlideIndex < currentNodeSlides.Count - 1)
+                if (currentSlideIndex < currentNodeSlides.Count)
                 {
                     currentSlideIndex++;
                     ShowSlide(currentSlideIndex);
@@ -447,7 +432,7 @@ namespace NodeMap
             else
             {
                 leftArrowButton.interactable = currentSlideIndex > 0;
-                rightArrowButton.interactable = currentSlideIndex < currentNodeSlides.Count - 1;
+                rightArrowButton.interactable = currentSlideIndex < currentNodeSlides.Count;
             }
 
             // Update colors
@@ -484,7 +469,8 @@ namespace NodeMap
         private void HandleQuizCompleted(int nodeIndex)
         {
             PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
-            int completedNodeIndex = openedNodeIndex - 1; // Use zero-based index
+            // No need for conversion
+            int completedNodeIndex = openedNodeIndex;
 
             if (playerMover != null && playerMover.IsNodeCompleted(completedNodeIndex))
             {

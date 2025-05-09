@@ -133,9 +133,9 @@ namespace NodeMap
             if (manager != null)
             {
                 int currentNode = manager.CurrentNodeIndex;
-                isEnabled = manager.IsNodeCompleted(currentNode - 1);
+                isEnabled = manager.IsNodeCompleted(currentNode); // Remove -1
 
-                Debug.Log($"Button state updated: Node {currentNode}, Completed: {isEnabled}");
+                // Debug.Log($"Button state updated: Node {currentNode}, Completed: {isEnabled}");
             }
             else
             {
