@@ -207,10 +207,10 @@ namespace NodeMap
         private void ShowSlide(int index)
         {
             // LogSlidesState(); // Debug log for slide state
-            Debug.Log("Current Node Slides:");
+            // Debug.Log("Current Node Slides:");
             foreach (var slide in currentNodeSlides)
             {
-                Debug.Log(slide != null ? slide.name : "NULL");
+                // Debug.Log(slide != null ? slide.name : "NULL");
             }
             // Safety check
             if (currentNodeSlides.Count == 0 || index < 0 || index >= currentNodeSlides.Count)
@@ -259,12 +259,12 @@ namespace NodeMap
                 // First open → skip animation
                 activeSlide.localScale = Vector3.one;
                 slideCg.alpha = 1f;
-                Debug.Log($"Showing first slide (index {index}) without animation");
+                // Debug.Log($"Showing first slide (index {index}) without animation");
             }
             else
             {
                 // Normal transition → animate
-                Debug.Log($"Animating slide transition to index {index}");
+                // Debug.Log($"Animating slide transition to index {index}");
                 StartCoroutine(UIAnimator.AnimateSlideIn(activeSlide));
             }
 
@@ -276,7 +276,7 @@ namespace NodeMap
         /// </summary>
         private void LogSlidesState()
         {
-            Debug.Log($"-------- Slides State ({currentNodeSlides.Count} slides) --------");
+            // Debug.Log($"-------- Slides State ({currentNodeSlides.Count} slides) --------");
             for (int i = 0; i < currentNodeSlides.Count; i++)
             {
                 if (currentNodeSlides[i] != null)
@@ -285,14 +285,14 @@ namespace NodeMap
                     CanvasGroup cg = slide.GetComponent<CanvasGroup>();
                     string cgInfo = cg != null ? $"CanvasGroup alpha: {cg.alpha}, interactable: {cg.interactable}" : "No CanvasGroup";
 
-                    Debug.Log($"Slide {i}: {slide.name}, Active: {slide.activeInHierarchy}, Scale: {slide.transform.localScale}, {cgInfo}");
+                    // Debug.Log($"Slide {i}: {slide.name}, Active: {slide.activeInHierarchy}, Scale: {slide.transform.localScale}, {cgInfo}");
                 }
                 else
                 {
-                    Debug.Log($"Slide {i}: NULL");
+                    // Debug.Log($"Slide {i}: NULL");
                 }
             }
-            Debug.Log("---------------------------------------");
+            // Debug.Log("---------------------------------------");
         }
 
         /// <summary>
@@ -489,7 +489,7 @@ namespace NodeMap
             if (playerMover != null && playerMover.IsNodeCompleted(completedNodeIndex))
             {
                 // Already completed — just close the popup
-                Debug.Log("[QUIZ] Node already completed. Closing popup only.");
+                // Debug.Log("[QUIZ] Node already completed. Closing popup only.");
                 successPanel.SetActive(false);
                 StartCoroutine(ClosePopup());
                 return;
@@ -530,7 +530,7 @@ namespace NodeMap
             if (currentNodeSlides.Count == 0 && openedNodeIndex > 0)
             {
                 LoadNodeSlides(openedNodeIndex);
-                Debug.Log($"Reloaded slides for node {openedNodeIndex}, count: {currentNodeSlides.Count}");
+                // Debug.Log($"Reloaded slides for node {openedNodeIndex}, count: {currentNodeSlides.Count}");
             }
 
             // Initialize slides view
@@ -564,7 +564,7 @@ namespace NodeMap
                 ShowSlide(currentSlideIndex); // Show the slide to ensure it's visible
 
                 UpdateArrows();
-                Debug.Log($"Returning to slides. Count: {currentNodeSlides.Count}, Current slide active: {currentNodeSlides[currentSlideIndex].activeInHierarchy}");
+                // Debug.Log($"Returning to slides. Count: {currentNodeSlides.Count}, Current slide active: {currentNodeSlides[currentSlideIndex].activeInHierarchy}");
             }
             else
             {
@@ -617,7 +617,7 @@ namespace NodeMap
             // Update tracking state
             lastSlideIndex = index;
 
-            Debug.Log($"Force showed slide {index}, active: {currentSlide.activeInHierarchy}, scale: {currentSlide.transform.localScale}, alpha: {slideCG.alpha}");
+            // Debug.Log($"Force showed slide {index}, active: {currentSlide.activeInHierarchy}, scale: {currentSlide.transform.localScale}, alpha: {slideCG.alpha}");
         }
         #endregion
 
@@ -640,7 +640,7 @@ namespace NodeMap
                 indicatorManager.GenerateIndicators(quizManager.CurrentQuizQuestions.Count);
                 indicatorManager.UpdateActiveIndicator(0);
                 indicatorManager.SetVisibility(true);
-                Debug.Log("Generated indicators for quiz questions: " + quizManager.CurrentQuizQuestions.Count);
+                // Debug.Log("Generated indicators for quiz questions: " + quizManager.CurrentQuizQuestions.Count);
             }
         }
 

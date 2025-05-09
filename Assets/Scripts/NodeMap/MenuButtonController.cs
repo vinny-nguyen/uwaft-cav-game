@@ -207,11 +207,11 @@ namespace NodeMap
             if (!string.IsNullOrEmpty(targetSceneName))
             {
                 SceneManager.LoadScene(targetSceneName);
-                Debug.Log($"Loading scene: {targetSceneName}");
+                // Debug.Log($"Loading scene: {targetSceneName}");
             }
             else
             {
-                Debug.LogError("No target scene specified!");
+                // Debug.LogError("No target scene specified!");
             }
         }
 

@@ -56,7 +56,7 @@ namespace NodeMap
         public void AdvanceToNextNode()
         {
             CurrentNodeIndex++;
-            Debug.Log($"Advanced to Node {CurrentNodeIndex}");
+            // Debug.Log($"Advanced to Node {CurrentNodeIndex}");
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace NodeMap
         public void SetCurrentNode(int nodeIndex)
         {
             CurrentNodeIndex = nodeIndex;
-            Debug.Log($"Set current node to {CurrentNodeIndex}");
+            // Debug.Log($"Set current node to {CurrentNodeIndex}");
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace NodeMap
             if (!completedNodes.Contains(nodeIndex))
             {
                 completedNodes.Add(nodeIndex);
-                Debug.Log($"Node {nodeIndex} marked as completed");
+                // Debug.Log($"Node {nodeIndex} marked as completed");
             }
 
             OnNodeCompleted?.Invoke(nodeIndex);

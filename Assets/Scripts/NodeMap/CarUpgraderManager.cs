@@ -85,7 +85,7 @@ namespace NodeMap
 
             currentUpgradeIndex = -1; // Indicate we're using initial appearance
 
-            Debug.Log("Applied initial car appearance");
+            // Debug.Log("Applied initial car appearance");
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace NodeMap
             // Update current index
             currentUpgradeIndex = upgradeIndex;
 
-            Debug.Log($"Car upgraded to: {carUpgrades[upgradeIndex].upgradeName}");
+            // Debug.Log($"Car upgraded to: {carUpgrades[upgradeIndex].upgradeName}");
         }
 
         /// <summary>

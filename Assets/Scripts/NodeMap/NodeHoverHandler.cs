@@ -148,7 +148,7 @@ namespace NodeMap
 
             if (NopeMapManager.Instance == null)
             {
-                Debug.LogWarning("NopeMapManager instance missing!");
+                // Debug.LogWarning("NopeMapManager instance missing!");
                 return;
             }
 

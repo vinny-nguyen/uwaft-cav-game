@@ -69,11 +69,11 @@ namespace NodeMap
             if (jsonText != null)
             {
                 quizData = JsonUtility.FromJson<QuizData>(jsonText.text);
-                Debug.Log("Quiz data loaded successfully.");
+                // Debug.Log("Quiz data loaded successfully.");
             }
             else
             {
-                Debug.LogError("Failed to load quiz_data.json from Resources.");
+                // Debug.LogError("Failed to load quiz_data.json from Resources.");
             }
         }
         #endregion
@@ -94,12 +94,12 @@ namespace NodeMap
             NodeQuiz nodeQuiz = quizData.FindNodeQuizById(nodeIndex);
             if (nodeQuiz == null)
             {
-                Debug.LogError($"No quiz data found for Node {nodeIndex}.");
+                // Debug.LogError($"No quiz data found for Node {nodeIndex}.");
                 return;
             }
 
             currentQuizQuestions = nodeQuiz.questions.ToList();
-            Debug.Log($"[QUIZ] Starting quiz for Node {nodeIndex} with {currentQuizQuestions.Count} questions");
+            // Debug.Log($"[QUIZ] Starting quiz for Node {nodeIndex} with {currentQuizQuestions.Count} questions");
 
             // Setup UI
             LoadQuizQuestion(currentQuizQuestionIndex);
@@ -157,7 +157,7 @@ namespace NodeMap
         /// </summary>
         private void HandleCorrectAnswer()
         {
-            Debug.Log("[QUIZ] Correct!");
+            // Debug.Log("[QUIZ] Correct!");
 
             // Unlock next question
             unlockedQuizQuestions.Add(currentQuizQuestionIndex + 1);
@@ -165,7 +165,7 @@ namespace NodeMap
             // Show "Correct!" feedback temporarily
             if (correctFeedbackPanel != null)
             {
-                Debug.Log("[QUIZ] Showing correct feedback panel.");
+                // Debug.Log("[QUIZ] Showing correct feedback panel.");
                 StartCoroutine(ShowTemporaryFeedback(correctFeedbackPanel, () =>
                 {
                     ProceedAfterCorrectAnswer();
@@ -195,7 +195,7 @@ namespace NodeMap
             if (currentQuizQuestionIndex < currentQuizQuestions.Count)
             {
                 // Move to next question
-                Debug.Log($"[QUIZ] Moving to question {currentQuizQuestionIndex}");
+                // Debug.Log($"[QUIZ] Moving to question {currentQuizQuestionIndex}");
                 LoadQuizQuestion(currentQuizQuestionIndex);
                 if (indicatorManager != null)
                 {
@@ -205,7 +205,7 @@ namespace NodeMap
             else
             {
                 // Quiz completed
-                Debug.Log("[QUIZ] Quiz Complete!");
+                // Debug.Log("[QUIZ] Quiz Complete!");
                 ShowSuccessPanel();
 
                 NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
@@ -223,7 +223,7 @@ namespace NodeMap
         /// </summary>
         private void HandleIncorrectAnswer(int selectedIndex)
         {
-            Debug.Log("[QUIZ] Incorrect — try again!");
+            // Debug.Log("[QUIZ] Incorrect — try again!");
 
             // Shake the selected button
             StartCoroutine(UIAnimator.ShakeElement(optionButtons[selectedIndex].transform));
@@ -231,7 +231,7 @@ namespace NodeMap
             // Show "Incorrect!" feedback temporarily
             if (incorrectFeedbackPanel != null)
             {
-                Debug.Log("[QUIZ] Showing incorrect feedback panel.");
+                // Debug.Log("[QUIZ] Showing incorrect feedback panel.");
                 StartCoroutine(ShowTemporaryFeedback(incorrectFeedbackPanel, () =>
                 {
                     ShowFailurePanel();
@@ -399,7 +399,7 @@ namespace NodeMap
             }
 
             // Log that we're restarting
-            Debug.Log("[QUIZ] Quiz restarted. Current question index: 0");
+            // Debug.Log("[QUIZ] Quiz restarted. Current question index: 0");
         }
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace NodeMap
         /// </summary>
         public void CompleteCurrentNode()
         {
-            Debug.Log("[QUIZ] Completing current node and advancing.");
+            // Debug.Log("[QUIZ] Completing current node and advancing.");
 
             // Notify listeners
             OnQuizCompleted?.Invoke(currentNodeIndex);

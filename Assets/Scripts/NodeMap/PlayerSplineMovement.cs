@@ -48,39 +48,19 @@ namespace NodeMap
         private void Awake()
         {
             InitializeStops();
-            Debug.Log("Awake is running in PlayerSplineMovement.");
+            // Debug.Log("Awake is running in PlayerSplineMovement.");
         }
 
         private void Start()
         {
-            Debug.Log("Start is running in PlayerSplineMovement.");
-
-            // Validate critical components
-            if (spline == null)
-            {
-                Debug.LogError("Spline Container is missing!");
-            }
-
-            if (smokeParticles == null)
-            {
-                Debug.LogError("Smoke particle system is missing!");
-            }
-            else
-            {
-                Debug.Log($"Smoke particles found: {smokeParticles.gameObject.name}, Is active: {smokeParticles.gameObject.activeSelf}");
-            }
-
-            if (frontWheel == null || rearWheel == null)
-            {
-                Debug.LogError("One or more wheel transforms are missing!");
-            }
+            // Debug.Log("Start is running in PlayerSplineMovement.");
 
             InitializeParticles();
             InitializePosition();
 
             if (stops.Count > 0)
             {
-                Debug.Log($"Starting sequence to move to first node. Stop count: {stops.Count}");
+                // Debug.Log($"Starting sequence to move to first node. Stop count: {stops.Count}");
                 StartCoroutine(StartSequence());
             }
             else
@@ -111,14 +91,14 @@ namespace NodeMap
 
         private void InitializeParticles()
         {
-            Debug.Log("Initializing smoke particles.");
+            // Debug.Log("Initializing smoke particles.");
             if (smokeParticles != null)
                 smokeMain = smokeParticles.main;
         }
 
         private void InitializePosition()
         {
-            Debug.Log("Initializing player position.");
+            // Debug.Log("Initializing player position.");
             transform.position = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(0f));
         }
         #endregion
@@ -151,7 +131,7 @@ namespace NodeMap
         /// </summary>
         private IEnumerator StartSequence()
         {
-            Debug.Log("Starting sequence to move player to first node.");
+            // Debug.Log("Starting sequence to move player to first node.");
             // Move car from spline start (T=0) to first node (1/7)
             yield return MoveAlongSpline(0f, stops[0].splinePercent);
 
@@ -179,13 +159,13 @@ namespace NodeMap
             // Prevent forward movement if current node is not complete
             if (targetNode > currentNode && !IsNodeCompleted(currentNode))
             {
-                Debug.Log($"Cannot move forward: Node {currentNode + 1} is not yet complete.");
+                // Debug.Log($"Cannot move forward: Node {currentNode + 1} is not yet complete.");
                 ShakeCurrentNode(currentNode);
                 return;
             }
 
             isMovingForward = targetNode > currentNode;
-            Debug.Log($"Moving to node {targetNode} (isMovingForward: {isMovingForward})");
+            // Debug.Log($"Moving to node {targetNode} (isMovingForward: {isMovingForward})");
             StartCoroutine(MoveToNode(targetNode));
         }
 
@@ -225,7 +205,7 @@ namespace NodeMap
         /// </summary>
         private IEnumerator MoveAlongSpline(float startT, float endT)
         {
-            Debug.Log($"Moving along spline from {startT} to {endT}");
+            // Debug.Log($"Moving along spline from {startT} to {endT}");
             StartSmokeEffect();
 
             if (spline == null)
@@ -240,7 +220,7 @@ namespace NodeMap
             float duration = distance / moveSpeed;
             float elapsed = 0f;
 
-            Debug.Log($"Start position: {startPos}, End position: {endPos}, Distance: {distance}, Duration: {duration}, Speed: {moveSpeed}");
+            // Debug.Log($"Start position: {startPos}, End position: {endPos}, Distance: {distance}, Duration: {duration}, Speed: {moveSpeed}");
 
             // Force minimum duration
             if (duration < 0.1f)
@@ -251,7 +231,7 @@ namespace NodeMap
 
             while (elapsed < duration)
             {
-                Debug.Log($"Animation progress: {elapsed}/{duration} - {elapsed / duration * 100}%");
+                // Debug.Log($"Animation progress: {elapsed}/{duration} - {elapsed / duration * 100}%");
                 elapsed += Time.deltaTime;
                 float progress = Mathf.Clamp01(elapsed / duration);
                 float easedProgress = EaseInOut(progress);
@@ -268,7 +248,7 @@ namespace NodeMap
             UpdatePlayerPosition(endT);
             UpdatePlayerRotation(endT);
 
-            Debug.Log("Movement along spline complete!");
+            // Debug.Log("Movement along spline complete!");
             StopSmokeEffect();
         }
         #endregion
@@ -276,23 +256,23 @@ namespace NodeMap
         #region Movement Helpers
         private void StartSmokeEffect()
         {
-            Debug.Log("Starting smoke effect.");
+            // Debug.Log("Starting smoke effect.");
             if (smokeParticles != null)
             {
                 if (!smokeParticles.gameObject.activeSelf)
                 {
                     smokeParticles.gameObject.SetActive(true);
-                    Debug.Log("Smoke particles game object activated");
+                    // Debug.Log("Smoke particles game object activated");
                 }
 
                 if (!smokeParticles.isPlaying)
                 {
                     smokeParticles.Play();
-                    Debug.Log("Smoke particles started playing");
+                    // Debug.Log("Smoke particles started playing");
                 }
                 else
                 {
-                    Debug.Log("Smoke particles were already playing");
+                    // Debug.Log("Smoke particles were already playing");
                 }
             }
             else
@@ -313,7 +293,7 @@ namespace NodeMap
             float bounce = Mathf.Sin(Time.time * 5f) * 0.05f;
             worldPos.y += bounce;
             transform.position = worldPos;
-            Debug.Log($"Updated position to: {worldPos}");
+            // Debug.Log($"Updated position to: {worldPos}");
         }
 
         private void UpdatePlayerRotation(float splineT)
