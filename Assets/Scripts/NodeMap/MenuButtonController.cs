@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 namespace NodeMap
 {
@@ -46,13 +47,13 @@ namespace NodeMap
             // Get component references
             button = GetComponent<Button>();
             backgroundImage = GetComponent<Image>();
-            
+
             // If house icon isn't assigned, try to find it
             if (houseIcon == null)
             {
                 // Try to find it among children
                 houseIcon = GetComponentInChildren<Image>();
-                
+
                 // If the image we found is actually our background, look for the second image
                 if (houseIcon == backgroundImage)
                 {
@@ -206,13 +207,71 @@ namespace NodeMap
         {
             if (!string.IsNullOrEmpty(targetSceneName))
             {
+                // Save current progress to PlayerPrefs before transitioning
+                SaveNodeProgress();
+
+                // Load the main menu scene
                 SceneManager.LoadScene(targetSceneName);
-                // Debug.Log($"Loading scene: {targetSceneName}");
+                Debug.Log($"Loading scene: {targetSceneName}");
             }
             else
             {
-                // Debug.LogError("No target scene specified!");
+                Debug.LogError("No target scene specified!");
             }
+        }
+
+        /// <summary>
+        /// Saves current node progress to PlayerPrefs
+        /// </summary>
+        private void SaveNodeProgress()
+        {
+            NopeMapManager manager = FindFirstObjectByType<NopeMapManager>();
+            if (manager == null) return;
+
+            // Save current node index
+            PlayerPrefs.SetInt("CurrentNodeIndex", manager.CurrentNodeIndex);
+
+            // Get completed nodes from the manager
+            HashSet<int> completedNodes = GetCompletedNodesFromManager(manager);
+
+            // Convert completed nodes to string and save
+            string completedNodesStr = SerializeCompletedNodes(completedNodes);
+            PlayerPrefs.SetString("CompletedNodes", completedNodesStr);
+
+            // Make sure data is written to disk
+            PlayerPrefs.Save();
+
+            Debug.Log($"Saved progress before returning to menu: Current Node = {manager.CurrentNodeIndex}, " +
+                      $"Completed Nodes = {completedNodesStr}");
+        }
+
+        /// <summary>
+        /// Gets the completed nodes from the manager
+        /// </summary>
+        private HashSet<int> GetCompletedNodesFromManager(NopeMapManager manager)
+        {
+            HashSet<int> result = new HashSet<int>();
+
+            // Since we don't have direct access to the completedNodes HashSet in the manager,
+            // we'll check each possible node (up to a reasonable number)
+            for (int i = 0; i < 20; i++) // Assuming max 20 nodes, adjust as needed
+            {
+                if (manager.IsNodeCompleted(i))
+                {
+                    result.Add(i);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a HashSet of completed node indices to a serialized string
+        /// </summary>
+        private string SerializeCompletedNodes(HashSet<int> completedNodes)
+        {
+            // Join node indices with commas (e.g., "0,1,3,5")
+            return string.Join(",", completedNodes);
         }
 
         private void OnDisable()

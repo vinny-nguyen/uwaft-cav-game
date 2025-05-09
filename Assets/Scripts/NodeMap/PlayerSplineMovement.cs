@@ -59,8 +59,18 @@ namespace NodeMap
 
             if (stops.Count > 0)
             {
-                // Debug.Log($"Starting sequence to move to first node. Stop count: {stops.Count}");
-                StartCoroutine(StartSequence());
+                // Check if saved progress exists
+                if (HasSavedProgress())
+                {
+                    // Load saved progress and position player at the current node
+                    StartCoroutine(LoadSavedProgress());
+                }
+                else
+                {
+                    // No saved progress, start from the beginning
+                    // Debug.Log($"Starting sequence to move to first node. Stop count: {stops.Count}");
+                    StartCoroutine(StartSequence());
+                }
             }
             else
             {
@@ -373,7 +383,7 @@ namespace NodeMap
         {
             if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
                 return; // Skip — leave as complete (green)
-                
+
             if (nodeMarkers.Count > nodeIndex && activeNodeSprites.Count > nodeIndex)
             {
                 GameObject marker = nodeMarkers[nodeIndex];
@@ -507,6 +517,101 @@ namespace NodeMap
         }
         #endregion
 
+        private bool HasSavedProgress()
+        {
+            return PlayerPrefs.HasKey("CurrentNodeIndex") &&
+                   PlayerPrefs.HasKey("CompletedNodes");
+        }
+
+        /// <summary>
+        /// Loads saved progress and positions the player at the saved node
+        /// </summary>
+        private IEnumerator LoadSavedProgress()
+        {
+            // Make sure NodeMapManager has loaded its data
+            NopeMapManager manager = NopeMapManager.Instance;
+            if (manager == null)
+            {
+                Debug.LogError("NopeMapManager not found when trying to load saved progress!");
+                yield break;
+            }
+
+            // Wait a frame to ensure NodeMapManager has completed its Start() method
+            yield return null;
+
+            // Get current node index from NodeMapManager (it should have loaded from PlayerPrefs)
+            int currentNodeIndex = manager.CurrentNodeIndex;
+
+            // Safety check - make sure we have a valid node
+            if (currentNodeIndex < 0 || currentNodeIndex >= stops.Count)
+            {
+                Debug.LogWarning($"Saved node index {currentNodeIndex} is invalid. Starting from beginning.");
+                StartCoroutine(StartSequence());
+                yield break;
+            }
+
+            Debug.Log($"Loading saved progress - positioning at node {currentNodeIndex}");
+
+            // Position the player at the saved node
+            float nodePosition = stops[currentNodeIndex].splinePercent;
+            Vector3 worldPos = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(nodePosition));
+            transform.position = worldPos;
+
+            // Set the correct rotation
+            Vector3 tangent = spline.transform.TransformDirection((Vector3)spline.EvaluateTangent(nodePosition)).normalized;
+            float angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+            // Update visual state of all nodes
+            UpdateAllNodeVisuals();
+
+            // Set this node as active
+            SetNodeToActive(currentNodeIndex);
+        }
+
+        /// <summary>
+        /// Updates the visual state of all nodes based on completion status
+        /// </summary>
+        private void UpdateAllNodeVisuals()
+        {
+            // Update visuals for each node
+            for (int i = 0; i < nodeMarkers.Count; i++)
+            {
+                if (NopeMapManager.Instance.IsNodeCompleted(i))
+                {
+                    // Set completed nodes to completed state
+                    if (i < completeNodeSprites.Count && nodeMarkers[i] != null)
+                    {
+                        GameObject marker = nodeMarkers[i];
+                        NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
+                        NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
+
+                        if (visualController != null)
+                        {
+                            visualController.TransitionToComplete(completeNodeSprites[i]);
+                        }
+                        else
+                        {
+                            SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                            if (sr != null && completeNodeSprites[i] != null)
+                            {
+                                sr.sprite = completeNodeSprites[i];
+                            }
+                        }
+
+                        if (handler != null)
+                        {
+                            handler.SetClickable(true);
+                        }
+                    }
+                }
+                else if (i != NopeMapManager.Instance.CurrentNodeIndex)
+                {
+                    // Set non-current, non-completed nodes to normal state
+                    SetNodeToNormal(i);
+                }
+            }
+        }
         // Add this to the PopupManager class
     }
 }

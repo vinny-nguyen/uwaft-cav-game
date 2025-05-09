@@ -284,6 +284,10 @@ namespace NodeMap
         {
             if (!string.IsNullOrEmpty(targetSceneName))
             {
+                // Save current progress to PlayerPrefs
+                SaveNodeProgress();
+
+                // Load the target scene
                 SceneManager.LoadScene(targetSceneName);
                 // Debug.Log($"Loading scene: {targetSceneName}");
             }
@@ -291,6 +295,54 @@ namespace NodeMap
             {
                 // Debug.LogError("No target scene specified!");
             }
+        }
+
+        private void SaveNodeProgress()
+        {
+            NopeMapManager manager = FindFirstObjectByType<NopeMapManager>();
+            if (manager == null) return;
+
+            // Save current node index
+            PlayerPrefs.SetInt("CurrentNodeIndex", manager.CurrentNodeIndex);
+
+            // Get completed nodes from the manager
+            HashSet<int> completedNodes = GetCompletedNodesFromManager(manager);
+
+            // Convert completed nodes to string and save
+            string completedNodesStr = SerializeCompletedNodes(completedNodes);
+            PlayerPrefs.SetString("CompletedNodes", completedNodesStr);
+
+            // Make sure data is written to disk
+            PlayerPrefs.Save();
+
+            Debug.Log($"Saved progress: Current Node = {manager.CurrentNodeIndex}, " +
+                      $"Completed Nodes = {completedNodesStr}");
+        }
+
+        private HashSet<int> GetCompletedNodesFromManager(NopeMapManager manager)
+        {
+            HashSet<int> result = new HashSet<int>();
+
+            // Since we don't have direct access to the completedNodes HashSet in the manager,
+            // we'll check each possible node (up to a reasonable number)
+            for (int i = 0; i < 20; i++) // Assuming max 20 nodes, adjust as needed
+            {
+                if (manager.IsNodeCompleted(i))
+                {
+                    result.Add(i);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a HashSet of completed node indices to a serialized string
+        /// </summary>
+        private string SerializeCompletedNodes(HashSet<int> completedNodes)
+        {
+            // Join node indices with commas (e.g., "0,1,3,5")
+            return string.Join(",", completedNodes);
         }
 
         private void OnDisable()
