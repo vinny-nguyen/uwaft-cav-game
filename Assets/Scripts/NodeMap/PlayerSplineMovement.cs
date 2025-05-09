@@ -41,7 +41,6 @@ namespace NodeMap
         private bool isMoving = false;
         private bool isMovingForward = true;
         private ParticleSystem.MainModule smokeMain;
-        private HashSet<int> completedNodes = new HashSet<int>();
         #endregion
 
         #region Unity Lifecycle
@@ -345,7 +344,7 @@ namespace NodeMap
         {
             // nodeIndex = nodeIndex - 1; // Adjust for zero-based index
 
-            if (completedNodes.Contains(nodeIndex))
+            if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
                 return; // Skip — leave as complete (green)
 
             if (nodeMarkers.Count > nodeIndex && normalNodeSprites.Count > nodeIndex)
@@ -372,9 +371,9 @@ namespace NodeMap
 
         private void SetNodeToActive(int nodeIndex)
         {
-            if (completedNodes.Contains(nodeIndex))
+            if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
                 return; // Skip — leave as complete (green)
-
+                
             if (nodeMarkers.Count > nodeIndex && activeNodeSprites.Count > nodeIndex)
             {
                 GameObject marker = nodeMarkers[nodeIndex];
@@ -409,9 +408,10 @@ namespace NodeMap
         /// </summary>
         public void SetNodeToComplete(int nodeIndex)
         {
-            if (!completedNodes.Contains(nodeIndex))
+            // Instead of checking our own list, use NopeMapManager
+            if (!NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
             {
-                completedNodes.Add(nodeIndex);
+                // No need to add to our own list, just notify the manager
                 NopeMapManager.Instance.CompleteNode(nodeIndex);
             }
 
@@ -503,7 +503,7 @@ namespace NodeMap
         /// </summary>
         public bool IsNodeCompleted(int nodeIndex)
         {
-            return completedNodes.Contains(nodeIndex);
+            return NopeMapManager.Instance.IsNodeCompleted(nodeIndex);
         }
         #endregion
 
