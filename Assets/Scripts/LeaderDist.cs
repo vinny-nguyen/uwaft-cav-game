@@ -60,11 +60,33 @@ public class LeaderDist : MonoBehaviour
         _CarRB.AddTorque(-_Move_Input * _Rotation_Speed * Time.fixedDeltaTime);
     }
 
+    //private void TrackDistance()
+    //{
+    //    float distanceThisFrame = Vector2.Distance(_CarRB.position, _lastPosition);
+    //    _totalDistance += distanceThisFrame;
+    //    _lastPosition = _CarRB.position;
+
+    //    if (_totalDistance >= _nextUpdateThreshold)
+    //    {
+    //        _ = SubmitDistanceToLeaderboard();
+    //        _nextUpdateThreshold = _totalDistance + _distanceUpdateInterval;
+    //    }
+    //}
+
     private void TrackDistance()
     {
-        float distanceThisFrame = Vector2.Distance(_CarRB.position, _lastPosition);
-        _totalDistance += distanceThisFrame;
-        _lastPosition = _CarRB.position;
+        Vector2 currentPosition = _CarRB.position;
+        Vector2 movementVector = currentPosition - _lastPosition;
+
+        // Use the car's right vector as the forward direction (adjust if needed)
+        Vector2 forwardDirection = _CarRB.transform.right.normalized;
+
+        // Project movement onto forward direction
+        float signedDistance = Vector2.Dot(movementVector, forwardDirection);
+
+        _totalDistance += signedDistance;
+        _totalDistance = Mathf.Max(0f, _totalDistance); // Prevent negative total distance
+        _lastPosition = currentPosition;
 
         if (_totalDistance >= _nextUpdateThreshold)
         {
