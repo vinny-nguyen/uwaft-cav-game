@@ -9,28 +9,31 @@ public class DriveCar: MonoBehaviour {
     [SerializeField] private float _Speed = 150f;
     [SerializeField] private float _Rotation_Speed = 300f;
     [SerializeField] float _Flip_Angle_Threshold = 0f;
-    [SerializeField] float _Required_Flip_Duration = 2.0f;
+    [SerializeField] float _Required_Flip_Duration = 3.0f;
 
     private float _Flip_Timer = 0f;
     private float _Move_Input;
     public bool _Can_Control = true;
 
-    void DetectFlip() {
-        float dot = Vector2.Dot(transform.up, Vector2.up); // Dot product between up-direction & world up
+void DetectFlip() {
+    // Calculate the dot product between the car's up direction and the world's up direction
+    float dot = Vector2.Dot(transform.up, Vector2.up);
+    Debug.Log($"Dot product: {dot}, Flip Timer: {_Flip_Timer}");
 
-        // Checking if the car is inverted beyond threshold:
-        if (dot < Mathf.Cos(180f * Mathf.Deg2Rad)) { // dot < -1: Dot product < - 1 meaning full inversion
-            _Flip_Timer += Time.deltaTime;
-            if (_Flip_Timer >= _Required_Flip_Duration) {
-                if (_Can_Control) {
-                    _Can_Control = false;
-                    GameManager.instance.GameOver();
-                }
+    // Check if the car is inverted beyond the threshold
+    if (dot < Mathf.Cos(90f * Mathf.Deg2Rad)) { // 90 degrees threshold for being "flipped"
+        _Flip_Timer += Time.deltaTime; // Increment the flip timer
+        if (_Flip_Timer >= _Required_Flip_Duration) { // Check if the car has been flipped for the required duration
+            if (_Can_Control) {
+                Debug.Log("Car is flipped for too long. Triggering GameOver.");
+                _Can_Control = false; // Disable control
+                GameManager.instance.GameOver(); // Trigger GameOver
             }
-        } else {
-            _Flip_Timer = 0f;
         }
+    } else {
+        _Flip_Timer = 0f; // Reset the flip timer if the car is not flipped
     }
+}
 
     private void Update() {
 
