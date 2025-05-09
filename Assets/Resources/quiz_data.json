@@ -1,7 +1,7 @@
 {
   "nodes": [
     {
-      "nodeId": 1,
+      "nodeId": 0,
       "questions": [
         {
           "questionText": "What stores electric energy in an EV?",
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "nodeId": 2,
+      "nodeId": 1,
       "questions": [
         {
           "questionText": "What does regenerative braking do?",
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "nodeId": 3,
+      "nodeId": 2,
       "questions": [
         {
           "questionText": "What part controls power flow?",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "nodeId": 4,
+      "nodeId": 3,
       "questions": [
         {
           "questionText": "What keeps the battery cool?",
@@ -101,7 +101,7 @@
       ]
     },
     {
-      "nodeId": 5,
+      "nodeId": 4,
       "questions": [
         {
           "questionText": "Which connector charges the EV fastest?",
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "nodeId": 6,
+      "nodeId": 5,
       "questions": [
         {
           "questionText": "What improves vehicle range?",

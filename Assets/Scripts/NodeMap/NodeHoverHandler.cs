@@ -130,7 +130,8 @@ namespace NodeMap
         private bool IsNodeInteractable()
         {
             PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
-            bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex - 1);
+            // Use nodeIndex directly without -1
+            bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex);
             return NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted || isClickable;
         }
 
@@ -148,7 +149,7 @@ namespace NodeMap
 
             if (NopeMapManager.Instance == null)
             {
-                Debug.LogWarning("NopeMapManager instance missing!");
+                // Debug.LogWarning("NopeMapManager instance missing!");
                 return;
             }
 

@@ -41,9 +41,58 @@ namespace NodeMap
 
         private void Start()
         {
-            // Apply initial appearance
-            if (useInitialAppearance)
+            // Apply initial appearance if no nodes are completed
+            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
+            if (gameManager == null)
             {
+                ApplyInitialAppearance();
+                return;
+            }
+
+            // Subscribe to node completion events
+            gameManager.OnNodeCompleted += HandleNodeCompleted;
+
+            // Check if any nodes are completed and apply the latest car upgrade
+            UpdateCarBasedOnCompletedNodes(gameManager);
+        }
+
+        private void OnDestroy()
+        {
+            // Unsubscribe from events when this object is destroyed
+            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
+            if (gameManager != null)
+            {
+                gameManager.OnNodeCompleted -= HandleNodeCompleted;
+            }
+        }
+
+        private void OnDisable()
+        {
+            // Unsubscribe from events when this object is disabled
+            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
+            if (gameManager != null)
+            {
+                gameManager.OnNodeCompleted -= HandleNodeCompleted;
+            }
+        }
+
+        /// <summary>
+        /// Updates the car appearance based on the highest completed node
+        /// </summary>
+        private void UpdateCarBasedOnCompletedNodes(NopeMapManager gameManager)
+        {
+            int highestCompletedNode = FindHighestCompletedNodeIndex(gameManager);
+
+            if (highestCompletedNode >= 0)
+            {
+                // We have at least one completed node, apply the corresponding upgrade
+                int upgradeIndex = GetUpgradeIndexForNode(highestCompletedNode);
+                ApplyUpgrade(upgradeIndex, false);
+                currentUpgradeIndex = upgradeIndex;
+            }
+            else if (useInitialAppearance)
+            {
+                // No completed nodes, use initial appearance
                 ApplyInitialAppearance();
             }
             else if (carUpgrades.Count > 0)
@@ -52,12 +101,53 @@ namespace NodeMap
                 ApplyUpgrade(0, false);
                 currentUpgradeIndex = 0;
             }
+        }
 
-            // Subscribe to node completion events
-            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
-            if (gameManager != null)
+        /// <summary>
+        /// Finds the highest completed node index
+        /// </summary>
+        private int FindHighestCompletedNodeIndex(NopeMapManager gameManager)
+        {
+            int highestNode = -1;
+
+            // Check up to a reasonable number of nodes (adjust as needed)
+            for (int i = 0; i < 20; i++)
             {
-                gameManager.OnNodeCompleted += HandleNodeCompleted;
+                if (gameManager.IsNodeCompleted(i))
+                {
+                    highestNode = i;
+                }
+            }
+
+            return highestNode;
+        }
+
+        /// <summary>
+        /// Handles node completion event
+        /// </summary>
+        private void HandleNodeCompleted(int nodeIndex)
+        {
+            // Safety check for destroyed objects
+            if (this == null || !this.gameObject || !this.isActiveAndEnabled)
+                return;
+
+            // Get the node that was just completed
+            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
+            if (gameManager == null) return;
+
+            // Find highest completed node (which might be the one just completed)
+            int highestCompletedNode = FindHighestCompletedNodeIndex(gameManager);
+
+            // Determine upgrade based on the highest completed node
+            int upgradeIndex = GetUpgradeIndexForNode(highestCompletedNode);
+
+            // Only upgrade if this is a new car type
+            if (upgradeIndex >= 0 && upgradeIndex < carUpgrades.Count && upgradeIndex != currentUpgradeIndex)
+            {
+                if (this.isActiveAndEnabled) // Additional check right before calling UpgradeCar
+                {
+                    UpgradeCar(upgradeIndex);
+                }
             }
         }
 
@@ -85,21 +175,7 @@ namespace NodeMap
 
             currentUpgradeIndex = -1; // Indicate we're using initial appearance
 
-            Debug.Log("Applied initial car appearance");
-        }
-
-        /// <summary>
-        /// Handles node completion event
-        /// </summary>
-        private void HandleNodeCompleted(int nodeIndex)
-        {
-            // Check if we have an upgrade for this node
-            int upgradeIndex = GetUpgradeIndexForNode(nodeIndex);
-
-            if (upgradeIndex >= 0 && upgradeIndex < carUpgrades.Count && upgradeIndex != currentUpgradeIndex)
-            {
-                UpgradeCar(upgradeIndex);
-            }
+            // Debug.Log("Applied initial car appearance");
         }
 
         /// <summary>
@@ -119,18 +195,30 @@ namespace NodeMap
         /// </summary>
         public void UpgradeCar(int upgradeIndex)
         {
+            // Check if this object has been destroyed
+            if (this == null || !this.gameObject || !this.isActiveAndEnabled)
+                return;
+
             if (upgradeIndex < 0 || upgradeIndex >= carUpgrades.Count)
                 return;
 
-            // Start upgrade animation
-            StartCoroutine(AnimateUpgrade(upgradeIndex));
+            try
+            {
+                // Start upgrade animation
+                StartCoroutine(AnimateUpgrade(upgradeIndex));
 
-            // Update current index
-            currentUpgradeIndex = upgradeIndex;
+                // Update current index
+                currentUpgradeIndex = upgradeIndex;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Failed to upgrade car: {e.Message}");
 
-            Debug.Log($"Car upgraded to: {carUpgrades[upgradeIndex].upgradeName}");
+                // Apply the upgrade directly without animation as fallback
+                ApplyUpgrade(upgradeIndex, true);
+                currentUpgradeIndex = upgradeIndex;
+            }
         }
-
         /// <summary>
         /// Immediately applies an upgrade without animation
         /// </summary>

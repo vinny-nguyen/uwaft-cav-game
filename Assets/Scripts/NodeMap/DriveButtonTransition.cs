@@ -53,7 +53,7 @@ namespace NodeMap
 
             if (allButtonImages.Count == 0)
             {
-                Debug.LogWarning("No images found in button hierarchy!");
+                // Debug.LogWarning("No images found in button hierarchy!");
             }
 
             if (button != null)
@@ -62,7 +62,7 @@ namespace NodeMap
             }
             else
             {
-                Debug.LogError("No Button component found on GameObject with DriveButtonTransition script!");
+                // Debug.LogError("No Button component found on GameObject with DriveButtonTransition script!");
             }
 
             // Store original scale and position for animations
@@ -118,7 +118,7 @@ namespace NodeMap
             if (!isEnabled && !isShaking)
             {
                 StartCoroutine(ShakeButton());
-                Debug.Log("Shake animation started for disabled button");
+                // Debug.Log("Shake animation started for disabled button");
             }
         }
 
@@ -133,13 +133,13 @@ namespace NodeMap
             if (manager != null)
             {
                 int currentNode = manager.CurrentNodeIndex;
-                isEnabled = manager.IsNodeCompleted(currentNode - 1);
+                isEnabled = manager.IsNodeCompleted(currentNode); // Remove -1
 
                 // Debug.Log($"Button state updated: Node {currentNode}, Completed: {isEnabled}");
             }
             else
             {
-                Debug.LogWarning("NodeMapManager not found!");
+                // Debug.LogWarning("NodeMapManager not found!");
             }
 
             // Update visual state for all images
@@ -159,7 +159,7 @@ namespace NodeMap
         {
             if (isShaking) yield break;
 
-            Debug.Log("Starting shake animation");
+            // Debug.Log("Starting shake animation");
             isShaking = true;
             RectTransform rectTransform = transform as RectTransform;
             Vector3 originalPosition = rectTransform != null ? rectTransform.anchoredPosition : transform.localPosition;
@@ -188,7 +188,7 @@ namespace NodeMap
                 }
 
                 // Visual debug
-                Debug.Log($"Shake position: {offsetX} (Original: {originalPosition}, Current: {(rectTransform != null ? rectTransform.anchoredPosition : transform.localPosition)})");
+                // Debug.Log($"Shake position: {offsetX} (Original: {originalPosition}, Current: {(rectTransform != null ? rectTransform.anchoredPosition : transform.localPosition)})");
 
                 yield return null;
             }
@@ -204,7 +204,7 @@ namespace NodeMap
             }
 
             isShaking = false;
-            Debug.Log("Shake animation completed");
+            // Debug.Log("Shake animation completed");
         }
 
         private IEnumerator AnimateHoverScale(bool scaleUp)
@@ -284,13 +284,65 @@ namespace NodeMap
         {
             if (!string.IsNullOrEmpty(targetSceneName))
             {
+                // Save current progress to PlayerPrefs
+                SaveNodeProgress();
+
+                // Load the target scene
                 SceneManager.LoadScene(targetSceneName);
-                Debug.Log($"Loading scene: {targetSceneName}");
+                // Debug.Log($"Loading scene: {targetSceneName}");
             }
             else
             {
-                Debug.LogError("No target scene specified!");
+                // Debug.LogError("No target scene specified!");
             }
+        }
+
+        private void SaveNodeProgress()
+        {
+            NopeMapManager manager = FindFirstObjectByType<NopeMapManager>();
+            if (manager == null) return;
+
+            // Save current node index
+            PlayerPrefs.SetInt("CurrentNodeIndex", manager.CurrentNodeIndex);
+
+            // Get completed nodes from the manager
+            HashSet<int> completedNodes = GetCompletedNodesFromManager(manager);
+
+            // Convert completed nodes to string and save
+            string completedNodesStr = SerializeCompletedNodes(completedNodes);
+            PlayerPrefs.SetString("CompletedNodes", completedNodesStr);
+
+            // Make sure data is written to disk
+            PlayerPrefs.Save();
+
+            Debug.Log($"Saved progress: Current Node = {manager.CurrentNodeIndex}, " +
+                      $"Completed Nodes = {completedNodesStr}");
+        }
+
+        private HashSet<int> GetCompletedNodesFromManager(NopeMapManager manager)
+        {
+            HashSet<int> result = new HashSet<int>();
+
+            // Since we don't have direct access to the completedNodes HashSet in the manager,
+            // we'll check each possible node (up to a reasonable number)
+            for (int i = 0; i < 20; i++) // Assuming max 20 nodes, adjust as needed
+            {
+                if (manager.IsNodeCompleted(i))
+                {
+                    result.Add(i);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a HashSet of completed node indices to a serialized string
+        /// </summary>
+        private string SerializeCompletedNodes(HashSet<int> completedNodes)
+        {
+            // Join node indices with commas (e.g., "0,1,3,5")
+            return string.Join(",", completedNodes);
         }
 
         private void OnDisable()

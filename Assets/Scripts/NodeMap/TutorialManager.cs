@@ -273,7 +273,7 @@ namespace NodeMap
                     Vector2 defaultOffset = new Vector2(0, 100); // Default position above the UI element
                     arrowImage.anchoredPosition = localPosition + defaultOffset + customOffset;
 
-                    Debug.Log($"Positioning arrow at UI element: {target.name}, Position: {localPosition}, With offset: {customOffset}");
+                    // Debug.Log($"Positioning arrow at UI element: {target.name}, Position: {localPosition}, With offset: {customOffset}");
                 }
             }
             else
@@ -351,7 +351,7 @@ namespace NodeMap
                     screenPoint.y / Screen.height
                 );
 
-                Debug.Log($"UI Element spotlight at viewport: {viewportPosition}");
+                // Debug.Log($"UI Element spotlight at viewport: {viewportPosition}");
             }
             else
             {

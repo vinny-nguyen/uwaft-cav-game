@@ -84,7 +84,7 @@ namespace NodeMap.EditorTools
                 }
             }
             
-            Debug.Log("Node markers repositioned successfully!");
+            // Debug.Log("Node markers repositioned successfully!");
         }
     }
 }

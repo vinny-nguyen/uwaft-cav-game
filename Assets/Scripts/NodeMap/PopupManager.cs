@@ -138,9 +138,8 @@ namespace NodeMap
 
             if (playerMover != null)
             {
-                // Convert to zero-based index for the player movement system
-                int zeroBasedNodeIndex = nodeIndex - 1;
-                isNodeCompleted = playerMover.IsNodeCompleted(zeroBasedNodeIndex);
+                // No need to convert to zero-based index
+                isNodeCompleted = playerMover.IsNodeCompleted(nodeIndex);
 
                 // Set the appropriate sprite based on completion status
                 if (popupPanel != null)
@@ -207,10 +206,10 @@ namespace NodeMap
         private void ShowSlide(int index)
         {
             // LogSlidesState(); // Debug log for slide state
-            Debug.Log("Current Node Slides:");
+            // Debug.Log("Current Node Slides:");
             foreach (var slide in currentNodeSlides)
             {
-                Debug.Log(slide != null ? slide.name : "NULL");
+                // Debug.Log(slide != null ? slide.name : "NULL");
             }
             // Safety check
             if (currentNodeSlides.Count == 0 || index < 0 || index >= currentNodeSlides.Count)
@@ -259,12 +258,12 @@ namespace NodeMap
                 // First open → skip animation
                 activeSlide.localScale = Vector3.one;
                 slideCg.alpha = 1f;
-                Debug.Log($"Showing first slide (index {index}) without animation");
+                // Debug.Log($"Showing first slide (index {index}) without animation");
             }
             else
             {
                 // Normal transition → animate
-                Debug.Log($"Animating slide transition to index {index}");
+                // Debug.Log($"Animating slide transition to index {index}");
                 StartCoroutine(UIAnimator.AnimateSlideIn(activeSlide));
             }
 
@@ -274,26 +273,6 @@ namespace NodeMap
         /// <summary>
         /// Debug method to log info about all slides - call from ReturnToSlides or other places
         /// </summary>
-        private void LogSlidesState()
-        {
-            Debug.Log($"-------- Slides State ({currentNodeSlides.Count} slides) --------");
-            for (int i = 0; i < currentNodeSlides.Count; i++)
-            {
-                if (currentNodeSlides[i] != null)
-                {
-                    GameObject slide = currentNodeSlides[i];
-                    CanvasGroup cg = slide.GetComponent<CanvasGroup>();
-                    string cgInfo = cg != null ? $"CanvasGroup alpha: {cg.alpha}, interactable: {cg.interactable}" : "No CanvasGroup";
-
-                    Debug.Log($"Slide {i}: {slide.name}, Active: {slide.activeInHierarchy}, Scale: {slide.transform.localScale}, {cgInfo}");
-                }
-                else
-                {
-                    Debug.Log($"Slide {i}: NULL");
-                }
-            }
-            Debug.Log("---------------------------------------");
-        }
 
         /// <summary>
         /// Loads slide content for the specified node
@@ -308,6 +287,12 @@ namespace NodeMap
             if (nodeContainer == null)
             {
                 Debug.LogWarning($"Node{nodeIndex} slides not found!");
+
+                // Log all node containers found in slidesParent
+                foreach (Transform child in slidesParent.transform)
+                {
+                    Debug.Log($"Found node container: {child.name}");
+                }
                 return;
             }
 
@@ -334,8 +319,8 @@ namespace NodeMap
             TMP_Text finalHeader = slide.GetComponentInChildren<TMP_Text>();
             if (finalHeader != null)
             {
-                string headerText = (nodeIndex - 1 >= 0 && nodeIndex - 1 < nodeHeaders.Count)
-                    ? nodeHeaders[nodeIndex - 1]
+                string headerText = (nodeIndex >= 0 && nodeIndex < nodeHeaders.Count)
+                    ? nodeHeaders[nodeIndex]
                     : $"Node {nodeIndex}";
 
                 finalHeader.text = $"Congratulations for completing the {headerText} node!";
@@ -368,8 +353,8 @@ namespace NodeMap
         /// </summary>
         private void UpdateNodeHeader(int nodeIndex)
         {
-            headerText.text = (nodeIndex - 1 >= 0 && nodeIndex - 1 < nodeHeaders.Count)
-                ? nodeHeaders[nodeIndex - 1]
+            headerText.text = (nodeIndex >= 0 && nodeIndex < nodeHeaders.Count)
+                ? nodeHeaders[nodeIndex]
                 : $"Node {nodeIndex}";
         }
         #endregion
@@ -392,7 +377,7 @@ namespace NodeMap
             }
             else
             {
-                if (currentSlideIndex < currentNodeSlides.Count - 1)
+                if (currentSlideIndex < currentNodeSlides.Count)
                 {
                     currentSlideIndex++;
                     ShowSlide(currentSlideIndex);
@@ -447,7 +432,7 @@ namespace NodeMap
             else
             {
                 leftArrowButton.interactable = currentSlideIndex > 0;
-                rightArrowButton.interactable = currentSlideIndex < currentNodeSlides.Count - 1;
+                rightArrowButton.interactable = currentSlideIndex < currentNodeSlides.Count;
             }
 
             // Update colors
@@ -484,12 +469,13 @@ namespace NodeMap
         private void HandleQuizCompleted(int nodeIndex)
         {
             PlayerSplineMovement playerMover = FindFirstObjectByType<PlayerSplineMovement>();
-            int completedNodeIndex = openedNodeIndex - 1; // Use zero-based index
+            // No need for conversion
+            int completedNodeIndex = openedNodeIndex;
 
             if (playerMover != null && playerMover.IsNodeCompleted(completedNodeIndex))
             {
                 // Already completed — just close the popup
-                Debug.Log("[QUIZ] Node already completed. Closing popup only.");
+                // Debug.Log("[QUIZ] Node already completed. Closing popup only.");
                 successPanel.SetActive(false);
                 StartCoroutine(ClosePopup());
                 return;
@@ -530,7 +516,7 @@ namespace NodeMap
             if (currentNodeSlides.Count == 0 && openedNodeIndex > 0)
             {
                 LoadNodeSlides(openedNodeIndex);
-                Debug.Log($"Reloaded slides for node {openedNodeIndex}, count: {currentNodeSlides.Count}");
+                // Debug.Log($"Reloaded slides for node {openedNodeIndex}, count: {currentNodeSlides.Count}");
             }
 
             // Initialize slides view
@@ -564,7 +550,7 @@ namespace NodeMap
                 ShowSlide(currentSlideIndex); // Show the slide to ensure it's visible
 
                 UpdateArrows();
-                Debug.Log($"Returning to slides. Count: {currentNodeSlides.Count}, Current slide active: {currentNodeSlides[currentSlideIndex].activeInHierarchy}");
+                // Debug.Log($"Returning to slides. Count: {currentNodeSlides.Count}, Current slide active: {currentNodeSlides[currentSlideIndex].activeInHierarchy}");
             }
             else
             {
@@ -617,7 +603,7 @@ namespace NodeMap
             // Update tracking state
             lastSlideIndex = index;
 
-            Debug.Log($"Force showed slide {index}, active: {currentSlide.activeInHierarchy}, scale: {currentSlide.transform.localScale}, alpha: {slideCG.alpha}");
+            // Debug.Log($"Force showed slide {index}, active: {currentSlide.activeInHierarchy}, scale: {currentSlide.transform.localScale}, alpha: {slideCG.alpha}");
         }
         #endregion
 
@@ -640,7 +626,7 @@ namespace NodeMap
                 indicatorManager.GenerateIndicators(quizManager.CurrentQuizQuestions.Count);
                 indicatorManager.UpdateActiveIndicator(0);
                 indicatorManager.SetVisibility(true);
-                Debug.Log("Generated indicators for quiz questions: " + quizManager.CurrentQuizQuestions.Count);
+                // Debug.Log("Generated indicators for quiz questions: " + quizManager.CurrentQuizQuestions.Count);
             }
         }
 

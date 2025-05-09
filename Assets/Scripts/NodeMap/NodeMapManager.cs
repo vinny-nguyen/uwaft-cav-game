@@ -9,16 +9,22 @@ namespace NodeMap
     /// 
     public class NopeMapManager : MonoBehaviour
     {
-        // Define event delegate
         public delegate void NodeCompletedHandler(int nodeIndex);
 
         // Add event
         public event NodeCompletedHandler OnNodeCompleted;
-        
+
         public static NopeMapManager Instance { get; private set; }
 
         [Header("Node Progression")]
-        public int CurrentNodeIndex { get; private set; } = -1; // starts with no active node
+        // Changed from -1 to 0, representing no active node
+        public int CurrentNodeIndex { get; private set; } = -1;
+
+        [Header("Debug Tools")]
+        [SerializeField] private bool enableResetOption = true;
+        [SerializeField] private KeyCode resetKey = KeyCode.Delete;
+        [SerializeField] private KeyCode resetModifierKey = KeyCode.LeftControl;
+
 
         // Track completion status
         private HashSet<int> completedNodes = new HashSet<int>();
@@ -30,6 +36,22 @@ namespace NodeMap
             SetupSingleton();
         }
 
+        private void Start()
+        {
+            // Load saved progress when starting the scene
+            LoadNodeProgress();
+        }
+
+        private void Update()
+        {
+            // Check for reset key combo (Ctrl+Delete)
+            if (enableResetOption &&
+                Input.GetKey(resetModifierKey) &&
+                Input.GetKeyDown(resetKey))
+            {
+                ResetAllPlayerPrefs();
+            }
+        }
         #endregion
 
         #region Singleton Setup
@@ -56,7 +78,7 @@ namespace NodeMap
         public void AdvanceToNextNode()
         {
             CurrentNodeIndex++;
-            Debug.Log($"Advanced to Node {CurrentNodeIndex}");
+            // Debug.Log($"Advanced to Node {CurrentNodeIndex}");
         }
 
         /// <summary>
@@ -65,7 +87,7 @@ namespace NodeMap
         public void SetCurrentNode(int nodeIndex)
         {
             CurrentNodeIndex = nodeIndex;
-            Debug.Log($"Set current node to {CurrentNodeIndex}");
+            // Debug.Log($"Set current node to {CurrentNodeIndex}");
         }
 
         /// <summary>
@@ -76,7 +98,7 @@ namespace NodeMap
             if (!completedNodes.Contains(nodeIndex))
             {
                 completedNodes.Add(nodeIndex);
-                Debug.Log($"Node {nodeIndex} marked as completed");
+                // Debug.Log($"Node {nodeIndex} marked as completed");
             }
 
             OnNodeCompleted?.Invoke(nodeIndex);
@@ -91,5 +113,75 @@ namespace NodeMap
         }
 
         #endregion
+
+        public void LoadNodeProgress()
+        {
+            // Load current node index
+            if (PlayerPrefs.HasKey("CurrentNodeIndex"))
+            {
+                CurrentNodeIndex = PlayerPrefs.GetInt("CurrentNodeIndex");
+            }
+
+            // Load completed nodes
+            if (PlayerPrefs.HasKey("CompletedNodes"))
+            {
+                string completedNodesStr = PlayerPrefs.GetString("CompletedNodes");
+                DeserializeCompletedNodes(completedNodesStr);
+            }
+
+            Debug.Log($"Loaded progress: Current Node = {CurrentNodeIndex}, " +
+                      $"Completed Nodes Count = {completedNodes.Count}");
+        }
+
+        /// <summary>
+        /// Parses a string of node indices back into the completedNodes HashSet
+        /// </summary>
+        private void DeserializeCompletedNodes(string completedNodesStr)
+        {
+            completedNodes.Clear();
+
+            if (string.IsNullOrEmpty(completedNodesStr))
+                return;
+
+            string[] nodeIndices = completedNodesStr.Split(',');
+
+            foreach (string nodeIndexStr in nodeIndices)
+            {
+                if (int.TryParse(nodeIndexStr, out int nodeIndex))
+                {
+                    completedNodes.Add(nodeIndex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears saved progress (useful for restarting the game)
+        /// </summary>
+        public void ResetAllPlayerPrefs()
+        {
+            // Clear all game progress
+            PlayerPrefs.DeleteKey("CurrentNodeIndex");
+            PlayerPrefs.DeleteKey("CompletedNodes");
+            PlayerPrefs.DeleteKey("CarUpgradeIndex");
+            PlayerPrefs.DeleteKey("CompletedTutorial");
+
+            // Add any other PlayerPrefs keys your game uses
+
+            // Reset in-memory state
+            CurrentNodeIndex = 0; // Or -1, depending on your initial state
+            completedNodes.Clear();
+
+            // Apply changes immediately
+            PlayerPrefs.Save();
+
+            Debug.Log("<color=yellow>⚠ DEBUG: All PlayerPrefs data has been reset!</color>");
+        }
+
+        // Existing ClearSavedProgress method can call this new method:
+        public void ClearSavedProgress()
+        {
+            ResetAllPlayerPrefs();
+            Debug.Log("Node progress cleared");
+        }
     }
 }
