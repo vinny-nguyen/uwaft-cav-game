@@ -19,15 +19,14 @@ namespace NodeMap
         [Header("Node Progression")]
         // Changed from -1 to 0, representing no active node
         public int CurrentNodeIndex { get; private set; } = -1;
+        public int HighestCompletedNodeIndex { get; private set; } = -1;
 
         [Header("Debug Tools")]
         [SerializeField] private bool enableResetOption = true;
         [SerializeField] private KeyCode resetKey = KeyCode.Delete;
         [SerializeField] private KeyCode resetModifierKey = KeyCode.LeftControl;
 
-
         // Track completion status
-        private HashSet<int> completedNodes = new HashSet<int>();
 
         #region Unity Lifecycle
 
@@ -95,13 +94,11 @@ namespace NodeMap
         /// </summary>
         public void CompleteNode(int nodeIndex)
         {
-            if (!completedNodes.Contains(nodeIndex))
+            if (nodeIndex > HighestCompletedNodeIndex)
             {
-                completedNodes.Add(nodeIndex);
-                // Debug.Log($"Node {nodeIndex} marked as completed");
+                HighestCompletedNodeIndex = nodeIndex;
+                OnNodeCompleted?.Invoke(nodeIndex);
             }
-
-            OnNodeCompleted?.Invoke(nodeIndex);
         }
 
         /// <summary>
@@ -109,7 +106,7 @@ namespace NodeMap
         /// </summary>
         public bool IsNodeCompleted(int nodeIndex)
         {
-            return completedNodes.Contains(nodeIndex);
+            return nodeIndex <= HighestCompletedNodeIndex;
         }
 
         #endregion
@@ -122,36 +119,14 @@ namespace NodeMap
                 CurrentNodeIndex = PlayerPrefs.GetInt("CurrentNodeIndex");
             }
 
-            // Load completed nodes
-            if (PlayerPrefs.HasKey("CompletedNodes"))
+            // Load highest completed node index
+            if (PlayerPrefs.HasKey("HighestCompletedNodeIndex"))
             {
-                string completedNodesStr = PlayerPrefs.GetString("CompletedNodes");
-                DeserializeCompletedNodes(completedNodesStr);
+                HighestCompletedNodeIndex = PlayerPrefs.GetInt("HighestCompletedNodeIndex");
             }
 
             Debug.Log($"Loaded progress: Current Node = {CurrentNodeIndex}, " +
-                      $"Completed Nodes Count = {completedNodes.Count}");
-        }
-
-        /// <summary>
-        /// Parses a string of node indices back into the completedNodes HashSet
-        /// </summary>
-        private void DeserializeCompletedNodes(string completedNodesStr)
-        {
-            completedNodes.Clear();
-
-            if (string.IsNullOrEmpty(completedNodesStr))
-                return;
-
-            string[] nodeIndices = completedNodesStr.Split(',');
-
-            foreach (string nodeIndexStr in nodeIndices)
-            {
-                if (int.TryParse(nodeIndexStr, out int nodeIndex))
-                {
-                    completedNodes.Add(nodeIndex);
-                }
-            }
+                      $"Highest Completed Node = {HighestCompletedNodeIndex}");
         }
 
         /// <summary>
@@ -161,21 +136,20 @@ namespace NodeMap
         {
             // Clear all game progress
             PlayerPrefs.DeleteKey("CurrentNodeIndex");
-            PlayerPrefs.DeleteKey("CompletedNodes");
+            PlayerPrefs.DeleteKey("HighestCompletedNodeIndex");
             PlayerPrefs.DeleteKey("CarUpgradeIndex");
             PlayerPrefs.DeleteKey("CompletedTutorial");
 
-            // Add any other PlayerPrefs keys your game uses
-
             // Reset in-memory state
-            CurrentNodeIndex = 0; // Or -1, depending on your initial state
-            completedNodes.Clear();
+            CurrentNodeIndex = -1;
+            HighestCompletedNodeIndex = -1;
 
             // Apply changes immediately
             PlayerPrefs.Save();
 
             Debug.Log("<color=yellow>⚠ DEBUG: All PlayerPrefs data has been reset!</color>");
         }
+
 
         // Existing ClearSavedProgress method can call this new method:
         public void ClearSavedProgress()
