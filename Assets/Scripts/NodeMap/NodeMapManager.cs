@@ -102,10 +102,29 @@ namespace NodeMap
         /// </summary>
         public bool IsNodeCompleted(int nodeIndex)
         {
-            return nodeIndex <= HighestCompletedNodeIndex;
+            Debug.Log($"Checking if node {nodeIndex} is completed. " +
+                      $"Current Node = {CurrentNodeIndex}, " +
+                      $"Highest Completed Node = {HighestCompletedNodeIndex}");
+            return (nodeIndex <= HighestCompletedNodeIndex) && (nodeIndex != -1);
         }
 
         #endregion
+
+        /// <summary>
+        /// Saves the current node progression to PlayerPrefs
+        /// </summary>
+        public void SaveNodeProgress()
+        {
+            // Save current node progress
+            PlayerPrefs.SetInt("CurrentNodeIndex", CurrentNodeIndex);
+            PlayerPrefs.SetInt("HighestCompletedNodeIndex", HighestCompletedNodeIndex);
+
+            // Save immediately (in case of application crashes)
+            PlayerPrefs.Save();
+
+            Debug.Log($"Saved progress: Current Node = {CurrentNodeIndex}, " +
+                      $"Highest Completed Node = {HighestCompletedNodeIndex}");
+        }
 
         public void LoadNodeProgress()
         {

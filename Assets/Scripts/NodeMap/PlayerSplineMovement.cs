@@ -64,12 +64,14 @@ namespace NodeMap
                 {
                     // Load saved progress and position player at the current node
                     StartCoroutine(LoadSavedProgress());
+                    Debug.Log("Loading saved progress...");
                 }
                 else
                 {
                     // No saved progress, start from the beginning
                     // Debug.Log($"Starting sequence to move to first node. Stop count: {stops.Count}");
                     StartCoroutine(StartSequence());
+                    Debug.Log("Starting sequence to move to first node.");
                 }
             }
             else

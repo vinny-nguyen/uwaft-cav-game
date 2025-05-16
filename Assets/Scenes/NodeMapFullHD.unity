@@ -14229,17 +14229,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSceneName: DrivingScene
   transitionDelay: 0.2
-  useClickAnimation: 1
+  useAnimation: 1
   clickScaleAmount: 0.9
-  clickAnimationDuration: 0.05
-  useHoverAnimation: 1
-  hoverScaleAmount: 1.03
-  hoverAnimationDuration: 0.1
+  animationDuration: 0.1
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   disabledColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 0.7}
   shakeAmount: 0.15
   shakeDuration: 0.15
-  car: {fileID: 0}
 --- !u!1 &1241165971
 GameObject:
   m_ObjectHideFlags: 0
@@ -19595,7 +19591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba37611d7f76d94c8f3d82363dd2df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugLogs: 1
+  showDebugLogs: 0
   initialCarBodySprite: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
   initialWheelSprite: {fileID: -2269576385534222424, guid: f22e2537a9820e149964459b1d3b75c8, type: 3}
   useInitialAppearance: 1

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -8,349 +7,189 @@ using UnityEngine.EventSystems;
 namespace NodeMap
 {
     /// <summary>
-    /// Handles transitioning to a different scene when clicked with hover effects
-    /// Only allows transition when current node is completed
+    /// Handles the drive button's behavior, enabling it when a node is completed
+    /// and transitioning to the next scene when clicked
     /// </summary>
-    public class DriveButtonTransition : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class DriveButtonTransition : MonoBehaviour, IPointerClickHandler
     {
         [Header("Navigation")]
         [SerializeField] private string targetSceneName;
         [SerializeField] private float transitionDelay = 0.2f;
 
         [Header("Visual Effects")]
-        [SerializeField] private bool useClickAnimation = true;
+        [SerializeField] private bool useAnimation = true;
         [SerializeField] private float clickScaleAmount = 0.9f;
-        [SerializeField] private float clickAnimationDuration = 0.1f;
-
-        [Header("Hover Effects")]
-        [SerializeField] private bool useHoverAnimation = true;
-        [SerializeField] private float hoverScaleAmount = 1.05f; // 5% larger on hover
-        [SerializeField] private float hoverAnimationDuration = 0.2f;
-
+        [SerializeField] private float animationDuration = 0.1f;
+        
         [Header("Disabled State")]
         [SerializeField] private Color normalColor = Color.white;
         [SerializeField] private Color disabledColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
         [SerializeField] private float shakeAmount = 0.15f;
         [SerializeField] private float shakeDuration = 0.15f;
 
-        [Header("References")]
-        [SerializeField] private Transform car; // Direct reference to the car object
-
         private Button button;
         private Vector3 originalScale;
-        private Coroutine hoverAnimationCoroutine;
-        private List<Image> allButtonImages = new List<Image>();
-        private bool isEnabled = true;
-        private bool isShaking = false;
-        private Vector3 originalPosition;
+        private Image[] buttonImages;
+        private bool isEnabled = false;
+        private bool isAnimating = false;
 
         private void Awake()
         {
+            // Cache components
             button = GetComponent<Button>();
-
-            // Get all images in hierarchy
-            allButtonImages.AddRange(GetComponentsInChildren<Image>(true));
-
-            if (allButtonImages.Count == 0)
-            {
-                // Debug.LogWarning("No images found in button hierarchy!");
-            }
-
+            buttonImages = GetComponentsInChildren<Image>(true);
+            originalScale = transform.localScale;
+            
+            // Remove the button click listener since we'll handle it ourselves
             if (button != null)
             {
-                button.onClick.AddListener(OnButtonClick);
+                button.onClick.RemoveAllListeners();
             }
-            else
-            {
-                // Debug.LogError("No Button component found on GameObject with DriveButtonTransition script!");
-            }
-
-            // Store original scale and position for animations
-            originalScale = transform.localScale;
-            originalPosition = transform.localPosition;
         }
 
         private void Start()
         {
-            // Check node status on start
             UpdateButtonState();
         }
 
         private void Update()
         {
-            // Regularly check if the node state has changed
             UpdateButtonState();
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (useHoverAnimation && isEnabled)
-            {
-                // Stop any existing hover animation
-                if (hoverAnimationCoroutine != null)
-                {
-                    StopCoroutine(hoverAnimationCoroutine);
-                }
-
-                // Start new hover animation (scale up)
-                hoverAnimationCoroutine = StartCoroutine(AnimateHoverScale(true));
-            }
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (useHoverAnimation)
-            {
-                // Stop any existing hover animation
-                if (hoverAnimationCoroutine != null)
-                {
-                    StopCoroutine(hoverAnimationCoroutine);
-                }
-
-                // Start new hover animation (scale down)
-                hoverAnimationCoroutine = StartCoroutine(AnimateHoverScale(false));
-            }
-        }
-
+        /// <summary>
+        /// Unified click handler that works for both enabled and disabled states
+        /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
-            // This will catch clicks even when the button is disabled
-            if (!isEnabled && !isShaking)
+            if (isAnimating)
+                return;
+                
+            // Button is enabled - proceed with click action
+            if (isEnabled)
+            {
+                if (useAnimation)
+                    StartCoroutine(AnimateButtonClick());
+                else
+                    LoadTargetScene();
+            }
+            // Button is disabled - show shake effect
+            else
             {
                 StartCoroutine(ShakeButton());
-                // Debug.Log("Shake animation started for disabled button");
             }
         }
 
         private void UpdateButtonState()
         {
-            // TEMPORARY FOR TESTING - always enabled
-            // Remove this line in production
-            //isEnabled = true;
-
-            // Get from node manager
-            NopeMapManager manager = FindFirstObjectByType<NopeMapManager>();
+            // Check if current node is completed
+            NopeMapManager manager = NopeMapManager.Instance;
             if (manager != null)
             {
                 int currentNode = manager.CurrentNodeIndex;
-                isEnabled = manager.IsNodeCompleted(currentNode); // Remove -1
+                isEnabled = manager.IsNodeCompleted(currentNode);
 
-                // Debug.Log($"Button state updated: Node {currentNode}, Completed: {isEnabled}");
-            }
-            else
-            {
-                // Debug.LogWarning("NodeMapManager not found!");
-            }
+                // Update visual state
+                foreach (Image img in buttonImages)
+                {
+                    img.color = isEnabled ? normalColor : disabledColor;
+                }
 
-            // Update visual state for all images
-            foreach (Image img in allButtonImages)
-            {
-                img.color = isEnabled ? normalColor : disabledColor;
-            }
-
-            // Enable/disable button functionality
-            if (button != null)
-            {
-                button.interactable = isEnabled;
+                // We still update interactable for visual state, but handle clicks ourselves
+                if (button != null)
+                {
+                    button.interactable = isEnabled;
+                }
             }
         }
 
         private IEnumerator ShakeButton()
         {
-            if (isShaking) yield break;
-
-            // Debug.Log("Starting shake animation");
-            isShaking = true;
-            RectTransform rectTransform = transform as RectTransform;
-            Vector3 originalPosition = rectTransform != null ? rectTransform.anchoredPosition : transform.localPosition;
-
-            // Stronger shake parameters
-            float amplitude = shakeAmount * 60f; // Increase multiplier for stronger effect
-            float frequency = 60f; // Higher frequency for more "nervous" shake
-
+            isAnimating = true;
+            RectTransform rt = transform as RectTransform;
+            Vector3 startPos = rt != null ? rt.anchoredPosition : transform.localPosition;
+            
             float elapsed = 0f;
+            float frequency = 60f;
+            float amplitude = shakeAmount * 60f;
 
             while (elapsed < shakeDuration)
             {
                 elapsed += Time.deltaTime;
-                float diminish = 1f - (elapsed / shakeDuration); // Shake diminishes over time
+                float diminish = 1f - (elapsed / shakeDuration);
                 float offsetX = Mathf.Sin(elapsed * frequency) * amplitude * diminish;
-
-                // Apply shake with more visibility
-                if (rectTransform != null)
-                {
-                    // Use anchoredPosition for UI elements (more reliable)
-                    rectTransform.anchoredPosition = originalPosition + new Vector3(offsetX, 0, 0);
-                }
+                
+                // Apply shake
+                if (rt != null)
+                    rt.anchoredPosition = startPos + new Vector3(offsetX, 0, 0);
                 else
-                {
-                    transform.localPosition = originalPosition + new Vector3(offsetX, 0f, 0f);
-                }
-
-                // Visual debug
-                // Debug.Log($"Shake position: {offsetX} (Original: {originalPosition}, Current: {(rectTransform != null ? rectTransform.anchoredPosition : transform.localPosition)})");
-
+                    transform.localPosition = startPos + new Vector3(offsetX, 0, 0);
+                
                 yield return null;
             }
 
             // Reset position
-            if (rectTransform != null)
-            {
-                rectTransform.anchoredPosition = originalPosition;
-            }
+            if (rt != null)
+                rt.anchoredPosition = startPos;
             else
-            {
-                transform.localPosition = originalPosition;
-            }
-
-            isShaking = false;
-            // Debug.Log("Shake animation completed");
-        }
-
-        private IEnumerator AnimateHoverScale(bool scaleUp)
-        {
-            Vector3 startScale = transform.localScale;
-            Vector3 targetScale = scaleUp ?
-                originalScale * hoverScaleAmount :
-                originalScale;
-
-            float elapsed = 0f;
-
-            while (elapsed < hoverAnimationDuration)
-            {
-                elapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsed / hoverAnimationDuration);
-
-                // Ease the scaling animation
-                float smoothT = t * t * (3f - 2f * t); // Smoothstep easing
-
-                transform.localScale = Vector3.Lerp(startScale, targetScale, smoothT);
-                yield return null;
-            }
-
-            // Ensure we end at exactly the target scale
-            transform.localScale = targetScale;
-            hoverAnimationCoroutine = null;
-        }
-
-        private void OnButtonClick()
-        {
-            if (useClickAnimation && isEnabled)
-            {
-                StartCoroutine(AnimateButtonClick());
-            }
-            else if (isEnabled)
-            {
-                LoadTargetScene();
-            }
+                transform.localPosition = startPos;
+                
+            isAnimating = false;
         }
 
         private IEnumerator AnimateButtonClick()
         {
-            // For click animation, we need to scale relative to current scale
-            // which might be the hover scale
+            isAnimating = true;
             Vector3 currentScale = transform.localScale;
             Vector3 targetScale = currentScale * clickScaleAmount;
-
+            
             // Scale down
             float elapsed = 0;
-            while (elapsed < clickAnimationDuration / 2)
+            while (elapsed < animationDuration / 2)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / (clickAnimationDuration / 2);
+                float t = elapsed / (animationDuration / 2);
                 transform.localScale = Vector3.Lerp(currentScale, targetScale, t);
                 yield return null;
             }
-
+            
             // Scale back up
             elapsed = 0;
-            while (elapsed < clickAnimationDuration / 2)
+            while (elapsed < animationDuration / 2)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / (clickAnimationDuration / 2);
+                float t = elapsed / (animationDuration / 2);
                 transform.localScale = Vector3.Lerp(targetScale, currentScale, t);
                 yield return null;
             }
-
-            // Reset to current (possibly hovered) scale
+            
             transform.localScale = currentScale;
-
-            // Load scene after animation
+            
             yield return new WaitForSeconds(transitionDelay);
             LoadTargetScene();
+            isAnimating = false;
         }
 
         private void LoadTargetScene()
         {
-            if (!string.IsNullOrEmpty(targetSceneName))
+            if (string.IsNullOrEmpty(targetSceneName))
+                return;
+                
+            // Save current node progress
+            NopeMapManager manager = NopeMapManager.Instance;
+            if (manager != null)
             {
-                // Save current progress to PlayerPrefs
-                SaveNodeProgress();
-
-                // Load the target scene
+                // Let the manager handle saving progress
+                manager.SaveNodeProgress();
                 SceneManager.LoadScene(targetSceneName);
-                // Debug.Log($"Loading scene: {targetSceneName}");
             }
-            else
-            {
-                // Debug.LogError("No target scene specified!");
-            }
-        }
-
-        private void SaveNodeProgress()
-        {
-            NopeMapManager manager = FindFirstObjectByType<NopeMapManager>();
-            if (manager == null) return;
-
-            // Save current node index
-            PlayerPrefs.SetInt("CurrentNodeIndex", manager.CurrentNodeIndex);
-
-            // Get completed nodes from the manager
-            HashSet<int> completedNodes = GetCompletedNodesFromManager(manager);
-
-            // Convert completed nodes to string and save
-            string completedNodesStr = SerializeCompletedNodes(completedNodes);
-            PlayerPrefs.SetString("CompletedNodes", completedNodesStr);
-
-            // Make sure data is written to disk
-            PlayerPrefs.Save();
-
-            Debug.Log($"Saved progress: Current Node = {manager.CurrentNodeIndex}, " +
-                      $"Completed Nodes = {completedNodesStr}");
-        }
-
-        private HashSet<int> GetCompletedNodesFromManager(NopeMapManager manager)
-        {
-            HashSet<int> result = new HashSet<int>();
-
-            // Since we don't have direct access to the completedNodes HashSet in the manager,
-            // we'll check each possible node (up to a reasonable number)
-            for (int i = 0; i < 20; i++) // Assuming max 20 nodes, adjust as needed
-            {
-                if (manager.IsNodeCompleted(i))
-                {
-                    result.Add(i);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Converts a HashSet of completed node indices to a serialized string
-        /// </summary>
-        private string SerializeCompletedNodes(HashSet<int> completedNodes)
-        {
-            // Join node indices with commas (e.g., "0,1,3,5")
-            return string.Join(",", completedNodes);
         }
 
         private void OnDisable()
         {
-            // Reset scale and position when disabled
+            // Reset scale when disabled
             transform.localScale = originalScale;
-            transform.localPosition = originalPosition;
-            isShaking = false;
+            isAnimating = false;
         }
     }
 }
