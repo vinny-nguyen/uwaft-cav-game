@@ -72,21 +72,17 @@ namespace NodeMap
         #region Node Progression Management
 
         /// <summary>
-        /// Advances to the next node in sequence
-        /// </summary>
-        public void AdvanceToNextNode()
-        {
-            CurrentNodeIndex++;
-            // Debug.Log($"Advanced to Node {CurrentNodeIndex}");
-        }
-
-        /// <summary>
         /// Sets the currently active node
         /// </summary>
         public void SetCurrentNode(int nodeIndex)
         {
             CurrentNodeIndex = nodeIndex;
             // Debug.Log($"Set current node to {CurrentNodeIndex}");
+        }
+
+        public void SetNodesToInactive()
+        {
+            CurrentNodeIndex = -1;
         }
 
         /// <summary>

@@ -19595,12 +19595,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba37611d7f76d94c8f3d82363dd2df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDebugLogs: 1
   initialCarBodySprite: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
   initialWheelSprite: {fileID: -2269576385534222424, guid: f22e2537a9820e149964459b1d3b75c8, type: 3}
   useInitialAppearance: 1
   carUpgrades:
   - upgradeName: Tire
-    carBodySprite: {fileID: -980750134191345388, guid: 923b6faeee841e54aaee97dadba0f88d, type: 3}
+    carBodySprite: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
     wheelSprite: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}
     upgradeDescription: adsf
   - upgradeName: Aerodynamics

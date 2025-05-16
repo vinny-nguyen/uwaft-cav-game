@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 
 namespace NodeMap
 {
-    /// <summary>
-    /// Manages car visual upgrades as nodes are completed
-    /// </summary>
     public class CarUpgradeManager : MonoBehaviour
     {
+        #region Types
         [System.Serializable]
         public class CarUpgrade
         {
@@ -19,6 +18,13 @@ namespace NodeMap
             [TextArea]
             public string upgradeDescription;
         }
+        #endregion
+
+        #region Inspector Fields
+
+        [Header("Debug")]
+        [Tooltip("Enable to show debug logs")]
+        [SerializeField] public bool showDebugLogs = false;
 
         [Header("Initial Appearance")]
         [SerializeField] private Sprite initialCarBodySprite;
@@ -26,7 +32,7 @@ namespace NodeMap
         [SerializeField] private bool useInitialAppearance = true;
 
         [Header("Upgrade Settings")]
-        [SerializeField] private List<CarUpgrade> carUpgrades = new List<CarUpgrade>();
+        [SerializeField] private List<CarUpgrade> carUpgrades = new();
 
         [Header("Car References")]
         [SerializeField] private SpriteRenderer carBodyRenderer;
@@ -37,199 +43,155 @@ namespace NodeMap
         [SerializeField] private float upgradeAnimationDuration = 1.0f;
         [SerializeField] private ParticleSystem upgradeParticles;
 
-        private int currentUpgradeIndex = -1; // -1 means initial state
+        #endregion
+
+        #region Unity Events
 
         private void Start()
         {
-            // Apply initial appearance if no nodes are completed
-            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
-            if (gameManager == null)
+            DebugLog("CarUpgradeManager started");
+
+            if (NopeMapManager.Instance != null)
             {
-                ApplyInitialAppearance();
-                return;
+                NopeMapManager.Instance.OnNodeCompleted += HandleNodeCompleted;
+                DebugLog("Subscribed to node completion events");
+            }
+            else
+            {
+                DebugLog("Warning: NopeMapManager instance is null", LogType.Warning);
             }
 
-            // Subscribe to node completion events
-            gameManager.OnNodeCompleted += HandleNodeCompleted;
-
-            // Check if any nodes are completed and apply the latest car upgrade
-            UpdateCarBasedOnCompletedNodes(gameManager);
-        }
-
-        private void OnDestroy()
-        {
-            // Unsubscribe from events when this object is destroyed
-            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
-            if (gameManager != null)
-            {
-                gameManager.OnNodeCompleted -= HandleNodeCompleted;
-            }
+            UpdateCarAppearance();
         }
 
         private void OnDisable()
         {
-            // Unsubscribe from events when this object is disabled
-            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
-            if (gameManager != null)
+            UnsubscribeFromEvents();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromEvents();
+        }
+
+        #endregion
+
+        #region Event Subscription
+
+        private void UnsubscribeFromEvents()
+        {
+            if (NopeMapManager.Instance != null)
             {
-                gameManager.OnNodeCompleted -= HandleNodeCompleted;
+                NopeMapManager.Instance.OnNodeCompleted -= HandleNodeCompleted;
+                DebugLog("Unsubscribed from node completion events");
             }
         }
 
-        /// <summary>
-        /// Updates the car appearance based on the highest completed node
-        /// </summary>
-        private void UpdateCarBasedOnCompletedNodes(NopeMapManager gameManager)
-        {
-            int highestCompletedNode = FindHighestCompletedNodeIndex(gameManager);
+        #endregion
 
-            if (highestCompletedNode >= 0)
+        #region Upgrade Logic
+
+        private void UpdateCarAppearance()
+        {
+            DebugLog("Updating car appearance");
+
+            // Get the current appropriate upgrade based on highest completed node
+            int highestCompletedNode = NopeMapManager.Instance?.HighestCompletedNodeIndex ?? -1;
+            int upgradeIndex = Mathf.Min(highestCompletedNode, carUpgrades.Count - 1);
+
+            if (upgradeIndex >= 0 && carUpgrades.Count > 0)
             {
-                // We have at least one completed node, apply the corresponding upgrade
-                int upgradeIndex = GetUpgradeIndexForNode(highestCompletedNode);
+                DebugLog($"Applying upgrade {upgradeIndex}: {carUpgrades[upgradeIndex].upgradeName}");
                 ApplyUpgrade(upgradeIndex, false);
-                currentUpgradeIndex = upgradeIndex;
             }
             else if (useInitialAppearance)
             {
-                // No completed nodes, use initial appearance
+                DebugLog("Applying initial appearance");
                 ApplyInitialAppearance();
             }
             else if (carUpgrades.Count > 0)
             {
-                // Fallback to first upgrade if initial appearance not used
+                DebugLog("Applying default first upgrade");
                 ApplyUpgrade(0, false);
-                currentUpgradeIndex = 0;
             }
         }
 
-        /// <summary>
-        /// Finds the highest completed node index
-        /// </summary>
-        private int FindHighestCompletedNodeIndex(NopeMapManager gameManager)
-        {
-            int highestNode = -1;
-
-            // Check up to a reasonable number of nodes (adjust as needed)
-            for (int i = 0; i < 20; i++)
-            {
-                if (gameManager.IsNodeCompleted(i))
-                {
-                    highestNode = i;
-                }
-            }
-
-            return highestNode;
-        }
-
-        /// <summary>
-        /// Handles node completion event
-        /// </summary>
         private void HandleNodeCompleted(int nodeIndex)
         {
-            // Safety check for destroyed objects
-            if (this == null || !this.gameObject || !this.isActiveAndEnabled)
+            DebugLog($"Node {nodeIndex} completed");
+
+            if (!gameObject || !isActiveAndEnabled)
                 return;
 
-            // Get the node that was just completed
-            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
-            if (gameManager == null) return;
-
-            // Find highest completed node (which might be the one just completed)
-            int highestCompletedNode = FindHighestCompletedNodeIndex(gameManager);
-
-            // Determine upgrade based on the highest completed node
-            int upgradeIndex = GetUpgradeIndexForNode(highestCompletedNode);
-
-            // Only upgrade if this is a new car type
-            if (upgradeIndex >= 0 && upgradeIndex < carUpgrades.Count && upgradeIndex != currentUpgradeIndex)
+            // Only trigger upgrade if this is the new highest completed node
+            if (nodeIndex == NopeMapManager.Instance.HighestCompletedNodeIndex)
             {
-                if (this.isActiveAndEnabled) // Additional check right before calling UpgradeCar
-                {
-                    UpgradeCar(upgradeIndex);
-                }
+                int newUpgradeIndex = Mathf.Min(nodeIndex, carUpgrades.Count - 1);
+                DebugLog($"New highest node completed - upgrading car to level {newUpgradeIndex}");
+                UpgradeCar(newUpgradeIndex);
+            }
+            else
+            {
+                DebugLog("Not highest node - no upgrade needed");
             }
         }
 
-        /// <summary>
-        /// Applies the initial car appearance before any upgrades
-        /// </summary>
         private void ApplyInitialAppearance()
         {
-            // Set initial car body
-            if (carBodyRenderer != null && initialCarBodySprite != null)
-            {
-                carBodyRenderer.sprite = initialCarBodySprite;
-            }
+            DebugLog("Applying initial car appearance");
 
-            // Set initial wheels
+            if (carBodyRenderer != null && initialCarBodySprite != null)
+                carBodyRenderer.sprite = initialCarBodySprite;
+
             if (frontWheelRenderer != null && initialWheelSprite != null)
-            {
                 frontWheelRenderer.sprite = initialWheelSprite;
-            }
 
             if (rearWheelRenderer != null && initialWheelSprite != null)
-            {
                 rearWheelRenderer.sprite = initialWheelSprite;
-            }
-
-            currentUpgradeIndex = -1; // Indicate we're using initial appearance
-
-            // Debug.Log("Applied initial car appearance");
         }
 
-        /// <summary>
-        /// Determines which upgrade to use based on node index
-        /// </summary>
-        private int GetUpgradeIndexForNode(int nodeIndex)
-        {
-            // Simple implementation: use node index as upgrade index
-            // You could also use a mapping table or other logic
-
-            // Make sure we don't go out of bounds
-            return Mathf.Min(nodeIndex, carUpgrades.Count - 1);
-        }
-
-        /// <summary>
-        /// Upgrades the car with animation
-        /// </summary>
         public void UpgradeCar(int upgradeIndex)
         {
-            // Check if this object has been destroyed
-            if (this == null || !this.gameObject || !this.isActiveAndEnabled)
-                return;
+            DebugLog($"UpgradeCar({upgradeIndex}) called");
 
-            if (upgradeIndex < 0 || upgradeIndex >= carUpgrades.Count)
+            if (!gameObject || !isActiveAndEnabled)
+            {
+                DebugLog("Cannot upgrade car - GameObject inactive", LogType.Warning);
                 return;
+            }
+
+            // Keep this check as it's for direct external calls to UpgradeCar
+            if (upgradeIndex < 0 || upgradeIndex >= carUpgrades.Count)
+            {
+                DebugLog($"Invalid upgrade index: {upgradeIndex}", LogType.Error);
+                return;
+            }
 
             try
             {
-                // Start upgrade animation
+                DebugLog($"Starting animation for upgrade to {carUpgrades[upgradeIndex].upgradeName}");
                 StartCoroutine(AnimateUpgrade(upgradeIndex));
-
-                // Update current index
-                currentUpgradeIndex = upgradeIndex;
             }
             catch (System.Exception e)
             {
                 Debug.LogWarning($"Failed to upgrade car: {e.Message}");
-
-                // Apply the upgrade directly without animation as fallback
+                DebugLog("Falling back to direct upgrade without animation", LogType.Warning);
                 ApplyUpgrade(upgradeIndex, true);
-                currentUpgradeIndex = upgradeIndex;
             }
         }
-        /// <summary>
-        /// Immediately applies an upgrade without animation
-        /// </summary>
+
         private void ApplyUpgrade(int upgradeIndex, bool showParticles = true)
         {
+            // This safety check is still needed as ApplyUpgrade can be called directly
             if (upgradeIndex < 0 || upgradeIndex >= carUpgrades.Count)
+            {
+                DebugLog($"Cannot apply upgrade - Invalid index: {upgradeIndex}", LogType.Error);
                 return;
+            }
 
             CarUpgrade upgrade = carUpgrades[upgradeIndex];
+            DebugLog($"Applying upgrade: {upgrade.upgradeName}");
 
-            // Update sprites
             if (carBodyRenderer != null && upgrade.carBodySprite != null)
                 carBodyRenderer.sprite = upgrade.carBodySprite;
 
@@ -239,103 +201,97 @@ namespace NodeMap
             if (rearWheelRenderer != null && upgrade.wheelSprite != null)
                 rearWheelRenderer.sprite = upgrade.wheelSprite;
 
-            // Play particles if requested
             if (showParticles && upgradeParticles != null)
+            {
+                DebugLog("Playing upgrade particles");
                 upgradeParticles.Play();
+            }
         }
 
-        /// <summary>
-        /// Animates the car upgrade with visual effects
-        /// </summary>
-        private System.Collections.IEnumerator AnimateUpgrade(int upgradeIndex)
+        #endregion
+
+        #region Animation
+
+        private IEnumerator AnimateUpgrade(int upgradeIndex)
         {
-            // Save original scales
+            DebugLog("Starting upgrade animation");
             Vector3 originalBodyScale = carBodyRenderer.transform.localScale;
             Vector3 originalFrontWheelScale = frontWheelRenderer.transform.localScale;
             Vector3 originalRearWheelScale = rearWheelRenderer.transform.localScale;
 
-            // Pulse animation
             float halfDuration = upgradeAnimationDuration / 2f;
 
-            // Scale down and fade
+            // First phase - scale down and fade
+            DebugLog("Animation phase 1: Scale down");
             for (float t = 0; t < halfDuration; t += Time.deltaTime)
             {
                 float progress = t / halfDuration;
                 float scale = Mathf.Lerp(1f, 0.8f, progress);
                 float alpha = Mathf.Lerp(1f, 0.5f, progress);
 
-                // Scale down
-                carBodyRenderer.transform.localScale = originalBodyScale * scale;
-                frontWheelRenderer.transform.localScale = originalFrontWheelScale * scale;
-                rearWheelRenderer.transform.localScale = originalRearWheelScale * scale;
-
-                // Fade
-                Color bodyColor = carBodyRenderer.color;
-                bodyColor.a = alpha;
-                carBodyRenderer.color = bodyColor;
-
-                Color wheelColor = frontWheelRenderer.color;
-                wheelColor.a = alpha;
-                frontWheelRenderer.color = wheelColor;
-                rearWheelRenderer.color = wheelColor;
-
+                ApplyScaleAndOpacity(scale, alpha, originalBodyScale, originalFrontWheelScale, originalRearWheelScale);
                 yield return null;
             }
 
-            // Apply the new sprites while car is small
+            // Apply the upgrade
+            DebugLog("Animation midpoint: Applying new sprites");
             ApplyUpgrade(upgradeIndex, true);
 
-            // For first upgrade, show a special notification
-            if (currentUpgradeIndex == -1)
-            {
-                // ShowFirstUpgradeNotification(upgradeIndex);
-            }
-            else
-            {
-                // ShowUpgradeNotification(upgradeIndex);
-            }
-
-            // Update current index
-            currentUpgradeIndex = upgradeIndex;
-
-            // Scale back up and restore opacity
+            // Second phase - scale back up
+            DebugLog("Animation phase 2: Scale up");
             for (float t = 0; t < halfDuration; t += Time.deltaTime)
             {
                 float progress = t / halfDuration;
                 float scale = Mathf.Lerp(0.8f, 1f, progress);
                 float alpha = Mathf.Lerp(0.5f, 1f, progress);
 
-                // Scale up
-                carBodyRenderer.transform.localScale = originalBodyScale * scale;
-                frontWheelRenderer.transform.localScale = originalFrontWheelScale * scale;
-                rearWheelRenderer.transform.localScale = originalRearWheelScale * scale;
-
-                // Restore opacity
-                Color bodyColor = carBodyRenderer.color;
-                bodyColor.a = alpha;
-                carBodyRenderer.color = bodyColor;
-
-                Color wheelColor = frontWheelRenderer.color;
-                wheelColor.a = alpha;
-                frontWheelRenderer.color = wheelColor;
-                rearWheelRenderer.color = wheelColor;
-
+                ApplyScaleAndOpacity(scale, alpha, originalBodyScale, originalFrontWheelScale, originalRearWheelScale);
                 yield return null;
             }
 
-            // Ensure final state is correct
-            carBodyRenderer.transform.localScale = originalBodyScale;
-            frontWheelRenderer.transform.localScale = originalFrontWheelScale;
-            rearWheelRenderer.transform.localScale = originalRearWheelScale;
-
-            Color finalBodyColor = carBodyRenderer.color;
-            finalBodyColor.a = 1f;
-            carBodyRenderer.color = finalBodyColor;
-
-            Color finalWheelColor = frontWheelRenderer.color;
-            finalWheelColor.a = 1f;
-            frontWheelRenderer.color = finalWheelColor;
-            rearWheelRenderer.color = finalWheelColor;
+            // Ensure final state is perfect
+            ApplyScaleAndOpacity(1f, 1f, originalBodyScale, originalFrontWheelScale, originalRearWheelScale);
+            DebugLog("Animation complete");
         }
+
+        private void ApplyScaleAndOpacity(float scale, float alpha, Vector3 originalBodyScale, Vector3 originalFrontWheelScale, Vector3 originalRearWheelScale)
+        {
+            carBodyRenderer.transform.localScale = originalBodyScale * scale;
+            frontWheelRenderer.transform.localScale = originalFrontWheelScale * scale;
+            rearWheelRenderer.transform.localScale = originalRearWheelScale * scale;
+
+            Color bodyColor = carBodyRenderer.color;
+            bodyColor.a = alpha;
+            carBodyRenderer.color = bodyColor;
+
+            Color wheelColor = frontWheelRenderer.color;
+            wheelColor.a = alpha;
+            frontWheelRenderer.color = wheelColor;
+            rearWheelRenderer.color = wheelColor;
+        }
+
+        #endregion
+
+        #region Debug Helper
+
+        private void DebugLog(string message, LogType logType = LogType.Log)
+        {
+            if (!showDebugLogs) return;
+
+            switch (logType)
+            {
+                case LogType.Warning:
+                    Debug.LogWarning($"[CarUpgrader] {message}");
+                    break;
+                case LogType.Error:
+                    Debug.LogError($"[CarUpgrader] {message}");
+                    break;
+                default:
+                    Debug.Log($"[CarUpgrader] {message}");
+                    break;
+            }
+        }
+
+        #endregion
     }
 }
