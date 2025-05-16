@@ -24,7 +24,7 @@ namespace NodeMap
 
         [Header("Debug")]
         [Tooltip("Enable to show debug logs")]
-        [SerializeField] public bool showDebugLogs = false;
+        [SerializeField] private bool showDebugLogs = false;
 
         [Header("Initial Appearance")]
         [SerializeField] private Sprite initialCarBodySprite;
