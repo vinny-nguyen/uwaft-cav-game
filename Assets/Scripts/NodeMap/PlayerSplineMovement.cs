@@ -352,61 +352,59 @@ namespace NodeMap
         #endregion
 
         #region Node State Management
-        private void SetNodeToNormal(int nodeIndex)
+        /// <summary>
+        /// Sets a node to the specified state
+        /// </summary>
+        private void SetNodeState(int nodeIndex, NodeState state)
         {
-            // nodeIndex = nodeIndex - 1; // Adjust for zero-based index
+            // Skip if this is a completed node and we're trying to set it to a different state
+            if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex) && state != NodeState.Complete)
+                return;
 
-            if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
-                return; // Skip — leave as complete (green)
-
-            if (nodeMarkers.Count > nodeIndex && normalNodeSprites.Count > nodeIndex)
+            // Ensure we have valid data
+            if (nodeIndex >= 0 && nodeIndex < nodeMarkers.Count)
             {
                 GameObject marker = nodeMarkers[nodeIndex];
-                if (marker != null)
+                if (marker == null) return;
+
+                // Get the appropriate sprite based on state
+                Sprite stateSprite = null;
+                switch (state)
                 {
-                    NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
-                    if (visualController != null)
+                    case NodeState.Normal:
+                        if (nodeIndex < normalNodeSprites.Count)
+                            stateSprite = normalNodeSprites[nodeIndex];
+                        break;
+                    case NodeState.Active:
+                        if (nodeIndex < activeNodeSprites.Count)
+                            stateSprite = activeNodeSprites[nodeIndex];
+                        break;
+                    case NodeState.Complete:
+                        if (nodeIndex < completeNodeSprites.Count)
+                            stateSprite = completeNodeSprites[nodeIndex];
+                        break;
+                }
+
+                // Apply the state visually
+                NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
+                if (visualController != null && stateSprite != null)
+                {
+                    visualController.TransitionToState(state, stateSprite);
+                }
+                else
+                {
+                    // Fallback if no visual controller
+                    SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
+                    if (sr != null && stateSprite != null)
                     {
-                        visualController.TransitionToNormal(normalNodeSprites[nodeIndex]);
-                    }
-                    else
-                    {
-                        SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                        if (sr != null && normalNodeSprites[nodeIndex] != null)
-                        {
-                            sr.sprite = normalNodeSprites[nodeIndex];
-                        }
+                        sr.sprite = stateSprite;
                     }
                 }
-            }
-        }
 
-        private void SetNodeToActive(int nodeIndex)
-        {
-            if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
-                return; // Skip — leave as complete (green)
-
-            if (nodeMarkers.Count > nodeIndex && activeNodeSprites.Count > nodeIndex)
-            {
-                GameObject marker = nodeMarkers[nodeIndex];
-                if (marker != null)
+                // Handle clickability
+                if (state == NodeState.Active || state == NodeState.Complete)
                 {
-                    NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
                     NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
-
-                    if (visualController != null)
-                    {
-                        visualController.TransitionToActive(activeNodeSprites[nodeIndex]);
-                    }
-                    else
-                    {
-                        SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                        if (sr != null && activeNodeSprites[nodeIndex] != null)
-                        {
-                            sr.sprite = activeNodeSprites[nodeIndex];
-                        }
-                    }
-
                     if (handler != null)
                     {
                         handler.SetClickable(true);
@@ -416,48 +414,59 @@ namespace NodeMap
         }
 
         /// <summary>
-        /// Sets a node to the completed state
+        /// Sets a node to normal state
+        /// </summary>
+        private void SetNodeToNormal(int nodeIndex)
+        {
+            SetNodeState(nodeIndex, NodeState.Normal);
+        }
+
+        /// <summary>
+        /// Sets a node to active state
+        /// </summary>
+        private void SetNodeToActive(int nodeIndex)
+        {
+            SetNodeState(nodeIndex, NodeState.Active);
+        }
+
+        /// <summary>
+        /// Sets a node to completed state and updates game progression
         /// </summary>
         public void SetNodeToComplete(int nodeIndex)
         {
-            // Instead of checking our own list, use NopeMapManager
+            // Update game manager
             if (!NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
             {
-                // No need to add to our own list, just notify the manager
                 NopeMapManager.Instance.CompleteNode(nodeIndex);
             }
 
-            if (nodeMarkers.Count > nodeIndex && completeNodeSprites.Count > nodeIndex)
+            // Update visuals
+            SetNodeState(nodeIndex, NodeState.Complete);
+        }
+
+        /// <summary>
+        /// Updates the visual state of all nodes based on completion status
+        /// </summary>
+        private void UpdateAllNodeVisuals()
+        {
+            for (int i = 0; i < nodeMarkers.Count; i++)
             {
-                GameObject marker = nodeMarkers[nodeIndex];
-                if (marker != null)
+                if (NopeMapManager.Instance.IsNodeCompleted(i))
                 {
-                    NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
-                    NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
-
-                    if (visualController != null)
-                    {
-                        visualController.TransitionToComplete(completeNodeSprites[nodeIndex]);
-                    }
-                    else
-                    {
-                        SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                        if (sr != null && completeNodeSprites[nodeIndex] != null)
-                        {
-                            sr.sprite = completeNodeSprites[nodeIndex];
-                        }
-                    }
-
-                    if (handler != null)
-                    {
-                        handler.SetClickable(true); // Keep completed nodes clickable for review
-                    }
+                    // Set completed nodes to complete state
+                    SetNodeState(i, NodeState.Complete);
+                }
+                else if (i == NopeMapManager.Instance.CurrentNodeIndex)
+                {
+                    // Set current node to active state
+                    SetNodeState(i, NodeState.Active);
+                }
+                else
+                {
+                    // Set all other nodes to normal state
+                    SetNodeState(i, NodeState.Normal);
                 }
             }
-
-            // Update game manager and move to next node
-            // NopeMapManager.Instance.SetCurrentNode(nodeIndex + 1);
-            // TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
         }
         #endregion
 
@@ -573,47 +582,6 @@ namespace NodeMap
 
         /// <summary>
         /// Updates the visual state of all nodes based on completion status
-        /// </summary>
-        private void UpdateAllNodeVisuals()
-        {
-            // Update visuals for each node
-            for (int i = 0; i < nodeMarkers.Count; i++)
-            {
-                if (NopeMapManager.Instance.IsNodeCompleted(i))
-                {
-                    // Set completed nodes to completed state
-                    if (i < completeNodeSprites.Count && nodeMarkers[i] != null)
-                    {
-                        GameObject marker = nodeMarkers[i];
-                        NodeVisualController visualController = marker.GetComponent<NodeVisualController>();
-                        NodeHoverHandler handler = marker.GetComponent<NodeHoverHandler>();
-
-                        if (visualController != null)
-                        {
-                            visualController.TransitionToComplete(completeNodeSprites[i]);
-                        }
-                        else
-                        {
-                            SpriteRenderer sr = marker.GetComponent<SpriteRenderer>();
-                            if (sr != null && completeNodeSprites[i] != null)
-                            {
-                                sr.sprite = completeNodeSprites[i];
-                            }
-                        }
-
-                        if (handler != null)
-                        {
-                            handler.SetClickable(true);
-                        }
-                    }
-                }
-                else if (i != NopeMapManager.Instance.CurrentNodeIndex)
-                {
-                    // Set non-current, non-completed nodes to normal state
-                    SetNodeToNormal(i);
-                }
-            }
-        }
-        // Add this to the PopupManager class
+        /// </summary>   // Add this to the PopupManager class
     }
 }
