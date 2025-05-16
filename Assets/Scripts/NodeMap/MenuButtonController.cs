@@ -1,295 +1,116 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
+using System.Collections;
 
 namespace NodeMap
 {
     /// <summary>
-    /// Handles UI and animations for the Main Menu button with a house icon
+    /// Menu button controller with scale-on-hover effect and scene transition
     /// </summary>
     public class MenuButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [Header("Navigation")]
         [SerializeField] private string targetSceneName = "MainMenu";
-        [SerializeField] private float transitionDelay = 0.2f;
 
-        [Header("Visual Effects")]
-        [SerializeField] private bool useClickAnimation = true;
-        [SerializeField] private float clickScaleAmount = 0.9f;
-        [SerializeField] private float clickAnimationDuration = 0.1f;
-
-        [Header("Hover Effects")]
-        [SerializeField] private bool useHoverAnimation = true;
-        [SerializeField] private float hoverScaleAmount = 1.05f;
-        [SerializeField] private float hoverAnimationDuration = 0.2f;
-        [SerializeField] private Color normalIconColor = Color.white;
-        [SerializeField] private Color hoverIconColor = new Color(0.9f, 0.9f, 1f);
-
-        [Header("Background Animation")]
-        [SerializeField] private bool useBackgroundPulse = true;
-        [SerializeField] private float pulseAmount = 0.2f;
-        [SerializeField] private float pulseDuration = 2f;
-
-        [Header("Icon References")]
-        [SerializeField] private Image houseIcon;
+        [Header("Hover Effect")]
+        [SerializeField] private bool enableHoverScale = true;
+        [SerializeField] private float hoverScaleMultiplier = 1.1f;
+        [SerializeField] private float hoverTransitionTime = 0.1f;
 
         private Button button;
-        private Image backgroundImage;
         private Vector3 originalScale;
-        private Coroutine hoverCoroutine;
-        private Coroutine pulseCoroutine;
+        private Coroutine scaleCoroutine;
 
         private void Awake()
         {
-            // Get component references
+            // Cache components and original scale
             button = GetComponent<Button>();
-            backgroundImage = GetComponent<Image>();
-
-            // If house icon isn't assigned, try to find it
-            if (houseIcon == null)
-            {
-                // Try to find it among children
-                houseIcon = GetComponentInChildren<Image>();
-
-                // If the image we found is actually our background, look for the second image
-                if (houseIcon == backgroundImage)
-                {
-                    Image[] images = GetComponentsInChildren<Image>();
-                    foreach (Image img in images)
-                    {
-                        if (img != backgroundImage)
-                        {
-                            houseIcon = img;
-                            break;
-                        }
-                    }
-                }
-            }
+            originalScale = transform.localScale;
 
             // Set up button click handler
             if (button != null)
             {
                 button.onClick.AddListener(OnButtonClick);
             }
-
-            // Store original scale for animations
-            originalScale = transform.localScale;
-        }
-
-        private void Start()
-        {
-            // Set initial icon color
-            if (houseIcon != null)
-            {
-                houseIcon.color = normalIconColor;
-            }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (useHoverAnimation)
-            {
-                // Stop existing hover animation if any
-                if (hoverCoroutine != null)
-                {
-                    StopCoroutine(hoverCoroutine);
-                }
+            if (!enableHoverScale || !button.interactable) return;
 
-                // Start hover animation (scale up)
-                hoverCoroutine = StartCoroutine(AnimateHoverScale(true));
+            // Cancel existing animation if any
+            if (scaleCoroutine != null)
+                StopCoroutine(scaleCoroutine);
 
-                // Change house icon color
-                if (houseIcon != null)
-                {
-                    houseIcon.color = hoverIconColor;
-                }
-            }
+            // Start new hover animation
+            scaleCoroutine = StartCoroutine(AnimateScale(originalScale * hoverScaleMultiplier));
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (useHoverAnimation)
-            {
-                // Stop existing hover animation if any
-                if (hoverCoroutine != null)
-                {
-                    StopCoroutine(hoverCoroutine);
-                }
+            if (!enableHoverScale) return;
 
-                // Start hover animation (scale down)
-                hoverCoroutine = StartCoroutine(AnimateHoverScale(false));
+            // Cancel existing animation if any
+            if (scaleCoroutine != null)
+                StopCoroutine(scaleCoroutine);
 
-                // Reset house icon color
-                if (houseIcon != null)
-                {
-                    houseIcon.color = normalIconColor;
-                }
-            }
+            // Return to original scale
+            scaleCoroutine = StartCoroutine(AnimateScale(originalScale));
         }
 
-        private IEnumerator AnimateHoverScale(bool scaleUp)
+        private IEnumerator AnimateScale(Vector3 targetScale)
         {
             Vector3 startScale = transform.localScale;
-            Vector3 targetScale = scaleUp ?
-                originalScale * hoverScaleAmount :
-                originalScale;
+            float time = 0;
 
-            float elapsed = 0f;
-
-            while (elapsed < hoverAnimationDuration)
+            while (time < hoverTransitionTime)
             {
-                elapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsed / hoverAnimationDuration);
+                time += Time.deltaTime;
+                float t = Mathf.Clamp01(time / hoverTransitionTime);
 
-                // Smoothstep easing
-                float smoothT = t * t * (3f - 2f * t);
+                // Smooth step easing for more natural feel
+                t = t * t * (3f - 2f * t);
 
-                transform.localScale = Vector3.Lerp(startScale, targetScale, smoothT);
+                transform.localScale = Vector3.Lerp(startScale, targetScale, t);
                 yield return null;
             }
 
             transform.localScale = targetScale;
-            hoverCoroutine = null;
+            scaleCoroutine = null;
         }
 
         private void OnButtonClick()
         {
-            if (useClickAnimation)
-            {
-                StartCoroutine(AnimateButtonClick());
-            }
-            else
-            {
-                LoadMainMenu();
-            }
+            SaveAndLoadMainMenu();
         }
 
-        private IEnumerator AnimateButtonClick()
+        private void SaveAndLoadMainMenu()
         {
-            // Store current scale which might be the hover scale
-            Vector3 currentScale = transform.localScale;
-            Vector3 clickScale = currentScale * clickScaleAmount;
+            if (string.IsNullOrEmpty(targetSceneName))
+                return;
 
-            // Scale down
-            float elapsed = 0f;
-            while (elapsed < clickAnimationDuration / 2)
+            // Save progress before scene transition
+            if (NopeMapManager.Instance != null)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / (clickAnimationDuration / 2);
-                transform.localScale = Vector3.Lerp(currentScale, clickScale, t);
-                yield return null;
+                NopeMapManager.Instance.SaveNodeProgress();
             }
 
-            // Scale back up
-            elapsed = 0f;
-            while (elapsed < clickAnimationDuration / 2)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / (clickAnimationDuration / 2);
-                transform.localScale = Vector3.Lerp(clickScale, currentScale, t);
-                yield return null;
-            }
-
-            // Reset scale
-            transform.localScale = currentScale;
-
-            // Wait before scene transition
-            yield return new WaitForSeconds(transitionDelay);
-
-            // Load the main menu scene
-            LoadMainMenu();
-        }
-
-        private void LoadMainMenu()
-        {
-            if (!string.IsNullOrEmpty(targetSceneName))
-            {
-                // Save current progress to PlayerPrefs before transitioning
-                SaveNodeProgress();
-
-                // Load the main menu scene
-                SceneManager.LoadScene(targetSceneName);
-                Debug.Log($"Loading scene: {targetSceneName}");
-            }
-            else
-            {
-                Debug.LogError("No target scene specified!");
-            }
-        }
-
-        /// <summary>
-        /// Saves current node progress to PlayerPrefs
-        /// </summary>
-        private void SaveNodeProgress()
-        {
-            NopeMapManager manager = FindFirstObjectByType<NopeMapManager>();
-            if (manager == null) return;
-
-            // Save current node index
-            PlayerPrefs.SetInt("CurrentNodeIndex", manager.CurrentNodeIndex);
-
-            // Get completed nodes from the manager
-            HashSet<int> completedNodes = GetCompletedNodesFromManager(manager);
-
-            // Convert completed nodes to string and save
-            string completedNodesStr = SerializeCompletedNodes(completedNodes);
-            PlayerPrefs.SetString("CompletedNodes", completedNodesStr);
-
-            // Make sure data is written to disk
-            PlayerPrefs.Save();
-
-            Debug.Log($"Saved progress before returning to menu: Current Node = {manager.CurrentNodeIndex}, " +
-                      $"Completed Nodes = {completedNodesStr}");
-        }
-
-        /// <summary>
-        /// Gets the completed nodes from the manager
-        /// </summary>
-        private HashSet<int> GetCompletedNodesFromManager(NopeMapManager manager)
-        {
-            HashSet<int> result = new HashSet<int>();
-
-            // Since we don't have direct access to the completedNodes HashSet in the manager,
-            // we'll check each possible node (up to a reasonable number)
-            for (int i = 0; i < 20; i++) // Assuming max 20 nodes, adjust as needed
-            {
-                if (manager.IsNodeCompleted(i))
-                {
-                    result.Add(i);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Converts a HashSet of completed node indices to a serialized string
-        /// </summary>
-        private string SerializeCompletedNodes(HashSet<int> completedNodes)
-        {
-            // Join node indices with commas (e.g., "0,1,3,5")
-            return string.Join(",", completedNodes);
+            // Load main menu scene
+            SceneManager.LoadScene(targetSceneName);
         }
 
         private void OnDisable()
         {
-            // Cleanup coroutines
-            if (pulseCoroutine != null)
+            // Cancel any ongoing animations
+            if (scaleCoroutine != null)
             {
-                StopCoroutine(pulseCoroutine);
-                pulseCoroutine = null;
+                StopCoroutine(scaleCoroutine);
+                scaleCoroutine = null;
             }
 
-            if (hoverCoroutine != null)
-            {
-                StopCoroutine(hoverCoroutine);
-                hoverCoroutine = null;
-            }
-
-            // Reset scale
+            // Reset to original scale
             transform.localScale = originalScale;
         }
     }
