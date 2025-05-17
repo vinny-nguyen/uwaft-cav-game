@@ -117,24 +117,11 @@ namespace NodeMap.UI
         /// </summary>
         private IEnumerator AnimateIndicatorTransition(int newActiveIndex)
         {
-            CanvasGroup parentGroup = EnsureCanvasGroup();
-
-            // Scale down and fade out slightly
-            yield return ScaleAndFadeGroup(parentGroup,
-                slideIndicatorsParent.localScale,
-                slideIndicatorsParent.localScale * scaleAmount,
-                1f, 0.7f,
-                transitionDuration / 2f);
-
-            // Update the indicators while scaled down
+            // Simply update the indicators immediately without any scaling or fading
             UpdateIndicatorsImmediate(newActiveIndex);
 
-            // Scale back up and fade in
-            yield return ScaleAndFadeGroup(parentGroup,
-                slideIndicatorsParent.localScale,
-                slideIndicatorsParent.localScale / scaleAmount,
-                0.7f, 1f,
-                transitionDuration / 2f);
+            // Return completed coroutine
+            yield break;
         }
 
         /// <summary>
