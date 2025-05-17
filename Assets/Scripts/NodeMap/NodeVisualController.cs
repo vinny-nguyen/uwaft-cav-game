@@ -9,14 +9,13 @@ namespace NodeMap
     [RequireComponent(typeof(SpriteRenderer))]
     public class NodeVisualController : MonoBehaviour
     {
-        #region Animation Parameters
         [Header("Animation Settings")]
         [SerializeField] private float popUpDuration = 0.1f;
         [SerializeField] private float popDownDuration = 0.15f;
         [SerializeField] private float popScale = 1.1f;
-        #endregion
 
         private SpriteRenderer spriteRenderer;
+        private NodeState currentState = NodeState.Normal;
 
         private void Awake()
         {
@@ -24,36 +23,28 @@ namespace NodeMap
         }
 
         /// <summary>
-        /// Transitions the node to normal state with animation
+        /// Transitions the node to a new state with animation
         /// </summary>
-        public void TransitionToNormal(Sprite normalSprite)
+        public void TransitionToState(NodeState newState, Sprite stateSprite)
         {
-            if (spriteRenderer != null && normalSprite != null)
+            if (spriteRenderer != null && stateSprite != null)
             {
-                StartCoroutine(AnimateTransition(normalSprite));
+                currentState = newState;
+                
+                // Use longer animation for completion state
+                float upTime = newState == NodeState.Complete ? 0.15f : popUpDuration;
+                float downTime = newState == NodeState.Complete ? 0.2f : popDownDuration;
+                
+                StartCoroutine(AnimateTransition(stateSprite, upTime, downTime));
             }
         }
 
         /// <summary>
-        /// Transitions the node to active state with animation
+        /// Get the current state of this node
         /// </summary>
-        public void TransitionToActive(Sprite activeSprite)
+        public NodeState GetCurrentState()
         {
-            if (spriteRenderer != null && activeSprite != null)
-            {
-                StartCoroutine(AnimateTransition(activeSprite));
-            }
-        }
-
-        /// <summary>
-        /// Transitions the node to completed state with animation
-        /// </summary>
-        public void TransitionToComplete(Sprite completeSprite)
-        {
-            if (spriteRenderer != null && completeSprite != null)
-            {
-                StartCoroutine(AnimateTransition(completeSprite, 0.15f, 0.2f));
-            }
+            return currentState;
         }
 
         private IEnumerator AnimateTransition(Sprite targetSprite, float upDuration = -1, float downDuration = -1)

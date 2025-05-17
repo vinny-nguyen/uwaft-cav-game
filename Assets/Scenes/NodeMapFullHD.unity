@@ -8132,6 +8132,7 @@ GameObject:
   - component: {fileID: 1020558461}
   - component: {fileID: 1020558460}
   - component: {fileID: 1020558459}
+  - component: {fileID: 1020558463}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -8171,19 +8172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: MainMenu
-  transitionDelay: 0.2
-  useClickAnimation: 1
-  clickScaleAmount: 0.9
-  clickAnimationDuration: 0.1
-  useHoverAnimation: 1
-  hoverScaleAmount: 1.05
-  hoverAnimationDuration: 0.2
-  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverIconColor: {r: 0.9, g: 0.9, b: 1, a: 1}
-  useBackgroundPulse: 1
-  pulseAmount: 0.2
-  pulseDuration: 2
-  houseIcon: {fileID: 1020558461}
 --- !u!114 &1020558460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8266,6 +8254,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020558457}
   m_CullTransparentMesh: 1
+--- !u!114 &1020558463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020558457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbfb51cb6e14e0c409b90d2929470334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableHoverEffect: 1
+  hoverScaleMultiplier: 1.1
+  hoverTransitionTime: 0.1
+  enableClickEffect: 1
+  clickScaleMultiplier: 0.9
+  clickTransitionTime: 0.05
 --- !u!1 &1026936735
 GameObject:
   m_ObjectHideFlags: 0
@@ -14135,6 +14141,7 @@ GameObject:
   - component: {fileID: 1225086864}
   - component: {fileID: 1225086863}
   - component: {fileID: 1225086865}
+  - component: {fileID: 1225086866}
   m_Layer: 5
   m_Name: DriveButton
   m_TagString: Untagged
@@ -14229,17 +14236,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSceneName: DrivingScene
   transitionDelay: 0.2
-  useClickAnimation: 1
-  clickScaleAmount: 0.9
-  clickAnimationDuration: 0.05
-  useHoverAnimation: 1
-  hoverScaleAmount: 1.03
-  hoverAnimationDuration: 0.1
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   disabledColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 0.7}
+  useShakeEffect: 1
   shakeAmount: 0.15
   shakeDuration: 0.15
-  car: {fileID: 0}
+--- !u!114 &1225086866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225086861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbfb51cb6e14e0c409b90d2929470334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableHoverEffect: 1
+  hoverScaleMultiplier: 1.1
+  hoverTransitionTime: 0.1
+  enableClickEffect: 1
+  clickScaleMultiplier: 0.9
+  clickTransitionTime: 0.05
 --- !u!1 &1241165971
 GameObject:
   m_ObjectHideFlags: 0
@@ -19595,12 +19614,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba37611d7f76d94c8f3d82363dd2df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDebugLogs: 0
   initialCarBodySprite: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
   initialWheelSprite: {fileID: -2269576385534222424, guid: f22e2537a9820e149964459b1d3b75c8, type: 3}
   useInitialAppearance: 1
   carUpgrades:
   - upgradeName: Tire
-    carBodySprite: {fileID: -980750134191345388, guid: 923b6faeee841e54aaee97dadba0f88d, type: 3}
+    carBodySprite: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
     wheelSprite: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}
     upgradeDescription: adsf
   - upgradeName: Aerodynamics

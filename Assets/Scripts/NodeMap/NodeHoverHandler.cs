@@ -10,7 +10,6 @@ namespace NodeMap
     [RequireComponent(typeof(SpriteRenderer))]
     public class NodeHoverHandler : MonoBehaviour
     {
-        #region Inspector Fields
         [Header("Hover Settings")]
         [SerializeField] private float hoverScaleMultiplier = 1.2f;
         [SerializeField] private float scaleSpeed = 5f;
@@ -20,54 +19,89 @@ namespace NodeMap
 
         [Header("Node Info")]
         public int nodeIndex;
-        #endregion
 
-        #region Private Fields
+        // Private fields
         private Vector3 originalScale;
         private bool isHovered = false;
         private SpriteRenderer spriteRenderer;
         private bool isClickable = false;
-        #endregion
+        private NodeVisualController visualController;
 
-        #region Unity Lifecycle
         private void Start()
         {
-            Initialize();
+            // Cache initial values
+            originalScale = transform.localScale;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            visualController = GetComponent<NodeVisualController>();
+            spriteRenderer.color = normalColor;
         }
 
         private void Update()
         {
-            UpdateScale();
-        }
-        #endregion
+            // Update scale based on hover state
+            Vector3 targetScale = isHovered && IsNodeInteractable() ?
+                originalScale * hoverScaleMultiplier : originalScale;
 
-        #region Mouse Interaction
+            transform.localScale = Vector3.Lerp(
+                transform.localScale,
+                targetScale,
+                Time.deltaTime * scaleSpeed);
+        }
+
         private void OnMouseEnter()
         {
+            // Ignore if UI is in the way
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return;
 
             isHovered = true;
-            UpdateCursor(true);
-            UpdateNodeAppearance();
+
+            // Update cursor
+            if (pointerCursorTexture != null)
+                Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
+
+            // Update appearance
+            if (!IsNodeInteractable() && spriteRenderer != null)
+                spriteRenderer.color = inactiveHoverColor;
         }
 
         private void OnMouseExit()
         {
             isHovered = false;
-            UpdateCursor(false);
-            ResetNodeAppearance();
+
+            // Reset cursor
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
+            // Reset appearance
+            if (spriteRenderer != null)
+                spriteRenderer.color = normalColor;
         }
 
         private void OnMouseDown()
         {
-            HandleNodeClick();
-        }
-        #endregion
+            // Skip if tutorial is active
+            TutorialManager tutorialManager = FindFirstObjectByType<TutorialManager>();
+            if (tutorialManager != null && tutorialManager.IsTutorialActive())
+                return;
 
-        #region Public Methods
+            // Skip if no manager
+            if (NopeMapManager.Instance == null)
+                return;
+
+            // Check if node can be interacted with
+            if (!IsNodeInteractable())
+            {
+                StartCoroutine(ShakeNode());
+                return;
+            }
+
+            // Open popup for this node
+            if (PopupManager.Instance != null)
+                PopupManager.Instance.OpenPopupForNode(nodeIndex);
+        }
+
         /// <summary>
-        /// Sets whether this node can be clicked
+        /// Sets whether this node can be clicked regardless of other conditions
         /// </summary>
         public void SetClickable(bool value)
         {
@@ -75,115 +109,51 @@ namespace NodeMap
         }
 
         /// <summary>
-        /// Starts the shake animation to indicate invalid interaction
+        /// Checks if this node is in a state that can be interacted with
+        /// </summary>
+        private bool IsNodeInteractable()
+        {
+            if (isClickable) return true;
+
+            // Check if the node is active or complete
+            if (visualController != null)
+            {
+                NodeState state = visualController.GetCurrentState();
+                return state == NodeState.Active || state == NodeState.Complete;
+            }
+
+            // Fallback to old method if no visual controller
+            bool isCompleted = NopeMapManager.Instance.IsNodeCompleted(nodeIndex);
+            bool isCurrent = NopeMapManager.Instance.CurrentNodeIndex == nodeIndex;
+            return isCurrent || isCompleted;
+        }
+
+        /// <summary>
+        /// Public method to trigger the shake animation from external scripts
         /// </summary>
         public void StartShake()
         {
             StartCoroutine(ShakeNode());
         }
-        #endregion
 
-        #region Private Methods
-        private void Initialize()
-        {
-            originalScale = transform.localScale;
-            spriteRenderer = GetComponent<SpriteRenderer>();
-
-            if (spriteRenderer != null)
-                spriteRenderer.color = normalColor;
-        }
-
-        private void UpdateScale()
-        {
-            bool shouldScale = NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isClickable;
-            Vector3 targetScale = originalScale;
-
-            if (isHovered && shouldScale)
-                targetScale *= hoverScaleMultiplier;
-
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
-        }
-
-        private void UpdateCursor(bool showCustomCursor)
-        {
-            if (showCustomCursor && pointerCursorTexture != null)
-                Cursor.SetCursor(pointerCursorTexture, Vector2.zero, CursorMode.Auto);
-            else
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        }
-
-        private void UpdateNodeAppearance()
-        {
-            if (spriteRenderer == null) return;
-
-            bool canInteract = IsNodeInteractable();
-            if (!canInteract)
-                spriteRenderer.color = inactiveHoverColor;
-        }
-
-        private void ResetNodeAppearance()
-        {
-            if (spriteRenderer != null)
-                spriteRenderer.color = normalColor;
-        }
-
-        private bool IsNodeInteractable()
-        {
-            PlayerSplineMovement mover = FindFirstObjectByType<PlayerSplineMovement>();
-            // Use nodeIndex directly without -1
-            bool isCompleted = mover != null && mover.IsNodeCompleted(nodeIndex);
-            return NopeMapManager.Instance.CurrentNodeIndex == nodeIndex || isCompleted || isClickable;
-        }
-
-        // Add to the private methods section, updating the HandleNodeClick method
-
-        private void HandleNodeClick()
-        {
-            // Check if tutorial is active - if yes, ignore clicks on nodes
-            TutorialManager tutorialManager = FindFirstObjectByType<TutorialManager>();
-            if (tutorialManager != null && tutorialManager.IsTutorialActive())
-            {
-                // Skip interaction while tutorial is active
-                return;
-            }
-
-            if (NopeMapManager.Instance == null)
-            {
-                // Debug.LogWarning("NopeMapManager instance missing!");
-                return;
-            }
-
-            bool canInteract = IsNodeInteractable();
-
-            if (!canInteract)
-            {
-                StartCoroutine(ShakeNode());
-                return;
-            }
-
-            if (PopupManager.Instance != null)
-                PopupManager.Instance.OpenPopupForNode(nodeIndex);
-        }
-        #endregion
-
-        #region Animations
         private IEnumerator ShakeNode()
         {
             float shakeDuration = 0.15f;
             float shakeMagnitude = 0.15f;
-            float time = 0f;
             Vector3 originalPosition = transform.localPosition;
+            float elapsed = 0;
 
-            while (time < shakeDuration)
+            while (elapsed < shakeDuration)
             {
-                time += Time.deltaTime;
-                float offsetX = Mathf.Sin(time * 50f) * shakeMagnitude * (1f - time / shakeDuration);
-                transform.localPosition = originalPosition + new Vector3(offsetX, 0f, 0f);
+                elapsed += Time.deltaTime;
+                float diminish = 1f - (elapsed / shakeDuration);
+                float offsetX = Mathf.Sin(elapsed * 50f) * shakeMagnitude * diminish;
+
+                transform.localPosition = originalPosition + new Vector3(offsetX, 0, 0);
                 yield return null;
             }
 
             transform.localPosition = originalPosition;
         }
-        #endregion
     }
 }
