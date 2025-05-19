@@ -52,6 +52,7 @@ namespace NodeMap
         private int currentQuizQuestionIndex = 0;
         private HashSet<int> unlockedQuizQuestions = new HashSet<int>();
         private int currentNodeIndex = -1;
+        private int lastLoadedQuestionIndex = -1; // Added to track the last loaded question
 
         // Animation constants
         private const float fadeInTime = 0.3f;
@@ -167,6 +168,7 @@ namespace NodeMap
             currentQuizQuestionIndex = 0;
             unlockedQuizQuestions.Clear();
             unlockedQuizQuestions.Add(0); // First question always unlocked
+            lastLoadedQuestionIndex = -1; // Initialize here
         }
 
         private void LoadQuestionsForNode(int nodeIndex)
@@ -219,8 +221,22 @@ namespace NodeMap
                 }
             }
 
-            // Animate panel
-            StartCoroutine(UIAnimator.AnimateSlideIn(quizPanel.transform));
+            // Determine animation direction
+            Vector3 entryDirection;
+            if (index < lastLoadedQuestionIndex) // Moving to a 'previous' question
+            {
+                entryDirection = Vector3.right; // New content slides in from the left
+            }
+            else // First load, 'next' question, or reloading the same question
+            {
+                entryDirection = Vector3.left; // New content slides in from the right
+            }
+
+            // Animate panel using the new slide animation
+            StartCoroutine(UIAnimator.AnimateSlideInFromSide(quizPanel.transform, entryDirection));
+
+            // Update the last loaded question index
+            lastLoadedQuestionIndex = index;
         }
 
         private void GenerateIndicators()

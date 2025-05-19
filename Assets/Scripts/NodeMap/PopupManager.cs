@@ -49,6 +49,7 @@ namespace NodeMap
         private int lastSlideIndex = -1;
         private int openedNodeIndex = -1;
         private bool inQuizMode = false;
+        private bool isTransitioningSlides = false; // Flag to track slide animation state
         private readonly Color enabledColor = Color.white;
         private readonly Color disabledColor = new Color(1f, 1f, 1f, 0.4f);
         #endregion
@@ -96,6 +97,8 @@ namespace NodeMap
         /// </summary>
         public void OpenPopupForNode(int nodeIndex)
         {
+            if (isTransitioningSlides) return; // Don't open if already transitioning
+
             // Reset state and track
             inQuizMode = false;
             ResetPanels();
@@ -116,13 +119,13 @@ namespace NodeMap
             }
 
             // Initialize slides
-            lastSlideIndex = -1;
             currentSlideIndex = 0;
-            UpdateArrows();
-            ShowSlide(currentSlideIndex);
+            lastSlideIndex = -1; // Signifies no previous slide for the first animation
 
-            // Animate opening
+            // Animate opening of the popup itself
             StartCoroutine(UIAnimator.AnimatePopupOpen(popupCanvasGroup, backgroundOverlay));
+            // Show the first slide
+            StartCoroutine(ProcessSlideChangeInternal(currentSlideIndex, lastSlideIndex));
         }
 
         /// <summary>
@@ -164,17 +167,127 @@ namespace NodeMap
             EnsureSlidesLoaded();
 
             // Reset to first slide
+            int oldSlideForAnimation = currentSlideIndex; // Or -1 if a fresh display is desired
             currentSlideIndex = 0;
 
+            StartCoroutine(ProcessSlideChangeInternal(currentSlideIndex, oldSlideForAnimation));
+
             // Update UI
-            ShowSlide(currentSlideIndex);
+            // ShowSlide(currentSlideIndex);
             // ShowCurrentSlideWithoutAnimation();
-            UpdateArrows();
-            UpdateIndicators();
+            // UpdateArrows();
+            // UpdateIndicators();
         }
         #endregion
 
         #region Slide Management
+        private IEnumerator ProcessSlideChangeInternal(int newSlideIndex, int oldSlideIndex)
+        {
+            if (newSlideIndex < 0 || newSlideIndex >= currentNodeSlides.Count)
+            {
+                Debug.LogWarning($"ProcessSlideChangeInternal: Invalid newSlideIndex {newSlideIndex}");
+                yield break;
+            }
+
+            isTransitioningSlides = true;
+            // Temporarily disable arrow buttons during animation to prevent spamming
+            // Their final state will be set by UpdateArrows()
+            bool originalLeftArrowState = leftArrowButton.interactable;
+            bool originalRightArrowState = rightArrowButton.interactable;
+            leftArrowButton.interactable = false;
+            rightArrowButton.interactable = false;
+
+            try
+            {
+                Coroutine hideCoroutine = null;
+                // Animate out the old slide if there is one and it's different from the new one
+                if (oldSlideIndex != newSlideIndex && oldSlideIndex >= 0 && oldSlideIndex < currentNodeSlides.Count)
+                {
+                    // Start the hide animation but don't wait for it to complete yet
+                    hideCoroutine = StartCoroutine(HideSlideCoroutine(oldSlideIndex, newSlideIndex));
+                }
+
+                // Start the show animation for the new slide
+                Coroutine showCoroutine = StartCoroutine(ShowNewSlideCoroutine(newSlideIndex, oldSlideIndex));
+
+                // Now, wait for both animations to complete.
+                // The new slide starts appearing while the old one is still moving out.
+                if (hideCoroutine != null)
+                {
+                    yield return hideCoroutine; // Wait for the hide animation to finish
+                }
+                yield return showCoroutine; // Wait for the show animation to finish
+
+                // Update state *after* animations are fully complete
+                this.currentSlideIndex = newSlideIndex;
+                this.lastSlideIndex = (oldSlideIndex == newSlideIndex && oldSlideIndex != -1) ? this.lastSlideIndex : oldSlideIndex;
+
+                UpdateArrows(); // Update arrow states based on the new currentSlideIndex
+                indicatorManager?.UpdateActiveIndicator(this.currentSlideIndex, animate: true);
+            }
+            finally
+            {
+                // Ensure arrows are re-enabled or set to their correct state by UpdateArrows()
+                // If UpdateArrows() doesn't correctly set interactability, you might need to restore originalLeftArrowState/originalRightArrowState
+                // but UpdateArrows() should handle it.
+                isTransitioningSlides = false;
+            }
+        }
+
+        private IEnumerator ShowNewSlideCoroutine(int slideToShowIndex, int previousActualSlideIndex)
+        {
+            if (slideToShowIndex < 0 || slideToShowIndex >= currentNodeSlides.Count)
+            {
+                Debug.LogWarning($"ShowNewSlideCoroutine: Invalid slideToShowIndex {slideToShowIndex}");
+                yield break;
+            }
+
+            GameObject currentSlide = currentNodeSlides[slideToShowIndex];
+            if (currentSlide == null) yield break;
+
+            SetSlidesParentVisibility(true);
+            currentSlide.SetActive(true);
+            CanvasGroup slideCg = GetOrAddCanvasGroup(currentSlide);
+
+            if (previousActualSlideIndex < 0 && slideToShowIndex == 0) // First slide shown for this popup
+            {
+                currentSlide.transform.localPosition = Vector3.zero;
+                currentSlide.transform.localScale = Vector3.one;
+                slideCg.alpha = 1f;
+            }
+            else
+            {
+                // Determine entry direction:
+                // If new slide index > old, it's a "next" slide, enters from right (moves left).
+                // If new slide index < old, it's a "previous" slide, enters from left (moves right).
+                Vector3 entryDirection = (slideToShowIndex > previousActualSlideIndex) ? Vector3.left : Vector3.right;
+                yield return StartCoroutine(UIAnimator.AnimateSlideInFromSide(currentSlide.transform, entryDirection));
+            }
+        }
+
+        private IEnumerator HideSlideCoroutine(int slideToHideIndex, int nextSlideIndex)
+        {
+            if (slideToHideIndex < 0 || slideToHideIndex >= currentNodeSlides.Count)
+            {
+                yield break;
+            }
+
+            if (slideToHideIndex == nextSlideIndex)
+            {
+                yield break;
+            }
+
+            GameObject slideToHideObject = currentNodeSlides[slideToHideIndex];
+            if (slideToHideObject != null && slideToHideObject.activeSelf)
+            {
+                // Determine exit direction:
+                // If moving to a "next" slide (nextSlideIndex > slideToHideIndex), current slide exits to the LEFT.
+                // If moving to a "previous" slide (nextSlideIndex < slideToHideIndex), current slide exits to the RIGHT.
+                Vector3 exitDirection = (nextSlideIndex > slideToHideIndex) ? Vector3.left : Vector3.right;
+                yield return StartCoroutine(UIAnimator.AnimateSlideOutToSide(slideToHideObject.transform, exitDirection));
+            }
+        }
+        
         private void LoadNodeSlides(int nodeIndex)
         {
             ClearCurrentSlides();
@@ -208,7 +321,7 @@ namespace NodeMap
                 return;
             }
 
-            // Hide previous slide if any
+            // Hide previous slide if any - this will now use the new animation
             HidePreviousSlide(index);
 
             // Get current slide
@@ -219,38 +332,46 @@ namespace NodeMap
             SetSlidesParentVisibility(true);
 
             // Prepare the slide
-            currentSlide.SetActive(true);
-            CanvasGroup slideCg = GetOrAddCanvasGroup(currentSlide);
+            currentSlide.SetActive(true); // Ensure active before animation
+            CanvasGroup slideCg = GetOrAddCanvasGroup(currentSlide); // GetOrAddCanvasGroup is in PopupManager
 
             // Show slide with or without animation
-            if (lastSlideIndex < 0)
+            if (lastSlideIndex < 0) // First slide shown
             {
-                // First slide - no animation
+                // First slide - no animation, just set to final state
+                currentSlide.transform.localPosition = Vector3.zero; // Center it
                 currentSlide.transform.localScale = Vector3.one;
                 slideCg.alpha = 1f;
             }
             else
             {
-                // Regular slide - animate
-                StartCoroutine(UIAnimator.AnimateSlideIn(currentSlide.transform));
+                // Regular slide - animate with new jab animation
+                Vector3 entryDirection = (index > lastSlideIndex) ? Vector3.left : Vector3.right; // Left means enters from Right
+                StartCoroutine(UIAnimator.AnimateSlideInFromSide(currentSlide.transform, entryDirection));
             }
 
             // Update state
             lastSlideIndex = index;
             UpdateArrows();
+            // Update indicator after the new slide is supposed to be visible or animating in
+            indicatorManager?.UpdateActiveIndicator(currentSlideIndex, animate: true);
         }
 
         private void HidePreviousSlide(int newIndex)
         {
             if (lastSlideIndex >= 0 && lastSlideIndex < currentNodeSlides.Count && lastSlideIndex != newIndex)
             {
-                GameObject lastSlide = currentNodeSlides[lastSlideIndex];
-                if (lastSlide != null)
-                    StartCoroutine(UIAnimator.AnimateSlideOut(lastSlide));
-
-                indicatorManager?.UpdateActiveIndicator(currentSlideIndex, animate: true);
+                GameObject lastSlideObject = currentNodeSlides[lastSlideIndex];
+                if (lastSlideObject != null)
+                {
+                    // Determine exit direction based on whether we are moving to the next or previous slide
+                    Vector3 exitDirection = (newIndex > lastSlideIndex) ? Vector3.left : Vector3.right; // Left means exits towards Left
+                    StartCoroutine(UIAnimator.AnimateSlideOutToSide(lastSlideObject.transform, exitDirection));
+                }
+                // Indicator update was here, moved to ShowSlide to reflect the new active slide
             }
         }
+
 
         private void ClearCurrentSlides()
         {
@@ -322,34 +443,26 @@ namespace NodeMap
         #region Navigation & Arrows
         private void NextSlide()
         {
-            if (inQuizMode)
+            if (isTransitioningSlides || inQuizMode) return;
+
+            int targetIndex = currentSlideIndex + 1;
+            if (targetIndex < currentNodeSlides.Count)
             {
-                HandleQuizNavigation(true);
-            }
-            else if (currentSlideIndex < currentNodeSlides.Count)
-            {
-                currentSlideIndex++;
-                ShowSlide(currentSlideIndex);
+                StartCoroutine(ProcessSlideChangeInternal(targetIndex, currentSlideIndex));
                 StartCoroutine(UIAnimator.BounceElement(rightArrowButton.transform));
             }
-
-            UpdateArrows();
         }
 
         private void PreviousSlide()
         {
-            if (inQuizMode)
+            if (isTransitioningSlides || inQuizMode) return;
+
+            int targetIndex = currentSlideIndex - 1;
+            if (targetIndex >= 0)
             {
-                HandleQuizNavigation(false);
-            }
-            else if (currentSlideIndex > 0)
-            {
-                currentSlideIndex--;
-                ShowSlide(currentSlideIndex);
+                StartCoroutine(ProcessSlideChangeInternal(targetIndex, currentSlideIndex));
                 StartCoroutine(UIAnimator.BounceElement(leftArrowButton.transform));
             }
-
-            UpdateArrows();
         }
 
         private void HandleQuizNavigation(bool goNext)

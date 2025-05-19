@@ -12,7 +12,7 @@ namespace NodeMap.UI
         #region Animation Constants
         private static readonly float PopupOpenDuration = 0.4f;
         private static readonly float PopupCloseDuration = 0.3f;
-        private static readonly float SlideTransitionDuration = 0.2f;
+        private static readonly float SlideTransitionDuration = 0.3f;  // Increased from 0.4f to make easing more noticeable
         private static readonly float BounceDuration = 0.15f;
         private static readonly float ShakeDuration = 0.3f;
 
@@ -21,6 +21,7 @@ namespace NodeMap.UI
         private static readonly float BounceScaleFactor = 0.9f;
         private static readonly float ShakeMagnitude = 10f;
         private static readonly float BackgroundOverlayAlpha = 0.6f;
+        private static readonly float SlideJabDistance = 1300f;  // Adjusted from 2000f to balance visibility and speed
         #endregion
 
         #region Popup Animations
@@ -96,60 +97,60 @@ namespace NodeMap.UI
         /// <summary>
         /// Animates a slide appearing with scale and fade in
         /// </summary>
-        public static IEnumerator AnimateSlideIn(Transform slideTransform)
+        public static IEnumerator AnimateSlideInFromSide(Transform slideTransform, Vector3 entryDirection)
         {
             if (slideTransform == null) yield break;
 
-            // Get or add canvas group
-            CanvasGroup slideCg = GetOrAddCanvasGroup(slideTransform.gameObject);
+            slideTransform.gameObject.SetActive(true);
+            CanvasGroup canvasGroup = GetOrAddCanvasGroup(slideTransform.gameObject);
 
-            // Initial state
-            Vector3 startScale = Vector3.one * SlideScaleFactor;
-            Vector3 endScale = Vector3.one;
+            Vector3 targetLocalPos = Vector3.zero;
+            Vector3 startPosOffset = (entryDirection == Vector3.left) ? Vector3.right : Vector3.left;
+            Vector3 startPos = targetLocalPos + startPosOffset * SlideJabDistance;
 
-            slideTransform.localScale = startScale;
-            slideCg.alpha = 0f;
+            Vector3 initialScale = Vector3.one * SlideScaleFactor;
+            Vector3 finalScale = Vector3.one;
 
-            yield return AnimateScaleAndFade(
-                slideTransform,          // transform
-                startScale,              // startScale
-                endScale,                // endScale
-                slideCg,                 // canvasGroup
-                0f,                      // startAlpha
-                1f,                      // endAlpha
-                null,                    // no background
-                0f, 0f,                  // unused background values
-                SlideTransitionDuration  // duration
+            slideTransform.localPosition = startPos;
+            slideTransform.localScale = initialScale;
+            canvasGroup.alpha = 0f;
+
+            yield return AnimatePositionFadeScale(
+                slideTransform,
+                startPos, targetLocalPos,
+                canvasGroup, 0f, 1f,
+                initialScale, finalScale,
+                SlideTransitionDuration
             );
         }
 
         /// <summary>
-        /// Animates a slide disappearing with scale and fade out
+        /// Animates a slide disappearing by sliding out and scaling.
         /// </summary>
-        public static IEnumerator AnimateSlideOut(GameObject slideObject)
+        public static IEnumerator AnimateSlideOutToSide(Transform slideTransform, Vector3 exitDirection)
         {
-            if (slideObject == null) yield break;
+            if (slideTransform == null) yield break;
 
-            Transform slideTransform = slideObject.transform;
-            CanvasGroup slideCg = GetOrAddCanvasGroup(slideObject);
+            CanvasGroup canvasGroup = GetOrAddCanvasGroup(slideTransform.gameObject);
+            if (canvasGroup != null) canvasGroup.alpha = 1f; // Ensure fully visible during movement
 
-            Vector3 startScale = Vector3.one;
-            Vector3 endScale = Vector3.one * SlideScaleFactor;
+            Vector3 startLocalPos = slideTransform.localPosition;
+            Vector3 endPos = startLocalPos + exitDirection * SlideJabDistance;
 
-            yield return AnimateScaleAndFade(
-                slideTransform,          // transform
-                startScale,              // startScale
-                endScale,                // endScale
-                slideCg,                 // canvasGroup
-                1f,                      // startAlpha
-                0f,                      // endAlpha
-                null,                    // no background
-                0f, 0f,                  // unused background values
-                SlideTransitionDuration  // duration
+            Vector3 initialScale = slideTransform.localScale; // Or Vector3.one if always starting from normal scale
+            Vector3 finalScale = Vector3.one * SlideScaleFactor;
+
+            yield return AnimatePositionScale(
+                slideTransform,
+                startLocalPos, endPos,
+                initialScale, finalScale,
+                SlideTransitionDuration
             );
 
-            // Deactivate slide after animation
-            slideObject.SetActive(false);
+            slideTransform.gameObject.SetActive(false);
+            slideTransform.localPosition = Vector3.zero;
+            slideTransform.localScale = Vector3.one; // Reset scale
+            if (canvasGroup != null) canvasGroup.alpha = 0f;
         }
 
         /// <summary>
@@ -221,10 +222,6 @@ namespace NodeMap.UI
             Vector3 dipScale = baseScale * BounceScaleFactor; // The scale to "dip" to during the bounce
             float halfDuration = BounceDuration * 0.5f;
 
-            // Scale down (squeeze)
-            // This will animate from baseScale to dipScale.
-            // If elementTransform.localScale is not baseScale when this starts,
-            // AnimateScale will effectively set it to baseScale in its first step.
             yield return AnimateScale(
                 elementTransform,    // transform
                 baseScale,           // startScale
@@ -334,6 +331,99 @@ namespace NodeMap.UI
         }
 
         /// <summary>
+        /// Reusable animation for position and fade effects.
+        /// </summary>
+        private static IEnumerator AnimatePositionAndFade(
+            Transform transform, Vector3 startPos, Vector3 endPos,
+            CanvasGroup canvasGroup, float startAlpha, float endAlpha,
+            float duration = 0.3f)
+        {
+            float time = 0f;
+            // Ensure canvasGroup is not null for safety, though GetOrAddCanvasGroup should handle it.
+            if (canvasGroup == null) canvasGroup = GetOrAddCanvasGroup(transform.gameObject);
+
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.Clamp01(time / duration);
+                float smoothT = SmoothStep(t); // This line applies the easing
+
+                // Update position
+                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
+
+                // Update alpha
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
+
+                yield return null;
+            }
+
+            // Ensure final values are set exactly
+            transform.localPosition = endPos;
+            canvasGroup.alpha = endAlpha;
+        }
+
+        private static IEnumerator AnimatePositionOnly(Transform transform, Vector3 startPos, Vector3 endPos, float duration)
+        {
+            float time = 0f;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.Clamp01(time / duration);
+                float smoothT = SmoothStep(t);
+                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
+                yield return null;
+            }
+            transform.localPosition = endPos; // Ensure final position is set
+        }
+
+        private static IEnumerator AnimatePositionFadeScale(
+            Transform transform, Vector3 startPos, Vector3 endPos,
+            CanvasGroup canvasGroup, float startAlpha, float endAlpha,
+            Vector3 startScale, Vector3 endScale,
+            float duration = 0.3f)
+        {
+            float time = 0f;
+            if (canvasGroup == null) canvasGroup = GetOrAddCanvasGroup(transform.gameObject);
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.Clamp01(time / duration);
+                float smoothT = SmoothStep(t);
+
+                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
+                transform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
+
+                yield return null;
+            }
+
+            transform.localPosition = endPos;
+            transform.localScale = endScale;
+            canvasGroup.alpha = endAlpha;
+        }
+
+        /// <summary>
+        /// Animates the position and scale of an object.
+        /// </summary>
+        private static IEnumerator AnimatePositionScale(Transform transform, Vector3 startPos, Vector3 endPos, Vector3 startScale, Vector3 endScale, float duration)
+        {
+            float time = 0f;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.Clamp01(time / duration);
+                float smoothT = SmoothStep(t);
+                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
+                transform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
+                yield return null;
+            }
+            transform.localPosition = endPos;
+            transform.localScale = endScale;
+        }
+
+        /// <summary>
         /// Gets or adds a canvas group to the game object
         /// </summary>
         private static CanvasGroup GetOrAddCanvasGroup(GameObject gameObject)
@@ -349,7 +439,8 @@ namespace NodeMap.UI
         /// </summary>
         private static float SmoothStep(float t)
         {
-            return t * t * (3f - 2f * t);
+            // Quintic SmoothStep: 6t^5 - 15t^4 + 10t^3
+            return t * t * t * (t * (t * 6f - 15f) + 10f);
         }
         #endregion
     }
