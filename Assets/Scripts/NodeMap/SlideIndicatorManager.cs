@@ -20,7 +20,7 @@ namespace NodeMap.UI
 
         [Header("Animation Settings")]
         [SerializeField] private float transitionDuration = 0.2f;
-        [SerializeField] private float scaleAmount = 0.9f;
+        [SerializeField] private float scaleAmount = 0.1f;
         [SerializeField] private float breatheDuration = 1f;
         [SerializeField] private float breatheMagnitude = 0.2f;
         #endregion
@@ -46,7 +46,9 @@ namespace NodeMap.UI
                 spawnedDots.Add(dot);
             }
 
-            UpdateActiveIndicator(0, false);
+            // Initialize with the first dot active, without animation, and set lastActiveIndex
+            UpdateIndicatorsImmediate(0);
+            this.lastActiveIndex = 0;
         }
 
         /// <summary>
@@ -56,19 +58,33 @@ namespace NodeMap.UI
         {
             if (spawnedDots.Count == 0) return;
 
-            StopAnimation(ref animationCoroutine);
-
-            if (animate && activeIndex != lastActiveIndex)
+            // If it's the same index and no transition animation is running,
+            // just ensure breathing is on the correct dot.
+            if (activeIndex == lastActiveIndex && animationCoroutine == null)
             {
-                animationCoroutine = StartCoroutine(AnimateIndicatorTransition(activeIndex));
-            }
-            else
-            {
-                UpdateIndicatorsImmediate(activeIndex);
+                StartBreathingAnimation(activeIndex); // Ensures breathing is active
+                return;
             }
 
-            lastActiveIndex = activeIndex;
+            // Only proceed if the index is actually changing
+            if (activeIndex != lastActiveIndex)
+            {
+                StopAnimation(ref animationCoroutine); // Stop any ongoing transition
+
+                if (animate)
+                {
+                    // Pass the current lastActiveIndex to the animation coroutine
+                    animationCoroutine = StartCoroutine(AnimateIndicatorTransition(activeIndex, this.lastActiveIndex));
+                }
+                else
+                {
+                    UpdateIndicatorsImmediate(activeIndex);
+                }
+                this.lastActiveIndex = activeIndex; // Update lastActiveIndex after initiating change
+            }
+            // If activeIndex == lastActiveIndex but an animation is running, let it complete.
         }
+
 
         /// <summary>
         /// Clears all indicator dots
@@ -112,6 +128,65 @@ namespace NodeMap.UI
         #endregion
 
         #region Animation Methods
+        private IEnumerator AnimateIndicatorTransition(int newActiveIndex, int oldActiveIndex)
+        {
+            float halfDuration = transitionDuration * 0.5f;
+            // Define target scales based on Vector3.one, assuming this is the default full scale for the parent
+            Vector3 fullScale = Vector3.one;
+            Vector3 shrunkScale = Vector3.one * scaleAmount;
+            Transform parentTransform = slideIndicatorsParent;
+
+            // Stop current breathing on the old active dot and reset its scale
+            if (oldActiveIndex >= 0 && oldActiveIndex < spawnedDots.Count && spawnedDots[oldActiveIndex] != null)
+            {
+                StopAnimation(ref activeDotBreathing);
+                Transform oldDotVisual = spawnedDots[oldActiveIndex].transform.Find("DotVisual");
+                if (oldDotVisual != null) oldDotVisual.localScale = Vector3.one;
+            }
+
+            // Animate parent from its current scale to shrunkScale
+            Vector3 currentActualScale = parentTransform.localScale;
+            float time = 0f;
+            while (time < halfDuration)
+            {
+                time += Time.deltaTime;
+                // Using Mathf.SmoothStep for ease-in/out.
+                // Replace with UIAnimator.SmoothStep if it's made public and a different curve is desired.
+                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(time / halfDuration));
+                parentTransform.localScale = Vector3.Lerp(currentActualScale, shrunkScale, t);
+                yield return null;
+            }
+            parentTransform.localScale = shrunkScale;
+
+            // Update sprites to new state (while scaled down)
+            for (int i = 0; i < spawnedDots.Count; i++)
+            {
+                GameObject dotContainer = spawnedDots[i];
+                if (dotContainer == null) continue;
+                Transform dotVisual = dotContainer.transform.Find("DotVisual");
+                if (dotVisual == null) continue;
+                Image img = dotVisual.GetComponent<Image>();
+                if (img != null)
+                {
+                    img.sprite = (i == newActiveIndex) ? activeDotSprite : inactiveDotSprite;
+                }
+                dotVisual.localScale = Vector3.one; // Ensure individual dots are at normal scale within parent
+            }
+
+            // Animate parent from shrunkScale back to fullScale
+            time = 0f;
+            while (time < halfDuration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(time / halfDuration));
+                parentTransform.localScale = Vector3.Lerp(shrunkScale, fullScale, t);
+                yield return null;
+            }
+            parentTransform.localScale = fullScale;
+
+            StartBreathingAnimation(newActiveIndex);
+        }
+
         /// <summary>
         /// Animates the transition between indicator states
         /// </summary>
@@ -189,8 +264,17 @@ namespace NodeMap.UI
         /// <summary>
         /// Updates indicators immediately without animation
         /// </summary>
-        private void UpdateIndicatorsImmediate(int activeIndex)
+        private void UpdateIndicatorsImmediate(int newActiveIndex)
         {
+            // Stop current breathing on the old active dot (this.lastActiveIndex)
+            // and reset its scale before changing sprites.
+            if (this.lastActiveIndex >= 0 && this.lastActiveIndex < spawnedDots.Count && spawnedDots[this.lastActiveIndex] != null)
+            {
+                StopAnimation(ref activeDotBreathing);
+                Transform oldDotVisual = spawnedDots[this.lastActiveIndex].transform.Find("DotVisual");
+                if (oldDotVisual != null) oldDotVisual.localScale = Vector3.one;
+            }
+
             for (int i = 0; i < spawnedDots.Count; i++)
             {
                 GameObject dotContainer = spawnedDots[i];
@@ -202,14 +286,13 @@ namespace NodeMap.UI
                 Image img = dotVisual.GetComponent<Image>();
                 if (img != null)
                 {
-                    img.sprite = (i == activeIndex) ? activeDotSprite : inactiveDotSprite;
+                    img.sprite = (i == newActiveIndex) ? activeDotSprite : inactiveDotSprite;
                 }
-
-                // Reset scale on all dots
-                dotVisual.localScale = Vector3.one;
+                dotVisual.localScale = Vector3.one; // Reset scale on all dots
             }
 
-            StartBreathingAnimation(activeIndex);
+            StartBreathingAnimation(newActiveIndex);
+            // Note: this.lastActiveIndex is updated by the calling UpdateActiveIndicator method
         }
 
         /// <summary>

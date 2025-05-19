@@ -190,8 +190,6 @@ namespace NodeMap
             }
 
             isTransitioningSlides = true;
-            // Temporarily disable arrow buttons during animation to prevent spamming
-            // Their final state will be set by UpdateArrows()
             bool originalLeftArrowState = leftArrowButton.interactable;
             bool originalRightArrowState = rightArrowButton.interactable;
             leftArrowButton.interactable = false;
@@ -199,40 +197,48 @@ namespace NodeMap
 
             try
             {
+                // Update the current slide index state for PopupManager
+                this.currentSlideIndex = newSlideIndex;
+
+                // Start indicator animation concurrently.
+                // SlideIndicatorManager uses its own lastActiveIndex to animate from.
+                indicatorManager?.UpdateActiveIndicator(this.currentSlideIndex, animate: true);
+
                 Coroutine hideCoroutine = null;
                 // Animate out the old slide if there is one and it's different from the new one
                 if (oldSlideIndex != newSlideIndex && oldSlideIndex >= 0 && oldSlideIndex < currentNodeSlides.Count)
                 {
-                    // Start the hide animation but don't wait for it to complete yet
                     hideCoroutine = StartCoroutine(HideSlideCoroutine(oldSlideIndex, newSlideIndex));
                 }
 
                 // Start the show animation for the new slide
                 Coroutine showCoroutine = StartCoroutine(ShowNewSlideCoroutine(newSlideIndex, oldSlideIndex));
 
-                // Now, wait for both animations to complete.
-                // The new slide starts appearing while the old one is still moving out.
+                // Wait for slide animations to complete.
                 if (hideCoroutine != null)
                 {
-                    yield return hideCoroutine; // Wait for the hide animation to finish
+                    yield return hideCoroutine;
                 }
-                yield return showCoroutine; // Wait for the show animation to finish
+                yield return showCoroutine;
 
-                // Update state *after* animations are fully complete
-                this.currentSlideIndex = newSlideIndex;
-                this.lastSlideIndex = (oldSlideIndex == newSlideIndex && oldSlideIndex != -1) ? this.lastSlideIndex : oldSlideIndex;
+                // Update PopupManager's record of the last slide index for the *next* transition
+                this.lastSlideIndex = oldSlideIndex;
 
-                UpdateArrows(); // Update arrow states based on the new currentSlideIndex
-                indicatorManager?.UpdateActiveIndicator(this.currentSlideIndex, animate: true);
+                UpdateArrows();
+                // Indicator update was moved up to run concurrently.
+                // If an immediate final state check is needed for indicators after all animations,
+                // it could be done here, but UpdateActiveIndicator should handle the final state.
             }
             finally
             {
-                // Ensure arrows are re-enabled or set to their correct state by UpdateArrows()
-                // If UpdateArrows() doesn't correctly set interactability, you might need to restore originalLeftArrowState/originalRightArrowState
-                // but UpdateArrows() should handle it.
                 isTransitioningSlides = false;
+                // UpdateArrows() should have set the correct interactability.
+                // If not, restore:
+                // leftArrowButton.interactable = originalLeftArrowState;
+                // rightArrowButton.interactable = originalRightArrowState;
             }
         }
+
 
         private IEnumerator ShowNewSlideCoroutine(int slideToShowIndex, int previousActualSlideIndex)
         {
@@ -287,7 +293,7 @@ namespace NodeMap
                 yield return StartCoroutine(UIAnimator.AnimateSlideOutToSide(slideToHideObject.transform, exitDirection));
             }
         }
-        
+
         private void LoadNodeSlides(int nodeIndex)
         {
             ClearCurrentSlides();
