@@ -13,12 +13,12 @@ namespace NodeMap.UI
         private static readonly float PopupOpenDuration = 0.4f;
         private static readonly float PopupCloseDuration = 0.3f;
         private static readonly float SlideTransitionDuration = 0.2f;
-        private static readonly float BounceDuration = 0.2f;
+        private static readonly float BounceDuration = 0.15f;
         private static readonly float ShakeDuration = 0.3f;
 
         private static readonly float PopupScaleFactor = 0.8f;
         private static readonly float SlideScaleFactor = 0.9f;
-        private static readonly float BounceScaleFactor = 0.8f;
+        private static readonly float BounceScaleFactor = 0.9f;
         private static readonly float ShakeMagnitude = 10f;
         private static readonly float BackgroundOverlayAlpha = 0.6f;
         #endregion
@@ -217,23 +217,27 @@ namespace NodeMap.UI
         {
             if (elementTransform == null) yield break;
 
-            Vector3 originalScale = elementTransform.localScale;
-            Vector3 smallScale = originalScale * BounceScaleFactor;
+            Vector3 baseScale = Vector3.one; // Define the base and final scale as Vector3.one
+            Vector3 dipScale = baseScale * BounceScaleFactor; // The scale to "dip" to during the bounce
             float halfDuration = BounceDuration * 0.5f;
 
             // Scale down (squeeze)
+            // This will animate from baseScale to dipScale.
+            // If elementTransform.localScale is not baseScale when this starts,
+            // AnimateScale will effectively set it to baseScale in its first step.
             yield return AnimateScale(
                 elementTransform,    // transform
-                originalScale,       // startScale
-                smallScale,          // endScale
+                baseScale,           // startScale
+                dipScale,            // endScale
                 halfDuration         // duration
             );
 
             // Scale up (expand)
+            // This will animate from dipScale back to baseScale (Vector3.one).
             yield return AnimateScale(
                 elementTransform,    // transform
-                smallScale,          // startScale
-                originalScale,       // endScale
+                dipScale,            // startScale
+                baseScale,           // endScale
                 halfDuration         // duration
             );
         }

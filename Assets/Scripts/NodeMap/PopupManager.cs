@@ -67,22 +67,10 @@ namespace NodeMap
 
         private void Start()
         {
-            InitializeUI();
-        }
-
-        private void Update()
-        {
-            // Handle keyboard navigation
-            if (Input.GetKeyDown(KeyCode.RightArrow)) NextSlide();
-            else if (Input.GetKeyDown(KeyCode.LeftArrow)) PreviousSlide();
-        }
-        #endregion
-
-        #region Initialization
-        private void InitializeUI()
-        {
             // Start hidden
-            SetPopupVisibility(false);
+            popupCanvasGroup.alpha = 0f;
+            popupCanvasGroup.interactable = false;
+            popupCanvasGroup.blocksRaycasts = false;
 
             // Setup navigation buttons
             leftArrowButton.onClick.AddListener(PreviousSlide);
@@ -94,11 +82,11 @@ namespace NodeMap
                 quizManager.OnQuizCompleted += HandleQuizCompleted;
         }
 
-        private void SetPopupVisibility(bool visible)
+        private void Update()
         {
-            popupCanvasGroup.alpha = visible ? 1f : 0f;
-            popupCanvasGroup.interactable = visible;
-            popupCanvasGroup.blocksRaycasts = visible;
+            // Handle keyboard navigation
+            if (Input.GetKeyDown(KeyCode.RightArrow)) NextSlide();
+            else if (Input.GetKeyDown(KeyCode.LeftArrow)) PreviousSlide();
         }
         #endregion
 
