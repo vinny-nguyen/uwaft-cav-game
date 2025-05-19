@@ -163,6 +163,9 @@ namespace NodeMap
         /// <summary>
         /// Returns to slides view from quiz mode
         /// </summary>
+        // <summary>
+        /// Returns to slides view from quiz mode
+        /// </summary>
         public void ReturnToSlides()
         {
             // Reset state
@@ -176,9 +179,10 @@ namespace NodeMap
             currentSlideIndex = 0;
 
             // Update UI
-            UpdateIndicators();
-            ShowCurrentSlideWithoutAnimation();
+            ShowSlide(currentSlideIndex);
+            // ShowCurrentSlideWithoutAnimation();
             UpdateArrows();
+            UpdateIndicators();
         }
         #endregion
 
@@ -291,7 +295,7 @@ namespace NodeMap
 
         private void ShowCurrentSlideWithoutAnimation()
         {
-            if (currentNodeSlides.Count == 0) return;
+            if (currentNodeSlides.Count == 0 || currentSlideIndex >= currentNodeSlides.Count) return;
 
             // Reset all slides
             foreach (var slide in currentNodeSlides)
@@ -307,12 +311,17 @@ namespace NodeMap
 
             // Show current slide
             GameObject currentSlide = currentNodeSlides[currentSlideIndex];
+            if (currentSlide == null) return;
+
             currentSlide.SetActive(true);
 
             CanvasGroup slideCg = GetOrAddCanvasGroup(currentSlide);
             slideCg.alpha = 1f;
             slideCg.interactable = true;
             slideCg.blocksRaycasts = true;
+
+            // Add a debug log to verify
+            Debug.Log($"Showing slide {currentSlideIndex} without animation");
         }
 
         private void EnsureSlidesLoaded()
