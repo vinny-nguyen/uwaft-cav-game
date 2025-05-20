@@ -14541,7 +14541,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: DrivingScene
-  transitionDelay: 0.2
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   disabledColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 0.7}
   useShakeEffect: 1
@@ -19956,6 +19955,8 @@ MonoBehaviour:
   rearWheelRenderer: {fileID: 1773106150}
   upgradeAnimationDuration: 0.5
   upgradeParticles: {fileID: 0}
+  animationScaleFactor: 0.8
+  animationAlphaValue: 0.5
 --- !u!4 &2057003456
 Transform:
   m_ObjectHideFlags: 0

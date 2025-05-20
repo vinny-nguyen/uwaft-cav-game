@@ -342,6 +342,89 @@ namespace NodeMap.UI
             // Optionally reset scale if needed when coroutine stops externally
             // if (elementTransform != null) elementTransform.localScale = baseScale;
         }
+
+        /// <summary>
+        /// Animates a content panel revealing or hiding by animating LayoutElement.preferredHeight and CanvasGroup.alpha.
+        /// Requires the contentTransform to have a ContentSizeFitter for height calculation when showing.
+        /// </summary>
+        public static IEnumerator AnimateRevealContent(
+            RectTransform contentTransform, // The RectTransform of the content panel
+            CanvasGroup contentCanvasGroup,
+            LayoutElement contentLayoutElement, // The LayoutElement to animate
+            bool show,
+            float duration,
+            System.Action onComplete = null)
+        {
+            if (contentTransform == null || contentCanvasGroup == null || contentLayoutElement == null)
+            {
+                Debug.LogError("AnimateRevealContent: Missing RectTransform, CanvasGroup, or LayoutElement.");
+                onComplete?.Invoke();
+                yield break;
+            }
+
+            float startAlpha = show ? 0f : 1f;
+            float endAlpha = show ? 1f : 0f;
+            float startHeight;
+            float endHeight;
+
+            if (show)
+            {
+                contentTransform.gameObject.SetActive(true); // Activate to measure preferred height
+                contentCanvasGroup.alpha = 0f;               // Start transparent
+                contentLayoutElement.preferredHeight = 0f;   // Start collapsed
+
+                // Wait a frame for ContentSizeFitter to calculate the actual height
+                yield return null; 
+                // Or yield return new WaitForEndOfFrame(); if more reliability is needed for layout calculation
+
+                startHeight = 0f;
+                endHeight = LayoutUtility.GetPreferredHeight(contentTransform);
+                if (endHeight <= 0) {
+                    // This can happen if ContentSizeFitter hasn't updated or content is truly zero height.
+                    // Provide a small default or log a warning.
+                    // Debug.LogWarning($"AnimateRevealContent: Calculated target height for {contentTransform.name} is {endHeight}. Ensure ContentSizeFitter is setup correctly and content has size.");
+                    // endHeight = 1; // Fallback to a tiny height to avoid division by zero or no animation.
+                                   // Or, if content is legitimately zero, this is fine.
+                }
+            }
+            else // Hiding
+            {
+                startHeight = contentLayoutElement.preferredHeight; // Current actual height
+                endHeight = 0f;
+            }
+
+            // Ensure duration is positive to prevent division by zero if heights are same
+            if (Mathf.Approximately(startHeight, endHeight) && Mathf.Approximately(startAlpha, endAlpha))
+            {
+                 // If already at target state, just ensure final values and complete
+                contentLayoutElement.preferredHeight = endHeight;
+                contentCanvasGroup.alpha = endAlpha;
+                LayoutRebuilder.MarkLayoutForRebuild(contentTransform);
+                onComplete?.Invoke();
+                yield break;
+            }
+            
+            if (duration <= 0) duration = 0.01f; // Prevent instant animation issues with AnimateOverTime if duration is zero
+
+            yield return AnimateOverTime(duration,
+                smoothT =>
+                {
+                    contentLayoutElement.preferredHeight = Mathf.Lerp(startHeight, endHeight, smoothT);
+                    contentCanvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
+                    if (contentTransform != null) // Guard against object destruction
+                    {
+                        LayoutRebuilder.MarkLayoutForRebuild(contentTransform);
+                    }
+                },
+                () => // onComplete for AnimateOverTime
+                {
+                    if (contentLayoutElement != null) contentLayoutElement.preferredHeight = endHeight;
+                    if (contentCanvasGroup != null) contentCanvasGroup.alpha = endAlpha;
+                    if (contentTransform != null) LayoutRebuilder.MarkLayoutForRebuild(contentTransform);
+                    onComplete?.Invoke();
+                }
+            );
+        }
         #endregion
 
         #region Helper Methods
@@ -349,7 +432,7 @@ namespace NodeMap.UI
         /// <summary>
         /// Generic coroutine to animate properties over a duration using SmoothStep.
         /// </summary>
-        private static IEnumerator AnimateOverTime(float duration, System.Action<float> onUpdate, System.Action onComplete = null)
+        public static IEnumerator AnimateOverTime(float duration, System.Action<float> onUpdate, System.Action onComplete = null) // Changed from private to public
         {
             float time = 0f;
             while (time < duration)
