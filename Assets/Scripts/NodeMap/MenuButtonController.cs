@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using NodeMap.UI; // Required for SceneTransitionManager
 
 namespace NodeMap
 {
@@ -28,7 +29,16 @@ namespace NodeMap
 
         private void OnButtonClick()
         {
-            SaveAndLoadMainMenu();
+            // SaveAndLoadMainMenu(); // Old way
+            if (SceneTransitionManager.Instance != null)
+            {
+                SceneTransitionManager.Instance.PlayClosingTransition(SaveAndLoadMainMenu);
+            }
+            else
+            {
+                // Fallback if SceneTransitionManager is not found
+                SaveAndLoadMainMenu();
+            }
         }
 
         private void SaveAndLoadMainMenu()

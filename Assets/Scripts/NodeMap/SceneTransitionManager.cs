@@ -211,6 +211,16 @@ namespace NodeMap.UI
             transitionCanvasGroup.gameObject.SetActive(true);
             transitionCanvasGroup.blocksRaycasts = true;
 
+            // Ensure the canvas group is opaque for RadialWipe effect to be visible.
+            // For Fade effects, alpha is animated in the loop.
+            if (effectType == TransitionEffectType.RadialWipe)
+            {
+                transitionCanvasGroup.alpha = 1f;
+            }
+            // If opening, and not RadialWipe, alpha will be set in the loop.
+            // If opening and RadialWipe, it starts at 1 (from CoverScreen or this set) and material animates.
+            // If closing and RadialWipe, it was 0, now set to 1, and material animates.
+
             float duration = isOpening ? openingDuration : closingDuration;
             AnimationCurve curve = isOpening ? openingCurve : closingCurve;
 
@@ -222,6 +232,7 @@ namespace NodeMap.UI
                 float normalizedTime = elapsedTime / duration;
                 float curvedProgress = curve.Evaluate(normalizedTime);
 
+                // For opening, progress goes 0 to 1. For closing, progress goes 1 to 0.
                 float progress = isOpening ? curvedProgress : 1 - curvedProgress;
 
                 switch (effectType)
@@ -229,16 +240,28 @@ namespace NodeMap.UI
                     case TransitionEffectType.RadialWipe:
                         if (radialWipeMaterial != null)
                             radialWipeMaterial.SetFloat("_Progress", progress);
+                        // Note: transitionCanvasGroup.alpha should be 1 here for RadialWipe, set above.
                         break;
 
                     case TransitionEffectType.Fade:
+                        // Alpha for fade: opening (1 to 0), closing (0 to 1)
+                        // progress for opening (0 to 1), progress for closing (1 to 0)
+                        // So, alpha = 1 - progress works for both.
                         transitionCanvasGroup.alpha = 1 - progress;
                         break;
 
                     case TransitionEffectType.FadeAndScale:
-                        transitionCanvasGroup.alpha = 1 - progress;
-                        float scale = isOpening ? 1 - progress * 0.25f : 1 + progress * 0.25f;
-                        transitionImage.transform.localScale = new Vector3(scale, scale, 1);
+                        transitionCanvasGroup.alpha = 1 - progress; // Same alpha logic as Fade
+                        // Original scale logic:
+                        // float scale = isOpening ? 1 - progress * 0.25f : 1 + progress * 0.25f;
+                        // Opening: progress (0->1), scale (1 -> 0.75) - shrinks
+                        // Closing: progress (1->0), scale (1.25 -> 1) - shrinks from larger
+                        // Let's keep original scale logic unless specified otherwise.
+                        float scaleValue = isOpening ? (1.0f - progress * 0.25f) : (1.0f + progress * 0.25f);
+                        if (transitionImage != null)
+                        {
+                            transitionImage.transform.localScale = new Vector3(scaleValue, scaleValue, 1);
+                        }
                         break;
                 }
 
@@ -248,20 +271,31 @@ namespace NodeMap.UI
             // Ensure final values are set exactly
             if (isOpening)
             {
-                transitionCanvasGroup.alpha = 0f;
+                transitionCanvasGroup.alpha = 0f; // Fully transparent after opening
                 transitionCanvasGroup.blocksRaycasts = false;
 
                 if (effectType == TransitionEffectType.RadialWipe && radialWipeMaterial != null)
-                    radialWipeMaterial.SetFloat("_Progress", 1f);
+                    radialWipeMaterial.SetFloat("_Progress", 1f); // Fully revealed
 
-                transitionCanvasGroup.gameObject.SetActive(false);
+                if (effectType == TransitionEffectType.FadeAndScale && transitionImage != null)
+                    transitionImage.transform.localScale = Vector3.one; // Reset scale
+
+                transitionCanvasGroup.gameObject.SetActive(false); // Hide after opening
             }
-            else
+            else // Closing
             {
-                transitionCanvasGroup.alpha = 1f;
+                transitionCanvasGroup.alpha = 1f; // Fully opaque after closing
 
                 if (effectType == TransitionEffectType.RadialWipe && radialWipeMaterial != null)
-                    radialWipeMaterial.SetFloat("_Progress", 0f);
+                    radialWipeMaterial.SetFloat("_Progress", 0f); // Fully covered
+                
+                if (effectType == TransitionEffectType.FadeAndScale && transitionImage != null)
+                {
+                    // Final scale for closing based on its logic (e.g., 1.0f or 1.25f depending on interpretation)
+                    // The loop ends with progress = 0 for closing.
+                    // scaleValue = 1.0f + 0 * 0.25f = 1.0f;
+                    transitionImage.transform.localScale = Vector3.one; 
+                }
             }
 
             isTransitioning = false;

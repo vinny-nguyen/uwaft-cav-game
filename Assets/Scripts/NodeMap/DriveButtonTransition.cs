@@ -14,7 +14,7 @@ namespace NodeMap
     {
         [Header("Navigation")]
         [SerializeField] private string targetSceneName;
-        [SerializeField] private float transitionDelay = 0.2f;
+        // [SerializeField] private float transitionDelay = 0.2f; // Removed, SceneTransitionManager handles duration
 
         [Header("Disabled State")]
         [SerializeField] private Color normalColor = Color.white;
@@ -59,7 +59,16 @@ namespace NodeMap
         {
             if (isEnabled)
             {
-                StartCoroutine(DelayedSceneLoad());
+                // StartCoroutine(DelayedSceneLoad()); // Old way
+                if (SceneTransitionManager.Instance != null)
+                {
+                    SceneTransitionManager.Instance.PlayClosingTransition(LoadTargetScene);
+                }
+                else
+                {
+                    // Fallback if SceneTransitionManager is not found
+                    LoadTargetScene();
+                }
             }
             else if (useShakeEffect)
             {
@@ -94,12 +103,6 @@ namespace NodeMap
                     button.interactable = isEnabled;
                 }
             }
-        }
-
-        private IEnumerator DelayedSceneLoad()
-        {
-            yield return new WaitForSeconds(transitionDelay);
-            LoadTargetScene();
         }
 
         private void LoadTargetScene()
