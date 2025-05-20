@@ -14,12 +14,12 @@ namespace NodeMap.UI
         private static readonly float PopupCloseDuration = 0.3f;
         private static readonly float SlideTransitionDuration = 0.3f;  // Increased from 0.4f to make easing more noticeable
         private static readonly float BounceDuration = 0.15f;
-        private static readonly float ShakeDuration = 0.3f;
+        public static readonly float ShakeDuration = 0.3f;
 
         private static readonly float PopupScaleFactor = 0.8f;
         private static readonly float SlideScaleFactor = 0.9f;
         private static readonly float BounceScaleFactor = 0.9f;
-        private static readonly float ShakeMagnitude = 10f;
+        public static readonly float ShakeMagnitude = 10f;
         private static readonly float BackgroundOverlayAlpha = 0.6f;
         private static readonly float SlideJabDistance = 1300f;  // Adjusted from 2000f to balance visibility and speed
         #endregion
@@ -32,29 +32,27 @@ namespace NodeMap.UI
         {
             if (canvasGroup == null) yield break;
 
-            // Enable interaction
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
 
-            // Initial state
             Transform popupTransform = canvasGroup.transform;
             Vector3 startScale = Vector3.one * PopupScaleFactor;
             Vector3 endScale = Vector3.one;
 
             popupTransform.localScale = startScale;
             canvasGroup.alpha = 0f;
+            if (backgroundOverlay != null)
+            {
+                Color bgColor = backgroundOverlay.color;
+                bgColor.a = 0f;
+                backgroundOverlay.color = bgColor;
+            }
 
             yield return AnimateScaleAndFade(
-                popupTransform,      // transform
-                startScale,          // startScale
-                endScale,            // endScale
-                canvasGroup,         // canvasGroup
-                0f,                  // startAlpha
-                1f,                  // endAlpha
-                backgroundOverlay,   // backgroundOverlay
-                0f,                  // startBackgroundAlpha
-                BackgroundOverlayAlpha,  // endBackgroundAlpha
-                PopupOpenDuration    // duration
+                popupTransform, startScale, endScale,
+                canvasGroup, 0f, 1f,
+                backgroundOverlay, 0f, BackgroundOverlayAlpha,
+                PopupOpenDuration
             );
         }
 
@@ -65,31 +63,23 @@ namespace NodeMap.UI
         {
             if (canvasGroup == null) yield break;
 
-            // Disable interaction immediately
             canvasGroup.interactable = false;
 
             Transform popupTransform = canvasGroup.transform;
-            Vector3 startScale = Vector3.one;
+            Vector3 startScale = Vector3.one; // Current scale
             Vector3 endScale = Vector3.one * PopupScaleFactor;
+            float startAlpha = canvasGroup.alpha; // Current alpha
+            float startBgAlpha = backgroundOverlay != null ? backgroundOverlay.color.a : 0f;
 
             yield return AnimateScaleAndFade(
-                popupTransform,      // transform
-                startScale,          // startScale
-                endScale,            // endScale
-                canvasGroup,         // canvasGroup
-                1f,                  // startAlpha
-                0f,                  // endAlpha
-                backgroundOverlay,   // backgroundOverlay
-                BackgroundOverlayAlpha,  // startBackgroundAlpha
-                0f,                  // endBackgroundAlpha
-                PopupCloseDuration   // duration
+                popupTransform, startScale, endScale,
+                canvasGroup, startAlpha, 0f,
+                backgroundOverlay, startBgAlpha, 0f,
+                PopupCloseDuration
             );
 
-            // Disable raycast blocking after animation
             canvasGroup.blocksRaycasts = false;
-
-            // Reset scale to avoid affecting future animations
-            popupTransform.localScale = Vector3.one;
+            popupTransform.localScale = Vector3.one; // Reset scale
         }
         #endregion
 
@@ -116,8 +106,7 @@ namespace NodeMap.UI
             canvasGroup.alpha = 0f;
 
             yield return AnimatePositionFadeScale(
-                slideTransform,
-                startPos, targetLocalPos,
+                slideTransform, startPos, targetLocalPos,
                 canvasGroup, 0f, 1f,
                 initialScale, finalScale,
                 SlideTransitionDuration
@@ -132,25 +121,24 @@ namespace NodeMap.UI
             if (slideTransform == null) yield break;
 
             CanvasGroup canvasGroup = GetOrAddCanvasGroup(slideTransform.gameObject);
-            if (canvasGroup != null) canvasGroup.alpha = 1f; // Ensure fully visible during movement
 
             Vector3 startLocalPos = slideTransform.localPosition;
             Vector3 endPos = startLocalPos + exitDirection * SlideJabDistance;
 
-            Vector3 initialScale = slideTransform.localScale; // Or Vector3.one if always starting from normal scale
+            Vector3 initialScale = slideTransform.localScale;
             Vector3 finalScale = Vector3.one * SlideScaleFactor;
+            float startAlpha = canvasGroup.alpha;
 
-            yield return AnimatePositionScale(
-                slideTransform,
-                startLocalPos, endPos,
+            yield return AnimatePositionFadeScale(
+                slideTransform, startLocalPos, endPos,
+                canvasGroup, startAlpha, 0f,
                 initialScale, finalScale,
                 SlideTransitionDuration
             );
 
             slideTransform.gameObject.SetActive(false);
             slideTransform.localPosition = Vector3.zero;
-            slideTransform.localScale = Vector3.one; // Reset scale
-            if (canvasGroup != null) canvasGroup.alpha = 0f;
+            slideTransform.localScale = Vector3.one;
         }
 
         /// <summary>
@@ -160,52 +148,35 @@ namespace NodeMap.UI
         {
             if (fromPanel == null || toPanel == null) yield break;
 
-            // Get or add canvas groups
             CanvasGroup fromGroup = GetOrAddCanvasGroup(fromPanel);
             CanvasGroup toGroup = GetOrAddCanvasGroup(toPanel);
 
-            // Prepare panels
             toPanel.SetActive(true);
             toGroup.alpha = 0f;
 
-            // Calculate durations and scales
             float halfDuration = duration * 0.5f;
             Vector3 fromOriginalScale = fromPanel.transform.localScale;
             Vector3 fromEndScale = fromOriginalScale * SlideScaleFactor;
 
-            // Animate first panel out
             yield return AnimateScaleAndFade(
-                fromPanel.transform,     // transform
-                fromOriginalScale,       // startScale
-                fromEndScale,            // endScale
-                fromGroup,               // canvasGroup
-                1f,                      // startAlpha
-                0f,                      // endAlpha
-                null,                    // no background
-                0f, 0f,                  // unused background values
-                halfDuration             // duration
+                fromPanel.transform, fromOriginalScale, fromEndScale,
+                fromGroup, 1f, 0f,
+                null, 0f, 0f,
+                halfDuration
             );
 
-            // Clean up first panel
             fromPanel.SetActive(false);
             fromPanel.transform.localScale = fromOriginalScale;
 
-            // Setup second panel
-            Vector3 toOriginalScale = Vector3.one;
+            Vector3 toOriginalScale = Vector3.one; // Assuming toPanel should end at normal scale
             Vector3 toStartScale = toOriginalScale * SlideScaleFactor;
             toPanel.transform.localScale = toStartScale;
 
-            // Animate second panel in
             yield return AnimateScaleAndFade(
-                toPanel.transform,       // transform
-                toStartScale,            // startScale
-                toOriginalScale,         // endScale
-                toGroup,                 // canvasGroup
-                0f,                      // startAlpha
-                1f,                      // endAlpha
-                null,                    // no background
-                0f, 0f,                  // unused background values
-                halfDuration             // duration
+                toPanel.transform, toStartScale, toOriginalScale,
+                toGroup, 0f, 1f,
+                null, 0f, 0f,
+                halfDuration
             );
         }
         #endregion
@@ -242,7 +213,7 @@ namespace NodeMap.UI
         /// <summary>
         /// Creates a side-to-side shake animation
         /// </summary>
-        public static IEnumerator ShakeElement(Transform elementTransform)
+        public static IEnumerator ShakeElement(Transform elementTransform, float duration, float magnitude, float frequency = 40f)
         {
             if (elementTransform == null) yield break;
 
@@ -250,11 +221,11 @@ namespace NodeMap.UI
             float elapsed = 0f;
 
             // Shake with decreasing magnitude
-            while (elapsed < ShakeDuration)
+            while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float diminishFactor = 1f - (elapsed / ShakeDuration);
-                float offsetX = Mathf.Sin(elapsed * 40f) * ShakeMagnitude * diminishFactor;
+                float diminishFactor = 1f - (elapsed / duration); // Use parameterized duration
+                float offsetX = Mathf.Sin(elapsed * frequency) * magnitude * diminishFactor; // Use parameterized magnitude and frequency
 
                 elementTransform.localPosition = originalPos + new Vector3(offsetX, 0f, 0f);
                 yield return null;
@@ -263,164 +234,287 @@ namespace NodeMap.UI
             // Reset to original position
             elementTransform.localPosition = originalPos;
         }
+
+        /// <summary>
+        /// Animates a sprite's scale for a pop effect and changes the sprite mid-animation.
+        /// </summary>
+        public static IEnumerator AnimateSpritePop(
+            Transform markerTransform,
+            SpriteRenderer spriteRenderer,
+            Sprite targetSprite,
+            float popScaleFactor,
+            float upDuration,
+            float downDuration)
+        {
+            if (markerTransform == null || spriteRenderer == null) yield break;
+
+            Vector3 originalScale = markerTransform.localScale;
+            Vector3 poppedScale = originalScale * popScaleFactor;
+
+            // Pop up animation
+            yield return AnimateScale(markerTransform, originalScale, poppedScale, upDuration);
+
+            // Change sprite
+            spriteRenderer.sprite = targetSprite;
+
+            // Pop down animation
+            yield return AnimateScale(markerTransform, poppedScale, originalScale, downDuration);
+        }
+
+        /// <summary>
+        /// Animates the scale and opacity of car part SpriteRenderers for an upgrade effect.
+        /// </summary>
+        public static IEnumerator AnimateCarPartUpgrade(
+            SpriteRenderer carBodyRenderer,
+            SpriteRenderer frontWheelRenderer,
+            SpriteRenderer rearWheelRenderer,
+            System.Action onMidpointAction,
+            float totalDuration,
+            float targetScaleMultiplier,
+            float targetAlpha)
+        {
+            if (carBodyRenderer == null || frontWheelRenderer == null || rearWheelRenderer == null) yield break;
+
+            Vector3 initialBodyScale = carBodyRenderer.transform.localScale;
+            Vector3 initialFrontWheelScale = frontWheelRenderer.transform.localScale;
+            Vector3 initialRearWheelScale = rearWheelRenderer.transform.localScale;
+            Color initialBodyColor = carBodyRenderer.color;
+            Color initialWheelColor = frontWheelRenderer.color;
+
+            float halfDuration = totalDuration / 2f;
+
+            // Phase 1: Scale down and fade out
+            yield return AnimateOverTime(halfDuration,
+                smoothT =>
+                {
+                    float currentScale = Mathf.Lerp(1f, targetScaleMultiplier, smoothT);
+                    float currentAlpha = Mathf.Lerp(initialBodyColor.a, targetAlpha, smoothT);
+                    ApplyRendererProperties(carBodyRenderer, initialBodyScale * currentScale, initialBodyColor, currentAlpha);
+                    ApplyRendererProperties(frontWheelRenderer, initialFrontWheelScale * currentScale, initialWheelColor, currentAlpha);
+                    ApplyRendererProperties(rearWheelRenderer, initialRearWheelScale * currentScale, initialWheelColor, currentAlpha);
+                },
+                () => // onComplete
+                {
+                    float finalScale = targetScaleMultiplier;
+                    ApplyRendererProperties(carBodyRenderer, initialBodyScale * finalScale, initialBodyColor, targetAlpha);
+                    ApplyRendererProperties(frontWheelRenderer, initialFrontWheelScale * finalScale, initialWheelColor, targetAlpha);
+                    ApplyRendererProperties(rearWheelRenderer, initialRearWheelScale * finalScale, initialWheelColor, targetAlpha);
+                }
+            );
+
+            onMidpointAction?.Invoke();
+
+            // After sprites change, their base color might be different.
+            Color bodyColorAfterMidpoint = carBodyRenderer.color;
+            Color wheelColorAfterMidpoint = frontWheelRenderer.color;
+
+            // Phase 2: Scale up and fade in
+            yield return AnimateOverTime(halfDuration,
+                smoothT =>
+                {
+                    float currentScale = Mathf.Lerp(targetScaleMultiplier, 1f, smoothT);
+                    float currentAlpha = Mathf.Lerp(targetAlpha, 1.0f, smoothT);
+                    ApplyRendererProperties(carBodyRenderer, initialBodyScale * currentScale, bodyColorAfterMidpoint, currentAlpha);
+                    ApplyRendererProperties(frontWheelRenderer, initialFrontWheelScale * currentScale, wheelColorAfterMidpoint, currentAlpha);
+                    ApplyRendererProperties(rearWheelRenderer, initialRearWheelScale * currentScale, wheelColorAfterMidpoint, currentAlpha);
+                },
+                () => // onComplete
+                {
+                    ApplyRendererProperties(carBodyRenderer, initialBodyScale, bodyColorAfterMidpoint, 1.0f);
+                    ApplyRendererProperties(frontWheelRenderer, initialFrontWheelScale, wheelColorAfterMidpoint, 1.0f);
+                    ApplyRendererProperties(rearWheelRenderer, initialRearWheelScale, wheelColorAfterMidpoint, 1.0f);
+                }
+            );
+        }
+
+        public static IEnumerator BreatheElement(Transform elementTransform, float breatheDuration, float breatheMagnitude, Vector3 baseScale)
+        {
+            if (elementTransform == null) yield break;
+            float timer = 0f;
+
+            while (elementTransform != null && elementTransform.gameObject.activeInHierarchy)
+            {
+                timer += Time.deltaTime;
+                float scaleFactor = 1f + Mathf.Sin(timer * Mathf.PI * 2f / breatheDuration) * breatheMagnitude;
+                elementTransform.localScale = baseScale * scaleFactor;
+                yield return null;
+            }
+            // Optionally reset scale if needed when coroutine stops externally
+            // if (elementTransform != null) elementTransform.localScale = baseScale;
+        }
         #endregion
 
         #region Helper Methods
+
         /// <summary>
-        /// Reusable animation for scale and fade effects
+        /// Generic coroutine to animate properties over a duration using SmoothStep.
         /// </summary>
-        private static IEnumerator AnimateScaleAndFade(
-            Transform transform, Vector3 startScale, Vector3 endScale,
-            CanvasGroup canvasGroup, float startAlpha, float endAlpha,
-            Image backgroundOverlay = null, float startBgAlpha = 0f, float endBgAlpha = 0f,
-            float duration = 0.3f)
+        private static IEnumerator AnimateOverTime(float duration, System.Action<float> onUpdate, System.Action onComplete = null)
         {
             float time = 0f;
-
             while (time < duration)
             {
                 time += Time.deltaTime;
                 float t = Mathf.Clamp01(time / duration);
-                float smoothT = SmoothStep(t);
-
-                // Update scale
-                transform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
-
-                // Update alpha
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
-
-                // Update background if provided
-                if (backgroundOverlay != null)
-                {
-                    Color bgColor = backgroundOverlay.color;
-                    bgColor.a = Mathf.Lerp(startBgAlpha, endBgAlpha, smoothT);
-                    backgroundOverlay.color = bgColor;
-                }
-
+                onUpdate(SmoothStep(t));
                 yield return null;
             }
+            onComplete?.Invoke();
+        }
 
-            // Ensure final values are set exactly
-            transform.localScale = endScale;
-            canvasGroup.alpha = endAlpha;
-
-            if (backgroundOverlay != null)
-            {
-                Color bgColor = backgroundOverlay.color;
-                bgColor.a = endBgAlpha;
-                backgroundOverlay.color = bgColor;
-            }
+        /// <summary>
+        /// Reusable animation for scale and fade effects
+        /// </summary>
+        private static IEnumerator AnimateScaleAndFade(
+            Transform targetTransform, Vector3 startScale, Vector3 endScale,
+            CanvasGroup canvasGroup, float startAlpha, float endAlpha,
+            Image backgroundOverlay = null, float startBgAlpha = 0f, float endBgAlpha = 0f,
+            float duration = 0.3f)
+        {
+            yield return AnimateOverTime(duration,
+                smoothT =>
+                {
+                    if (targetTransform != null)
+                        targetTransform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
+                    if (canvasGroup != null)
+                        canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
+                    if (backgroundOverlay != null)
+                    {
+                        Color bgColor = backgroundOverlay.color;
+                        bgColor.a = Mathf.Lerp(startBgAlpha, endBgAlpha, smoothT);
+                        backgroundOverlay.color = bgColor;
+                    }
+                },
+                () => // onComplete
+                {
+                    if (targetTransform != null)
+                        targetTransform.localScale = endScale;
+                    if (canvasGroup != null)
+                        canvasGroup.alpha = endAlpha;
+                    if (backgroundOverlay != null)
+                    {
+                        Color bgColor = backgroundOverlay.color;
+                        bgColor.a = endBgAlpha;
+                        backgroundOverlay.color = bgColor;
+                    }
+                }
+            );
         }
 
         /// <summary>
         /// Animates only the scale of an object
         /// </summary>
-        private static IEnumerator AnimateScale(Transform transform, Vector3 startScale, Vector3 endScale, float duration)
+        public static IEnumerator AnimateScale(Transform targetTransform, Vector3 startScale, Vector3 endScale, float duration)
         {
-            float time = 0f;
-
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                float t = Mathf.Clamp01(time / duration);
-                transform.localScale = Vector3.Lerp(startScale, endScale, SmoothStep(t));
-                yield return null;
-            }
-
-            transform.localScale = endScale;
-        }
-
-        /// <summary>
-        /// Reusable animation for position and fade effects.
-        /// </summary>
-        private static IEnumerator AnimatePositionAndFade(
-            Transform transform, Vector3 startPos, Vector3 endPos,
-            CanvasGroup canvasGroup, float startAlpha, float endAlpha,
-            float duration = 0.3f)
-        {
-            float time = 0f;
-            // Ensure canvasGroup is not null for safety, though GetOrAddCanvasGroup should handle it.
-            if (canvasGroup == null) canvasGroup = GetOrAddCanvasGroup(transform.gameObject);
-
-
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                float t = Mathf.Clamp01(time / duration);
-                float smoothT = SmoothStep(t); // This line applies the easing
-
-                // Update position
-                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
-
-                // Update alpha
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
-
-                yield return null;
-            }
-
-            // Ensure final values are set exactly
-            transform.localPosition = endPos;
-            canvasGroup.alpha = endAlpha;
-        }
-
-        private static IEnumerator AnimatePositionOnly(Transform transform, Vector3 startPos, Vector3 endPos, float duration)
-        {
-            float time = 0f;
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                float t = Mathf.Clamp01(time / duration);
-                float smoothT = SmoothStep(t);
-                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
-                yield return null;
-            }
-            transform.localPosition = endPos; // Ensure final position is set
+            if (targetTransform == null) yield break;
+            yield return AnimateOverTime(duration,
+                smoothT => targetTransform.localScale = Vector3.Lerp(startScale, endScale, smoothT),
+                () => targetTransform.localScale = endScale
+            );
         }
 
         private static IEnumerator AnimatePositionFadeScale(
-            Transform transform, Vector3 startPos, Vector3 endPos,
+            Transform targetTransform, Vector3 startPos, Vector3 endPos,
             CanvasGroup canvasGroup, float startAlpha, float endAlpha,
             Vector3 startScale, Vector3 endScale,
             float duration = 0.3f)
         {
-            float time = 0f;
-            if (canvasGroup == null) canvasGroup = GetOrAddCanvasGroup(transform.gameObject);
+            if (targetTransform == null) yield break;
+            if (canvasGroup == null) canvasGroup = GetOrAddCanvasGroup(targetTransform.gameObject);
 
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                float t = Mathf.Clamp01(time / duration);
-                float smoothT = SmoothStep(t);
-
-                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
-                transform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
-
-                yield return null;
-            }
-
-            transform.localPosition = endPos;
-            transform.localScale = endScale;
-            canvasGroup.alpha = endAlpha;
+            yield return AnimateOverTime(duration,
+                smoothT =>
+                {
+                    targetTransform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
+                    targetTransform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
+                    canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT);
+                },
+                () => // onComplete
+                {
+                    targetTransform.localPosition = endPos;
+                    targetTransform.localScale = endScale;
+                    canvasGroup.alpha = endAlpha;
+                }
+            );
         }
 
         /// <summary>
-        /// Animates the position and scale of an object.
+        /// Animates the scale and alpha of a canvas group and its associated transform.
         /// </summary>
-        private static IEnumerator AnimatePositionScale(Transform transform, Vector3 startPos, Vector3 endPos, Vector3 startScale, Vector3 endScale, float duration)
+        public static IEnumerator AnimateGroupScaleAndFade(CanvasGroup group, Transform transformToScale, Vector3 targetScale, float targetAlpha, float duration)
         {
-            float time = 0f;
-            while (time < duration)
+            if (group == null || transformToScale == null) yield break;
+
+            Vector3 startScale = transformToScale.localScale;
+            float startAlpha = group.alpha;
+
+            yield return AnimateOverTime(duration,
+                smoothT =>
+                {
+                    transformToScale.localScale = Vector3.Lerp(startScale, targetScale, smoothT);
+                    group.alpha = Mathf.Lerp(startAlpha, targetAlpha, smoothT);
+                },
+                () => // onComplete
+                {
+                    transformToScale.localScale = targetScale;
+                    group.alpha = targetAlpha;
+                }
+            );
+        }
+
+        /// <summary>
+        /// Animates the alpha of a CanvasGroup.
+        /// </summary>
+        public static IEnumerator AnimateFade(CanvasGroup canvasGroup, float startAlpha, float endAlpha, float duration)
+        {
+            if (canvasGroup == null) yield break;
+            yield return AnimateOverTime(duration,
+                smoothT => canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, smoothT),
+                () => canvasGroup.alpha = endAlpha
+            );
+        }
+
+        /// <summary>
+        /// Shows a panel temporarily with fade-in and fade-out, optionally hiding another panel.
+        /// </summary>
+        public static IEnumerator ShowTemporaryPanel(
+            GameObject panelToShow,
+            float displayTime,
+            float fadeInDuration,
+            float fadeOutDuration,
+            System.Action onComplete = null,
+            GameObject panelToHideInitially = null)
+        {
+            if (panelToShow == null)
             {
-                time += Time.deltaTime;
-                float t = Mathf.Clamp01(time / duration);
-                float smoothT = SmoothStep(t);
-                transform.localPosition = Vector3.Lerp(startPos, endPos, smoothT);
-                transform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
-                yield return null;
+                onComplete?.Invoke();
+                yield break;
             }
-            transform.localPosition = endPos;
-            transform.localScale = endScale;
+
+            if (panelToHideInitially != null)
+            {
+                panelToHideInitially.SetActive(false);
+            }
+
+            panelToShow.SetActive(true);
+            CanvasGroup panelCanvasGroup = GetOrAddCanvasGroup(panelToShow);
+
+            // Fade In
+            panelCanvasGroup.alpha = 0f;
+            yield return AnimateFade(panelCanvasGroup, 0f, 1f, fadeInDuration);
+
+            // Hold
+            float holdTime = displayTime - fadeInDuration - fadeOutDuration;
+            if (holdTime > 0)
+            {
+                yield return new WaitForSeconds(holdTime);
+            }
+
+            // Fade Out
+            yield return AnimateFade(panelCanvasGroup, 1f, 0f, fadeOutDuration);
+
+            panelToShow.SetActive(false);
+            onComplete?.Invoke();
         }
 
         /// <summary>
@@ -441,6 +535,18 @@ namespace NodeMap.UI
         {
             // Quintic SmoothStep: 6t^5 - 15t^4 + 10t^3
             return t * t * t * (t * (t * 6f - 15f) + 10f);
+        }
+
+        /// <summary>
+        /// Helper to apply scale and opacity to a SpriteRenderer.
+        /// </summary>
+        private static void ApplyRendererProperties(SpriteRenderer renderer, Vector3 scale, Color baseColor, float alpha)
+        {
+            if (renderer == null) return;
+            renderer.transform.localScale = scale;
+            Color newColor = baseColor;
+            newColor.a = alpha;
+            renderer.color = newColor;
         }
         #endregion
     }

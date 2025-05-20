@@ -293,7 +293,7 @@ namespace NodeMap
         private void HandleIncorrectAnswer(int selectedIndex)
         {
             // Visual feedback - shake the button
-            StartCoroutine(UIAnimator.ShakeElement(optionButtons[selectedIndex].transform));
+            StartCoroutine(UIAnimator.ShakeElement(optionButtons[selectedIndex].transform, UIAnimator.ShakeDuration, UIAnimator.ShakeMagnitude));
 
             if (incorrectFeedbackPanel != null)
             {
@@ -336,39 +336,15 @@ namespace NodeMap
         #region UI Transitions
         private IEnumerator ShowTemporaryFeedback(GameObject feedbackPanel, System.Action onComplete)
         {
-            // Hide quiz panel, show feedback
-            quizPanel.SetActive(false);
-            feedbackPanel.SetActive(true);
-
-            // Get or add canvas group
-            CanvasGroup feedbackCanvasGroup = feedbackPanel.GetComponent<CanvasGroup>();
-            if (feedbackCanvasGroup == null)
-                feedbackCanvasGroup = feedbackPanel.AddComponent<CanvasGroup>();
-
-            // Fade in
-            yield return FadeCanvasGroup(feedbackCanvasGroup, 0f, 1f, fadeInTime);
-
-            // Hold
-            yield return new WaitForSeconds(feedbackDisplayTime - (fadeInTime + fadeOutTime));
-
-            // Fade out
-            yield return FadeCanvasGroup(feedbackCanvasGroup, 1f, 0f, fadeOutTime);
-
-            // Cleanup and callback
-            feedbackPanel.SetActive(false);
-            onComplete?.Invoke();
-        }
-
-        private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float from, float to, float duration)
-        {
-            float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                canvasGroup.alpha = Mathf.Lerp(from, to, elapsed / duration);
-                yield return null;
-            }
-            canvasGroup.alpha = to; // Ensure final value
+            // Use the new UIAnimator.ShowTemporaryPanel
+            yield return UIAnimator.ShowTemporaryPanel(
+                feedbackPanel,
+                feedbackDisplayTime,
+                fadeInTime,
+                fadeOutTime,
+                onComplete,
+                quizPanel // Panel to hide initially
+            );
         }
 
         private void ShowSuccessPanel()

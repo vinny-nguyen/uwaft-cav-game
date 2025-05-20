@@ -131,12 +131,10 @@ namespace NodeMap.UI
         private IEnumerator AnimateIndicatorTransition(int newActiveIndex, int oldActiveIndex)
         {
             float halfDuration = transitionDuration * 0.5f;
-            // Define target scales based on Vector3.one, assuming this is the default full scale for the parent
             Vector3 fullScale = Vector3.one;
-            Vector3 shrunkScale = Vector3.one * scaleAmount;
+            Vector3 shrunkScale = Vector3.one * scaleAmount; // Use scaleAmount for consistency, not 0.8f directly
             Transform parentTransform = slideIndicatorsParent;
 
-            // Stop current breathing on the old active dot and reset its scale
             if (oldActiveIndex >= 0 && oldActiveIndex < spawnedDots.Count && spawnedDots[oldActiveIndex] != null)
             {
                 StopAnimation(ref activeDotBreathing);
@@ -144,19 +142,8 @@ namespace NodeMap.UI
                 if (oldDotVisual != null) oldDotVisual.localScale = Vector3.one;
             }
 
-            // Animate parent from its current scale to shrunkScale
-            Vector3 currentActualScale = parentTransform.localScale;
-            float time = 0f;
-            while (time < halfDuration)
-            {
-                time += Time.deltaTime;
-                // Using Mathf.SmoothStep for ease-in/out.
-                // Replace with UIAnimator.SmoothStep if it's made public and a different curve is desired.
-                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(time / halfDuration));
-                parentTransform.localScale = Vector3.Lerp(currentActualScale, shrunkScale, t);
-                yield return null;
-            }
-            parentTransform.localScale = shrunkScale;
+            // Animate parent from its current scale to shrunkScale using UIAnimator.AnimateScale
+            yield return UIAnimator.AnimateScale(parentTransform, parentTransform.localScale, shrunkScale, halfDuration);
 
             // Update sprites to new state (while scaled down)
             for (int i = 0; i < spawnedDots.Count; i++)
@@ -170,21 +157,14 @@ namespace NodeMap.UI
                 {
                     img.sprite = (i == newActiveIndex) ? activeDotSprite : inactiveDotSprite;
                 }
-                dotVisual.localScale = Vector3.one; // Ensure individual dots are at normal scale within parent
+                dotVisual.localScale = Vector3.one; 
             }
 
-            // Animate parent from shrunkScale back to fullScale
-            time = 0f;
-            while (time < halfDuration)
-            {
-                time += Time.deltaTime;
-                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(time / halfDuration));
-                parentTransform.localScale = Vector3.Lerp(shrunkScale, fullScale, t);
-                yield return null;
-            }
-            parentTransform.localScale = fullScale;
+            // Animate parent from shrunkScale back to fullScale using UIAnimator.AnimateScale
+            yield return UIAnimator.AnimateScale(parentTransform, shrunkScale, fullScale, halfDuration);
 
             StartBreathingAnimation(newActiveIndex);
+            // lastActiveIndex will be updated by the caller (UpdateActiveIndicator)
         }
 
         /// <summary>
@@ -205,58 +185,18 @@ namespace NodeMap.UI
         private IEnumerator AnimateVisibility(bool visible)
         {
             float targetAlpha = visible ? 1f : 0f;
-            float startAlpha = slideIndicatorsCanvasGroup.alpha;
-            Vector3 startScale = slideIndicatorsParent.localScale;
             Vector3 targetScale = visible ? Vector3.one : Vector3.one * scaleAmount;
 
-            yield return ScaleAndFadeGroup(slideIndicatorsCanvasGroup,
-                startScale, targetScale,
-                startAlpha, targetAlpha,
-                transitionDuration);
+            // Use the new UIAnimator.AnimateGroupScaleAndFade
+            yield return UIAnimator.AnimateGroupScaleAndFade(
+                slideIndicatorsCanvasGroup,
+                slideIndicatorsParent, // Pass the transform to scale
+                targetScale,
+                targetAlpha,
+                transitionDuration
+            );
 
-            // Only deactivate after animation if hiding
             if (!visible) slideIndicatorsParent.gameObject.SetActive(false);
-        }
-
-        /// <summary>
-        /// Animates the scale and alpha of a canvas group
-        /// </summary>
-        private IEnumerator ScaleAndFadeGroup(CanvasGroup group, Vector3 startScale, Vector3 targetScale,
-                                              float startAlpha, float targetAlpha, float duration)
-        {
-            float time = 0f;
-            Transform parentTransform = group.transform;
-
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                float t = Mathf.Clamp01(time / duration);
-
-                parentTransform.localScale = Vector3.Lerp(startScale, targetScale, t);
-                group.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-
-                yield return null;
-            }
-
-            // Ensure we hit the target values exactly
-            parentTransform.localScale = targetScale;
-            group.alpha = targetAlpha;
-        }
-
-        /// <summary>
-        /// Animates a dot "breathing" (pulsing scale)
-        /// </summary>
-        private IEnumerator BreatheDot(Transform dotTransform)
-        {
-            float timer = 0f;
-
-            while (dotTransform != null && dotTransform.gameObject.activeInHierarchy)
-            {
-                timer += Time.deltaTime;
-                float scale = 1f + Mathf.Sin(timer * Mathf.PI * 2f / breatheDuration) * breatheMagnitude;
-                dotTransform.localScale = Vector3.one * scale;
-                yield return null;
-            }
         }
         #endregion
 
@@ -307,7 +247,8 @@ namespace NodeMap.UI
                 Transform dotVisual = spawnedDots[activeIndex].transform.Find("DotVisual");
                 if (dotVisual != null)
                 {
-                    activeDotBreathing = StartCoroutine(BreatheDot(dotVisual));
+                    // Call the new UIAnimator.BreatheElement
+                    activeDotBreathing = StartCoroutine(UIAnimator.BreatheElement(dotVisual, breatheDuration, breatheMagnitude, Vector3.one));
                 }
             }
         }

@@ -91,7 +91,7 @@ namespace NodeMap
             // Check if node can be interacted with
             if (!IsNodeInteractable())
             {
-                StartCoroutine(ShakeNode());
+                StartCoroutine(UI.UIAnimator.ShakeElement(transform, 0.15f, 0.15f, 50f));
                 return;
             }
 
@@ -133,27 +133,7 @@ namespace NodeMap
         /// </summary>
         public void StartShake()
         {
-            StartCoroutine(ShakeNode());
-        }
-
-        private IEnumerator ShakeNode()
-        {
-            float shakeDuration = 0.15f;
-            float shakeMagnitude = 0.15f;
-            Vector3 originalPosition = transform.localPosition;
-            float elapsed = 0;
-
-            while (elapsed < shakeDuration)
-            {
-                elapsed += Time.deltaTime;
-                float diminish = 1f - (elapsed / shakeDuration);
-                float offsetX = Mathf.Sin(elapsed * 50f) * shakeMagnitude * diminish;
-
-                transform.localPosition = originalPosition + new Vector3(offsetX, 0, 0);
-                yield return null;
-            }
-
-            transform.localPosition = originalPosition;
+            StartCoroutine(UI.UIAnimator.ShakeElement(transform, 0.15f, 0.15f, 50f));
         }
     }
 }

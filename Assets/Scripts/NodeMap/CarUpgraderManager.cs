@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
+using NodeMap.UI; // Added using directive
 
 namespace NodeMap
 {
@@ -42,6 +43,8 @@ namespace NodeMap
         [Header("Animation")]
         [SerializeField] private float upgradeAnimationDuration = 1.0f;
         [SerializeField] private ParticleSystem upgradeParticles;
+        [SerializeField] private float animationScaleFactor = 0.8f; // Scale to animate to/from
+        [SerializeField] private float animationAlphaValue = 0.5f; // Alpha to animate to/from
 
         #endregion
 
@@ -160,7 +163,6 @@ namespace NodeMap
                 return;
             }
 
-            // Keep this check as it's for direct external calls to UpgradeCar
             if (upgradeIndex < 0 || upgradeIndex >= carUpgrades.Count)
             {
                 DebugLog($"Invalid upgrade index: {upgradeIndex}", LogType.Error);
@@ -170,7 +172,18 @@ namespace NodeMap
             try
             {
                 DebugLog($"Starting animation for upgrade to {carUpgrades[upgradeIndex].upgradeName}");
-                StartCoroutine(AnimateUpgrade(upgradeIndex));
+                
+                System.Action onMidpoint = () => ApplyUpgrade(upgradeIndex, true);
+
+                StartCoroutine(UIAnimator.AnimateCarPartUpgrade(
+                    carBodyRenderer,
+                    frontWheelRenderer,
+                    rearWheelRenderer,
+                    onMidpoint,
+                    upgradeAnimationDuration,
+                    animationScaleFactor,
+                    animationAlphaValue
+                ));
             }
             catch (System.Exception e)
             {
@@ -206,68 +219,6 @@ namespace NodeMap
                 DebugLog("Playing upgrade particles");
                 upgradeParticles.Play();
             }
-        }
-
-        #endregion
-
-        #region Animation
-
-        private IEnumerator AnimateUpgrade(int upgradeIndex)
-        {
-            DebugLog("Starting upgrade animation");
-            Vector3 originalBodyScale = carBodyRenderer.transform.localScale;
-            Vector3 originalFrontWheelScale = frontWheelRenderer.transform.localScale;
-            Vector3 originalRearWheelScale = rearWheelRenderer.transform.localScale;
-
-            float halfDuration = upgradeAnimationDuration / 2f;
-
-            // First phase - scale down and fade
-            DebugLog("Animation phase 1: Scale down");
-            for (float t = 0; t < halfDuration; t += Time.deltaTime)
-            {
-                float progress = t / halfDuration;
-                float scale = Mathf.Lerp(1f, 0.8f, progress);
-                float alpha = Mathf.Lerp(1f, 0.5f, progress);
-
-                ApplyScaleAndOpacity(scale, alpha, originalBodyScale, originalFrontWheelScale, originalRearWheelScale);
-                yield return null;
-            }
-
-            // Apply the upgrade
-            DebugLog("Animation midpoint: Applying new sprites");
-            ApplyUpgrade(upgradeIndex, true);
-
-            // Second phase - scale back up
-            DebugLog("Animation phase 2: Scale up");
-            for (float t = 0; t < halfDuration; t += Time.deltaTime)
-            {
-                float progress = t / halfDuration;
-                float scale = Mathf.Lerp(0.8f, 1f, progress);
-                float alpha = Mathf.Lerp(0.5f, 1f, progress);
-
-                ApplyScaleAndOpacity(scale, alpha, originalBodyScale, originalFrontWheelScale, originalRearWheelScale);
-                yield return null;
-            }
-
-            // Ensure final state is perfect
-            ApplyScaleAndOpacity(1f, 1f, originalBodyScale, originalFrontWheelScale, originalRearWheelScale);
-            DebugLog("Animation complete");
-        }
-
-        private void ApplyScaleAndOpacity(float scale, float alpha, Vector3 originalBodyScale, Vector3 originalFrontWheelScale, Vector3 originalRearWheelScale)
-        {
-            carBodyRenderer.transform.localScale = originalBodyScale * scale;
-            frontWheelRenderer.transform.localScale = originalFrontWheelScale * scale;
-            rearWheelRenderer.transform.localScale = originalRearWheelScale * scale;
-
-            Color bodyColor = carBodyRenderer.color;
-            bodyColor.a = alpha;
-            carBodyRenderer.color = bodyColor;
-
-            Color wheelColor = frontWheelRenderer.color;
-            wheelColor.a = alpha;
-            frontWheelRenderer.color = wheelColor;
-            rearWheelRenderer.color = wheelColor;
         }
 
         #endregion
