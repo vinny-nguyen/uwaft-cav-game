@@ -40,6 +40,16 @@ namespace NodeMap
         [SerializeField] private Image dimmerPanel;
         [SerializeField] private float spotlightRadius = 100f;
         [SerializeField] private Material spotlightMaterial;
+        [SerializeField] private float spotlightPulseSpeed = 1f;
+        [SerializeField] private float spotlightPulseMagnitude = 0.1f; // Percentage of base radius
+
+
+        [Header("Engagement Enhancements")]
+        [SerializeField] private float typewriterSpeed = 0.1f; // Time between characters
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip tutorialStartSound;
+        [SerializeField] private AudioClip stepAdvanceSound;
+        [SerializeField] private AudioClip tutorialEndSound;
         #endregion
 
         #region Private Fields
@@ -47,7 +57,10 @@ namespace NodeMap
         private int currentStep = 0;
         private bool tutorialActive = false;
         private Coroutine arrowAnimationCoroutine;
+        private Coroutine typeMessageCoroutine;
         private Camera mainCamera;
+        private float pulseTimer = 0f;
+        private bool isTypingMessage = false;
         #endregion
 
         #region Unity Lifecycle
@@ -66,6 +79,13 @@ namespace NodeMap
         private void Update()
         {
             UpdateArrowPosition();
+
+            if (tutorialActive && dimmerPanel != null && dimmerPanel.gameObject.activeInHierarchy)
+            {
+                pulseTimer += Time.deltaTime;
+                // UpdateSpotlight is called via UpdateArrowPosition -> PositionArrowAtTarget,
+                // so the pulse effect will be updated.
+            }
         }
         #endregion
 
@@ -80,6 +100,16 @@ namespace NodeMap
                 tutorialCanvasGroup.alpha = 0f;
                 tutorialCanvasGroup.gameObject.SetActive(false);
             }
+
+            if (continueText != null)
+                continueText.gameObject.SetActive(false);
+
+            // Setup AudioSource
+            if (audioSource == null)
+                audioSource = GetComponent<AudioSource>();
+            if (audioSource == null) // If still null, add one
+                audioSource = gameObject.AddComponent<AudioSource>();
+
 
             // Setup spotlight material
             if (dimmerPanel != null && spotlightMaterial != null)
@@ -101,7 +131,8 @@ namespace NodeMap
                 "These are nodes. Click on them to learn about cars!",
                 firstNodeTransform,
                 false,
-                Vector2.zero
+                new Vector2(16.13f, 7.28f),
+                0f // Default rotation
             ));
 
             // Step 2: Show the goal
@@ -109,7 +140,8 @@ namespace NodeMap
                 "This is your goal. Complete all nodes to reach the final destination!",
                 finalNodeTransform,
                 false,
-                Vector2.zero
+                new Vector2(-233.94f, -15.61f),
+                78.79f // Default rotation
             ));
 
             // Step 3: Drive button
@@ -117,7 +149,8 @@ namespace NodeMap
                 "Click this button to drive when you have completed a node!",
                 driveButton,
                 true,
-                new Vector2(30, 60)
+                new Vector2(-105.51f, 52.11f),
+                80.61f
             ));
 
             // Step 4: Home button
@@ -125,7 +158,8 @@ namespace NodeMap
                 "Click this button to go back to the main menu.",
                 homeButton,
                 true,
-                new Vector2(50, 60)
+                new Vector2(137.57f, -216.42f),
+                270.95f
             ));
         }
         #endregion
@@ -153,6 +187,7 @@ namespace NodeMap
 
             tutorialActive = true;
             currentStep = 0;
+            pulseTimer = 0f; // Reset pulse timer for a consistent start
 
             // Enable components
             tutorialCanvasGroup.gameObject.SetActive(true);
@@ -163,6 +198,7 @@ namespace NodeMap
                 clickBlocker.color = new Color(0, 0, 0, 0.01f); // Invisible but blocks raycasts
             }
 
+            PlaySound(tutorialStartSound);
             // Start animation
             StartCoroutine(FadeInTutorial());
         }
@@ -176,6 +212,8 @@ namespace NodeMap
 
             if (arrowAnimationCoroutine != null)
                 StopCoroutine(arrowAnimationCoroutine);
+            if (typeMessageCoroutine != null)
+                StopCoroutine(typeMessageCoroutine);
 
             // Disable click blocker
             if (clickBlocker != null)
@@ -183,6 +221,8 @@ namespace NodeMap
 
             // Fade out and hide
             StartCoroutine(FadeOutTutorial());
+
+            PlaySound(tutorialEndSound);
 
             // Mark tutorial as completed
             PlayerPrefs.SetInt(playerPrefKey, 1);
@@ -229,6 +269,7 @@ namespace NodeMap
         /// </summary>
         private void AdvanceToNextStep()
         {
+            PlaySound(stepAdvanceSound);
             currentStep++;
 
             if (currentStep >= tutorialSteps.Count)
@@ -250,14 +291,27 @@ namespace NodeMap
 
             TutorialStep step = tutorialSteps[currentStep];
 
-            // Update text
+            // Hide continue text initially
+            if (continueText != null)
+                continueText.gameObject.SetActive(false);
+
+            // Animate text
             if (messageText != null)
-                messageText.text = step.Message;
+            {
+                if (typeMessageCoroutine != null)
+                    StopCoroutine(typeMessageCoroutine);
+                typeMessageCoroutine = StartCoroutine(AnimateTextMessage(step.Message));
+            }
+            else if (continueText != null) // If no message text, show continue immediately
+            {
+                continueText.gameObject.SetActive(true);
+            }
+
 
             // Position arrow and panel
             if (step.Target != null)
             {
-                PositionArrowAtTarget(step.Target, step.IsUIElement, step.ArrowOffset);
+                PositionArrowAtTarget(step.Target, step.IsUIElement, step.ArrowOffset, step.ArrowRotation);
 
                 // Stop existing animation if any
                 if (arrowAnimationCoroutine != null)
@@ -284,7 +338,8 @@ namespace NodeMap
                 PositionArrowAtTarget(
                     currentTutorialStep.Target,
                     currentTutorialStep.IsUIElement,
-                    currentTutorialStep.ArrowOffset
+                    currentTutorialStep.ArrowOffset,
+                    currentTutorialStep.ArrowRotation
                 );
             }
         }
@@ -292,7 +347,7 @@ namespace NodeMap
         /// <summary>
         /// Positions the arrow to point at a target
         /// </summary>
-        private void PositionArrowAtTarget(Transform target, bool isUIElement, Vector2 customOffset)
+        private void PositionArrowAtTarget(Transform target, bool isUIElement, Vector2 customOffset, float arrowRotation)
         {
             if (target == null || mainCamera == null || arrowImage == null)
                 return;
@@ -308,6 +363,8 @@ namespace NodeMap
 
             // Set arrow position
             arrowImage.anchoredPosition = localPosition + defaultOffset + customOffset;
+            arrowImage.localEulerAngles = new Vector3(0, 0, arrowRotation);
+
 
             // Update spotlight effect
             UpdateSpotlight(target, isUIElement);
@@ -415,13 +472,30 @@ namespace NodeMap
                 ? GetViewportPositionForUIElement(target)
                 : mainCamera.WorldToViewportPoint(target.position);
 
-            // Apply to material
-            float aspectRatio = (float)Screen.width / Screen.height;
-            float normalizedRadius = spotlightRadius / Screen.height;
+            // Common pulse factor
+            float sinPulse = Mathf.Sin(pulseTimer * spotlightPulseSpeed); // Ranges from -1 to 1
 
+            // --- Radius Pulse ---
+            float baseNormalizedRadius = spotlightRadius / Screen.height;
+            float radiusPulseOffset = sinPulse * baseNormalizedRadius * spotlightPulseMagnitude;
+            float actualNormalizedRadius = baseNormalizedRadius + radiusPulseOffset;
+            // Clamp to avoid negative or excessively small radius
+            actualNormalizedRadius = Mathf.Max(actualNormalizedRadius, baseNormalizedRadius * (1.0f - spotlightPulseMagnitude * 0.9f));
+            actualNormalizedRadius = Mathf.Max(actualNormalizedRadius, 0.01f); // Absolute minimum
+
+            dimmerPanel.material.SetFloat("_Radius", actualNormalizedRadius);
+            dimmerPanel.material.SetFloat("_SoftEdge", actualNormalizedRadius * 0.2f); // Soft edge pulses with radius
+
+            // --- Alpha Pulse for "Glow" REMOVED ---
+            // The alpha of the material's _Color property is now controlled by 
+            // dimmerPanel.color.a (Image component's alpha), which is animated 
+            // during FadeInTutorial/FadeOutTutorial and remains constant during a step.
+            // We don't need to set _Color here if FadeIn/Out correctly sets dimmerPanel.color
+            // and that propagates to the material's _Color property.
+
+            // --- Other Shader Properties ---
+            float aspectRatio = (float)Screen.width / Screen.height;
             dimmerPanel.material.SetVector("_Center", new Vector4(viewportPosition.x, viewportPosition.y, 0, 0));
-            dimmerPanel.material.SetFloat("_Radius", normalizedRadius);
-            dimmerPanel.material.SetFloat("_SoftEdge", normalizedRadius * 0.2f);
             dimmerPanel.material.SetFloat("_AspectRatio", aspectRatio);
         }
 
@@ -455,17 +529,49 @@ namespace NodeMap
         {
             Vector2 originalPosition = arrowImage.anchoredPosition;
             float time = 0f;
+            // Store the initial Y to bob around, in case UpdateArrowPosition changes it
+            float initialY = originalPosition.y;
+            // Store the initial X as well if arrow rotation might affect perceived bobbing axis
+            float initialX = originalPosition.x;
+
 
             while (tutorialActive)
             {
                 time += Time.deltaTime;
-
-                // Create bobbing motion
+                // Bob relative to the current X, but the initial Y plus offset
                 float yOffset = Mathf.Sin(time * arrowBobSpeed) * arrowBobAmount;
-                arrowImage.anchoredPosition = originalPosition + new Vector2(0, yOffset);
+
+                // If arrow is rotated, bobbing might need to be adjusted based on rotation
+                // For simplicity, we'll keep bobbing on the local Y axis of the arrow's parent (Canvas)
+                // If the arrow itself is rotated, this yOffset will still be along the canvas's Y.
+                // If you want bobbing along the arrow's rotated "up", that's more complex.
+                arrowImage.anchoredPosition = new Vector2(arrowImage.anchoredPosition.x, initialY + yOffset);
+
 
                 yield return null;
             }
+        }
+
+        /// <summary>
+        /// Animates the tutorial message text using a typewriter effect.
+        /// </summary>
+        private IEnumerator AnimateTextMessage(string message)
+        {
+            if (messageText == null) yield break;
+
+            isTypingMessage = true;
+            messageText.text = "";
+            foreach (char letter in message.ToCharArray())
+            {
+                messageText.text += letter;
+                yield return new WaitForSeconds(typewriterSpeed);
+            }
+
+            // Show continue text after message is typed
+            if (continueText != null)
+                continueText.gameObject.SetActive(true);
+
+            isTypingMessage = false;
         }
 
         /// <summary>
@@ -473,12 +579,14 @@ namespace NodeMap
         /// </summary>
         private IEnumerator WaitForClick()
         {
-            // Delay to avoid accidental progression
-            yield return new WaitForSeconds(0.5f);
+            // Delay to avoid accidental progression if click initiated the tutorial step
+            // or to give user time to start reading.
+            yield return new WaitForSeconds(0.2f);
 
             while (tutorialActive)
             {
-                if (Input.GetMouseButtonDown(0))
+                // Wait until message is fully typed out before accepting click to advance
+                if (Input.GetMouseButtonDown(0) && !isTypingMessage)
                 {
                     AdvanceToNextStep();
                     break;
@@ -494,16 +602,15 @@ namespace NodeMap
         {
             // Set initial state
             tutorialCanvasGroup.alpha = 0f;
+            if (continueText != null) continueText.gameObject.SetActive(false);
+            if (messageText != null) messageText.text = ""; // Clear text before fade-in
+
 
             if (dimmerPanel != null)
             {
                 dimmerPanel.gameObject.SetActive(true);
                 dimmerPanel.color = new Color(0, 0, 0, 0);
             }
-
-            // Set text first
-            if (currentStep < tutorialSteps.Count && messageText != null)
-                messageText.text = tutorialSteps[currentStep].Message;
 
             // Fade in
             float timer = 0f;
@@ -534,6 +641,9 @@ namespace NodeMap
         {
             float timer = 0f;
 
+            if (continueText != null)
+                continueText.gameObject.SetActive(false);
+
             while (timer < fadeOutDuration)
             {
                 timer += Time.deltaTime;
@@ -554,6 +664,14 @@ namespace NodeMap
             if (dimmerPanel != null)
                 dimmerPanel.gameObject.SetActive(false);
         }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (audioSource != null && clip != null)
+            {
+                audioSource.PlayOneShot(clip);
+            }
+        }
         #endregion
     }
 
@@ -567,16 +685,22 @@ namespace NodeMap
         public Transform Target;
         public bool IsUIElement;
         public Vector2 ArrowOffset = Vector2.zero;
+        public float ArrowRotation = 0f; // Added for arrow rotation
 
         public TutorialStep(string message, Transform target, bool isUIElement = false)
-            : this(message, target, isUIElement, Vector2.zero) { }
+            : this(message, target, isUIElement, Vector2.zero, 0f) { }
 
         public TutorialStep(string message, Transform target, bool isUIElement, Vector2 arrowOffset)
+            : this(message, target, isUIElement, arrowOffset, 0f) { }
+
+
+        public TutorialStep(string message, Transform target, bool isUIElement, Vector2 arrowOffset, float arrowRotation)
         {
             Message = message;
             Target = target;
             IsUIElement = isUIElement;
             ArrowOffset = arrowOffset;
+            ArrowRotation = arrowRotation;
         }
     }
 }

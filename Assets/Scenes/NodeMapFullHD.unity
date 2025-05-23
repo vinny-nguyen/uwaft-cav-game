@@ -5299,6 +5299,13 @@ MonoBehaviour:
   dimmerPanel: {fileID: 963065709}
   spotlightRadius: 100
   spotlightMaterial: {fileID: 2100000, guid: adc0549ff6845bd4c85886bc7bac39b7, type: 2}
+  spotlightPulseSpeed: 1
+  spotlightPulseMagnitude: 0.1
+  typewriterSpeed: 0.05
+  audioSource: {fileID: 0}
+  tutorialStartSound: {fileID: 0}
+  stepAdvanceSound: {fileID: 0}
+  tutorialEndSound: {fileID: 0}
 --- !u!4 &584200641
 Transform:
   m_ObjectHideFlags: 0
@@ -6252,7 +6259,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -600, y: 50}
+  m_SizeDelta: {x: -800, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &771678960
 CanvasRenderer:
@@ -7870,7 +7877,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 200}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &932111412
@@ -8029,7 +8036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.56078434}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -17401,7 +17408,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1752264955
 MonoBehaviour:
