@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro; // Added for TextMeshProUGUI
 
 namespace NodeMap
 {
@@ -35,12 +36,16 @@ namespace NodeMap
         [Header("Tutorial")]
         [SerializeField] private TutorialManager tutorialManager;
         [SerializeField] private int firstNodeIndex = 0;
+
+        [Header("Feedback UI")] // Added Header for clarity
+        [SerializeField] private TextMeshProUGUI statusMessageText; // Reference for status messages
         #endregion
 
         #region Private Fields
         private readonly List<SplineStop> stops = new();
         private bool isMoving = false;
         private bool isMovingForward = true;
+        private Coroutine activeMessageCoroutine; // To manage the message display coroutine
         #endregion
 
         #region Unity Lifecycle
@@ -149,6 +154,14 @@ namespace NodeMap
             if (targetNode > currentNode && !IsNodeCompleted(currentNode))
             {
                 ShakeCurrentNode(currentNode);
+                if (statusMessageText != null)
+                {
+                    if (activeMessageCoroutine != null)
+                    {
+                        StopCoroutine(activeMessageCoroutine);
+                    }
+                    activeMessageCoroutine = StartCoroutine(UI.UIAnimator.ShowTemporaryMessage(statusMessageText, "Complete the current node first.", 1.5f, 0.25f));
+                }
                 return;
             }
 

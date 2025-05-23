@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro; // Added for TextMeshProUGUI
 
 namespace NodeMap.UI
 {
@@ -443,6 +444,88 @@ namespace NodeMap.UI
                 yield return null;
             }
             onComplete?.Invoke();
+        }
+
+        /// <summary>
+        /// Shows a temporary message using a TextMeshProUGUI element, with fade-in, hold, and fade-out.
+        /// </summary>
+        /// <param name="textElement">The TextMeshProUGUI element to display the message.</param>
+        /// <param name="message">The message string to display.</param>
+        /// <param name="holdDuration">How long the message stays fully visible (seconds).</param>
+        /// <param name="fadeDuration">Duration of the fade-in and fade-out animations (seconds).</param>
+        public static IEnumerator ShowTemporaryMessage(TextMeshProUGUI textElement, string message, float holdDuration, float fadeDuration)
+        {
+            if (textElement == null)
+            {
+                Debug.LogWarning("ShowTemporaryMessage: textElement is null.");
+                yield break;
+            }
+
+            // Store original state
+            Color originalColor = textElement.color;
+            string originalText = textElement.text;
+            bool wasGameObjectActive = textElement.gameObject.activeSelf;
+
+            // Prepare for animation
+            textElement.gameObject.SetActive(true);
+            textElement.text = message;
+
+            float targetAlpha = 1.0f; // Fade to fully opaque
+
+            // Set initial state for fade in (fully transparent)
+            Color currentColor = textElement.color;
+            currentColor.a = 0f;
+            textElement.color = currentColor;
+
+            // Fade In animation
+            yield return AnimateOverTime(fadeDuration,
+                smoothT => { // onUpdate
+                    if (textElement == null) return; // Guard against destruction
+                    Color c = textElement.color;
+                    c.a = Mathf.Lerp(0f, targetAlpha, smoothT);
+                    textElement.color = c;
+                },
+                () => { // onComplete
+                    if (textElement == null) return;
+                    Color c = textElement.color;
+                    c.a = targetAlpha;
+                    textElement.color = c;
+                }
+            );
+
+            // Hold
+            if (textElement != null) // Check before waiting
+            {
+                 yield return new WaitForSeconds(holdDuration);
+            }
+
+
+            // Fade Out animation
+            // Current alpha is targetAlpha (e.g., 1.0f)
+            float fadeOutSourceAlpha = (textElement != null) ? textElement.color.a : targetAlpha;
+
+            yield return AnimateOverTime(fadeDuration,
+                smoothT => { // onUpdate
+                    if (textElement == null) return;
+                    Color c = textElement.color;
+                    c.a = Mathf.Lerp(fadeOutSourceAlpha, 0f, smoothT);
+                    textElement.color = c;
+                },
+                () => { // onComplete
+                    if (textElement == null) return;
+                    Color c = textElement.color;
+                    c.a = 0f;
+                    textElement.color = c;
+                }
+            );
+
+            // Cleanup: Restore original state
+            if (textElement != null)
+            {
+                textElement.text = originalText; // Or clear it: textElement.text = "";
+                textElement.color = originalColor;
+                textElement.gameObject.SetActive(wasGameObjectActive);
+            }
         }
 
         /// <summary>

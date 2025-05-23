@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using TMPro; // Added for TextMeshProUGUI
 
 namespace NodeMap
 {
@@ -20,12 +21,16 @@ namespace NodeMap
         [Header("Node Info")]
         public int nodeIndex;
 
+        [Header("Feedback UI")] // Added Header for clarity
+        [SerializeField] private TextMeshProUGUI statusMessageText; // Reference to the TextMeshProUGUI for messages
+
         // Private fields
         private Vector3 originalScale;
         private bool isHovered = false;
         private SpriteRenderer spriteRenderer;
         private bool isClickable = false;
         private NodeVisualController visualController;
+        private Coroutine activeMessageCoroutine; // To manage the message display coroutine
 
         private void Start()
         {
@@ -92,6 +97,14 @@ namespace NodeMap
             if (!IsNodeInteractable())
             {
                 StartCoroutine(UI.UIAnimator.ShakeElement(transform, 0.15f, 0.15f, 50f));
+                if (statusMessageText != null)
+                {
+                    if (activeMessageCoroutine != null)
+                    {
+                        StopCoroutine(activeMessageCoroutine);
+                    }
+                    activeMessageCoroutine = StartCoroutine(UI.UIAnimator.ShowTemporaryMessage(statusMessageText, "This node is not available.", 1.5f, 0.25f));
+                }
                 return;
             }
 
