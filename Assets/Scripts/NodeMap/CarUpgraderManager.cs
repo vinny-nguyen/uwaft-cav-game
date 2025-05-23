@@ -48,6 +48,12 @@ namespace NodeMap
 
         #endregion
 
+        #region Public State
+        public Sprite CurrentCarBodySprite { get; private set; }
+        public Sprite CurrentWheelSprite { get; private set; }
+        public static event System.Action<Sprite, Sprite> OnCarAppearanceUpdated;
+        #endregion
+
         #region Unity Events
 
         private void Start()
@@ -151,6 +157,10 @@ namespace NodeMap
 
             if (rearWheelRenderer != null && initialWheelSprite != null)
                 rearWheelRenderer.sprite = initialWheelSprite;
+
+            CurrentCarBodySprite = initialCarBodySprite;
+            CurrentWheelSprite = initialWheelSprite;
+            OnCarAppearanceUpdated?.Invoke(CurrentCarBodySprite, CurrentWheelSprite);
         }
 
         public void UpgradeCar(int upgradeIndex)
@@ -189,7 +199,7 @@ namespace NodeMap
             {
                 Debug.LogWarning($"Failed to upgrade car: {e.Message}");
                 DebugLog("Falling back to direct upgrade without animation", LogType.Warning);
-                ApplyUpgrade(upgradeIndex, true);
+                ApplyUpgrade(upgradeIndex, true); // This call will also trigger the event
             }
         }
 
@@ -214,11 +224,21 @@ namespace NodeMap
             if (rearWheelRenderer != null && upgrade.wheelSprite != null)
                 rearWheelRenderer.sprite = upgrade.wheelSprite;
 
+            CurrentCarBodySprite = upgrade.carBodySprite;
+            CurrentWheelSprite = upgrade.wheelSprite;
+            OnCarAppearanceUpdated?.Invoke(CurrentCarBodySprite, CurrentWheelSprite);
+
             if (showParticles && upgradeParticles != null)
             {
                 DebugLog("Playing upgrade particles");
                 upgradeParticles.Play();
             }
+        }
+
+        public void GetCurrentCarSprites(out Sprite carBody, out Sprite wheel)
+        {
+            carBody = CurrentCarBodySprite;
+            wheel = CurrentWheelSprite;
         }
 
         #endregion
