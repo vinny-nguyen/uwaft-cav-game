@@ -49,7 +49,13 @@ namespace NodeMap.EditorTools
             playerSplineMovement.ForceGenerateStops();
             #endif
             
-            return playerSplineMovement.GetStops();
+            SplineStopGenerator stopGenerator = playerSplineMovement.GetComponent<SplineStopGenerator>();
+            if (stopGenerator == null)
+            {
+                Debug.LogError("SplineStopGenerator component not found on PlayerSplineMovement!");
+                return null;
+            }
+            return stopGenerator.GetStops();
         }
         
         private bool ValidateStops(List<SplineStop> stops)
