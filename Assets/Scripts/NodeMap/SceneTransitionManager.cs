@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Splines; // Required for SplineContainer
+using System.Linq; // Added to use .Count() on IEnumerable
 
 namespace NodeMap.UI
 {
@@ -29,6 +31,17 @@ namespace NodeMap.UI
         [SerializeField] private CanvasGroup transitionCanvasGroup;
         [SerializeField] private Image transitionImage;
 
+        [Header("Camera Control (Tutorial Zoom)")]
+        [SerializeField] private Camera mainCamera;
+        [SerializeField] private NodeMap.PlayerSplineMovement playerSplineMovement;
+        [SerializeField] private NodeMap.TutorialManager tutorialManager;
+        [SerializeField] private float zoomedInOrthographicSize = 2.5f;
+        [SerializeField] private float defaultMapOrthographicSize = 5.0f;
+        [SerializeField] private Vector3 defaultMapCameraPosition = new Vector3(0, 0, -10);
+        [SerializeField] private float zoomAnimationDuration = 1.0f;
+        [SerializeField] private Vector2 worldBoundsMin = new Vector2(-10f, -5f);
+        [SerializeField] private Vector2 worldBoundsMax = new Vector2(10f, 5f);
+
         public enum TransitionEffectType
         {
             RadialWipe,
@@ -40,6 +53,12 @@ namespace NodeMap.UI
         #region Private Fields
         private Coroutine activeTransition;
         private bool isTransitioning = false;
+        private bool isCameraZoomedForTutorial = false;
+        private Coroutine cameraAnimationCoroutine;
+        #endregion
+
+        #region Public Properties
+        public bool IsOpeningTransitionComplete { get; private set; } = false;
         #endregion
 
         #region Unity Lifecycle
@@ -54,6 +73,11 @@ namespace NodeMap.UI
 
             Instance = this;
             InitializeComponents();
+
+            if (mainCamera == null)
+            {
+                mainCamera = Camera.main;
+            }
         }
 
         // And modify the Start() method:
@@ -64,6 +88,51 @@ namespace NodeMap.UI
 
             // Update aspect ratio
             UpdateShaderAspectRatio();
+
+            // Camera setup based on tutorial state
+            if (mainCamera != null && tutorialManager != null && playerSplineMovement != null && playerSplineMovement.GetSpline() != null)
+            {
+                if (!tutorialManager.HasCompletedTutorial())
+                {
+                    isCameraZoomedForTutorial = true;
+                    mainCamera.orthographicSize = zoomedInOrthographicSize;
+
+                    SplineContainer playerSpline = playerSplineMovement.GetSpline();
+                    // Ensure spline has knots before evaluating
+                    if (playerSpline != null && playerSpline.Spline != null && playerSpline.Spline.Knots.Count() > 0)
+                    {
+                        Vector3 playerInitialWorldPos = playerSpline.transform.TransformPoint(playerSpline.Spline.EvaluatePosition(0f));
+                        Vector3 cameraTargetPos = new Vector3(playerInitialWorldPos.x, playerInitialWorldPos.y, defaultMapCameraPosition.z);
+                        mainCamera.transform.position = ClampCameraPosition(cameraTargetPos, zoomedInOrthographicSize);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("SceneTransitionManager: Player's spline is null or empty. Falling back to default camera for tutorial zoom.");
+                        mainCamera.orthographicSize = defaultMapOrthographicSize;
+                        mainCamera.transform.position = defaultMapCameraPosition; // Fallback
+                        isCameraZoomedForTutorial = false; // Cannot perform special zoom
+                    }
+                }
+                else
+                {
+                    isCameraZoomedForTutorial = false;
+                    mainCamera.orthographicSize = defaultMapOrthographicSize;
+                    mainCamera.transform.position = defaultMapCameraPosition;
+                }
+            }
+            else
+            {
+                isCameraZoomedForTutorial = false;
+                if (mainCamera != null) {
+                    mainCamera.orthographicSize = defaultMapOrthographicSize;
+                    mainCamera.transform.position = defaultMapCameraPosition;
+                }
+                // Log warnings for missing dependencies
+                if (mainCamera == null) Debug.LogWarning("SceneTransitionManager: Main Camera not assigned or found.");
+                if (tutorialManager == null) Debug.LogWarning("SceneTransitionManager: TutorialManager not assigned.");
+                if (playerSplineMovement == null) Debug.LogWarning("SceneTransitionManager: PlayerSplineMovement not assigned.");
+                else if (playerSplineMovement.GetSpline() == null) Debug.LogWarning("SceneTransitionManager: PlayerSplineMovement has no spline assigned.");
+            }
 
             // Start the opening transition
             PlayOpeningTransition();
@@ -86,6 +155,15 @@ namespace NodeMap.UI
                 _lastScreenWidth = Screen.width;
                 _lastScreenHeight = Screen.height;
                 UpdateShaderAspectRatio();
+            }
+
+            // Camera follow logic for tutorial zoom
+            if (isCameraZoomedForTutorial && cameraAnimationCoroutine == null && mainCamera != null && playerSplineMovement != null)
+            {
+                Vector3 playerPos = playerSplineMovement.transform.position;
+                // Use the camera's current Z or the default Z for consistency
+                Vector3 cameraTargetPos = new Vector3(playerPos.x, playerPos.y, defaultMapCameraPosition.z); 
+                mainCamera.transform.position = ClampCameraPosition(cameraTargetPos, mainCamera.orthographicSize);
             }
         }
 
@@ -114,6 +192,46 @@ namespace NodeMap.UI
             StopActiveTransition();
 
             activeTransition = StartCoroutine(PlayTransition(false, onComplete));
+        }
+
+        public void StartZoomOutMapTransition()
+        {
+            Debug.Log($"[SceneTransitionManager] StartZoomOutMapTransition called. isCameraZoomedForTutorial: {isCameraZoomedForTutorial}, mainCamera != null: {mainCamera != null}");
+            if (isCameraZoomedForTutorial && mainCamera != null)
+            {
+                if (cameraAnimationCoroutine != null)
+                {
+                    Debug.Log("[SceneTransitionManager] Stopping existing camera animation coroutine.");
+                    StopCoroutine(cameraAnimationCoroutine);
+                }
+                Debug.Log("[SceneTransitionManager] Starting AnimateCameraToDefaultView coroutine (no tutorial callback).");
+                cameraAnimationCoroutine = StartCoroutine(AnimateCameraToDefaultView(null)); // Call with null callback
+            }
+            else
+            {
+                Debug.LogWarning("[SceneTransitionManager] Conditions not met to start zoom out animation.");
+            }
+        }
+
+        public void InitiateZoomOutAndTutorialSequence()
+        {
+            Debug.Log($"[SceneTransitionManager] InitiateZoomOutAndTutorialSequence called. isCameraZoomedForTutorial: {isCameraZoomedForTutorial}");
+            if (isCameraZoomedForTutorial && mainCamera != null)
+            {
+                if (cameraAnimationCoroutine != null)
+                {
+                    Debug.Log("[SceneTransitionManager] Stopping existing camera animation coroutine before starting zoom for tutorial.");
+                    StopCoroutine(cameraAnimationCoroutine);
+                }
+                Debug.Log("[SceneTransitionManager] Starting AnimateCameraToDefaultView coroutine with _StartTutorial callback.");
+                cameraAnimationCoroutine = StartCoroutine(AnimateCameraToDefaultView(_StartTutorial));
+            }
+            else
+            {
+                // Camera is already in default state or not applicable, start tutorial directly.
+                Debug.Log("[SceneTransitionManager] Camera already in default state or not applicable. Starting tutorial directly.");
+                _StartTutorial();
+            }
         }
         #endregion
 
@@ -281,6 +399,8 @@ namespace NodeMap.UI
                     transitionImage.transform.localScale = Vector3.one; // Reset scale
 
                 transitionCanvasGroup.gameObject.SetActive(false); // Hide after opening
+                IsOpeningTransitionComplete = true; // Signal completion
+                Debug.Log("[SceneTransitionManager] Opening transition complete.");
             }
             else // Closing
             {
@@ -303,6 +423,99 @@ namespace NodeMap.UI
 
             // Call completion callback if provided
             onComplete?.Invoke();
+        }
+
+        private IEnumerator AnimateCameraToDefaultView(System.Action onComplete = null)
+        {
+            Debug.Log($"[SceneTransitionManager] AnimateCameraToDefaultView started. Has onComplete callback: {onComplete != null}");
+            float elapsedTime = 0f;
+            Vector3 startingPosition = mainCamera.transform.position;
+            float startingOrthoSize = mainCamera.orthographicSize;
+
+            // Ensure target position is clamped if it's the default map position and could be out of bounds
+            // However, typically defaultMapCameraPosition should be a safe, central view.
+            // For this animation, we lerp towards defaultMapCameraPosition.
+            // Clamping during the animation might be jittery; better to ensure defaultMapCameraPosition is valid.
+            Vector3 targetPosition = defaultMapCameraPosition;
+            float targetOrthoSize = defaultMapOrthographicSize;
+
+            while (elapsedTime < zoomAnimationDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsedTime / zoomAnimationDuration);
+                // Optional: Add easing (e.g., SmoothStep)
+                // float easedProgress = progress * progress * (3f - 2f * progress);
+                // mainCamera.orthographicSize = Mathf.Lerp(startingOrthoSize, targetOrthoSize, easedProgress);
+                // mainCamera.transform.position = Vector3.Lerp(startingPosition, targetPosition, easedProgress);
+
+                mainCamera.orthographicSize = Mathf.Lerp(startingOrthoSize, targetOrthoSize, progress);
+                // Lerp towards the target, then clamp. Or, ensure targetPosition is already valid.
+                // For simplicity, we lerp directly. If defaultMapCameraPosition is out of bounds, that's a setup issue.
+                mainCamera.transform.position = Vector3.Lerp(startingPosition, targetPosition, progress);
+
+                yield return null;
+            }
+
+            mainCamera.orthographicSize = targetOrthoSize;
+            mainCamera.transform.position = targetPosition; 
+            // Optionally, clamp final position if defaultMapCameraPosition might be out of bounds with defaultMapOrthographicSize
+            // This ensures the final state is valid, even if the animation path wasn't clamped per frame.
+            mainCamera.transform.position = ClampCameraPosition(mainCamera.transform.position, mainCamera.orthographicSize);
+
+
+            isCameraZoomedForTutorial = false; // Crucial: set this before onComplete
+            cameraAnimationCoroutine = null;
+            Debug.Log("[SceneTransitionManager] AnimateCameraToDefaultView finished.");
+
+            onComplete?.Invoke();
+        }
+
+        private void _StartTutorial()
+        {
+            Debug.Log("[SceneTransitionManager] _StartTutorial called.");
+            if (tutorialManager != null)
+            {
+                // We call StartTutorial directly, assuming if this sequence is initiated, the tutorial should run.
+                // HasCompletedTutorial check is implicitly handled by PlayerSplineMovement before calling InitiateZoomOutAndTutorialSequence.
+                if (!tutorialManager.HasCompletedTutorial()) // Still good to double check here
+                {
+                    Debug.Log("[SceneTransitionManager] Calling tutorialManager.StartTutorial().");
+                    tutorialManager.StartTutorial();
+                }
+                else
+                {
+                    Debug.Log("[SceneTransitionManager] Tutorial already completed, not starting via _StartTutorial.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[SceneTransitionManager] TutorialManager reference is null in _StartTutorial.");
+            }
+        }
+
+        private Vector3 ClampCameraPosition(Vector3 targetPosition, float orthoSize)
+        {
+            if (mainCamera == null) return targetPosition;
+
+            float camHeight = orthoSize; // Orthographic size is half the height
+            float camWidth = orthoSize * mainCamera.aspect; // Half the width
+
+            // Calculate camera view boundaries
+            float cameraMinX = worldBoundsMin.x + camWidth;
+            float cameraMaxX = worldBoundsMax.x - camWidth;
+            float cameraMinY = worldBoundsMin.y + camHeight;
+            float cameraMaxY = worldBoundsMax.y - camHeight;
+            
+            Vector3 clampedPosition = targetPosition;
+
+            // If the viewport is larger than the bounds, center it or handle as desired.
+            // For now, Mathf.Clamp will ensure it picks one of the bounds if min > max.
+            clampedPosition.x = Mathf.Clamp(targetPosition.x, cameraMinX, cameraMaxX);
+            clampedPosition.y = Mathf.Clamp(targetPosition.y, cameraMinY, cameraMaxY);
+            // Z position is maintained from targetPosition (which should have the correct Z)
+            clampedPosition.z = targetPosition.z; 
+
+            return clampedPosition;
         }
         #endregion
 

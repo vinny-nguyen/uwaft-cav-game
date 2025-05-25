@@ -39,6 +39,9 @@ namespace NodeMap
 
         [Header("Feedback UI")] // Added Header for clarity
         [SerializeField] private TextMeshProUGUI statusMessageText; // Reference for status messages
+
+        [Header("Scene Management")] // Added for SceneTransitionManager reference
+        [SerializeField] private NodeMap.UI.SceneTransitionManager sceneTransitionManager;
         #endregion
 
         #region Private Fields
@@ -84,6 +87,7 @@ namespace NodeMap
         #region Initialization
         private void InitializePosition()
         {
+            // Sets the car's initial visual position to the very start (0%) of the spline.
             transform.position = spline.transform.TransformPoint((Vector3)spline.EvaluatePosition(0f));
         }
 
@@ -128,16 +132,53 @@ namespace NodeMap
         /// </summary>
         private IEnumerator StartSequence()
         {
+            // Wait for SceneTransitionManager to be ready and opening transition to complete
+            Debug.Log("[PlayerSplineMovement] StartSequence initiated. Waiting for opening transition...");
+            while (NodeMap.UI.SceneTransitionManager.Instance == null || !NodeMap.UI.SceneTransitionManager.Instance.IsOpeningTransitionComplete)
+            {
+                if (NodeMap.UI.SceneTransitionManager.Instance == null)
+                {
+                    // This case should ideally not happen if script execution order is fine
+                    // or if PlayerSplineMovement depends on SceneTransitionManager.
+                    // Debug.LogWarning("[PlayerSplineMovement] Waiting for SceneTransitionManager instance...");
+                }
+                yield return null; // Wait a frame
+            }
+
+            Debug.Log("[PlayerSplineMovement] Opening transition complete. Waiting 2 seconds before moving car.");
+            yield return new WaitForSeconds(2f);
+
             // Move car from spline start to first node
-            yield return MoveAlongSpline(0f, stops[0].splinePercent);
+            Debug.Log("[PlayerSplineMovement] Starting car movement to first node.");
+            // The car's first animated movement starts from 0% along the spline to the 'firstNodeIndex'.
+            yield return MoveAlongSpline(0f, stops[firstNodeIndex].splinePercent); // Use firstNodeIndex
 
             // Set up first node
-            SetNodeToActive(0);
-            NopeMapManager.Instance.SetCurrentNode(0);
+            SetNodeToActive(firstNodeIndex); // Use firstNodeIndex
+            NopeMapManager.Instance.SetCurrentNode(firstNodeIndex); // Use firstNodeIndex
 
             // Check for tutorial
+            // Debug.Log($"[PlayerSplineMovement] Reached first node. TutorialManager: {tutorialManager != null}, HasCompletedTutorial: {(tutorialManager != null ? tutorialManager.HasCompletedTutorial().ToString() : "N/A")}"); // Keep for debugging if needed
             if (tutorialManager != null && !tutorialManager.HasCompletedTutorial())
-                tutorialManager.TriggerNodeReachedTutorial();
+            {
+                // tutorialManager.TriggerNodeReachedTutorial(); // Old direct call
+                if (sceneTransitionManager != null)
+                {
+                    Debug.Log("[PlayerSplineMovement] Reached first node. Waiting 1 second before initiating zoom out and tutorial sequence.");
+                    yield return new WaitForSeconds(1f); // Wait 1 second before zoom out
+
+                    // Debug.Log("[PlayerSplineMovement] Calling StartZoomOutMapTransition on SceneTransitionManager."); // Keep for debugging if needed
+                    // sceneTransitionManager.StartZoomOutMapTransition(); // Old direct call
+                    Debug.Log("[PlayerSplineMovement] Calling InitiateZoomOutAndTutorialSequence on SceneTransitionManager.");
+                    sceneTransitionManager.InitiateZoomOutAndTutorialSequence();
+                }
+                else
+                {
+                    Debug.LogWarning("[PlayerSplineMovement] SceneTransitionManager reference is null. Cannot start zoom out and tutorial sequence.");
+                    // Fallback: If SceneTransitionManager is missing, but tutorial should run, start it directly.
+                    tutorialManager.StartTutorial();
+                }
+            }
         }
 
         /// <summary>
