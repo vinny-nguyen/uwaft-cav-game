@@ -27,7 +27,7 @@ namespace NodeMap
         public void SetNodeState(int nodeIndex, NodeState state)
         {
             // Skip if completed node is being changed to non-complete state
-            if (NopeMapManager.Instance.IsNodeCompleted(nodeIndex) && state != NodeState.Complete)
+            if (NodeMapManager.Instance.IsNodeCompleted(nodeIndex) && state != NodeState.Complete)
                 return;
 
             // Ensure node index is valid
@@ -85,8 +85,8 @@ namespace NodeMap
 
         public void SetNodeToComplete(int nodeIndex)
         {
-            if (!NopeMapManager.Instance.IsNodeCompleted(nodeIndex))
-                NopeMapManager.Instance.CompleteNode(nodeIndex);
+            if (!NodeMapManager.Instance.IsNodeCompleted(nodeIndex))
+                NodeMapManager.Instance.CompleteNode(nodeIndex);
 
             SetNodeState(nodeIndex, NodeState.Complete);
         }
@@ -96,11 +96,11 @@ namespace NodeMap
         /// </summary>
         public void UpdateAllNodeVisuals()
         {
-            int currentNode = NopeMapManager.Instance.CurrentNodeIndex;
+            int currentNode = NodeMapManager.Instance.CurrentNodeIndex;
 
             for (int i = 0; i < nodeMarkers.Count; i++)
             {
-                if (NopeMapManager.Instance.IsNodeCompleted(i))
+                if (NodeMapManager.Instance.IsNodeCompleted(i))
                     SetNodeState(i, NodeState.Complete);
                 else if (i == currentNode)
                     SetNodeState(i, NodeState.Active);
@@ -119,6 +119,6 @@ namespace NodeMap
             }
         }
 
-        public bool IsNodeCompleted(int nodeIndex) => NopeMapManager.Instance.IsNodeCompleted(nodeIndex);
+        public bool IsNodeCompleted(int nodeIndex) => NodeMapManager.Instance.IsNodeCompleted(nodeIndex);
     }
 }

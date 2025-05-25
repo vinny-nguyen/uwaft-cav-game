@@ -29,10 +29,10 @@ namespace NodeMap
         /// </summary>
         public IEnumerator LoadSavedProgress()
         {
-            NopeMapManager manager = NopeMapManager.Instance;
+            NodeMapManager manager = NodeMapManager.Instance;
             if (manager == null)
             {
-                Debug.LogError("NopeMapManager not found when trying to load saved progress!");
+                Debug.LogError("NodeMapManager not found when trying to load saved progress!");
                 yield break;
             }
 

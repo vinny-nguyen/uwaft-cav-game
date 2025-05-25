@@ -142,7 +142,7 @@ namespace NodeMap
         private void UpdateButtonState()
         {
             // Check if current node is completed
-            NopeMapManager manager = NopeMapManager.Instance;
+            NodeMapManager manager = NodeMapManager.Instance;
             if (manager != null)
             {
                 int currentNode = manager.CurrentNodeIndex;
@@ -203,7 +203,7 @@ namespace NodeMap
                 return;
 
             // Save current node progress
-            NopeMapManager manager = NopeMapManager.Instance;
+            NodeMapManager manager = NodeMapManager.Instance;
             if (manager != null)
             {
                 // Let the manager handle saving progress

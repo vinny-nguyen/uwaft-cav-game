@@ -144,9 +144,9 @@ namespace NodeMap
                 return;
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
-                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
+                TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex + 1);
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
-                TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex - 1);
+                TryMoveToNode(NodeMapManager.Instance.CurrentNodeIndex - 1);
         }
         #endregion
 
@@ -159,7 +159,7 @@ namespace NodeMap
             if (isMoving)
                 return;
 
-            int currentNode = NopeMapManager.Instance.CurrentNodeIndex;
+            int currentNode = NodeMapManager.Instance.CurrentNodeIndex;
 
             if (!progressManager.CanMoveToNode(targetNode, currentNode))
             {
@@ -184,19 +184,19 @@ namespace NodeMap
             isMoving = true;
 
             // Reset current node if valid
-            if (NopeMapManager.Instance.CurrentNodeIndex != -1)
-                nodeStateManager.SetNodeToNormal(NopeMapManager.Instance.CurrentNodeIndex);
+            if (NodeMapManager.Instance.CurrentNodeIndex != -1)
+                nodeStateManager.SetNodeToNormal(NodeMapManager.Instance.CurrentNodeIndex);
 
             // Get starting position
             float startT = 0f;
-            if (NopeMapManager.Instance.CurrentNodeIndex >= 0 &&
-                NopeMapManager.Instance.CurrentNodeIndex < stopGenerator.GetStops().Count)
+            if (NodeMapManager.Instance.CurrentNodeIndex >= 0 &&
+                NodeMapManager.Instance.CurrentNodeIndex < stopGenerator.GetStops().Count)
             {
-                startT = stopGenerator.GetStops()[NopeMapManager.Instance.CurrentNodeIndex].splinePercent;
+                startT = stopGenerator.GetStops()[NodeMapManager.Instance.CurrentNodeIndex].splinePercent;
             }
 
             // Mark no active node during movement
-            NopeMapManager.Instance.SetCurrentNode(-1);
+            NodeMapManager.Instance.SetCurrentNode(-1);
 
             // Do the movement
             yield return movementController.MoveAlongSpline(spline, startT, 
@@ -204,7 +204,7 @@ namespace NodeMap
 
             // Update node state
             isMoving = false;
-            NopeMapManager.Instance.SetCurrentNode(targetNode);
+            NodeMapManager.Instance.SetCurrentNode(targetNode);
             nodeStateManager.SetNodeToActive(targetNode);
         }
         #endregion

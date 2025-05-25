@@ -90,7 +90,7 @@ namespace NodeMap
                 return;
 
             // Skip if no manager
-            if (NopeMapManager.Instance == null)
+            if (NodeMapManager.Instance == null)
                 return;
 
             // Check if node can be interacted with
@@ -136,8 +136,8 @@ namespace NodeMap
             }
 
             // Fallback to old method if no visual controller
-            bool isCompleted = NopeMapManager.Instance.IsNodeCompleted(nodeIndex);
-            bool isCurrent = NopeMapManager.Instance.CurrentNodeIndex == nodeIndex;
+            bool isCompleted = NodeMapManager.Instance.IsNodeCompleted(nodeIndex);
+            bool isCurrent = NodeMapManager.Instance.CurrentNodeIndex == nodeIndex;
             return isCurrent || isCompleted;
         }
 

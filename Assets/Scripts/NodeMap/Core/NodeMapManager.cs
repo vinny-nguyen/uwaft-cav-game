@@ -5,13 +5,13 @@ namespace NodeMap
     /// <summary>
     /// Core manager for node-based game progression
     /// </summary>
-    public class NopeMapManager : MonoBehaviour
+    public class NodeMapManager : MonoBehaviour
     {
         #region Events & Singleton
 
         public delegate void NodeCompletedHandler(int nodeIndex);
         public event NodeCompletedHandler OnNodeCompleted;
-        public static NopeMapManager Instance { get; private set; }
+        public static NodeMapManager Instance { get; private set; }
 
         #endregion
 

@@ -47,9 +47,9 @@ namespace NodeMap
                 return;
 
             // Save progress before scene transition
-            if (NopeMapManager.Instance != null)
+            if (NodeMapManager.Instance != null)
             {
-                NopeMapManager.Instance.SaveNodeProgress();
+                NodeMapManager.Instance.SaveNodeProgress();
             }
 
             // Load main menu scene

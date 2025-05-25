@@ -60,14 +60,14 @@ namespace NodeMap
         {
             DebugLog("CarUpgradeManager started");
 
-            if (NopeMapManager.Instance != null)
+            if (NodeMapManager.Instance != null)
             {
-                NopeMapManager.Instance.OnNodeCompleted += HandleNodeCompleted;
+                NodeMapManager.Instance.OnNodeCompleted += HandleNodeCompleted;
                 DebugLog("Subscribed to node completion events");
             }
             else
             {
-                DebugLog("Warning: NopeMapManager instance is null", LogType.Warning);
+                DebugLog("Warning: NodeMapManager instance is null", LogType.Warning);
             }
 
             UpdateCarAppearance();
@@ -89,9 +89,9 @@ namespace NodeMap
 
         private void UnsubscribeFromEvents()
         {
-            if (NopeMapManager.Instance != null)
+            if (NodeMapManager.Instance != null)
             {
-                NopeMapManager.Instance.OnNodeCompleted -= HandleNodeCompleted;
+                NodeMapManager.Instance.OnNodeCompleted -= HandleNodeCompleted;
                 DebugLog("Unsubscribed from node completion events");
             }
         }
@@ -105,7 +105,7 @@ namespace NodeMap
             DebugLog("Updating car appearance");
 
             // Get the current appropriate upgrade based on highest completed node
-            int highestCompletedNode = NopeMapManager.Instance?.HighestCompletedNodeIndex ?? -1;
+            int highestCompletedNode = NodeMapManager.Instance?.HighestCompletedNodeIndex ?? -1;
             int upgradeIndex = Mathf.Min(highestCompletedNode, carUpgrades.Count - 1);
 
             if (upgradeIndex >= 0 && carUpgrades.Count > 0)
@@ -133,7 +133,7 @@ namespace NodeMap
                 return;
 
             // Only trigger upgrade if this is the new highest completed node
-            if (nodeIndex == NopeMapManager.Instance.HighestCompletedNodeIndex)
+            if (nodeIndex == NodeMapManager.Instance.HighestCompletedNodeIndex)
             {
                 int newUpgradeIndex = Mathf.Min(nodeIndex, carUpgrades.Count - 1);
                 DebugLog($"New highest node completed - upgrading car to level {newUpgradeIndex}");

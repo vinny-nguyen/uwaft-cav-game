@@ -325,7 +325,7 @@ namespace NodeMap
 
         private void NotifyNodeCompletion()
         {
-            NopeMapManager gameManager = FindFirstObjectByType<NopeMapManager>();
+            NodeMapManager gameManager = FindFirstObjectByType<NodeMapManager>();
             if (gameManager != null)
             {
                 gameManager.SendMessage("NodeCompleted", currentNodeIndex, SendMessageOptions.DontRequireReceiver);

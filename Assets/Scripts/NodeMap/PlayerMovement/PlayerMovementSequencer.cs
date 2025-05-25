@@ -56,7 +56,7 @@ namespace NodeMap
 
             // Set up first node
             nodeStateManager.SetNodeToActive(firstNodeIndex);
-            NopeMapManager.Instance.SetCurrentNode(firstNodeIndex);
+            NodeMapManager.Instance.SetCurrentNode(firstNodeIndex);
 
             // Check for tutorial
             if (tutorialManager != null && !tutorialManager.HasCompletedTutorial())
