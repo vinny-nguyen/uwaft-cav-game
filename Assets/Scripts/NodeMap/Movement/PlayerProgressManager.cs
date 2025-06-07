@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 using System.Collections.Generic;
+using NodeMap.Nodes;
 
-namespace NodeMap
+namespace NodeMap.Movement
 {
     /// <summary>
     /// Manages player progress including save/load functionality

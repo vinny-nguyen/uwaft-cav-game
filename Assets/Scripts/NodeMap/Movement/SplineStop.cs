@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NodeMap
+namespace NodeMap.Movement
 {
     /// <summary>
     /// Represents a stopping point along a spline path

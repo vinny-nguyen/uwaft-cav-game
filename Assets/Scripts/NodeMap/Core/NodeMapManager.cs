@@ -1,4 +1,5 @@
 using UnityEngine;
+using NodeMap.Nodes;
 
 namespace NodeMap
 {

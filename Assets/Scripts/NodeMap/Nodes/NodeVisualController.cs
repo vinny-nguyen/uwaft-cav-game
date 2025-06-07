@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using NodeMap.UI;
 
-namespace NodeMap
+namespace NodeMap.Nodes
 {
     /// <summary>
     /// Handles the visual state transitions for nodes

@@ -2,8 +2,10 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 using System.Collections.Generic;
+using NodeMap.Tutorial;
+using NodeMap.Nodes;
 
-namespace NodeMap
+namespace NodeMap.Movement
 {
     /// <summary>
     /// Handles movement sequences, tutorials, and scene transitions
@@ -11,7 +13,7 @@ namespace NodeMap
     public class PlayerMovementSequencer : MonoBehaviour
     {
         [Header("Tutorial")]
-        [SerializeField] private TutorialManager tutorialManager;
+        [SerializeField] private NodeMapTutorialManager tutorialManager;
         [SerializeField] private int firstNodeIndex = 0;
 
         [Header("Scene Management")]

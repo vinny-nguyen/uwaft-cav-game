@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using NodeMap.UI; // Added using directive
+using NodeMap.Nodes;
 
 namespace NodeMap
 {

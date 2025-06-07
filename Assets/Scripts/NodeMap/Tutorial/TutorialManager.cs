@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace NodeMap
+namespace NodeMap.Tutorial
 {
     /// <summary>
     /// Manages the first-time tutorial flow for players
     /// </summary>
-    public class TutorialManager : MonoBehaviour
+    public class NodeMapTutorialManager : MonoBehaviour
     {
         #region Inspector Fields
         [Header("UI References")]

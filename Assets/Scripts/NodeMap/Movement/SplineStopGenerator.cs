@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace NodeMap
+namespace NodeMap.Movement
 {
     /// <summary>
     /// Generates and manages spline stops

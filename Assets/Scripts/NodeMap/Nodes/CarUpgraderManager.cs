@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using NodeMap.UI; // Added using directive
 
-namespace NodeMap
+namespace NodeMap.Nodes
 {
     public class CarUpgradeManager : MonoBehaviour
     {

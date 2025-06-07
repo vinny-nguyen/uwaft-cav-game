@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
-using TMPro; // Added for TextMeshProUGUI
+using NodeMap.Tutorial; 
+using TMPro;
 
-namespace NodeMap
+namespace NodeMap.Nodes
 {
     /// <summary>
     /// Handles node hover and click interactions
@@ -21,8 +21,18 @@ namespace NodeMap
         [Header("Node Info")]
         public int nodeIndex;
 
-        [Header("Feedback UI")] // Added Header for clarity
-        [SerializeField] private TextMeshProUGUI statusMessageText; // Reference to the TextMeshProUGUI for messages
+        [Header("Feedback UI")]
+        [SerializeField] private TextMeshProUGUI statusMessageText;
+
+        [Header("Animation Settings")]
+        [SerializeField] private float shakeIntensity = 0.15f;
+        [SerializeField] private float shakeDuration = 0.15f;
+        [SerializeField] private float shakeFrequency = 50f;
+        [SerializeField] private float messageDisplayDuration = 1.5f;
+        [SerializeField] private float messageFadeDuration = 0.25f;
+
+        // Constants
+        private const string NODE_UNAVAILABLE_MESSAGE = "This node is not available.";
 
         // Private fields
         private Vector3 originalScale;
@@ -30,7 +40,11 @@ namespace NodeMap
         private SpriteRenderer spriteRenderer;
         private bool isClickable = false;
         private NodeVisualController visualController;
-        private Coroutine activeMessageCoroutine; // To manage the message display coroutine
+        private Coroutine activeMessageCoroutine;
+        
+        // Cached references for performance
+        private NodeMapTutorialManager cachedTutorialManager;
+        private bool hasCachedTutorialManager = false;
 
         private void Start()
         {
@@ -39,6 +53,29 @@ namespace NodeMap
             spriteRenderer = GetComponent<SpriteRenderer>();
             visualController = GetComponent<NodeVisualController>();
             spriteRenderer.color = normalColor;
+            
+            // Cache tutorial manager reference once
+            CacheTutorialManager();
+        }
+
+        /// <summary>
+        /// Cache the TutorialManager reference to avoid repeated FindFirstObjectByType calls
+        /// </summary>
+        private void CacheTutorialManager()
+        {
+            if (!hasCachedTutorialManager)
+            {
+                cachedTutorialManager = FindFirstObjectByType<NodeMapTutorialManager>();
+                hasCachedTutorialManager = true;
+            }
+        }
+
+        /// <summary>
+        /// Check if tutorial is currently active
+        /// </summary>
+        private bool IsTutorialActive()
+        {
+            return cachedTutorialManager != null && cachedTutorialManager.IsTutorialActive();
         }
 
         private void Update()
@@ -84,9 +121,8 @@ namespace NodeMap
 
         private void OnMouseDown()
         {
-            // Skip if tutorial is active
-            TutorialManager tutorialManager = FindFirstObjectByType<TutorialManager>();
-            if (tutorialManager != null && tutorialManager.IsTutorialActive())
+            // Skip if tutorial is active (using cached reference)
+            if (IsTutorialActive())
                 return;
 
             // Skip if no manager
@@ -96,21 +132,40 @@ namespace NodeMap
             // Check if node can be interacted with
             if (!IsNodeInteractable())
             {
-                StartCoroutine(UI.UIAnimator.ShakeElement(transform, 0.15f, 0.15f, 50f));
-                if (statusMessageText != null)
-                {
-                    if (activeMessageCoroutine != null)
-                    {
-                        StopCoroutine(activeMessageCoroutine);
-                    }
-                    activeMessageCoroutine = StartCoroutine(UI.UIAnimator.ShowTemporaryMessage(statusMessageText, "This node is not available.", 1.5f, 0.25f));
-                }
+                PlayNodeUnavailableAnimation();
                 return;
             }
 
             // Open popup for this node
             if (PopupManager.Instance != null)
                 PopupManager.Instance.OpenPopupForNode(nodeIndex);
+        }
+
+        /// <summary>
+        /// Play animation and show message when node is not available
+        /// </summary>
+        private void PlayNodeUnavailableAnimation()
+        {
+            // Play shake animation
+            StartCoroutine(UI.UIAnimator.ShakeElement(transform, shakeIntensity, shakeDuration, shakeFrequency));
+            
+            // Show message if text component is available
+            if (statusMessageText != null)
+            {
+                // Stop previous message coroutine if still running
+                if (activeMessageCoroutine != null)
+                {
+                    StopCoroutine(activeMessageCoroutine);
+                }
+                
+                // Start new message display
+                activeMessageCoroutine = StartCoroutine(
+                    UI.UIAnimator.ShowTemporaryMessage(
+                        statusMessageText, 
+                        NODE_UNAVAILABLE_MESSAGE, 
+                        messageDisplayDuration, 
+                        messageFadeDuration));
+            }
         }
 
         /// <summary>
@@ -136,6 +191,8 @@ namespace NodeMap
             }
 
             // Fallback to old method if no visual controller
+            if (NodeMapManager.Instance == null) return false;
+            
             bool isCompleted = NodeMapManager.Instance.IsNodeCompleted(nodeIndex);
             bool isCurrent = NodeMapManager.Instance.CurrentNodeIndex == nodeIndex;
             return isCurrent || isCompleted;
@@ -146,7 +203,20 @@ namespace NodeMap
         /// </summary>
         public void StartShake()
         {
-            StartCoroutine(UI.UIAnimator.ShakeElement(transform, 0.15f, 0.15f, 50f));
+            StartCoroutine(UI.UIAnimator.ShakeElement(transform, shakeIntensity, shakeDuration, shakeFrequency));
+        }
+        
+        /// <summary>
+        /// Clean up when object is destroyed
+        /// </summary>
+        private void OnDestroy()
+        {
+            // Stop any running coroutines to prevent memory leaks
+            if (activeMessageCoroutine != null)
+            {
+                StopCoroutine(activeMessageCoroutine);
+                activeMessageCoroutine = null;
+            }
         }
     }
 }

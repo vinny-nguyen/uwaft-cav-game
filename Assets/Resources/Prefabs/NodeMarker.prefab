@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2204535091217470649}
   - component: {fileID: 3569520702400294767}
-  - component: {fileID: -8851102538227576220}
   - component: {fileID: 354660298895098759}
   - component: {fileID: 6253346868535568618}
+  - component: {fileID: 7400667794365266125}
   m_Layer: 0
   m_Name: NodeMarker
   m_TagString: Untagged
@@ -90,24 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-8851102538227576220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888835348061749661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f1f94d6a37e5124192c5ebfb8f30b48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverScaleMultiplier: 1.1
-  scaleSpeed: 10
-  pointerCursorTexture: {fileID: 0}
-  inactiveHoverColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  nodeIndex: 0
 --- !u!60 &354660298895098759
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -190,3 +172,22 @@ MonoBehaviour:
   popUpDuration: 0.1
   popDownDuration: 0.15
   popScale: 1.1
+--- !u!114 &7400667794365266125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888835348061749661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cdc88d21b239e4a9ba99d7c1728c13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverScaleMultiplier: 1.2
+  scaleSpeed: 5
+  pointerCursorTexture: {fileID: 0}
+  inactiveHoverColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  nodeIndex: 0
+  statusMessageText: {fileID: 0}

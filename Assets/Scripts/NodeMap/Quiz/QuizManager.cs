@@ -4,10 +4,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using NodeMap.Quiz;
 using NodeMap.UI;
 
-namespace NodeMap
+namespace NodeMap.Quiz
 {
     /// <summary>
     /// Manages quiz functionality for nodes

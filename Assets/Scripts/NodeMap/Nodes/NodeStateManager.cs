@@ -1,14 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace NodeMap
+namespace NodeMap.Nodes
 {
-    public enum NodeState
-    {
-        Normal,
-        Active,
-        Complete
-    }
 
     /// <summary>
     /// Manages node visual states and completion tracking

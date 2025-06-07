@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
+using NodeMap.Movement;
 
 namespace NodeMap.EditorTools
 {

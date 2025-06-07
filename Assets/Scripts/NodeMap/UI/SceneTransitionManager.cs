@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Splines; // Required for SplineContainer
 using System.Linq; // Added to use .Count() on IEnumerable
+using NodeMap.Tutorial; // Assuming this is where TutorialManager is defined
 
 namespace NodeMap.UI
 {
@@ -34,7 +35,7 @@ namespace NodeMap.UI
         [Header("Camera Control (Tutorial Zoom)")]
         [SerializeField] private Camera mainCamera;
         [SerializeField] private NodeMap.PlayerSplineMovement playerSplineMovement;
-        [SerializeField] private NodeMap.TutorialManager tutorialManager;
+        [SerializeField] private NodeMapTutorialManager tutorialManager;
         [SerializeField] private float zoomedInOrthographicSize = 2.5f;
         [SerializeField] private float defaultMapOrthographicSize = 5.0f;
         [SerializeField] private Vector3 defaultMapCameraPosition = new Vector3(0, 0, -10);

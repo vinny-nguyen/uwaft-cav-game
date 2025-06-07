@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 
-namespace NodeMap
+namespace NodeMap.Movement
 {
     /// <summary>
     /// Handles the actual movement along splines including visual effects

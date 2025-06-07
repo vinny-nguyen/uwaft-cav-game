@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using NodeMap.UI;
+using NodeMap.Quiz;
 
 namespace NodeMap
 {

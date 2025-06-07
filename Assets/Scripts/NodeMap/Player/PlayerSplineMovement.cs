@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 using TMPro;
+using NodeMap.Nodes;
+using NodeMap.Movement;
 
 namespace NodeMap
 {
@@ -199,7 +201,7 @@ namespace NodeMap
             NodeMapManager.Instance.SetCurrentNode(-1);
 
             // Do the movement
-            yield return movementController.MoveAlongSpline(spline, startT, 
+            yield return movementController.MoveAlongSpline(spline, startT,
                 stopGenerator.GetStops()[targetNode].splinePercent, isMovingForward);
 
             // Update node state
