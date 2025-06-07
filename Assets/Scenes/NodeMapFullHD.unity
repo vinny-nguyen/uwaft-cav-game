@@ -451,6 +451,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node0
       objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: statusMessageText
+      value: 
+      objectReference: {fileID: 1656065716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2032,6 +2036,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node2
       objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: nodeIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: statusMessageText
+      value: 
+      objectReference: {fileID: 1656065716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5270,6 +5282,8 @@ GameObject:
   m_Component:
   - component: {fileID: 584200641}
   - component: {fileID: 584200640}
+  - component: {fileID: 584200642}
+  - component: {fileID: 584200643}
   m_Layer: 0
   m_Name: TutorialManager
   m_TagString: Untagged
@@ -5289,32 +5303,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8780898a5e1f7684aa35e8afe287a7be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialCanvasGroup: {fileID: 1708417692}
-  arrowImage: {fileID: 1752264954}
-  messageText: {fileID: 771678961}
-  continueText: {fileID: 904793879}
-  clickBlocker: {fileID: 1652228240}
-  messagePanel: {fileID: 1747832569}
-  arrowBobAmount: 20
-  arrowBobSpeed: 2
+  showTutorialOnStart: 1
+  playerPrefKey: CompletedTutorial
   firstNodeTransform: {fileID: 343780605}
   finalNodeTransform: {fileID: 1658079462}
   driveButton: {fileID: 1225086862}
   homeButton: {fileID: 1020558458}
-  showTutorialOnStart: 1
-  playerPrefKey: CompletedTutorial
-  fadeInDuration: 0.5
-  fadeOutDuration: 0.3
-  dimmerPanel: {fileID: 963065709}
-  spotlightRadius: 100
-  spotlightMaterial: {fileID: 2100000, guid: adc0549ff6845bd4c85886bc7bac39b7, type: 2}
-  spotlightPulseSpeed: 1
-  spotlightPulseMagnitude: 0.1
-  typewriterSpeed: 0.05
-  audioSource: {fileID: 0}
-  tutorialStartSound: {fileID: 0}
-  stepAdvanceSound: {fileID: 0}
-  tutorialEndSound: {fileID: 0}
+  uiController: {fileID: 584200642}
+  audioManager: {fileID: 0}
 --- !u!4 &584200641
 Transform:
   m_ObjectHideFlags: 0
@@ -5330,6 +5326,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &584200642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584200639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6509aaa4496865640ae76cf9a35cfbd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialCanvasGroup: {fileID: 1708417692}
+  arrowImage: {fileID: 1752264954}
+  messageText: {fileID: 771678961}
+  continueText: {fileID: 904793879}
+  clickBlocker: {fileID: 1652228240}
+  messagePanel: {fileID: 1747832569}
+  arrowBobAmount: 20
+  arrowBobSpeed: 2
+  fadeInDuration: 0.5
+  fadeOutDuration: 0.3
+  typewriterSpeed: 0.05
+--- !u!114 &584200643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584200639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728bf63d21253e8429aaf26ebfdb4ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dimmerPanel: {fileID: 963065709}
+  spotlightRadius: 100
+  spotlightMaterial: {fileID: 2100000, guid: adc0549ff6845bd4c85886bc7bac39b7, type: 2}
+  spotlightPulseSpeed: 1
+  spotlightPulseMagnitude: 0.1
 --- !u!1 &632333398
 GameObject:
   m_ObjectHideFlags: 0
@@ -7445,6 +7481,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node5
       objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: nodeIndex
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: statusMessageText
+      value: 
+      objectReference: {fileID: 1656065716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8814,6 +8858,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node4
       objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: nodeIndex
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: statusMessageText
+      value: 
+      objectReference: {fileID: 1656065716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15126,6 +15178,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node3
       objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: nodeIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: statusMessageText
+      value: 
+      objectReference: {fileID: 1656065716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16454,6 +16514,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node1
       objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: nodeIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400667794365266125, guid: 929dc33b5bc7563458f39a8e60cb774c, type: 3}
+      propertyPath: statusMessageText
+      value: 
+      objectReference: {fileID: 1656065716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
