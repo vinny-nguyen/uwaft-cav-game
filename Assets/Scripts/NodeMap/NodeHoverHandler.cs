@@ -137,7 +137,7 @@ namespace NodeMap
         {
             Vector3 targetScale = isHovered && IsNodeInteractable() ?
                 originalScale * hoverScaleMultiplier : originalScale;
-            transform.localScale = targetScale;
+            StartCoroutine(NodeMap.TweenHelper.ScaleTo(transform, targetScale, 0.1f));
         }
 
         private void OnDisable()
@@ -148,22 +148,10 @@ namespace NodeMap
 
         private IEnumerator ShakeNode()
         {
-            float shakeDuration = 0.15f;
-            float shakeMagnitude = 0.15f;
             Vector3 originalPosition = transform.localPosition;
-            float elapsed = 0;
-
-            while (elapsed < shakeDuration)
-            {
-                elapsed += Time.deltaTime;
-                float diminish = 1f - (elapsed / shakeDuration);
-                float offsetX = Mathf.Sin(elapsed * 50f) * shakeMagnitude * diminish;
-
-                transform.localPosition = originalPosition + new Vector3(offsetX, 0, 0);
-                yield return null;
-            }
-
-            transform.localPosition = originalPosition;
+            Vector3 shakeOffset = originalPosition + new Vector3(0.15f, 0, 0);
+            yield return NodeMap.TweenHelper.MoveTo(transform, shakeOffset, 0.075f);
+            yield return NodeMap.TweenHelper.MoveTo(transform, originalPosition, 0.075f);
         }
     }
 }

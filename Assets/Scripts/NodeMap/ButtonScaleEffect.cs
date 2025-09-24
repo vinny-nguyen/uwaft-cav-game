@@ -86,43 +86,11 @@ namespace NodeMap.UI
 
         private void AnimateTo(Vector3 targetScale, float duration)
         {
-            // Cancel any active animation
             if (activeCoroutine != null)
             {
                 StopCoroutine(activeCoroutine);
             }
-
-            // Start new animation
-            activeCoroutine = StartCoroutine(AnimateScale(targetScale, duration));
-        }
-
-        private IEnumerator AnimateScale(Vector3 targetScale, float duration)
-        {
-            Vector3 startScale = transform.localScale;
-            float elapsed = 0f;
-
-            // Use very short duration for instant animation if needed
-            if (duration <= 0.01f)
-            {
-                transform.localScale = targetScale;
-                activeCoroutine = null;
-                yield break;
-            }
-
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                float progress = Mathf.Clamp01(elapsed / duration);
-
-                // Smoothstep for more natural movement
-                float smoothProgress = progress * progress * (3f - 2f * progress);
-
-                transform.localScale = Vector3.Lerp(startScale, targetScale, smoothProgress);
-                yield return null;
-            }
-
-            transform.localScale = targetScale;
-            activeCoroutine = null;
+            activeCoroutine = StartCoroutine(NodeMap.TweenHelper.ScaleTo(transform, targetScale, duration));
         }
 
         private void OnDisable()
