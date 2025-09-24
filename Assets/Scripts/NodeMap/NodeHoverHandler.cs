@@ -31,22 +31,14 @@ namespace NodeMap
         {
             // Cache initial values
             originalScale = transform.localScale;
+            NodeEvents.OnCurrentNodeChanged += HandleNodeStateChanged;
+            NodeEvents.OnNodeCompleted += HandleNodeStateChanged;
             spriteRenderer = GetComponent<SpriteRenderer>();
             visualController = GetComponent<NodeVisualController>();
             spriteRenderer.color = normalColor;
         }
 
-        private void Update()
-        {
-            // Update scale based on hover state
-            Vector3 targetScale = isHovered && IsNodeInteractable() ?
-                originalScale * hoverScaleMultiplier : originalScale;
-
-            transform.localScale = Vector3.Lerp(
-                transform.localScale,
-                targetScale,
-                Time.deltaTime * scaleSpeed);
-        }
+        // Removed Update() polling. Scale is updated via events and mouse handlers.
 
         private void OnMouseEnter()
         {
@@ -64,7 +56,6 @@ namespace NodeMap
             if (!IsNodeInteractable() && spriteRenderer != null)
                 spriteRenderer.color = inactiveHoverColor;
         }
-
         private void OnMouseExit()
         {
             isHovered = false;
@@ -134,6 +125,25 @@ namespace NodeMap
         public void StartShake()
         {
             StartCoroutine(ShakeNode());
+        }
+
+        private void HandleNodeStateChanged(int nodeIndex)
+        {
+            if (nodeIndex == this.nodeIndex)
+                UpdateScale();
+        }
+
+        private void UpdateScale()
+        {
+            Vector3 targetScale = isHovered && IsNodeInteractable() ?
+                originalScale * hoverScaleMultiplier : originalScale;
+            transform.localScale = targetScale;
+        }
+
+        private void OnDisable()
+        {
+            NodeEvents.OnCurrentNodeChanged -= HandleNodeStateChanged;
+            NodeEvents.OnNodeCompleted -= HandleNodeStateChanged;
         }
 
         private IEnumerator ShakeNode()

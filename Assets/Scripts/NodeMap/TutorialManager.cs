@@ -63,10 +63,7 @@ namespace NodeMap
             // ResetTutorialStatus();
         }
 
-        private void Update()
-        {
-            UpdateArrowPosition();
-        }
+        // Removed Update() polling. Arrow position is updated when tutorial step changes or UI changes.
         #endregion
 
         #region Initialization

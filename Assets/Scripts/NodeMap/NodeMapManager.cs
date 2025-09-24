@@ -69,6 +69,7 @@ namespace NodeMap
         public void SetCurrentNode(int nodeIndex)
         {
             CurrentNodeIndex = nodeIndex;
+            NodeEvents.RaiseCurrentNodeChanged(nodeIndex);
         }
 
         /// <summary>
@@ -101,6 +102,7 @@ namespace NodeMap
             {
                 HighestCompletedNodeIndex = nodeIndex;
                 OnNodeCompleted?.Invoke(nodeIndex);
+                NodeEvents.RaiseNodeCompleted(nodeIndex);
             }
         }
 

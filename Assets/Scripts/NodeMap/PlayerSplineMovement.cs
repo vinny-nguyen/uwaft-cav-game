@@ -70,9 +70,16 @@ namespace NodeMap
             }
         }
 
-        private void Update()
+        // Removed Update() polling. Use UI button events or Input system events to call TryMoveToNode.
+        // Example: public methods for UI buttons:
+        public void MoveToNextNode()
         {
-            HandleKeyboardInput();
+            TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex + 1);
+        }
+
+        public void MoveToPreviousNode()
+        {
+            TryMoveToNode(NopeMapManager.Instance.CurrentNodeIndex - 1);
         }
         #endregion
 

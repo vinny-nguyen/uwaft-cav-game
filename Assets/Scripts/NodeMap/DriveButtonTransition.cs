@@ -46,12 +46,11 @@ namespace NodeMap
         private void Start()
         {
             UpdateButtonState();
+            NodeEvents.OnCurrentNodeChanged += HandleNodeChanged;
+            NodeEvents.OnNodeCompleted += HandleNodeCompleted;
         }
 
-        private void Update()
-        {
-            UpdateButtonState();
-        }
+        // ...existing code...
 
         private void OnButtonClick()
         {
@@ -160,6 +159,19 @@ namespace NodeMap
             {
                 rt.anchoredPosition = rt.anchoredPosition;
             }
+
+            NodeEvents.OnCurrentNodeChanged -= HandleNodeChanged;
+            NodeEvents.OnNodeCompleted -= HandleNodeCompleted;
+        }
+
+        private void HandleNodeChanged(int nodeIndex)
+        {
+            UpdateButtonState();
+        }
+
+        private void HandleNodeCompleted(int nodeIndex)
+        {
+            UpdateButtonState();
         }
     }
 }

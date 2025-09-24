@@ -70,12 +70,7 @@ namespace NodeMap
             InitializeUI();
         }
 
-        private void Update()
-        {
-            // Handle keyboard navigation
-            if (Input.GetKeyDown(KeyCode.RightArrow)) NextSlide();
-            else if (Input.GetKeyDown(KeyCode.LeftArrow)) PreviousSlide();
-        }
+        // Removed Update() polling. Navigation is handled by UI button listeners.
         #endregion
 
         #region Initialization
