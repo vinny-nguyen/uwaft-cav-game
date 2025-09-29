@@ -1,15 +1,20 @@
+
 using UnityEngine;
 
+/// <summary>
+/// Controls the map UI, node placement, and car movement based on progression.
+/// </summary>
 public class MapController : MonoBehaviour
 {
-    [SerializeField] LevelNodeView[] nodes;       // 6 buttons in order
-    [SerializeField] NodePlacer nodePlacer;       // reference to NodePlacer
-    [SerializeField] CarPathFollower car;         // CarRoot
-    [SerializeField] ProgressionController prog;  // ProgressionController
+    [SerializeField] private LevelNodeView[] nodes;       // 6 buttons in order
+    [SerializeField] private NodePlacer nodePlacer;       // reference to NodePlacer
+    [SerializeField] private CarPathFollower car;         // CarRoot
+    [SerializeField] private ProgressionController prog;  // ProgressionController
 
-    void Start()
+    private void Start()
     {
-        if (!prog) prog = FindFirstObjectByType<ProgressionController>();
+        if (!prog)
+            prog = FindFirstObjectByType<ProgressionController>();
 
         // 1) Place nodes along spline
         nodePlacer.PlaceNodes();
@@ -23,14 +28,7 @@ public class MapController : MonoBehaviour
                       : i == activeIdx0 ? NodeState.Active
                       : NodeState.Inactive;
             nodes[i].SetState(state);
-            if (state == NodeState.Active)
-            {
-                nodes[i].SetOnClick(() => OnActiveNodeClicked(activeIdx0));
-            }
-            else
-            {
-                nodes[i].SetOnClick(null);
-            }
+            nodes[i].SetOnClick(state == NodeState.Active ? () => OnActiveNodeClicked(activeIdx0) : null);
         }
 
         // 3) Move car from off-screen to active node
@@ -42,9 +40,13 @@ public class MapController : MonoBehaviour
         car.MoveTo(t);
     }
 
-    void OnActiveNodeClicked(int activeIdx0)
+    /// <summary>
+    /// Called when the active node is clicked. Opens the learning popup/quiz.
+    /// </summary>
+    /// <param name="activeIdx0">Zero-based index of the active node.</param>
+    private void OnActiveNodeClicked(int activeIdx0)
     {
-        // Open your LearningPopup here.
         Debug.Log($"Node {activeIdx0 + 1} clicked (active). Open popup/quiz.");
+        // TODO: Open your LearningPopup here.
     }
 }

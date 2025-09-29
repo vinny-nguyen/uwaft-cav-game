@@ -1,21 +1,29 @@
 using UnityEngine;
 using UnityEngine.Splines;
 
+/// <summary>
+/// Moves the car along a spline path with smooth movement and bounce effect.
+/// </summary>
 public class CarPathFollower : MonoBehaviour
 {
-    [SerializeField] SplineContainer spline;     // your world spline
-    [SerializeField] float moveSpeed = 2f;       // units per second
-    [SerializeField] float minMoveDuration = 0.1f;
-    float t;
+    [SerializeField] private SplineContainer spline;     // World spline reference
+    [SerializeField] private float moveSpeed = 2f;       // Units per second
+    [SerializeField] private float minMoveDuration = 0.1f;
+    private float t;
 
+    /// <summary>
+    /// Instantly snaps the car to a normalized position on the spline.
+    /// </summary>
     public void SnapTo(float tNorm)
     {
         t = Mathf.Clamp01(tNorm);
         UpdatePlayerPosition(t);
-        // Always set rotation to straight when snapping
         transform.rotation = Quaternion.identity;
     }
 
+    /// <summary>
+    /// Smoothly moves the car to a target normalized position on the spline.
+    /// </summary>
     public void MoveTo(float targetT)
     {
         StopAllCoroutines();
@@ -59,7 +67,6 @@ public class CarPathFollower : MonoBehaviour
 
         // Ensure final position and rotation are precise
         UpdatePlayerPosition(endT);
-        // Smoothly rotate to straight (Quaternion.identity)
         yield return StartCoroutine(SmoothRotateToStraight(0.3f));
         t = endT;
     }

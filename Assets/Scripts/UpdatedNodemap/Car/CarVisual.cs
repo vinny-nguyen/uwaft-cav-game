@@ -1,19 +1,22 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles car sprite visuals and upgrades.
+/// </summary>
 public class CarVisual : MonoBehaviour
 {
     [Header("Renderers")]
-    [SerializeField] SpriteRenderer frameRenderer;
-    [SerializeField] SpriteRenderer tireFrontRenderer;
-    [SerializeField] SpriteRenderer tireRearRenderer;
+    [SerializeField] private SpriteRenderer frameRenderer;
+    [SerializeField] private SpriteRenderer tireFrontRenderer;
+    [SerializeField] private SpriteRenderer tireRearRenderer;
 
     [Header("Default Art (optional)")]
-    [SerializeField] Sprite defaultFrame;
-    [SerializeField] Sprite defaultTire;
+    [SerializeField] private Sprite defaultFrame;
+    [SerializeField] private Sprite defaultTire;
 
-    void Awake()
+    private void Awake()
     {
-        // Optional: set defaults on load
+        // Set defaults on load
         if (defaultFrame) frameRenderer.sprite = defaultFrame;
         if (defaultTire)
         {
@@ -22,7 +25,9 @@ public class CarVisual : MonoBehaviour
         }
     }
 
-    // Upgrade API — pass null to keep current sprite
+    /// <summary>
+    /// Applies upgrade sprites to the car. Pass null to keep current sprite.
+    /// </summary>
     public void ApplyUpgrade(Sprite newFrame, Sprite newTire)
     {
         if (newFrame) frameRenderer.sprite = newFrame;
@@ -31,6 +36,6 @@ public class CarVisual : MonoBehaviour
             tireFrontRenderer.sprite = newTire;
             tireRearRenderer.sprite = newTire;
         }
-        // Optional tiny pop/fade here for polish
+        // Optional: add pop/fade effect for polish
     }
 }
