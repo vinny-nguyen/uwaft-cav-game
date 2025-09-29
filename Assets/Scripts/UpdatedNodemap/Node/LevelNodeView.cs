@@ -19,6 +19,13 @@ public class LevelNodeView : MonoBehaviour
 
     public void SetState(NodeState state)
     {
+        // Play animation for state change
+    var animator = GetComponent<NodeStateAnimation>();
+        if (animator != null)
+        {
+            animator.PlayStateChange(state);
+        }
+
         icon.sprite = state switch
         {
             NodeState.Inactive => inactiveSprite,
@@ -26,9 +33,9 @@ public class LevelNodeView : MonoBehaviour
             NodeState.Completed => completedSprite,
             _ => inactiveSprite
         };
-        button.interactable = state == NodeState.Active;
+        // button.interactable = state == NodeState.Active;
 
-        Debug.Log("Set node " + Index + " to " + state);
+        Debug.Log($"Set node {Index} to {state}");
     }
 
     public void SetOnClick(System.Action onClick)

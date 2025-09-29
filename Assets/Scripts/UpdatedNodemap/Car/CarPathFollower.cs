@@ -69,6 +69,13 @@ public class CarPathFollower : MonoBehaviour
         UpdatePlayerPosition(endT);
         yield return StartCoroutine(SmoothRotateToStraight(0.3f));
         t = endT;
+
+        // Stop wheel spinning when car reaches the node
+        var wheelSpinner = GetComponent<WheelSpinner>();
+        if (wheelSpinner != null)
+        {
+            wheelSpinner.StopSpinning();
+        }
     }
 
     private System.Collections.IEnumerator SmoothRotateToStraight(float duration)
