@@ -1,0 +1,88 @@
+using UnityEngine;
+using UnityEngine.Splines;
+
+public class CarPathFollower : MonoBehaviour
+{
+    [SerializeField] SplineContainer spline;     // your world spline
+    [SerializeField] float moveSpeed = 2f;       // units per second
+    [SerializeField] float minMoveDuration = 0.1f;
+    float t;
+
+    public void SnapTo(float tNorm)
+    {
+        t = Mathf.Clamp01(tNorm);
+        UpdatePlayerPosition(t);
+        // Always set rotation to straight when snapping
+        transform.rotation = Quaternion.identity;
+    }
+
+    public void MoveTo(float targetT)
+    {
+        StopAllCoroutines();
+        StartCoroutine(MoveAlongSpline(t, Mathf.Clamp01(targetT)));
+    }
+
+    private System.Collections.IEnumerator MoveAlongSpline(float startT, float endT)
+    {
+        if (spline == null)
+        {
+            Debug.LogError("Cannot move - spline is null!");
+            yield break;
+        }
+
+        Vector3 startPos = spline.EvaluatePosition(startT);
+        Vector3 endPos = spline.EvaluatePosition(endT);
+        float distance = Vector3.Distance(startPos, endPos);
+        float duration = Mathf.Max(distance / moveSpeed, minMoveDuration);
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            float easedProgress = progress * progress * (3f - 2f * progress); // Smoothstep
+            float splineT = Mathf.Lerp(startT, endT, easedProgress);
+
+            // Update position with bounce
+            Vector3 worldPos = spline.EvaluatePosition(splineT);
+            worldPos.y += Mathf.Sin(Time.time * 5f) * 0.05f; // Add bounce
+            transform.position = worldPos;
+
+            // Update rotation to follow spline tangent
+            var tangent3 = spline.EvaluateTangent(splineT);
+            Vector3 tangent = new Vector3(tangent3.x, tangent3.y, tangent3.z).normalized;
+            transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg);
+
+            t = splineT;
+            yield return null;
+        }
+
+        // Ensure final position and rotation are precise
+        UpdatePlayerPosition(endT);
+        // Smoothly rotate to straight (Quaternion.identity)
+        yield return StartCoroutine(SmoothRotateToStraight(0.3f));
+        t = endT;
+    }
+
+    private System.Collections.IEnumerator SmoothRotateToStraight(float duration)
+    {
+        Quaternion startRot = transform.rotation;
+        Quaternion endRot = Quaternion.identity;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            transform.rotation = Quaternion.Slerp(startRot, endRot, t);
+            yield return null;
+        }
+        transform.rotation = endRot;
+    }
+
+    private void UpdatePlayerPosition(float splineT)
+    {
+        Vector3 worldPos = spline.EvaluatePosition(splineT);
+        worldPos.y += Mathf.Sin(Time.time * 5f) * 0.05f;
+        transform.position = worldPos;
+    }
+}
