@@ -98,13 +98,25 @@ public class MapController : MonoBehaviour
         int prevIndex = currentNodeIndex;
         currentNodeIndex = targetIndex;
 
-        // Move car to the new node, and only set node active when car arrives
-        float fromT = Mathf.Lerp(tStart, tEnd, prevIndex / (float)(nodes.Length - 1));
-        float toT = Mathf.Lerp(tStart, tEnd, currentNodeIndex / (float)(nodes.Length - 1));
-        StartCoroutine(MoveCarAndActivateNode(fromT, toT, currentNodeIndex));
+        MoveCarAndSetNodeState(prevIndex, currentNodeIndex);
     }
 
-    private System.Collections.IEnumerator MoveCarAndActivateNode(float fromT, float toT, int nodeIdx)
+
+    // Helper to get normalized spline t for a node index
+    private float GetSplineTForNode(int index)
+    {
+        return Mathf.Lerp(tStart, tEnd, index / (float)(nodes.Length - 1));
+    }
+
+    // Helper to move car and set node state when car arrives
+    private void MoveCarAndSetNodeState(int fromIndex, int toIndex)
+    {
+        float fromT = GetSplineTForNode(fromIndex);
+        float toT = GetSplineTForNode(toIndex);
+        StartCoroutine(MoveCarAndActivateNodeCoroutine(fromT, toT, toIndex));
+    }
+
+    private System.Collections.IEnumerator MoveCarAndActivateNodeCoroutine(float fromT, float toT, int nodeIdx)
     {
         yield return StartCoroutine(MoveCarTo(fromT, toT, true));
         if (!progressionController.IsCompleted(nodeIdx))
@@ -139,20 +151,16 @@ public class MapController : MonoBehaviour
     // Animate car passing completed nodes and update their state as car passes (original logic)
     private System.Collections.IEnumerator AnimateCarAndCompletedNodes(int activeIdx0, int totalNodes)
     {
-        float[] nodeT = new float[totalNodes];
-        for (int i = 0; i < totalNodes; i++)
-            nodeT[i] = Mathf.Lerp(tStart, tEnd, i / (float)(totalNodes - 1));
-
         car.SnapTo(CarSnapStartT);
         float prevT = CarSnapStartT;
         for (int i = 0; i < activeIdx0; i++)
         {
-            float t = nodeT[i];
+            float t = GetSplineTForNode(i);
             yield return StartCoroutine(MoveCarTo(prevT, t, false)); // Linear, no ease
             nodes[i].SetState(NodeState.Completed, true);
             prevT = t;
         }
-        float activeT = nodeT[activeIdx0];
+        float activeT = GetSplineTForNode(activeIdx0);
         yield return StartCoroutine(MoveCarTo(prevT, activeT, true)); // Eased, no straighten
         nodes[activeIdx0].SetState(NodeState.Active, true);
         nodes[activeIdx0].SetOnClick(() => OnNodeClicked(activeIdx0));
