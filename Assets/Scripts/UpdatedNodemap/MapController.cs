@@ -1,7 +1,15 @@
 using UnityEngine;
+using System.Collections.Generic;
 /// <summary>
 /// Controls the map UI, node placement, and car movement based on progression.
 /// </summary>
+
+[System.Serializable]
+public class NodePopupData
+{
+    public string header;
+    public GameObject slidesParent; // Assign a GameObject with all slides as children
+}
 
 public class MapController : MonoBehaviour
 {
@@ -20,6 +28,10 @@ public class MapController : MonoBehaviour
 
     [SerializeField] private CarPathFollower car;         // CarRoot
     [SerializeField] private ProgressionController progressionController;  // Centralized progression
+    [Header("Popup")]
+    [SerializeField] private PopupController popupController; // Assign in inspector
+    [Tooltip("Popup data for each node (header and slides)")]
+    [SerializeField] private List<NodePopupData> nodePopups; // Assign in inspector, one per node
 
     // --- Constants ---
     private const float CarSnapStartT = 0f;
@@ -34,6 +46,10 @@ public class MapController : MonoBehaviour
     {
         if (!progressionController)
             progressionController = FindFirstObjectByType<ProgressionController>();
+
+        // Hide popup at game start
+        if (popupController != null)
+            popupController.Hide();
 
         // Subscribe to events
         progressionController.OnNodeStateChanged += HandleNodeStateChanged;
@@ -218,11 +234,27 @@ public class MapController : MonoBehaviour
         }
 
         Debug.Log($"Node {nodeIdx + 1} clicked. Open popup/quiz.");
-        // TODO: Open your LearningPopup here.
 
-        // Mark node as completed and unlock next if applicable
-        progressionController.CompleteNode(nodeIdx);
-        // Node visuals will be updated via event handlers
+        // Show popup for this node
+        if (popupController != null && nodePopups != null && nodeIdx < nodePopups.Count)
+        {
+            var popupData = nodePopups[nodeIdx];
+            var slides = new List<GameObject>();
+            if (popupData.slidesParent != null)
+            {
+                foreach (Transform child in popupData.slidesParent.transform)
+                {
+                    slides.Add(child.gameObject);
+                }
+            }
+            bool isCompleted = progressionController.IsCompleted(nodeIdx);
+            popupController.SetBackground(isCompleted);
+            popupController.SetHeaderAndSlides(popupData.header, slides);
+        }
+        else
+        {
+            Debug.LogWarning("PopupController or nodePopups not set, or nodeIdx out of range!");
+        }
     }
 
     // Event handler for node state changes
