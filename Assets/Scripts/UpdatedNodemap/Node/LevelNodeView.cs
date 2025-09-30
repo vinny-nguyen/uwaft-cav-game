@@ -8,8 +8,14 @@ public enum NodeState { Inactive, Active, Completed }
 
 public class LevelNodeView : MonoBehaviour
 {
-    [SerializeField] Image icon;                 // the button image
-    [SerializeField] Button button;
+    private Image icon;                 // the button image
+    private Button button;
+
+    private void Awake()
+    {
+        icon = GetComponent<Image>();
+        button = GetComponent<Button>();
+    }
 
     public int Index { get; private set; }       // 1..6
     System.Action _onClick;
@@ -19,14 +25,14 @@ public class LevelNodeView : MonoBehaviour
 
     public void BindIndex(int index) => Index = index;
 
-    public void SetState(NodeState state)
+    public void SetState(NodeState state, bool animate)
     {
         _currentState = state;
-        // Play animation for state change
         var animator = GetComponent<NodeStateAnimation>();
-        if (animator != null)
+        if (animator != null && animate)
         {
-            animator.PlayStateChange(state);
+            animator.StopAllCoroutines();
+            StartCoroutine(animator.AnimateStateChange(state));
         }
 
         LoadAndSetSprite(state, Index);

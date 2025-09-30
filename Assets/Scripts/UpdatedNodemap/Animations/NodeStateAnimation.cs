@@ -7,15 +7,15 @@ using System.Collections;
 /// </summary>
 public class NodeStateAnimation : MonoBehaviour
 {
-    [SerializeField] private float scaleUp = 1.2f;
-    [SerializeField] private float duration = 0.25f;
+    [SerializeField] private float scaleUp = 1.05f; // less scale up
+    [SerializeField] private float duration = 0.2f;
     [Header("Random Shake Settings")]
-    [SerializeField] private float randomMin = -1f;
-    [SerializeField] private float randomMax = 1f;
+    [SerializeField] private float randomMin = -0.4f;
+    [SerializeField] private float randomMax = 0.4f;
     private Vector3 originalScale;
     [Header("Shake Animation")]
-    [SerializeField] private float shakeDuration = 0.3f;
-    [SerializeField] private float shakeMagnitude = 10f;
+    [SerializeField] private float shakeDuration = 0.2f;
+    [SerializeField] private float shakeMagnitude = 5f;
     private bool isShaking = false;
 
     private void Awake()
@@ -24,41 +24,38 @@ public class NodeStateAnimation : MonoBehaviour
     }
 
     /// <summary>
-    /// Plays a shake animation for locked nodes.
+    /// Triggers a minimal shake animation. Call as StartCoroutine(anim.Shake()).
     /// </summary>
-    public void PlayLockedShake()
+    public IEnumerator Shake()
     {
-        if (!isShaking)
-            StartCoroutine(ShakeNode());
-    }
-
-    private IEnumerator ShakeNode()
-    {
+        if (isShaking) yield break;
         isShaking = true;
         float elapsed = 0f;
-        Vector3 startPos = transform.localPosition;
+        RectTransform rect = GetComponent<RectTransform>();
+        Vector3 startPos = rect ? (Vector3)rect.anchoredPosition : transform.localPosition;
         while (elapsed < shakeDuration)
         {
             float x = Random.Range(randomMin, randomMax) * shakeMagnitude;
             float y = Random.Range(randomMin, randomMax) * shakeMagnitude;
-            transform.localPosition = startPos + new Vector3(x, y, 0f);
+            Vector3 offset = new Vector3(x, y, 0f);
+            if (rect)
+                rect.anchoredPosition = (Vector2)startPos + (Vector2)offset;
+            else
+                transform.localPosition = startPos + offset;
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.localPosition = startPos;
+        if (rect)
+            rect.anchoredPosition = (Vector2)startPos;
+        else
+            transform.localPosition = startPos;
         isShaking = false;
     }
 
     /// <summary>
-    /// Plays the scale-up animation for any state change.
+    /// Animates the scale and color for any state change. Call as StartCoroutine(anim.AnimateStateChange(state)).
     /// </summary>
-    public void PlayStateChange(NodeState state)
-    {
-        StopAllCoroutines();
-        StartCoroutine(AnimateScale(state));
-    }
-
-    private IEnumerator AnimateScale(NodeState state)
+    public IEnumerator AnimateStateChange(NodeState state)
     {
         float elapsed = 0f;
         Vector3 targetScale = originalScale * scaleUp;

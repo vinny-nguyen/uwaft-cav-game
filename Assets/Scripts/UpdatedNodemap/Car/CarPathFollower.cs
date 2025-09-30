@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.Splines;
+using System.Collections;
 
 /// <summary>
-/// Moves the car along a spline path with smooth movement and bounce effect.
+/// Moves the car along a spline path with smooth movement, bounce, and wheel spin animation.
 /// </summary>
 public class CarPathFollower : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class CarPathFollower : MonoBehaviour
     [SerializeField] private float bounceFrequency = 5f;
     [SerializeField] private float bounceAmplitude = 0.05f;
     [SerializeField] private float smoothRotateDuration = 0.3f;
+
+    [Header("Wheel Spin Animation")]
+    [SerializeField] private Transform tireFront;
+    [SerializeField] private Transform tireRear;
+    [SerializeField] private float spinSpeed = 360f;
+    private bool spinning = false;
+
     private float t;
 
     /// <summary>
@@ -31,10 +39,21 @@ public class CarPathFollower : MonoBehaviour
     public void MoveTo(float targetT)
     {
         StopAllCoroutines();
+        StartSpinning();
         StartCoroutine(MoveAlongSpline(t, Mathf.Clamp01(targetT)));
     }
 
-    private System.Collections.IEnumerator MoveAlongSpline(float startT, float endT)
+    public void StartSpinning()
+    {
+        spinning = true;
+    }
+
+    public void StopSpinning()
+    {
+        spinning = false;
+    }
+
+    private IEnumerator MoveAlongSpline(float startT, float endT, bool straightenAtEnd = true, bool eased = true)
     {
         if (spline == null)
         {
@@ -48,12 +67,13 @@ public class CarPathFollower : MonoBehaviour
         float duration = Mathf.Max(distance / moveSpeed, minMoveDuration);
 
         float elapsed = 0f;
+    // spinning is now started in MoveTo()
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float progress = Mathf.Clamp01(elapsed / duration);
-            float easedProgress = SmoothStep(progress);
-            float splineT = Mathf.Lerp(startT, endT, easedProgress);
+            float interp = eased ? SmoothStep(progress) : progress;
+            float splineT = Mathf.Lerp(startT, endT, interp);
 
             // Update position with bounce
             Vector3 worldPos = spline.EvaluatePosition(splineT);
@@ -71,18 +91,15 @@ public class CarPathFollower : MonoBehaviour
 
         // Ensure final position and rotation are precise
         UpdatePlayerPosition(endT);
-        yield return StartCoroutine(SmoothRotateToStraight(0.3f));
         t = endT;
-
-        // Stop wheel spinning when car reaches the node
-        var wheelSpinner = GetComponent<WheelSpinner>();
-        if (wheelSpinner != null)
+        if (straightenAtEnd)
         {
-            wheelSpinner.StopSpinning();
+            yield return StartCoroutine(SmoothRotateToStraight(0.3f));
+            StopSpinning();
         }
     }
 
-    private System.Collections.IEnumerator SmoothRotateToStraight(float duration)
+    private IEnumerator SmoothRotateToStraight(float duration)
     {
         Quaternion startRot = transform.rotation;
         Quaternion endRot = Quaternion.identity;
@@ -108,5 +125,14 @@ public class CarPathFollower : MonoBehaviour
     private float SmoothStep(float t)
     {
         return t * t * (3f - 2f * t);
+    }
+
+    // --- Wheel Spin Animation ---
+    private void Update()
+    {
+        if (!spinning) return;
+        float dt = Time.deltaTime * spinSpeed;
+        if (tireFront != null) tireFront.Rotate(0f, 0f, -dt);
+        if (tireRear != null) tireRear.Rotate(0f, 0f, -dt);
     }
 }

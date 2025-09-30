@@ -258,6 +258,9 @@ MonoBehaviour:
   spline: {fileID: 2076594156}
   moveSpeed: 2
   minMoveDuration: 0.1
+  bounceFrequency: 5
+  bounceAmplitude: 0.05
+  smoothRotateDuration: 0.3
 --- !u!114 &341622341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -423,9 +426,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 471202078}
   button: {fileID: 471202077}
-  inactiveSprite: {fileID: 6922623290000598148, guid: d0439556dbc4041478c48aa8c91e9ce8, type: 3}
-  activeSprite: {fileID: -1879594939928271628, guid: de53d634915d64143801855ea64af45a, type: 3}
-  completedSprite: {fileID: -8624982438153348838, guid: c41553b8bff289647b84f451d04a16a6, type: 3}
 --- !u!114 &471202077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,9 +561,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 528749782}
   button: {fileID: 528749781}
-  inactiveSprite: {fileID: 4293912555441953248, guid: 6954ba37dc57f294baa4477a7e3b7843, type: 3}
-  activeSprite: {fileID: 9120673581907234416, guid: 0436590dc0f29b1409efffe4174cfec2, type: 3}
-  completedSprite: {fileID: -3619100789240571592, guid: 4834f2a5f0ea1bb4994b9a803eb077f8, type: 3}
 --- !u!114 &528749781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,9 +696,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 629962310}
   button: {fileID: 629962309}
-  inactiveSprite: {fileID: -9061277713842301972, guid: 4d1b2f9d2b01fd648b68fd681a4c8584, type: 3}
-  activeSprite: {fileID: 3901687008268635053, guid: 6ee5ed5c8f6edb74da01ff314630c632, type: 3}
-  completedSprite: {fileID: 1922291586192241093, guid: ac0b388d802d79a4782734b76dba628c, type: 3}
 --- !u!114 &629962309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -837,9 +831,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 865527683}
   button: {fileID: 865527682}
-  inactiveSprite: {fileID: -1680566680308144898, guid: dd044daaf87346b4bb3dbcd73cdf3699, type: 3}
-  activeSprite: {fileID: 961079629582449833, guid: f515f7c41713aa34fbc54eb43e198e45, type: 3}
-  completedSprite: {fileID: 8283905722115241371, guid: f088402ad73d71740acefe5ed7151e4c, type: 3}
 --- !u!114 &865527682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,62 +913,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865527679}
   m_CullTransparentMesh: 1
---- !u!1 &1042607625
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1042607627}
-  - component: {fileID: 1042607626}
-  m_Layer: 0
-  m_Name: NodePlacer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1042607626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042607625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 202847a01ed496c41ad19393de64ddef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spline: {fileID: 2076594156}
-  uiCamera: {fileID: 1128101301}
-  canvasRect: {fileID: 1721083542}
-  nodeRects:
-  - {fileID: 629962307}
-  - {fileID: 2004730050}
-  - {fileID: 865527680}
-  - {fileID: 1394273737}
-  - {fileID: 528749779}
-  - {fileID: 471202075}
-  tStart: 0.2
-  tEnd: 0.8
---- !u!4 &1042607627
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042607625}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 364.15924, y: -39.73341, z: -9639.498}
-  m_LocalScale: {x: 108, y: 108, z: 108}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1721083542}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1128101299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1241,9 +1176,20 @@ MonoBehaviour:
   - {fileID: 1394273738}
   - {fileID: 528749780}
   - {fileID: 471202076}
-  nodePlacer: {fileID: 1042607626}
+  spline: {fileID: 2076594156}
+  uiCamera: {fileID: 1128101301}
+  canvasRect: {fileID: 1721083542}
+  nodeRects:
+  - {fileID: 629962307}
+  - {fileID: 2004730050}
+  - {fileID: 865527680}
+  - {fileID: 1394273737}
+  - {fileID: 528749779}
+  - {fileID: 471202075}
+  tStart: 0.2
+  tEnd: 0.8
   car: {fileID: 341622340}
-  prog: {fileID: 1878284184}
+  progressionController: {fileID: 1878284186}
 --- !u!1 &1268699931
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,9 +1278,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 1394273740}
   button: {fileID: 1394273739}
-  inactiveSprite: {fileID: -4373920716103201160, guid: 914f0797c4f1bf344a78517336a3fc3d, type: 3}
-  activeSprite: {fileID: 3093574777989879339, guid: 76dd51ef9b8617147916f6f66b166234, type: 3}
-  completedSprite: {fileID: 6375380345658830432, guid: dd725a3b3375abb4499d345b5eaa655b, type: 3}
 --- !u!114 &1394273739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1601,7 +1544,6 @@ RectTransform:
   - {fileID: 1133648207}
   - {fileID: 1843448231}
   - {fileID: 1268699932}
-  - {fileID: 1042607627}
   - {fileID: 1878284185}
   - {fileID: 1146175852}
   m_Father: {fileID: 0}
@@ -1661,7 +1603,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1878284185}
-  - component: {fileID: 1878284184}
+  - component: {fileID: 1878284186}
   m_Layer: 0
   m_Name: ProgressionController
   m_TagString: Untagged
@@ -1669,18 +1611,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1878284184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1878284183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5af5b5ec3baf5544ae8179820a14bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1878284185
 Transform:
   m_ObjectHideFlags: 0
@@ -1696,6 +1626,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1721083542}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1878284186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1878284183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd2a364b6df07ed429c109561a5f4d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeCount: 6
 --- !u!1 &1892978978
 GameObject:
   m_ObjectHideFlags: 0
@@ -1836,9 +1779,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 2004730053}
   button: {fileID: 2004730052}
-  inactiveSprite: {fileID: 8761240011196768598, guid: 95e077252211a5848a6a97593a568d38, type: 3}
-  activeSprite: {fileID: 92021435380945955, guid: b1ffcb1e1f406534ba123642f064997f, type: 3}
-  completedSprite: {fileID: -5994034248583584534, guid: 6446ec1aa7754c54083f894f856787f8, type: 3}
 --- !u!114 &2004730052
 MonoBehaviour:
   m_ObjectHideFlags: 0
