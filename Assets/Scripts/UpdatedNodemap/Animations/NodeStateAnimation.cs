@@ -9,13 +9,45 @@ public class NodeStateAnimation : MonoBehaviour
 {
     [SerializeField] private float scaleUp = 1.2f;
     [SerializeField] private float duration = 0.25f;
+    [Header("Random Shake Settings")]
+    [SerializeField] private float randomMin = -1f;
+    [SerializeField] private float randomMax = 1f;
     private Vector3 originalScale;
+    [Header("Shake Animation")]
+    [SerializeField] private float shakeDuration = 0.3f;
+    [SerializeField] private float shakeMagnitude = 10f;
+    private bool isShaking = false;
 
     private void Awake()
     {
         originalScale = transform.localScale;
     }
 
+    /// <summary>
+    /// Plays a shake animation for locked nodes.
+    /// </summary>
+    public void PlayLockedShake()
+    {
+        if (!isShaking)
+            StartCoroutine(ShakeNode());
+    }
+
+    private IEnumerator ShakeNode()
+    {
+        isShaking = true;
+        float elapsed = 0f;
+        Vector3 startPos = transform.localPosition;
+        while (elapsed < shakeDuration)
+        {
+            float x = Random.Range(randomMin, randomMax) * shakeMagnitude;
+            float y = Random.Range(randomMin, randomMax) * shakeMagnitude;
+            transform.localPosition = startPos + new Vector3(x, y, 0f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.localPosition = startPos;
+        isShaking = false;
+    }
 
     /// <summary>
     /// Plays the scale-up animation for any state change.

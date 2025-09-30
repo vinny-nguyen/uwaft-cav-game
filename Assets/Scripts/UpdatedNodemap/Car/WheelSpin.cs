@@ -7,7 +7,10 @@ public class WheelSpinner : MonoBehaviour
 {
     [SerializeField] private Transform tireFront;
     [SerializeField] private Transform tireRear;
-    [SerializeField] private float spinSpeed = 360f; // Degrees per second
+    [SerializeField] private float spinSpeed = DefaultSpinSpeed;
+
+    // --- Constants ---
+    private const float DefaultSpinSpeed = 360f; // Degrees per second
     /// <summary>
     /// If true, wheels will spin in Update.
     /// </summary>
@@ -17,8 +20,8 @@ public class WheelSpinner : MonoBehaviour
     {
         if (!spinning) return;
         float dt = Time.deltaTime * spinSpeed;
-        tireFront.Rotate(0f, 0f, -dt);
-        tireRear.Rotate(0f, 0f, -dt);
+    tireFront.Rotate(0f, 0f, -dt);
+    tireRear.Rotate(0f, 0f, -dt);
     }
 
     /// <summary>

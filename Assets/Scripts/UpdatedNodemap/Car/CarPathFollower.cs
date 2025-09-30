@@ -9,6 +9,10 @@ public class CarPathFollower : MonoBehaviour
     [SerializeField] private SplineContainer spline;     // World spline reference
     [SerializeField] private float moveSpeed = 2f;       // Units per second
     [SerializeField] private float minMoveDuration = 0.1f;
+    [Header("Animation Settings")]
+    [SerializeField] private float bounceFrequency = 5f;
+    [SerializeField] private float bounceAmplitude = 0.05f;
+    [SerializeField] private float smoothRotateDuration = 0.3f;
     private float t;
 
     /// <summary>
@@ -48,12 +52,12 @@ public class CarPathFollower : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float progress = Mathf.Clamp01(elapsed / duration);
-            float easedProgress = progress * progress * (3f - 2f * progress); // Smoothstep
+            float easedProgress = SmoothStep(progress);
             float splineT = Mathf.Lerp(startT, endT, easedProgress);
 
             // Update position with bounce
             Vector3 worldPos = spline.EvaluatePosition(splineT);
-            worldPos.y += Mathf.Sin(Time.time * 5f) * 0.05f; // Add bounce
+            worldPos.y += Mathf.Sin(Time.time * bounceFrequency) * bounceAmplitude; // Add bounce
             transform.position = worldPos;
 
             // Update rotation to follow spline tangent
@@ -83,10 +87,10 @@ public class CarPathFollower : MonoBehaviour
         Quaternion startRot = transform.rotation;
         Quaternion endRot = Quaternion.identity;
         float elapsed = 0f;
-        while (elapsed < duration)
+        while (elapsed < smoothRotateDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
+            float t = Mathf.Clamp01(elapsed / smoothRotateDuration);
             transform.rotation = Quaternion.Slerp(startRot, endRot, t);
             yield return null;
         }
@@ -96,7 +100,13 @@ public class CarPathFollower : MonoBehaviour
     private void UpdatePlayerPosition(float splineT)
     {
         Vector3 worldPos = spline.EvaluatePosition(splineT);
-        worldPos.y += Mathf.Sin(Time.time * 5f) * 0.05f;
+        worldPos.y += Mathf.Sin(Time.time * bounceFrequency) * bounceAmplitude;
         transform.position = worldPos;
+    }
+
+    // Smoothstep function for animation
+    private float SmoothStep(float t)
+    {
+        return t * t * (3f - 2f * t);
     }
 }
