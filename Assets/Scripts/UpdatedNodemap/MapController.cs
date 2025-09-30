@@ -2,9 +2,9 @@ using UnityEngine;
 /// <summary>
 /// Controls the map UI, node placement, and car movement based on progression.
 /// </summary>
+
 public class MapController : MonoBehaviour
 {
-
     [SerializeField] private LevelNodeView[] nodes;       // 6 buttons in order
     [Header("World")]
     [SerializeField] private UnityEngine.Splines.SplineContainer spline;   // your world spline
@@ -21,11 +21,14 @@ public class MapController : MonoBehaviour
     [SerializeField] private CarPathFollower car;         // CarRoot
     [SerializeField] private ProgressionController progressionController;  // Centralized progression
 
-
-
     // --- Constants ---
     private const float CarSnapStartT = 0f;
     private const float CarArrivalTolerance = 0.1f;
+
+    // --- Keyboard Navigation ---
+    private int currentNodeIndex = 0; // zero-based, node 1 is index 0
+    private const int minNode = 0;    // index 0 (node 1)
+    private const int maxNode = 5;    // index 5 (node 6)
 
     private void Start()
     {
@@ -52,10 +55,64 @@ public class MapController : MonoBehaviour
         int activeIdx0 = progressionController.GetCurrentActiveNodeIndex();
         int totalNodes = nodes.Length;
         StartCoroutine(AnimateCarAndCompletedNodes(activeIdx0, totalNodes));
+
+        // Set currentNodeIndex to the active node at start
+        currentNodeIndex = Mathf.Clamp(progressionController.GetCurrentActiveNodeIndex(), minNode, maxNode);
+    }
+
+    private void Update()
+    {
+        HandleKeyboardInput();
+    }
+
+    private void HandleKeyboardInput()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            TryMoveToNode(currentNodeIndex + 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            TryMoveToNode(currentNodeIndex - 1);
+        }
+    }
+
+    private void TryMoveToNode(int targetIndex)
+    {
+        if (targetIndex < minNode || targetIndex > maxNode)
+            return;
+
+        if (!progressionController.IsUnlocked(targetIndex))
+        {
+            // Shake current node if trying to go to a locked node
+            var nodeAnim = nodes[currentNodeIndex].GetComponent<NodeStateAnimation>();
+            if (nodeAnim != null)
+                StartCoroutine(nodeAnim.Shake());
+            return;
+        }
+
+        // Set previous node inactive if not completed
+        if (!progressionController.IsCompleted(currentNodeIndex))
+            nodes[currentNodeIndex].SetState(NodeState.Inactive, true);
+
+        int prevIndex = currentNodeIndex;
+        currentNodeIndex = targetIndex;
+
+        // Move car to the new node, and only set node active when car arrives
+        float fromT = Mathf.Lerp(tStart, tEnd, prevIndex / (float)(nodes.Length - 1));
+        float toT = Mathf.Lerp(tStart, tEnd, currentNodeIndex / (float)(nodes.Length - 1));
+        StartCoroutine(MoveCarAndActivateNode(fromT, toT, currentNodeIndex));
+    }
+
+    private System.Collections.IEnumerator MoveCarAndActivateNode(float fromT, float toT, int nodeIdx)
+    {
+        yield return StartCoroutine(MoveCarTo(fromT, toT, true));
+        if (!progressionController.IsCompleted(nodeIdx))
+            nodes[nodeIdx].SetState(NodeState.Active, true);
     }
 
     // Helper coroutine to move car using CarPathFollower's private MoveAlongSpline
-    private System.Collections.IEnumerator MoveCarTo(float fromT, float toT, bool straightenAtEnd, bool eased)
+    private System.Collections.IEnumerator MoveCarTo(float fromT, float toT, bool eased)
     {
         var moveAlong = car.GetType().GetMethod("MoveAlongSpline", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (moveAlong != null)
@@ -63,9 +120,9 @@ public class MapController : MonoBehaviour
             var paramCount = moveAlong.GetParameters().Length;
             object[] parameters;
             if (paramCount == 4)
-                parameters = new object[] { fromT, toT, straightenAtEnd, eased };
+                parameters = new object[] { fromT, toT, false, eased }; // always false for straighten
             else if (paramCount == 3)
-                parameters = new object[] { fromT, toT, straightenAtEnd };
+                parameters = new object[] { fromT, toT, eased }; // drop straighten param
             else
                 parameters = new object[] { fromT, toT };
             var enumerator = (System.Collections.IEnumerator)moveAlong.Invoke(car, parameters);
@@ -91,12 +148,12 @@ public class MapController : MonoBehaviour
         for (int i = 0; i < activeIdx0; i++)
         {
             float t = nodeT[i];
-            yield return StartCoroutine(MoveCarTo(prevT, t, false, false)); // Linear, no ease, no straighten
+            yield return StartCoroutine(MoveCarTo(prevT, t, false)); // Linear, no ease
             nodes[i].SetState(NodeState.Completed, true);
             prevT = t;
         }
         float activeT = nodeT[activeIdx0];
-        yield return StartCoroutine(MoveCarTo(prevT, activeT, true, true)); // Eased, straighten at end
+        yield return StartCoroutine(MoveCarTo(prevT, activeT, true)); // Eased, no straighten
         nodes[activeIdx0].SetState(NodeState.Active, true);
         nodes[activeIdx0].SetOnClick(() => OnNodeClicked(activeIdx0));
     }

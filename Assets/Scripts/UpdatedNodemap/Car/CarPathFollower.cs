@@ -20,6 +20,7 @@ public class CarPathFollower : MonoBehaviour
     [SerializeField] private Transform tireRear;
     [SerializeField] private float spinSpeed = 360f;
     private bool spinning = false;
+    private int spinDirection = 1; // 1 = forward, -1 = backward
 
     private float t;
 
@@ -39,7 +40,8 @@ public class CarPathFollower : MonoBehaviour
     public void MoveTo(float targetT)
     {
         StopAllCoroutines();
-        StartSpinning();
+        // Set spin direction based on movement
+        spinDirection = (targetT >= t) ? 1 : -1;
         StartCoroutine(MoveAlongSpline(t, Mathf.Clamp01(targetT)));
     }
 
@@ -61,13 +63,16 @@ public class CarPathFollower : MonoBehaviour
             yield break;
         }
 
+    // Set spin direction based on movement
+    spinDirection = (endT >= startT) ? 1 : -1;
+    StartSpinning();
+
         Vector3 startPos = spline.EvaluatePosition(startT);
         Vector3 endPos = spline.EvaluatePosition(endT);
         float distance = Vector3.Distance(startPos, endPos);
         float duration = Mathf.Max(distance / moveSpeed, minMoveDuration);
 
         float elapsed = 0f;
-    // spinning is now started in MoveTo()
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
@@ -95,8 +100,8 @@ public class CarPathFollower : MonoBehaviour
         if (straightenAtEnd)
         {
             yield return StartCoroutine(SmoothRotateToStraight(0.3f));
-            StopSpinning();
         }
+        StopSpinning();
     }
 
     private IEnumerator SmoothRotateToStraight(float duration)
@@ -131,7 +136,7 @@ public class CarPathFollower : MonoBehaviour
     private void Update()
     {
         if (!spinning) return;
-        float dt = Time.deltaTime * spinSpeed;
+        float dt = Time.deltaTime * spinSpeed * spinDirection;
         if (tireFront != null) tireFront.Rotate(0f, 0f, -dt);
         if (tireRear != null) tireRear.Rotate(0f, 0f, -dt);
     }
