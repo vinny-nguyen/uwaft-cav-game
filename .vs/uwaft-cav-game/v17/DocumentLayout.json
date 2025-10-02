@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\assets\\scripts\\leaderdist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\leaderdist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|c:\\users\\umair\\documents\\github\\uwaft-cav-game\\assets\\scripts\\leaderboardmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\leaderboardmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\assets\\scripts\\leaderboardmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\leaderboardmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\assets\\scripts\\leaderdist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\leaderdist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{36908687-1755-6746-908E-D0543F7C7751}|Assembly-CSharp.csproj|C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\assets\\scripts\\authmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -42,12 +42,11 @@
               "RelativeToolTip": "Assets\\Scripts\\FuelTest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-07T03:26:19.58Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-07T03:26:19.58Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "LeaderDist.cs",
               "DocumentMoniker": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\LeaderDist.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\LeaderDist.cs",
@@ -55,18 +54,17 @@
               "RelativeToolTip": "Assets\\Scripts\\LeaderDist.cs",
               "ViewState": "AgIAAE4AAAAAAAAAAAAUwF8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T05:07:30.281Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-06T05:07:30.281Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "LeaderboardManager.cs",
               "DocumentMoniker": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\LeaderboardManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\LeaderboardManager.cs",
               "ToolTip": "C:\\Users\\umair\\Documents\\GitHub\\uwaft-cav-game\\Assets\\Scripts\\LeaderboardManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\LeaderboardManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAPwAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-04T21:27:14.687Z",
               "EditorCaption": ""
@@ -81,8 +79,7 @@
               "RelativeToolTip": "Assets\\Scripts\\AuthManager.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAQwAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T21:17:01.072Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T21:17:01.072Z"
             },
             {
               "$type": "Document",

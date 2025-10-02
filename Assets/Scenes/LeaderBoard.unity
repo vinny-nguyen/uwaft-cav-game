@@ -995,9 +995,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a278e256841ff24e91ebbe38b5d35e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaderboardPanel: {fileID: 1577725139}
+  leaderboardPanel: {fileID: 1339192789}
   entriesParent: {fileID: 1507915234}
-  entryPrefab: {fileID: 868756746}
+  entryPrefab: {fileID: 3007674752403655439, guid: 37b82f365d454e14394b00df75b784c5, type: 3}
   leaderboardID: UWAFT_CAV_Game
   maxEntries: 10
   refreshCooldown: 2
