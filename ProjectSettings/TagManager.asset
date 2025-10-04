@@ -46,5 +46,14 @@ TagManager:
   - name: Background
     uniqueID: 1008418755
     locked: 0
+  - name: Nodes
+    uniqueID: 1975741109
+    locked: 0
+  - name: Car
+    uniqueID: 3907265949
+    locked: 0
+  - name: Popup
+    uniqueID: 1111924565
+    locked: 0
   m_RenderingLayers:
   - Default

@@ -7,22 +7,45 @@ using System.Collections;
 /// </summary>
 public class CarPathFollower : MonoBehaviour
 {
+    [Header("Configuration")]
+    [SerializeField] private MapConfig mapConfig;
+    
     [SerializeField] private SplineContainer spline;     // World spline reference
+    
+    [Header("Movement Settings - Overridden by MapConfig")]
     [SerializeField] private float moveSpeed = 2f;       // Units per second
     [SerializeField] private float minMoveDuration = 0.1f;
-    [Header("Animation Settings")]
+    
+    [Header("Animation Settings - Overridden by MapConfig")]
     [SerializeField] private float bounceFrequency = 5f;
     [SerializeField] private float bounceAmplitude = 0.05f;
     [SerializeField] private float smoothRotateDuration = 0.3f;
 
-    [Header("Wheel Spin Animation")]
+    [Header("Wheel Spin Animation - Overridden by MapConfig")]
     [SerializeField] private Transform tireFront;
     [SerializeField] private Transform tireRear;
     [SerializeField] private float spinSpeed = 360f;
     private bool spinning = false;
-    private int spinDirection = 1; // 1 = forward, -1 = backward
-
+    private int spinDirection = 1;
+    public float NormalizedT => t;
     private float t;
+
+    // Public accessors for movement parameters
+    public float MoveSpeed => GetMoveSpeed();
+    public float MinMoveDuration => GetMinMoveDuration();
+    
+    // Configuration Helpers
+    private float GetMoveSpeed() => mapConfig ? mapConfig.moveSpeed : moveSpeed;
+    private float GetMinMoveDuration() => mapConfig ? mapConfig.minMoveDuration : minMoveDuration;
+    private float GetBounceFrequency() => mapConfig ? mapConfig.carBounceFrequency : bounceFrequency;
+    private float GetBounceAmplitude() => mapConfig ? mapConfig.carBounceAmplitude : bounceAmplitude;
+    private float GetSpinSpeed() => mapConfig ? mapConfig.wheelSpinSpeed : spinSpeed;
+    
+    private void Awake()
+    {
+        // Initialize config if not assigned
+        if (!mapConfig) mapConfig = MapConfig.Instance;
+    }
 
     /// <summary>
     /// Instantly snaps the car to a normalized position on the spline.
@@ -30,7 +53,8 @@ public class CarPathFollower : MonoBehaviour
     public void SnapTo(float tNorm)
     {
         t = Mathf.Clamp01(tNorm);
-        UpdatePlayerPosition(t);
+        var pos = spline.EvaluatePosition(t);
+        transform.position = pos;
         transform.rotation = Quaternion.identity;
     }
 
@@ -42,7 +66,7 @@ public class CarPathFollower : MonoBehaviour
         StopAllCoroutines();
         // Set spin direction based on movement
         spinDirection = (targetT >= t) ? 1 : -1;
-        StartCoroutine(MoveAlongSpline(t, Mathf.Clamp01(targetT)));
+        StartCoroutine(MoveAlong(t, Mathf.Clamp01(targetT)));
     }
 
     public void StartSpinning()
@@ -55,7 +79,7 @@ public class CarPathFollower : MonoBehaviour
         spinning = false;
     }
 
-    private IEnumerator MoveAlongSpline(float startT, float endT, bool straightenAtEnd = true, bool eased = true)
+    public IEnumerator MoveAlong(float startT, float endT, bool eased = true)
     {
         if (spline == null)
         {
@@ -63,14 +87,14 @@ public class CarPathFollower : MonoBehaviour
             yield break;
         }
 
-    // Set spin direction based on movement
-    spinDirection = (endT >= startT) ? 1 : -1;
-    StartSpinning();
+        // Set spin direction based on movement
+        spinDirection = (endT >= startT) ? 1 : -1;
+        StartSpinning();
 
         Vector3 startPos = spline.EvaluatePosition(startT);
         Vector3 endPos = spline.EvaluatePosition(endT);
         float distance = Vector3.Distance(startPos, endPos);
-        float duration = Mathf.Max(distance / moveSpeed, minMoveDuration);
+        float duration = Mathf.Max(distance / GetMoveSpeed(), GetMinMoveDuration());
 
         float elapsed = 0f;
         while (elapsed < duration)
@@ -82,7 +106,7 @@ public class CarPathFollower : MonoBehaviour
 
             // Update position with bounce
             Vector3 worldPos = spline.EvaluatePosition(splineT);
-            worldPos.y += Mathf.Sin(Time.time * bounceFrequency) * bounceAmplitude; // Add bounce
+            worldPos.y += Mathf.Sin(Time.time * GetBounceFrequency()) * GetBounceAmplitude(); // Add bounce
             transform.position = worldPos;
 
             // Update rotation to follow spline tangent
@@ -97,32 +121,13 @@ public class CarPathFollower : MonoBehaviour
         // Ensure final position and rotation are precise
         UpdatePlayerPosition(endT);
         t = endT;
-        if (straightenAtEnd)
-        {
-            yield return StartCoroutine(SmoothRotateToStraight(0.3f));
-        }
         StopSpinning();
-    }
-
-    private IEnumerator SmoothRotateToStraight(float duration)
-    {
-        Quaternion startRot = transform.rotation;
-        Quaternion endRot = Quaternion.identity;
-        float elapsed = 0f;
-        while (elapsed < smoothRotateDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / smoothRotateDuration);
-            transform.rotation = Quaternion.Slerp(startRot, endRot, t);
-            yield return null;
-        }
-        transform.rotation = endRot;
     }
 
     private void UpdatePlayerPosition(float splineT)
     {
         Vector3 worldPos = spline.EvaluatePosition(splineT);
-        worldPos.y += Mathf.Sin(Time.time * bounceFrequency) * bounceAmplitude;
+        worldPos.y += Mathf.Sin(Time.time * GetBounceFrequency()) * GetBounceAmplitude();
         transform.position = worldPos;
     }
 
@@ -136,7 +141,7 @@ public class CarPathFollower : MonoBehaviour
     private void Update()
     {
         if (!spinning) return;
-        float dt = Time.deltaTime * spinSpeed * spinDirection;
+        float dt = Time.deltaTime * GetSpinSpeed() * spinDirection;
         if (tireFront != null) tireFront.Rotate(0f, 0f, -dt);
         if (tireRear != null) tireRear.Rotate(0f, 0f, -dt);
     }

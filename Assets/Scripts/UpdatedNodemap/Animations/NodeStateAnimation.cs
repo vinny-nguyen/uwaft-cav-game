@@ -1,103 +1,95 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Simple scale-up animation for node state transitions.
-/// Attach to node GameObject.
-/// </summary>
 public class NodeStateAnimation : MonoBehaviour
 {
-    [SerializeField] private float scaleUp = 1.05f; // less scale up
+    [Header("Configuration")]
+    [SerializeField] private MapConfig mapConfig;
+    
+    [Header("Pop Animation - Overridden by MapConfig")]
+    [SerializeField] private float scaleUp = 1.05f;
     [SerializeField] private float duration = 0.2f;
+
     [Header("Random Shake Settings")]
     [SerializeField] private float randomMin = -0.4f;
     [SerializeField] private float randomMax = 0.4f;
+
     private Vector3 originalScale;
-    [Header("Shake Animation")]
+
+    [Header("Shake Animation - Overridden by MapConfig")]
     [SerializeField] private float shakeDuration = 0.2f;
     [SerializeField] private float shakeMagnitude = 5f;
-    private bool isShaking = false;
+    private bool isShaking;
 
     private void Awake()
     {
         originalScale = transform.localScale;
+        
+        // Initialize config if not assigned
+        if (!mapConfig) mapConfig = MapConfig.Instance;
     }
+    
+    // Configuration Helpers
+    private float GetScaleUp() => mapConfig ? mapConfig.popScaleUp : scaleUp;
+    private float GetDuration() => mapConfig ? mapConfig.popDuration : duration;
+    private float GetShakeDuration() => mapConfig ? mapConfig.shakeDuration : shakeDuration;
+    private float GetShakeMagnitude() => mapConfig ? mapConfig.shakeMagnitude : shakeMagnitude;
 
-    /// <summary>
-    /// Triggers a minimal shake animation. Call as StartCoroutine(anim.Shake()).
-    /// </summary>
     public IEnumerator Shake()
     {
         if (isShaking) yield break;
         isShaking = true;
+
         float elapsed = 0f;
-        RectTransform rect = GetComponent<RectTransform>();
+        var rect = GetComponent<RectTransform>();
         Vector3 startPos = rect ? (Vector3)rect.anchoredPosition : transform.localPosition;
-        while (elapsed < shakeDuration)
+        float configShakeDuration = GetShakeDuration();
+        float configShakeMagnitude = GetShakeMagnitude();
+
+        while (elapsed < configShakeDuration)
         {
-            float x = Random.Range(randomMin, randomMax) * shakeMagnitude;
-            float y = Random.Range(randomMin, randomMax) * shakeMagnitude;
+            float x = Random.Range(randomMin, randomMax) * configShakeMagnitude;
+            float y = Random.Range(randomMin, randomMax) * configShakeMagnitude;
             Vector3 offset = new Vector3(x, y, 0f);
-            if (rect)
-                rect.anchoredPosition = (Vector2)startPos + (Vector2)offset;
-            else
-                transform.localPosition = startPos + offset;
+
+            if (rect) rect.anchoredPosition = (Vector2)startPos + (Vector2)offset;
+            else      transform.localPosition = startPos + offset;
+
             elapsed += Time.deltaTime;
             yield return null;
         }
-        if (rect)
-            rect.anchoredPosition = (Vector2)startPos;
-        else
-            transform.localPosition = startPos;
+
+        if (rect) rect.anchoredPosition = (Vector2)startPos;
+        else      transform.localPosition = startPos;
+
         isShaking = false;
     }
 
-    /// <summary>
-    /// Animates the scale and color for any state change. Call as StartCoroutine(anim.AnimateStateChange(state)).
-    /// </summary>
-    public IEnumerator AnimateStateChange(NodeState state)
+    public IEnumerator AnimateStateChange(NodeState _)
     {
+        // scale pop only; no color tint
         float elapsed = 0f;
-        Vector3 targetScale = originalScale * scaleUp;
-        Color targetColor = Color.white;
-        var img = GetComponent<UnityEngine.UI.Image>();
-        if (img != null)
-        {
-            switch (state)
-            {
-                case NodeState.Active:
-                    targetColor = Color.yellow;
-                    break;
-                case NodeState.Completed:
-                    targetColor = Color.green;
-                    break;
-                case NodeState.Inactive:
-                    targetColor = Color.gray;
-                    break;
-            }
-        }
+        float configScaleUp = GetScaleUp();
+        float configDuration = GetDuration();
+        Vector3 targetScale = originalScale * configScaleUp;
 
-        Color originalColor = img != null ? img.color : Color.white;
-
-        while (elapsed < duration)
+        while (elapsed < configDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
+            float t = Mathf.Clamp01(elapsed / configDuration);
             transform.localScale = Vector3.Lerp(originalScale, targetScale, t);
-            if (img != null) img.color = Color.Lerp(originalColor, targetColor, t);
             yield return null;
         }
-        // Return to original scale and color
+
         elapsed = 0f;
-        while (elapsed < duration)
+        while (elapsed < configDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
+            float t = Mathf.Clamp01(elapsed / configDuration);
             transform.localScale = Vector3.Lerp(targetScale, originalScale, t);
-            if (img != null) img.color = Color.Lerp(targetColor, originalColor, t);
             yield return null;
         }
+
         transform.localScale = originalScale;
-        if (img != null) img.color = originalColor;
     }
 }

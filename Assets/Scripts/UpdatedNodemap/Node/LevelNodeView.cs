@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections;
 
 public enum NodeState { Inactive, Active, Completed }
 
@@ -10,11 +11,26 @@ public class LevelNodeView : MonoBehaviour
 {
     private Image icon;                 // the button image
     private Button button;
+    private NodeStateAnimation _anim;
 
     private void Awake()
     {
         icon = GetComponent<Image>();
         button = GetComponent<Button>();
+        _anim = GetComponent<NodeStateAnimation>();
+    }
+
+    public void PlayShake()
+    {
+        if (_anim != null)
+            StartCoroutine(_anim.Shake());
+    }
+
+    // OPTIONAL: if you want a helper for state-change pop animation too:
+    public void PlayStatePop(NodeState state)
+    {
+        if (_anim != null)
+            StartCoroutine(_anim.AnimateStateChange(state));
     }
 
     public int Index { get; private set; }       // 1..6

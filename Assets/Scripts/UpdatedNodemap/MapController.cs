@@ -1,85 +1,346 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-/// <summary>
-/// Controls the map UI, node placement, and car movement based on progression.
-/// </summary>
-
-[System.Serializable]
-public class NodePopupData
-{
-    public string header;
-    public GameObject slidesParent; // Assign a GameObject with all slides as children
-}
+using UnityEngine;
+using UnityEngine.Splines;
 
 public class MapController : MonoBehaviour
 {
-    [SerializeField] private LevelNodeView[] nodes;       // 6 buttons in order
-    [Header("World")]
-    [SerializeField] private UnityEngine.Splines.SplineContainer spline;   // your world spline
+    [Header("Data & UI Prefab")]
+    [SerializeField] private List<NodeData> nodeDataList; // One per node, in order
+    [SerializeField] private LevelNodeView nodePrefab;    // Prefabs/UI/NodeButton.prefab
+    [SerializeField] private RectTransform nodesParent;   // Parent under Canvas to hold spawned nodes
 
-    [Header("UI")]
-    [SerializeField] private Camera uiCamera;          // the Canvas' camera (Main Camera)
-    [SerializeField] private RectTransform canvasRect; // root Canvas RectTransform
-    [SerializeField] private RectTransform[] nodeRects; // your 6 node buttons, in order
+    [Header("Spline & Car (World)")]
+    [SerializeField] private SplineContainer spline;
+    [SerializeField] private CarPathFollower car;
 
-    [Header("Range on Spline (normalized t)")]
-    [Range(0f, 1f)] public float tStart = 0.2f;
-    [Range(0f, 1f)] public float tEnd = 0.8f;
+    [Header("Canvas Mapping")]
+    [SerializeField] private Camera uiCamera;                 // Canvas camera
+    [SerializeField] private RectTransform canvasRect;        // Root Canvas RectTransform
 
-    [SerializeField] private CarPathFollower car;         // CarRoot
-    [SerializeField] private ProgressionController progressionController;  // Centralized progression
-    [Header("Popup")]
-    [SerializeField] private PopupController popupController; // Assign in inspector
-    [Tooltip("Popup data for each node (header and slides)")]
-    [SerializeField] private List<NodePopupData> nodePopups; // Assign in inspector, one per node
+    [Header("Popup & Progression")]
+    [SerializeField] private PopupController popupController;
+    [SerializeField] private ProgressionController progressionController;
 
-    // --- Constants ---
-    private const float CarSnapStartT = 0f;
-    private const float CarArrivalTolerance = 0.1f;
+    [Header("Configuration")]
+    [SerializeField] private MapConfig mapConfig;
+    
+    [Header("Spline Range (normalized) - Overridden by MapConfig")]
+    [Range(0f, 1f)] public float tStart = 0.2f;   // where first node lives (fallback if no config)
+    [Range(0f, 1f)] public float tEnd = 0.8f;   // where last node lives (fallback if no config)
 
-    // --- Keyboard Navigation ---
-    private int currentNodeIndex = 0; // zero-based, node 1 is index 0
-    private const int minNode = 0;    // index 0 (node 1)
-    private const int maxNode = 5;    // index 5 (node 6)
+    [Header("Car Spawn (normalized)")]
+    [Tooltip("Where the car spawns initially along the spline (0..1). Set this outside [tStart, tEnd] so it starts off-screen.")]
+    [Range(0f, 1f)] public float carSpawnT = 0.0f;
+
+    private readonly List<LevelNodeView> nodes = new();
+    private readonly List<RectTransform> nodeRects = new();
+
+    private int currentNodeIndex = 0;
+
+    // Track arrival gating so active node doesn't light up prematurely
+    private int pendingActiveIndex = -1;
+    private bool isMovingToTarget = false;
+
+    // -------------------- Configuration Helpers --------------------
+    
+    private float GetTStart() => mapConfig ? mapConfig.tStart : tStart;
+    private float GetTEnd() => mapConfig ? mapConfig.tEnd : tEnd;
+
+    // -------------------- Lifecycle --------------------
 
     private void Start()
     {
+        // Initialize config if not assigned
+        if (!mapConfig) mapConfig = MapConfig.Instance;
+        
+        // Guards
+        if (!progressionController) progressionController = FindFirstObjectByType<ProgressionController>();
         if (!progressionController)
-            progressionController = FindFirstObjectByType<ProgressionController>();
+        {
+            Debug.LogError("MapController: ProgressionController is not assigned.");
+            enabled = false;
+            return;
+        }
+        if (!spline) { Debug.LogError("MapController: SplineContainer not assigned."); enabled = false; return; }
+        if (!car) { Debug.LogError("MapController: CarPathFollower not assigned."); enabled = false; return; }
+        if (!nodePrefab || !nodesParent) { Debug.LogError("MapController: nodePrefab or nodesParent missing."); enabled = false; return; }
+        if (!uiCamera || !canvasRect) { Debug.LogError("MapController: uiCamera or canvasRect missing."); enabled = false; return; }
 
-        // Hide popup at game start
-        if (popupController != null)
-            popupController.Hide();
+        if (popupController) popupController.Hide();
 
-        // Subscribe to events
+        // Subscribe to progression
         progressionController.OnNodeStateChanged += HandleNodeStateChanged;
         progressionController.OnActiveNodeChanged += HandleActiveNodeChanged;
 
-        // 1) Place nodes along spline
+        // Spawn nodes from data and place them on the canvas
+        SpawnNodesFromData();
         PlaceNodes();
 
-        // 2) Set node visuals & clickability (all start as Inactive, no animation)
-        for (int i = 0; i < nodes.Length; i++)
+        // Spawn car off-screen (or wherever carSpawnT is)
+        car.SnapTo(Mathf.Clamp01(carSpawnT));
+
+        // Set up movement tracking BEFORE visual updates to prevent premature activation
+        currentNodeIndex = Mathf.Clamp(progressionController.GetCurrentActiveNodeIndex(), 0, Mathf.Max(0, nodes.Count - 1));
+        pendingActiveIndex = currentNodeIndex;
+        isMovingToTarget = true;
+
+        // Paint states (Completed/Active/Inactive) without animation - now with proper gating
+        for (int i = 0; i < nodes.Count; i++)
+            UpdateNodeVisual(i, animate: false);
+
+        // Move through completed nodes (if any) then to the current active node, and only
+        // then light it up as Active (activate-on-arrival).
+        StartCoroutine(AnimateCarThroughCompletedToActive(currentNodeIndex));
+    }
+
+    private void OnDestroy()
+    {
+        if (progressionController != null)
         {
-            nodes[i].BindIndex(i + 1);
-            nodes[i].SetState(NodeState.Inactive, false); // no animation on setup
-            int idx = i;
-            nodes[i].SetOnClick(() => OnNodeClicked(idx));
+            progressionController.OnNodeStateChanged -= HandleNodeStateChanged;
+            progressionController.OnActiveNodeChanged -= HandleActiveNodeChanged;
         }
-
-        // 3) Animate car passing completed nodes and update their state as car passes
-        int activeIdx0 = progressionController.GetCurrentActiveNodeIndex();
-        int totalNodes = nodes.Length;
-        StartCoroutine(AnimateCarAndCompletedNodes(activeIdx0, totalNodes));
-
-        // Set currentNodeIndex to the active node at start
-        currentNodeIndex = Mathf.Clamp(progressionController.GetCurrentActiveNodeIndex(), minNode, maxNode);
     }
 
     private void Update()
     {
         HandleKeyboardInput();
     }
+
+    // -------------------- Spawning & Placement --------------------
+
+    private void SpawnNodesFromData()
+    {
+        // Clear existing children
+        for (int i = nodesParent.childCount - 1; i >= 0; i--)
+            Destroy(nodesParent.GetChild(i).gameObject);
+
+        nodes.Clear();
+        nodeRects.Clear();
+
+        int count = nodeDataList != null ? nodeDataList.Count : 0;
+        if (count == 0)
+        {
+            Debug.LogWarning("MapController: nodeDataList is empty; nothing to spawn.");
+            return;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            var view = Instantiate(nodePrefab, nodesParent);
+            view.BindIndex(i + 1);                    // numbering, if you show 1..N
+            view.SetState(NodeState.Inactive, false); // no pop on initial paint
+            int idx = i;
+            view.SetOnClick(() => OnNodeClicked(idx));
+
+            nodes.Add(view);
+            nodeRects.Add(view.GetComponent<RectTransform>());
+        }
+    }
+
+    private void PlaceNodes()
+    {
+        int n = nodeRects.Count;
+        if (n == 0) return;
+
+        for (int i = 0; i < n; i++)
+        {
+            float a = (n == 1) ? 0f : i / (float)(n - 1); // 0..1 across nodes
+            float t = Mathf.Lerp(GetTStart(), GetTEnd(), a);
+
+            Vector3 worldPos = spline.EvaluatePosition(t);
+            Vector3 screenPos = uiCamera.WorldToScreenPoint(worldPos);
+
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, uiCamera, out Vector2 local))
+                nodeRects[i].anchoredPosition = local;
+        }
+    }
+
+    private float GetSplineTForNode(int index)
+    {
+        if (nodes.Count <= 1) return GetTStart();
+        index = Mathf.Clamp(index, 0, nodes.Count - 1);
+        return Mathf.Lerp(GetTStart(), GetTEnd(), index / (float)(nodes.Count - 1));
+    }
+
+    // -------------------- Progression Events --------------------
+
+    private void HandleNodeStateChanged(int index, bool unlocked, bool completed)
+    {
+        if (index < 0 || index >= nodes.Count) return;
+        UpdateNodeVisual(index, animate: false);
+    }
+
+    private void HandleActiveNodeChanged(int nodeIndex)
+    {
+        int prev = currentNodeIndex;
+        currentNodeIndex = Mathf.Clamp(nodeIndex, 0, Mathf.Max(0, nodes.Count - 1));
+
+        // Defer lighting up the new active node; only show it Active on arrival
+        pendingActiveIndex = currentNodeIndex;
+        isMovingToTarget = true;
+
+        // Refresh all node visuals to ensure proper gating is applied
+        for (int i = 0; i < nodes.Count; i++)
+            UpdateNodeVisual(i, animate: false);
+
+        MoveCarAndSetNodeState(prev, currentNodeIndex);
+    }
+
+    // -------------------- Click & Popup --------------------
+
+    private void OnNodeClicked(int nodeIdx)
+    {
+        // Robust guards to avoid NullReference
+        if (nodeIdx < 0 || nodeIdx >= nodes.Count)
+        {
+            Debug.LogWarning($"MapController.OnNodeClicked: index {nodeIdx} out of range.");
+            return;
+        }
+        if (progressionController == null)
+        {
+            Debug.LogError("MapController.OnNodeClicked: ProgressionController is null.");
+            return;
+        }
+        if (popupController == null)
+        {
+            Debug.LogError("MapController.OnNodeClicked: PopupController is null.");
+            return;
+        }
+
+        // Locked feedback
+        if (!progressionController.IsUnlocked(nodeIdx))
+        {
+            nodes[nodeIdx].PlayShake();
+            return;
+        }
+
+        // Open learning popup from NodeData
+        NodeData data = (nodeIdx < nodeDataList.Count) ? nodeDataList[nodeIdx] : null;
+        if (data == null)
+        {
+            Debug.LogWarning($"MapController: No NodeData assigned for node {nodeIdx}. (OK while testing Tires only)");
+            return;
+        }
+
+        bool isCompleted = progressionController.IsCompleted(nodeIdx);
+        popupController.Open(data, isCompleted);
+    }
+
+    // -------------------- Car Movement --------------------
+
+    private void MoveCarAndSetNodeState(int fromIndex, int toIndex)
+    {
+        float fromT = (fromIndex < 0) ? Mathf.Clamp01(carSpawnT) : GetSplineTForNode(fromIndex);
+        float toT = GetSplineTForNode(toIndex);
+        StartCoroutine(MoveCarAndActivateNodeCoroutine(fromT, toT, toIndex));
+    }
+
+    private IEnumerator MoveCarAndActivateNodeCoroutine(float fromT, float toT, int nodeIdx)
+    {
+        // Start the car movement and update nodes as the car passes through them
+        yield return StartCoroutine(MoveCarWithPassThroughUpdates(fromT, toT));
+
+        // Only light up the final target node as Active (if not completed)
+        isMovingToTarget = false;
+
+        if (!progressionController.IsCompleted(nodeIdx))
+        {
+            // Gate: if this node is the pending one, activate it
+            if (pendingActiveIndex == nodeIdx)
+            {
+                nodes[nodeIdx].SetState(NodeState.Active, true);
+            }
+        }
+
+        // Refresh visuals for all (so "Active before arrival" is corrected if anything drifted)
+        for (int i = 0; i < nodes.Count; i++)
+            UpdateNodeVisual(i, animate: false);
+    }
+
+    private IEnumerator MoveCarWithPassThroughUpdates(float fromT, float toT)
+    {
+        if (spline == null)
+        {
+            Debug.LogError("Cannot move - spline is null!");
+            yield break;
+        }
+
+        // Set up movement parameters similar to CarPathFollower
+        Vector3 startPos = spline.EvaluatePosition(fromT);
+        Vector3 endPos = spline.EvaluatePosition(toT);
+        float distance = Vector3.Distance(startPos, endPos);
+        float duration = Mathf.Max(distance / car.MoveSpeed, car.MinMoveDuration);
+
+        // Track which nodes we've already updated
+        bool[] nodesPassed = new bool[nodes.Count];
+
+        // Start the car's movement coroutine
+        var carMoveCoroutine = StartCoroutine(car.MoveAlong(fromT, toT, eased: true));
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            
+            // Calculate current spline position using same easing as car
+            float easedProgress = progress * progress * (3f - 2f * progress); // SmoothStep
+            float currentT = Mathf.Lerp(fromT, toT, easedProgress);
+
+            // Check each node to see if the car has passed it
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (!nodesPassed[i] && progressionController.IsCompleted(i))
+                {
+                    float nodeT = GetSplineTForNode(i);
+                    
+                    // Check if car has passed this completed node
+                    bool hasPassed = (fromT < toT && currentT >= nodeT) || (fromT > toT && currentT <= nodeT);
+                    
+                    if (hasPassed)
+                    {
+                        nodesPassed[i] = true;
+                        // Update the node visual to completed state with animation
+                        nodes[i].SetState(NodeState.Completed, true);
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        // Wait for the car movement to finish
+        yield return carMoveCoroutine;
+    }
+
+    private IEnumerator AnimateCarThroughCompletedToActive(int activeIndex)
+    {
+        if (nodes.Count == 0) yield break;
+
+        // Start off-screen (or wherever carSpawnT is)
+        car.SnapTo(Mathf.Clamp01(carSpawnT));
+
+        // Set up for continuous movement
+        pendingActiveIndex = activeIndex;
+        isMovingToTarget = true;
+
+        // Calculate starting position - either current spawn position or tStart
+        float startT = Mathf.Clamp01(carSpawnT);
+        if (startT > GetTStart())
+        {
+            startT = GetTStart(); // If we spawn after tStart, move to tStart first
+        }
+
+        // Move continuously from start position directly to the active node
+        // This will pass through any completed nodes without stopping and update them visually
+        float targetT = GetSplineTForNode(activeIndex);
+        
+        yield return StartCoroutine(MoveCarAndActivateNodeCoroutine(startT, targetT, activeIndex));
+    }
+
+    // -------------------- Keyboard Nav --------------------
 
     private void HandleKeyboardInput()
     {
@@ -95,192 +356,47 @@ public class MapController : MonoBehaviour
 
     private void TryMoveToNode(int targetIndex)
     {
-        if (targetIndex < minNode || targetIndex > maxNode)
-            return;
+        if (targetIndex < 0 || targetIndex >= nodes.Count) return;
 
         if (!progressionController.IsUnlocked(targetIndex))
         {
-            // Shake current node if trying to go to a locked node
-            var nodeAnim = nodes[currentNodeIndex].GetComponent<NodeStateAnimation>();
-            if (nodeAnim != null)
-                StartCoroutine(nodeAnim.Shake());
+            nodes[targetIndex].PlayShake();
             return;
         }
 
-        // Set previous node inactive if not completed
-        if (!progressionController.IsCompleted(currentNodeIndex))
-            nodes[currentNodeIndex].SetState(NodeState.Inactive, true);
+        // Keep current from changing to Active too early
+        pendingActiveIndex = targetIndex;
+        isMovingToTarget = true;
 
-        int prevIndex = currentNodeIndex;
+        // Refresh all node visuals to ensure proper gating is applied
+        for (int i = 0; i < nodes.Count; i++)
+            UpdateNodeVisual(i, animate: false);
+
+        int prev = currentNodeIndex;
         currentNodeIndex = targetIndex;
-
-        MoveCarAndSetNodeState(prevIndex, currentNodeIndex);
+        MoveCarAndSetNodeState(prev, currentNodeIndex);
     }
 
+    // -------------------- Visual Helper --------------------
 
-    // Helper to get normalized spline t for a node index
-    private float GetSplineTForNode(int index)
+    private void UpdateNodeVisual(int i, bool animate)
     {
-        return Mathf.Lerp(tStart, tEnd, index / (float)(nodes.Length - 1));
-    }
+        // “Activate only on arrival” rule:
+        // If we're moving toward this index, keep it visually Inactive until arrival.
+        bool gateActive = (isMovingToTarget && i == pendingActiveIndex);
 
-    // Helper to move car and set node state when car arrives
-    private void MoveCarAndSetNodeState(int fromIndex, int toIndex)
-    {
-        float fromT = GetSplineTForNode(fromIndex);
-        float toT = GetSplineTForNode(toIndex);
-        StartCoroutine(MoveCarAndActivateNodeCoroutine(fromT, toT, toIndex));
-    }
-
-    private System.Collections.IEnumerator MoveCarAndActivateNodeCoroutine(float fromT, float toT, int nodeIdx)
-    {
-        yield return StartCoroutine(MoveCarTo(fromT, toT, true));
-        if (!progressionController.IsCompleted(nodeIdx))
-            nodes[nodeIdx].SetState(NodeState.Active, true);
-    }
-
-    // Helper coroutine to move car using CarPathFollower's private MoveAlongSpline
-    private System.Collections.IEnumerator MoveCarTo(float fromT, float toT, bool eased)
-    {
-        var moveAlong = car.GetType().GetMethod("MoveAlongSpline", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        if (moveAlong != null)
-        {
-            var paramCount = moveAlong.GetParameters().Length;
-            object[] parameters;
-            if (paramCount == 4)
-                parameters = new object[] { fromT, toT, false, eased }; // always false for straighten
-            else if (paramCount == 3)
-                parameters = new object[] { fromT, toT, eased }; // drop straighten param
-            else
-                parameters = new object[] { fromT, toT };
-            var enumerator = (System.Collections.IEnumerator)moveAlong.Invoke(car, parameters);
-            while (enumerator.MoveNext())
-                yield return enumerator.Current;
-        }
-        else
-        {
-            car.SnapTo(toT);
-            yield return null;
-        }
-    }
-
-    // Animate car passing completed nodes and update their state as car passes (original logic)
-    private System.Collections.IEnumerator AnimateCarAndCompletedNodes(int activeIdx0, int totalNodes)
-    {
-        car.SnapTo(CarSnapStartT);
-        float prevT = CarSnapStartT;
-        for (int i = 0; i < activeIdx0; i++)
-        {
-            float t = GetSplineTForNode(i);
-            yield return StartCoroutine(MoveCarTo(prevT, t, false)); // Linear, no ease
-            nodes[i].SetState(NodeState.Completed, true);
-            prevT = t;
-        }
-        float activeT = GetSplineTForNode(activeIdx0);
-        yield return StartCoroutine(MoveCarTo(prevT, activeT, true)); // Eased, no straighten
-        nodes[activeIdx0].SetState(NodeState.Active, true);
-        nodes[activeIdx0].SetOnClick(() => OnNodeClicked(activeIdx0));
-    }
-
-
-
-    void OnRectTransformDimensionsChange() => PlaceNodes(); // re-place on resize
-
-    public void PlaceNodes()
-    {
-        if (nodeRects == null || nodeRects.Length == 0 || spline == null || uiCamera == null || canvasRect == null)
-            return;
-
-        int n = nodeRects.Length;
-        for (int i = 0; i < n; i++)
-        {
-            float a = (n == 1) ? 0f : (float)i / (n - 1);      // 0..1
-            float t = Mathf.Lerp(tStart, tEnd, a);             // map into [tStart, tEnd]
-
-            Vector3 worldPos = spline.EvaluatePosition(t);    // replace with your spline API if different
-            Vector3 screenPos = uiCamera.WorldToScreenPoint(worldPos);
-
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, uiCamera, out Vector2 local))
-                nodeRects[i].anchoredPosition = local;
-        }
-    }
-
-    private System.Collections.IEnumerator ActivateNodeWhenCarArrives(int nodeIdx, float targetT)
-    {
-        // Wait until car reaches targetT (with small tolerance)
-        while (Mathf.Abs(car.transform.position.x - nodes[nodeIdx].transform.position.x) > CarArrivalTolerance ||
-               Mathf.Abs(car.transform.position.y - nodes[nodeIdx].transform.position.y) > CarArrivalTolerance)
-        {
-            yield return null;
-        }
-        // Activate node and play animation
-        nodes[nodeIdx].SetState(NodeState.Active, true); // animate
-        nodes[nodeIdx].SetOnClick(() => OnNodeClicked(nodeIdx));
-    }
-
-    /// <summary>
-    /// Called when a node is clicked. Handles completion and progression.
-    /// </summary>
-    /// <param name="nodeIdx">Zero-based index of the node.</param>
-    private void OnNodeClicked(int nodeIdx)
-    {
-        var nodeAnim = nodes[nodeIdx].GetComponent<NodeStateAnimation>();
-        if (!progressionController.IsUnlocked(nodeIdx))
-        {
-            Debug.Log($"Node {nodeIdx + 1} is locked. Shake animation.");
-            if (nodeAnim != null)
-                StartCoroutine(nodeAnim.Shake());
-            return;
-        }
-
-        Debug.Log($"Node {nodeIdx + 1} clicked. Open popup/quiz.");
-
-        // Show popup for this node
-        if (popupController != null && nodePopups != null && nodeIdx < nodePopups.Count)
-        {
-            var popupData = nodePopups[nodeIdx];
-            var slides = new List<GameObject>();
-            if (popupData.slidesParent != null)
-            {
-                foreach (Transform child in popupData.slidesParent.transform)
-                {
-                    slides.Add(child.gameObject);
-                }
-            }
-            bool isCompleted = progressionController.IsCompleted(nodeIdx);
-            popupController.SetBackground(isCompleted);
-            popupController.SetHeaderAndSlides(popupData.header, slides);
-        }
-        else
-        {
-            Debug.LogWarning("PopupController or nodePopups not set, or nodeIdx out of range!");
-        }
-    }
-
-    // Event handler for node state changes
-    private void HandleNodeStateChanged(int nodeIndex, bool unlocked, bool completed)
-    {
-        UpdateNodeVisual(nodeIndex);
-    }
-
-    // Event handler for active node changes
-    private void HandleActiveNodeChanged(int nodeIndex)
-    {
-        // Optionally, move car or trigger other logic when active node changes
-        // For now, just update visuals
-        UpdateNodeVisual(nodeIndex);
-    }
-
-    // Helper to update node visuals based on progression state
-    private void UpdateNodeVisual(int i)
-    {
-        NodeState state = NodeState.Inactive;
+        NodeState state;
         if (progressionController.IsCompleted(i))
             state = NodeState.Completed;
-        else if (progressionController.IsUnlocked(i))
+        else if (progressionController.IsUnlocked(i) && !gateActive)
             state = NodeState.Active;
-        // Only update state without animation (animation only on car arrival)
-        nodes[i].SetState(state, false);
+        else
+            state = NodeState.Inactive;
+
+        nodes[i].SetState(state, animate);
     }
 
+    // -------------------- External --------------------
+
+    public void RepositionNodes() => PlaceNodes();
 }

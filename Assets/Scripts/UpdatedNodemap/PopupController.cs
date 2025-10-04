@@ -6,11 +6,15 @@ using TMPro;
 
 public class PopupController : MonoBehaviour
 {
-    [Header("Popup UI References")]
+    [Header("Configuration")]
+    [SerializeField] private MapConfig mapConfig;
+    
+    [Header("Popup Background References")]
     public GameObject popupPanel;
     public Image popupBackground; // Assign the Image component for the popup background
     public Sprite defaultBackgroundSprite; // Assign your default background sprite
     public Sprite completedBackgroundSprite; // Assign your green completed background sprite
+
     /// <summary>
     /// Call this to set which background is visible.
     /// </summary>
@@ -19,31 +23,40 @@ public class PopupController : MonoBehaviour
         if (popupBackground != null)
             popupBackground.sprite = isCompleted ? completedBackgroundSprite : defaultBackgroundSprite;
     }
-    public Transform slidesContainer;
+
+    [Header("Popup UI References")]
     public Button nextSlideButton;
     public Button previousSlideButton;
-    public Transform slideIndicators;
-    public TextMeshProUGUI headerText;
-    [Header("Close Button")]
-    public Button closeButton; // Assign your X button here
+    public Button closeButton;
+    [SerializeField] private Transform slidesContainer;
+    [SerializeField] private TMP_Text headerText;
 
-    [Header("Indicator Sprites")]
-    public Sprite activeIndicatorSprite;
-    public Sprite inactiveIndicatorSprite;
-    public GameObject indicatorPrefab; // Prefab with Image component
+    [Header("Indicators")]
+    [SerializeField] private Transform slideIndicators;
+    [SerializeField] private GameObject indicatorPrefab;
+    [SerializeField] private Sprite activeIndicatorSprite;
+    [SerializeField] private Sprite inactiveIndicatorSprite;
 
-    private List<GameObject> slides = new List<GameObject>();
+    private readonly List<GameObject> slides = new();
+    private readonly List<GameObject> indicatorObjects = new();
     private int currentSlideIndex = 0;
-    private List<GameObject> indicatorObjects = new List<GameObject>();
 
     void Awake()
     {
+        // Initialize config if not assigned
+        if (!mapConfig) mapConfig = MapConfig.Instance;
+        
         nextSlideButton.onClick.AddListener(NextSlide);
-        previousSlideButton.onClick.AddListener(PreviousSlide);
+        previousSlideButton.onClick.AddListener(PrevSlide);
         if (closeButton != null)
             closeButton.onClick.AddListener(Hide);
         Hide();
     }
+    
+    // Configuration Helpers
+    private float GetPopupFadeDuration() => mapConfig ? mapConfig.popupFadeDuration : 0.3f;
+    private float GetSlideTransitionDuration() => mapConfig ? mapConfig.slideTransitionDuration : 0.2f;
+    private string GetNodeSpriteFolder() => mapConfig ? mapConfig.nodeSpriteFolder : "Sprites/Nodes";
 
     public void SetHeaderAndSlides(string header, List<GameObject> slideObjects)
     {
@@ -71,6 +84,46 @@ public class PopupController : MonoBehaviour
         Show();
     }
 
+    public void Open(NodeData node, bool isCompleted)
+    {
+        if (!popupPanel) return;
+
+        // Optional: set a different background if completed
+        if (popupBackground && defaultBackgroundSprite && completedBackgroundSprite)
+            popupBackground.sprite = isCompleted ? completedBackgroundSprite : defaultBackgroundSprite;
+
+        if (headerText) headerText.text = string.IsNullOrEmpty(node.title) ? "Lesson" : node.title;
+
+        // Clear previous content
+        ClearSlides();
+
+        // Instantiate slides from the SlideDeck (if any)
+        if (node.slideDeck != null && node.slideDeck.slides != null)
+        {
+            foreach (var sr in node.slideDeck.slides)
+            {
+                if (sr == null || sr.slidePrefab == null) continue;
+                var go = Instantiate(sr.slidePrefab, slidesContainer);
+                go.SetActive(false);
+                slides.Add(go);
+            }
+        }
+
+        // Fall-back if the deck is empty (not required, but nice for testing)
+        if (slides.Count == 0)
+        {
+            Debug.LogWarning($"PopupController.Open: No slides found in SlideDeck for node: {node.name}");
+        }
+
+        // Start at slide 0
+        currentSlideIndex = 0;
+        UpdateSlides();
+        UpdateIndicators();
+
+        // Show popup
+        popupPanel.SetActive(true);
+    }
+
     public void Show()
     {
         popupPanel.SetActive(true);
@@ -91,8 +144,9 @@ public class PopupController : MonoBehaviour
         }
     }
 
-    public void PreviousSlide()
+    public void PrevSlide()
     {
+        if (slides.Count == 0) return;
         if (currentSlideIndex > 0)
         {
             currentSlideIndex--;
@@ -105,32 +159,66 @@ public class PopupController : MonoBehaviour
     {
         for (int i = 0; i < slides.Count; i++)
         {
-            slides[i].SetActive(i == currentSlideIndex);
+            bool active = (i == currentSlideIndex);
+            if (slides[i]) slides[i].SetActive(active);
+
+            // optional lifecycle hooks
+            var sb = slides[i] ? slides[i].GetComponent<SlideBase>() : null;
+            if (sb != null)
+            {
+                if (active) sb.OnEnter();
+                else sb.OnExit();
+            }
         }
-        previousSlideButton.interactable = currentSlideIndex > 0;
-        nextSlideButton.interactable = currentSlideIndex < slides.Count - 1;
     }
+
+    public void JumpToSlideByKey(string key)
+    {
+        if (string.IsNullOrEmpty(key) || slides.Count == 0) return;
+
+        for (int i = 0; i < slides.Count; i++)
+        {
+            var sb = slides[i].GetComponent<SlideBase>();
+            if (sb != null && sb.Key == key)
+            {
+                currentSlideIndex = i;
+                UpdateSlides();
+                UpdateIndicators();
+                return;
+            }
+        }
+        Debug.LogWarning($"PopupController.JumpToSlideByKey: key '{key}' not found.");
+    }
+
+    private void ClearSlides()
+    {
+        foreach (var s in slides)
+            if (s) Destroy(s);
+        slides.Clear();
+
+        foreach (var dot in indicatorObjects)
+            if (dot) Destroy(dot);
+        indicatorObjects.Clear();
+    }
+
 
     private void UpdateIndicators()
     {
-        // Destroy old indicators
-        foreach (var obj in indicatorObjects)
-        {
-            if (obj != null) Destroy(obj);
-        }
+        if (!indicatorPrefab || !slideIndicators) return;
+
+        // rebuild dots
+        foreach (var dot in indicatorObjects)
+            if (dot) Destroy(dot);
         indicatorObjects.Clear();
 
-        // Create new indicators
         for (int i = 0; i < slides.Count; i++)
         {
-            var indicator = Instantiate(indicatorPrefab, slideIndicators);
-            var img = indicator.GetComponent<Image>();
-            if (img != null)
+            var dot = Instantiate(indicatorPrefab, slideIndicators);
+            var img = dot.GetComponent<Image>();
+            if (img)
                 img.sprite = (i == currentSlideIndex) ? activeIndicatorSprite : inactiveIndicatorSprite;
-                Debug.Log($"Setting indicator {i} to {(i == currentSlideIndex ? "active" : "inactive")}");
-            indicatorObjects.Add(indicator);
+            indicatorObjects.Add(dot);
         }
-
-        Debug.Log($"Updated indicators: {indicatorObjects.Count} indicators for {slides.Count} slides.");
     }
+
 }
