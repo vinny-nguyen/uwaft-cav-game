@@ -11,6 +11,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float spawnT = 0f;
 
     public event Action<int> OnArrivedAtNode;
+    public event Action<int> OnStartedMovingToNode;
 
     private NodeManager nodeManager;
     private int targetNodeIndex = -1;
@@ -21,13 +22,16 @@ public class CarController : MonoBehaviour
         car.SnapTo(spawnT);
     }
 
-    public void MoveToNode(int nodeIndex)
+    /// <summary>
+    /// Moves car to target node with optional pass-through visual updates for completed nodes.
+    /// </summary>
+    public void MoveToNode(int nodeIndex, bool[] completedNodes = null)
     {
         if (nodeManager == null) return;
         
         targetNodeIndex = nodeIndex;
-        float targetT = nodeManager.GetSplineT(nodeIndex);
-        StartCoroutine(MoveAndNotify(targetT));
+        OnStartedMovingToNode?.Invoke(nodeIndex);
+        StartCoroutine(MoveToNodeCoroutine(nodeIndex, completedNodes));
     }
 
     public void SnapToNode(int nodeIndex)
@@ -36,44 +40,47 @@ public class CarController : MonoBehaviour
         car.SnapTo(nodeManager.GetSplineT(nodeIndex));
     }
 
-    public void MoveToCurrentActive(int activeNode, bool[] completed)
-    {
-        if (nodeManager == null) return;
-        
-        targetNodeIndex = activeNode;
-        StartCoroutine(MoveWithCompletedUpdates(activeNode, completed));
-    }
-
-    private IEnumerator MoveAndNotify(float targetT)
-    {
-        yield return StartCoroutine(car.MoveAlong(car.NormalizedT, targetT, true));
-        OnArrivedAtNode?.Invoke(targetNodeIndex);
-    }
-
-    private IEnumerator MoveWithCompletedUpdates(int activeNode, bool[] completed)
+    private IEnumerator MoveToNodeCoroutine(int targetNodeIndex, bool[] completedNodes)
     {
         float startT = car.NormalizedT;
-        float targetT = nodeManager.GetSplineT(activeNode);
+        float targetT = nodeManager.GetSplineT(targetNodeIndex);
         
         // Start car movement
         var moveCoroutine = StartCoroutine(car.MoveAlong(startT, targetT, true));
         
-        // Update completed nodes as car passes them
-        bool[] updated = new bool[completed.Length];
-        while (car.NormalizedT != targetT)
+        // If we have completed nodes info, do pass-through visual updates
+        if (completedNodes != null)
         {
-            for (int i = 0; i < completed.Length; i++)
+            bool[] visualUpdated = new bool[completedNodes.Length];
+            
+            // Monitor movement and update completed nodes as car passes them
+            while (car.NormalizedT != targetT)
             {
-                if (completed[i] && !updated[i] && car.NormalizedT >= nodeManager.GetSplineT(i))
+                for (int i = 0; i < completedNodes.Length; i++)
                 {
-                    nodeManager.UpdateNodeVisual(i, true, true);
-                    updated[i] = true;
+                    if (completedNodes[i] && !visualUpdated[i])
+                    {
+                        float nodeT = nodeManager.GetSplineT(i);
+                        
+                        // Check if car has passed this completed node
+                        bool hasPassed = (startT < targetT && car.NormalizedT >= nodeT) || 
+                                        (startT > targetT && car.NormalizedT <= nodeT);
+                        
+                        if (hasPassed)
+                        {
+                            nodeManager.UpdateNodeVisual(i, true, true);
+                            visualUpdated[i] = true;
+                        }
+                    }
                 }
+                yield return null;
             }
-            yield return null;
         }
         
+        // Wait for movement to complete
         yield return moveCoroutine;
+        
+        // Notify arrival
         OnArrivedAtNode?.Invoke(targetNodeIndex);
     }
 }
