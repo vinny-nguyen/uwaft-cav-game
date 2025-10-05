@@ -16,9 +16,9 @@ public class PopupController : MonoBehaviour
     public Sprite completedBackgroundSprite; // Assign your green completed background sprite
 
     /// <summary>
-    /// Call this to set which background is visible.
+    /// Sets the background sprite based on completion state.
     /// </summary>
-    public void SetBackground(bool isCompleted)
+    private void SetBackground(bool isCompleted)
     {
         if (popupBackground != null)
             popupBackground.sprite = isCompleted ? completedBackgroundSprite : defaultBackgroundSprite;
@@ -58,18 +58,17 @@ public class PopupController : MonoBehaviour
     private float GetSlideTransitionDuration() => mapConfig ? mapConfig.slideTransitionDuration : 0.2f;
     private string GetNodeSpriteFolder() => mapConfig ? mapConfig.nodeSpriteFolder : "Sprites/Nodes";
 
-    public void SetHeaderAndSlides(string header, List<GameObject> slideObjects)
+    /// <summary>
+    /// Internal method to set header and create slides from slide objects.
+    /// </summary>
+    private void SetupHeaderAndSlides(string header, List<GameObject> slideObjects)
     {
         // Set header
         if (headerText != null)
             headerText.text = header;
 
-        // Remove old slides
-        foreach (var slide in slides)
-        {
-            if (slide != null) Destroy(slide);
-        }
-        slides.Clear();
+        // Clear previous content first
+        ClearSlides();
 
         // Add new slides
         foreach (var slideObj in slideObjects)
@@ -78,57 +77,64 @@ public class PopupController : MonoBehaviour
             slide.SetActive(false);
             slides.Add(slide);
         }
+        
+        // Initialize to first slide
         currentSlideIndex = 0;
         UpdateSlides();
         UpdateIndicators();
-        Show();
     }
 
+    /// <summary>
+    /// Opens the popup with the specified node data and completion state.
+    /// This is the main public entry point for opening popups.
+    /// </summary>
     public void Open(NodeData node, bool isCompleted)
     {
-        if (!popupPanel) return;
+        if (!popupPanel || node == null) return;
 
-        // Optional: set a different background if completed
-        if (popupBackground && defaultBackgroundSprite && completedBackgroundSprite)
-            popupBackground.sprite = isCompleted ? completedBackgroundSprite : defaultBackgroundSprite;
+        // Set background based on completion state
+        SetBackground(isCompleted);
 
-        if (headerText) headerText.text = string.IsNullOrEmpty(node.title) ? "Lesson" : node.title;
-
-        // Clear previous content
-        ClearSlides();
-
-        // Instantiate slides from the SlideDeck (if any)
+        // Set header text
+        string headerText = string.IsNullOrEmpty(node.title) ? "Lesson" : node.title;
+        
+        // Prepare slide objects from the node's slide deck
+        List<GameObject> slideObjects = new List<GameObject>();
         if (node.slideDeck != null && node.slideDeck.slides != null)
         {
-            foreach (var sr in node.slideDeck.slides)
+            foreach (var slideRef in node.slideDeck.slides)
             {
-                if (sr == null || sr.slidePrefab == null) continue;
-                var go = Instantiate(sr.slidePrefab, slidesContainer);
-                go.SetActive(false);
-                slides.Add(go);
+                if (slideRef?.slidePrefab != null)
+                {
+                    slideObjects.Add(slideRef.slidePrefab);
+                }
             }
         }
 
-        // Fall-back if the deck is empty (not required, but nice for testing)
+        // Setup all popup content
+        SetupHeaderAndSlides(headerText, slideObjects);
+
+        // Log warning if no slides found (for debugging)
         if (slides.Count == 0)
         {
-            Debug.LogWarning($"PopupController.Open: No slides found in SlideDeck for node: {node.name}");
+            Debug.LogWarning($"[PopupController] No slides found in SlideDeck for node: {node.name}");
         }
 
-        // Start at slide 0
-        currentSlideIndex = 0;
-        UpdateSlides();
-        UpdateIndicators();
-
-        // Show popup
-        popupPanel.SetActive(true);
+        // Show the popup
+        Show();
     }
 
-    public void Show()
+    /// <summary>
+    /// Shows the popup panel.
+    /// </summary>
+    private void Show()
     {
         popupPanel.SetActive(true);
     }
 
+    /// <summary>
+    /// Hides the popup panel. Public for close button functionality.
+    /// </summary>
     public void Hide()
     {
         popupPanel.SetActive(false);
