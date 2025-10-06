@@ -227,4 +227,16 @@ public class PopupController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        // Clean up button listeners to prevent memory leaks
+        if (nextSlideButton != null)
+            nextSlideButton.onClick.RemoveListener(NextSlide);
+            
+        if (previousSlideButton != null)
+            previousSlideButton.onClick.RemoveListener(PrevSlide);
+            
+        if (closeButton != null)
+            closeButton.onClick.RemoveListener(Hide);
+    }
 }

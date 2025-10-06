@@ -6,8 +6,11 @@ using UnityEngine;
 /// </summary>
 public class ProgressionController : MonoBehaviour
 {
+    [Header("Configuration")]
+    [SerializeField] private MapConfig mapConfig;
+    
     [Header("Node Progression")]
-    [SerializeField] private int nodeCount = 6;
+    [SerializeField] private int nodeCount = 6; // Fallback if mapConfig not set
 
     private bool[] unlocked;
     private bool[] completed;
@@ -26,13 +29,24 @@ public class ProgressionController : MonoBehaviour
 
     private void Awake()
     {
+        // Initialize config if not assigned and get actual node count
+        if (!mapConfig) mapConfig = MapConfig.Instance;
+        nodeCount = mapConfig.nodeCount;
+        
         unlocked = new bool[nodeCount];
         completed = new bool[nodeCount];
         Load();
     }
 
-    public bool IsUnlocked(int index) => unlocked[index];
-    public bool IsCompleted(int index) => completed[index];
+    public bool IsUnlocked(int index) 
+    {
+        return unlocked != null && index >= 0 && index < unlocked.Length && unlocked[index];
+    }
+    
+    public bool IsCompleted(int index) 
+    {
+        return completed != null && index >= 0 && index < completed.Length && completed[index];
+    }
 
     public void CompleteNode(int index)
     {

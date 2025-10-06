@@ -28,7 +28,8 @@ public class NodeManager : MonoBehaviour
 
     public void UpdateNodeVisual(int index, bool unlocked, bool completed)
     {
-        if (index < 0 || index >= nodes.Count) return;
+        if (nodes == null || index < 0 || index >= nodes.Count) return;
+        if (nodes[index] == null) return;
         
         NodeState state = completed ? NodeState.Completed : 
                          unlocked ? NodeState.Active : NodeState.Inactive;
@@ -37,8 +38,10 @@ public class NodeManager : MonoBehaviour
 
     public void ShakeNode(int index)
     {
-        if (index >= 0 && index < nodes.Count)
-            nodes[index].PlayShake();
+        if (nodes == null || index < 0 || index >= nodes.Count) return;
+        if (nodes[index] == null) return;
+        
+        nodes[index].PlayShake();
     }
 
     public NodeData GetNodeData(int index) => 

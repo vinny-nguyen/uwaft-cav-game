@@ -37,6 +37,11 @@ public class MapConfig : ScriptableObject
     [Range(0f, 1f)]
     public float tEnd = 0.8f;
 
+    [Header("Game Configuration")]
+    [Tooltip("Total number of nodes in the game")]
+    [Range(1, 10)]
+    public int nodeCount = 6;
+
     [Header("Asset Paths")]
     [Tooltip("Folder path for node sprite assets")]
     public string nodeSpriteFolder = "Sprites/Nodes";
