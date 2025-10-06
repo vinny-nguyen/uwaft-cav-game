@@ -34,12 +34,17 @@ public class CarPathFollower : MonoBehaviour
     public float MoveSpeed => GetMoveSpeed();
     public float MinMoveDuration => GetMinMoveDuration();
     
-    // Configuration Helpers
-    private float GetMoveSpeed() => mapConfig ? mapConfig.moveSpeed : moveSpeed;
-    private float GetMinMoveDuration() => mapConfig ? mapConfig.minMoveDuration : minMoveDuration;
-    private float GetBounceFrequency() => mapConfig ? mapConfig.carBounceFrequency : bounceFrequency;
-    private float GetBounceAmplitude() => mapConfig ? mapConfig.carBounceAmplitude : bounceAmplitude;
-    private float GetSpinSpeed() => mapConfig ? mapConfig.wheelSpinSpeed : spinSpeed;
+    // Configuration Helpers - Cleaner pattern with single method
+    private T GetConfigValue<T>(System.Func<MapConfig, T> configGetter, T fallback)
+    {
+        return mapConfig ? configGetter(mapConfig) : fallback;
+    }
+    
+    private float GetMoveSpeed() => GetConfigValue(c => c.moveSpeed, moveSpeed);
+    private float GetMinMoveDuration() => GetConfigValue(c => c.minMoveDuration, minMoveDuration);
+    private float GetBounceFrequency() => GetConfigValue(c => c.carBounceFrequency, bounceFrequency);
+    private float GetBounceAmplitude() => GetConfigValue(c => c.carBounceAmplitude, bounceAmplitude);
+    private float GetSpinSpeed() => GetConfigValue(c => c.wheelSpinSpeed, spinSpeed);
     
     private void Awake()
     {

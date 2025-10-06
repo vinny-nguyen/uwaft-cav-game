@@ -43,10 +43,14 @@ public class ProgressionController : MonoBehaviour
         return unlocked != null && index >= 0 && index < unlocked.Length && unlocked[index];
     }
     
+    public bool IsUnlocked(NodeId nodeId) => IsUnlocked(nodeId.Value);
+    
     public bool IsCompleted(int index) 
     {
         return completed != null && index >= 0 && index < completed.Length && completed[index];
     }
+    
+    public bool IsCompleted(NodeId nodeId) => IsCompleted(nodeId.Value);
 
     public void CompleteNode(int index)
     {
@@ -56,6 +60,8 @@ public class ProgressionController : MonoBehaviour
         UnlockNextNode(index);
         Save();
     }
+
+    public void CompleteNode(NodeId nodeId) => CompleteNode(nodeId.Value);
 
     private void UnlockNextNode(int index)
     {

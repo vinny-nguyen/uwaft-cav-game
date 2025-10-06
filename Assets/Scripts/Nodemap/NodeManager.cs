@@ -36,6 +36,11 @@ public class NodeManager : MonoBehaviour
         nodes[index].SetState(state, true);
     }
 
+    public void UpdateNodeVisual(NodeId nodeId, bool unlocked, bool completed)
+    {
+        UpdateNodeVisual(nodeId.Value, unlocked, completed);
+    }
+
     public void ShakeNode(int index)
     {
         if (nodes == null || index < 0 || index >= nodes.Count) return;
@@ -44,8 +49,15 @@ public class NodeManager : MonoBehaviour
         nodes[index].PlayShake();
     }
 
+    public void ShakeNode(NodeId nodeId)
+    {
+        ShakeNode(nodeId.Value);
+    }
+
     public NodeData GetNodeData(int index) => 
         index >= 0 && index < nodeData.Count ? nodeData[index] : null;
+        
+    public NodeData GetNodeData(NodeId nodeId) => GetNodeData(nodeId.Value);
 
     public float GetSplineT(int index)
     {

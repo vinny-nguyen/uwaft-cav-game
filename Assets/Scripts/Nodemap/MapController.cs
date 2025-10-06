@@ -49,10 +49,19 @@ public class MapController : MonoBehaviour
 
     private void Update()
     {
-        // Keyboard navigation - use progression controller as source of truth
-        int activeNode = progressionController.GetCurrentActiveNodeIndex();
-        if (Input.GetKeyDown(KeyCode.RightArrow)) TryMoveToNode(activeNode + 1);
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) TryMoveToNode(activeNode - 1);
+        // Efficient keyboard navigation - only process when keys are actually pressed
+        if (progressionController == null) return;
+        
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            // Use car's current position for navigation, not the "active" node
+            TryMoveToNode(carCurrentlyAtNodeIndex + 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            // Use car's current position for navigation, not the "active" node
+            TryMoveToNode(carCurrentlyAtNodeIndex - 1);
+        }
     }
 
     private void HandleNodeClick(int nodeIndex)

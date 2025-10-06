@@ -53,10 +53,15 @@ public class PopupController : MonoBehaviour
         Hide();
     }
     
-    // Configuration Helpers
-    private float GetPopupFadeDuration() => mapConfig ? mapConfig.popupFadeDuration : 0.3f;
-    private float GetSlideTransitionDuration() => mapConfig ? mapConfig.slideTransitionDuration : 0.2f;
-    private string GetNodeSpriteFolder() => mapConfig ? mapConfig.nodeSpriteFolder : "Sprites/Nodes";
+    // Configuration Helpers - Cleaner pattern with single method
+    private T GetConfigValue<T>(System.Func<MapConfig, T> configGetter, T fallback)
+    {
+        return mapConfig ? configGetter(mapConfig) : fallback;
+    }
+    
+    private float GetPopupFadeDuration() => GetConfigValue(c => c.popupFadeDuration, 0.3f);
+    private float GetSlideTransitionDuration() => GetConfigValue(c => c.slideTransitionDuration, 0.2f);
+    private string GetNodeSpriteFolder() => GetConfigValue(c => c.nodeSpriteFolder, "Sprites/Nodes");
 
     /// <summary>
     /// Internal method to set header and create slides from slide objects.

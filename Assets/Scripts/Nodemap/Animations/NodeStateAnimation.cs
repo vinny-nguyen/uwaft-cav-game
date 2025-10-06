@@ -29,11 +29,16 @@ public class NodeStateAnimation : MonoBehaviour
         if (!mapConfig) mapConfig = MapConfig.Instance;
     }
     
-    // Configuration Helpers
-    private float GetScaleUp() => mapConfig ? mapConfig.popScaleUp : scaleUp;
-    private float GetDuration() => mapConfig ? mapConfig.popDuration : duration;
-    private float GetShakeDuration() => mapConfig ? mapConfig.shakeDuration : shakeDuration;
-    private float GetShakeMagnitude() => mapConfig ? mapConfig.shakeMagnitude : shakeMagnitude;
+    // Configuration Helpers - Cleaner pattern with single method
+    private T GetConfigValue<T>(System.Func<MapConfig, T> configGetter, T fallback)
+    {
+        return mapConfig ? configGetter(mapConfig) : fallback;
+    }
+    
+    private float GetScaleUp() => GetConfigValue(c => c.popScaleUp, scaleUp);
+    private float GetDuration() => GetConfigValue(c => c.popDuration, duration);
+    private float GetShakeDuration() => GetConfigValue(c => c.shakeDuration, shakeDuration);
+    private float GetShakeMagnitude() => GetConfigValue(c => c.shakeMagnitude, shakeMagnitude);
 
     public IEnumerator Shake()
     {
