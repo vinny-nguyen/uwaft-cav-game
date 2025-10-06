@@ -1,0 +1,216 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Splines;
+using Nodemap.Core;
+
+namespace Nodemap
+{
+    /// <summary>
+    /// Simplified NodeManager that works with existing LevelNodeView.
+    /// Uses NodeId consistently but keeps compatibility with current code.
+    /// </summary>
+    public class NodeManagerSimple : ConfigurableComponent, IDisposable
+    {
+        [Header("Node Management")]
+        [SerializeField] private List<NodeData> nodeData;
+        [SerializeField] private LevelNodeView nodePrefab;
+        [SerializeField] private RectTransform nodesParent;
+        
+        [Header("Positioning")]
+        [SerializeField] private SplineContainer spline;
+        [SerializeField] private Camera uiCamera;
+        [SerializeField] private RectTransform canvasRect;
+
+        // State
+        private readonly List<LevelNodeView> nodeViews = new();
+        
+        // Events
+        public event Action<NodeId> OnNodeClicked;
+
+        #region Public API
+
+        public void Initialize()
+        {
+            CreateNodeViews();
+            PositionNodes();
+        }
+
+        public void UpdateNodeVisual(NodeId nodeId, NodeState state, bool hasCarPresent)
+        {
+            var nodeView = GetNodeView(nodeId);
+            if (nodeView == null) return;
+
+            // Update visual state using existing API
+            nodeView.SetState(state, true);
+            
+            // Simple car presence indicator using scale
+            if (hasCarPresent)
+            {
+                nodeView.transform.localScale = Vector3.one * 1.1f;
+            }
+            else
+            {
+                nodeView.transform.localScale = Vector3.one;
+            }
+        }
+
+        // Overload for backward compatibility with int
+        public void UpdateNodeVisual(int nodeIndex, bool unlocked, bool completed)
+        {
+            var nodeId = new NodeId(nodeIndex);
+            bool isCarHere = false; // You'd get this from MapState in the real implementation
+            NodeState state = completed ? NodeState.Completed : 
+                             unlocked ? NodeState.Active : NodeState.Inactive;
+            UpdateNodeVisual(nodeId, state, isCarHere);
+        }
+
+        public void ShakeNode(NodeId nodeId)
+        {
+            var nodeView = GetNodeView(nodeId);
+            nodeView?.PlayShake();
+        }
+
+        // Overload for backward compatibility
+        public void ShakeNode(int nodeIndex)
+        {
+            ShakeNode(new NodeId(nodeIndex));
+        }
+
+        public NodeData GetNodeData(NodeId nodeId)
+        {
+            int index = nodeId.Value;
+            return index >= 0 && index < nodeData.Count ? nodeData[index] : null;
+        }
+
+        // Overload for backward compatibility
+        public NodeData GetNodeData(int nodeIndex)
+        {
+            return GetNodeData(new NodeId(nodeIndex));
+        }
+
+        public float GetSplineT(NodeId nodeId)
+        {
+            if (nodeViews.Count <= 1) 
+                return GetConfig(c => c.tStart, 0.2f);
+
+            float tStart = GetConfig(c => c.tStart, 0.2f);
+            float tEnd = GetConfig(c => c.tEnd, 0.8f);
+            
+            return Mathf.Lerp(tStart, tEnd, (float)nodeId.Value / (nodeViews.Count - 1));
+        }
+
+        // Overload for backward compatibility
+        public float GetSplineT(int nodeIndex)
+        {
+            return GetSplineT(new NodeId(nodeIndex));
+        }
+
+        #endregion
+
+        #region Node Creation & Positioning
+
+        private void CreateNodeViews()
+        {
+            // Clean up existing nodes
+            ClearNodes();
+
+            // Create new node views
+            for (int i = 0; i < nodeData.Count; i++)
+            {
+                var nodeId = new NodeId(i);
+                var nodeView = CreateSingleNode(nodeId);
+                nodeViews.Add(nodeView);
+            }
+        }
+
+        private LevelNodeView CreateSingleNode(NodeId nodeId)
+        {
+            var nodeObject = Instantiate(nodePrefab, nodesParent);
+            var nodeView = nodeObject.GetComponent<LevelNodeView>();
+            
+            // Initialize using existing API
+            nodeView.BindIndex(nodeId.Value + 1); // LevelNodeView expects 1-based index
+            nodeView.SetOnClick(() => OnNodeClicked?.Invoke(nodeId));
+            
+            return nodeView;
+        }
+
+        private void PositionNodes()
+        {
+            if (spline == null || uiCamera == null || canvasRect == null) 
+            {
+                Debug.LogWarning("[NodeManager] Missing required components for positioning");
+                return;
+            }
+
+            for (int i = 0; i < nodeViews.Count; i++)
+            {
+                var nodeId = new NodeId(i);
+                PositionSingleNode(nodeViews[i], nodeId);
+            }
+        }
+
+        private void PositionSingleNode(LevelNodeView nodeView, NodeId nodeId)
+        {
+            var worldPos = spline.EvaluatePosition(GetSplineT(nodeId));
+            var screenPos = uiCamera.WorldToScreenPoint(worldPos);
+            
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect, screenPos, uiCamera, out Vector2 localPos))
+            {
+                var rectTransform = nodeView.GetComponent<RectTransform>();
+                if (rectTransform != null)
+                {
+                    rectTransform.anchoredPosition = localPos;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private LevelNodeView GetNodeView(NodeId nodeId)
+        {
+            int index = nodeId.Value;
+            return index >= 0 && index < nodeViews.Count ? nodeViews[index] : null;
+        }
+
+        private void ClearNodes()
+        {
+            // Clean up existing node objects
+            foreach (var nodeView in nodeViews)
+            {
+                if (nodeView != null && nodeView.gameObject != null)
+                {
+                    DestroyImmediate(nodeView.gameObject);
+                }
+            }
+            nodeViews.Clear();
+
+            // Clean up any remaining children
+            foreach (Transform child in nodesParent)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+        }
+
+        #endregion
+
+        #region Lifecycle
+
+        public void Dispose()
+        {
+            OnNodeClicked = null;
+            ClearNodes();
+        }
+
+        private void OnDestroy()
+        {
+            Dispose();
+        }
+
+        #endregion
+    }
+}
