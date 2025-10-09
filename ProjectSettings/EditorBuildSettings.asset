@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/SignUpPage.unity
+    guid: 5b1c3cdf1f293b040b2acbe34aaa71c0
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: af5e424bfecf90342bf97b2e3b11eb43
   - enabled: 1
+    path: Assets/Scenes/GameStart.unity
+    guid: 83479dc85ba013845b528e4916ee4d5d
+  - enabled: 1
+    path: Assets/Scenes/LeaderBoard2.0.unity
+    guid: 4a69cd660bde85d45b918669c0010056
+  - enabled: 0
     path: Assets/Scenes/LeaderBoard.unity
     guid: 76d2fbc12a5c68e46a37323272334011
   - enabled: 1
@@ -20,9 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DrivingScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/Scenes/GameStart.unity
-    guid: 83479dc85ba013845b528e4916ee4d5d
   - enabled: 1
     path: Assets/Scenes/NodeMapFullHD.unity
     guid: db768426cee1e0f4cb3fed4d41f4b23b
