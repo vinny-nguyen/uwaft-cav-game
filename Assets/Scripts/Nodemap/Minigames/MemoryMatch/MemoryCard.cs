@@ -8,7 +8,7 @@ public class MemoryCard : MonoBehaviour
     [SerializeField] private GameObject front;    // holds Icon + Label
     [SerializeField] private Image back;          // the button image (back face)
     [SerializeField] private Image iconImage;     // child under Front (optional)
-    [SerializeField] private TMP_Text labelText;  // child under Front (optional)
+    [SerializeField] private TMP_Text labelText;  // child under Front (wrapped text)
 
     [Header("Flip")]
     [SerializeField] private float flipDuration = 0.2f; // quick flip
@@ -16,6 +16,7 @@ public class MemoryCard : MonoBehaviour
     public string Key { get; private set; }
     public bool IsMatched { get; private set; }
     public bool IsFaceUp { get; private set; }
+    public bool IsTerm { get; private set; } // true = term card, false = definition card
 
     private Button _btn;
     private CanvasGroup _cg;
@@ -29,19 +30,24 @@ public class MemoryCard : MonoBehaviour
         ShowBackImmediate();
     }
 
-    public void Init(string key, Sprite icon, string label, MemoryMatchController controller)
+    // New init for term/definition content
+    public void InitWordDef(string key, string displayText, Sprite icon, bool isTerm, MemoryMatchController controller)
     {
         Key = key;
         _controller = controller;
+        IsTerm = isTerm;
 
-        if (iconImage) {
+        if (iconImage)
+        {
             iconImage.sprite = icon;
             iconImage.enabled = (icon != null);
         }
 
-        if (labelText) {
-            labelText.text = string.IsNullOrWhiteSpace(label) ? "" : label;
-            labelText.gameObject.SetActive(!string.IsNullOrWhiteSpace(label));
+        if (labelText)
+        {
+            labelText.textWrappingMode = TextWrappingModes.Normal;
+            labelText.text = string.IsNullOrWhiteSpace(displayText) ? "" : displayText.Trim();
+            labelText.gameObject.SetActive(!string.IsNullOrEmpty(labelText.text));
         }
     }
 
@@ -71,12 +77,11 @@ public class MemoryCard : MonoBehaviour
     {
         IsMatched = true;
         _btn.interactable = false;
-        if (_cg) _cg.alpha = 0.7f; // slight fade to indicate matched
+        if (_cg) _cg.alpha = 0.7f; // slight fade
     }
 
     private System.Collections.IEnumerator FlipRoutine(bool showFront)
     {
-        // simple scale-X flip
         var rt = (RectTransform)transform;
         float t = 0f;
         while (t < flipDuration)

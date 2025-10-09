@@ -11,12 +11,19 @@ public class MemoryMatchController : MonoBehaviour
     [Serializable]
     public class PairEntry
     {
-        [Tooltip("Unique ID for matching e.g., 'tread'")]
+        [Tooltip("Unique ID for matching, e.g., 'tread'")]
         public string key;
-        [Tooltip("Optional: sprite shown on the front")]
-        public Sprite icon;
-        [Tooltip("Optional: text shown on the front")]
-        public string label;
+
+        [Header("Learning Content")]
+        [Tooltip("The term (short text), shown on one card of the pair.")]
+        public string term;
+
+        [Tooltip("The definition (longer text), shown on the matching card.")]
+        [TextArea(2, 5)]
+        public string definition;
+
+        [Header("Optional visuals (used on the TERM card)")]
+        public Sprite icon;   // optional icon to show with the term
     }
 
     [Header("UI Refs")]
@@ -30,13 +37,16 @@ public class MemoryMatchController : MonoBehaviour
     [SerializeField] private MemoryCard cardPrefab;
 
     [Header("Config")]
-    [Tooltip("Define all possible pairs here. The controller will pick the first N (or shuffle)")]
+    [Tooltip("Define all pairs (term + definition).")]
     [SerializeField] private List<PairEntry> allPairs = new();
+
     [Tooltip("How many pairs to play this round.")]
     [SerializeField] private int pairsToUse = 6;
+
     [Tooltip("Shuffle which pairs are used and their positions.")]
     [SerializeField] private bool shufflePairs = true;
-    [Tooltip("Columns in the grid (must match GridLayoutGroup constraint).")]
+
+    [Tooltip("Columns in the grid (must also match GridLayoutGroup constraint).")]
     [SerializeField] private int gridColumns = 4;
 
     [Header("Events")]
@@ -59,26 +69,37 @@ public class MemoryMatchController : MonoBehaviour
 
     private void BuildBoard()
     {
-        // pick pairs
-        var pool = new List<PairEntry>(allPairs.Where(p => !string.IsNullOrWhiteSpace(p.key)));
-        if (shufflePairs)
-            Shuffle(pool);
+        // Validate and pool
+        var pool = new List<PairEntry>(
+            allPairs.Where(p =>
+                !string.IsNullOrWhiteSpace(p.key) &&
+                !string.IsNullOrWhiteSpace(p.term) &&
+                !string.IsNullOrWhiteSpace(p.definition))
+        );
+
+        if (pool.Count == 0)
+        {
+            Debug.LogWarning("[MemoryMatch] No valid pairs configured.");
+            return;
+        }
+
+        if (shufflePairs) Shuffle(pool);
 
         pairsToUse = Mathf.Clamp(pairsToUse, 1, pool.Count);
         var chosen = pool.Take(pairsToUse).ToList();
 
-        // build a deck of 2 cards per pair
-        var deck = new List<(string key, Sprite icon, string label)>();
+        // Build deck: for each pair, create a TERM card and a DEF card
+        var deck = new List<CardSpec>(pairsToUse * 2);
         foreach (var p in chosen)
         {
-            deck.Add((p.key, p.icon, p.label));
-            deck.Add((p.key, p.icon, p.label));
+            deck.Add(CardSpec.MakeTerm(p.key, p.term, p.icon));
+            deck.Add(CardSpec.MakeDef(p.key, p.definition));
         }
 
-        // shuffle deck positions
+        // Shuffle deck positions
         Shuffle(deck);
 
-        // clear grid
+        // Clear grid & reset state
         foreach (Transform c in gridRoot) Destroy(c.gameObject);
         _cards.Clear();
         _matches = 0;
@@ -86,11 +107,11 @@ public class MemoryMatchController : MonoBehaviour
         _first = _second = null;
         _inputLocked = false;
 
-        // spawn cards
-        foreach (var d in deck)
+        // Spawn cards
+        foreach (var spec in deck)
         {
             var card = Instantiate(cardPrefab, gridRoot);
-            card.Init(d.key, d.icon, d.label, this);
+            card.InitWordDef(spec.key, spec.displayText, spec.icon, spec.isTerm, this);
             _cards.Add(card);
         }
     }
@@ -113,10 +134,12 @@ public class MemoryMatchController : MonoBehaviour
             _moves++;
             UpdateHUD();
 
-            // evaluate
-            if (_first.Key == _second.Key)
+            // Evaluate: keys must match, but also require one TERM + one DEF
+            bool keyMatch = _first.Key == _second.Key;
+            bool roleMatch = _first.IsTerm != _second.IsTerm;
+
+            if (keyMatch && roleMatch)
             {
-                // match
                 _first.SetMatched();
                 _second.SetMatched();
                 _matches++;
@@ -124,14 +147,12 @@ public class MemoryMatchController : MonoBehaviour
 
                 if (_matches >= pairsToUse)
                 {
-                    // win
                     if (winBanner) winBanner.SetActive(true);
                     OnCompleted?.Invoke();
                 }
             }
             else
             {
-                // not a match -> flip back after delay
                 StartCoroutine(FlipBackRoutine());
             }
         }
@@ -163,7 +184,22 @@ public class MemoryMatchController : MonoBehaviour
         }
     }
 
-    // Public API
+    // Internal helper to carry the per-card spec
+    private struct CardSpec
+    {
+        public string key;
+        public string displayText;
+        public Sprite icon;
+        public bool isTerm;
+
+        public static CardSpec MakeTerm(string key, string term, Sprite icon)
+            => new CardSpec { key = key, displayText = term, icon = icon, isTerm = true };
+
+        public static CardSpec MakeDef(string key, string def)
+            => new CardSpec { key = key, displayText = def, icon = null, isTerm = false };
+    }
+
+    // Public API (optional)
     public void ResetGame()
     {
         if (winBanner) winBanner.SetActive(false);

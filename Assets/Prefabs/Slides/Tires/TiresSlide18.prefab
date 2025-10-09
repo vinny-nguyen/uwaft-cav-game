@@ -216,7 +216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[0].key
@@ -228,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[2].key
-      value: grooves
+      value: bead
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[3].key
@@ -236,11 +236,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[4].key
-      value: innnerWall
+      value: rotation
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[5].key
-      value: idk
+      value: rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[0].term
+      value: Tread
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[1].term
+      value: Sidewall
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[2].term
+      value: Bead
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[3].term
+      value: Air Pressure (PSI)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[4].term
+      value: Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[5].term
+      value: Rotation
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[0].label
@@ -265,6 +289,36 @@ PrefabInstance:
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[5].label
       value: I Don't Know
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[0].definition
+      value: The outer part of the tire that touches the road. Its grooves help grip
+        and push water away
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[1].definition
+      value: "The side of the tire between the tread and the wheel. It shows tire
+        size and protects the tire\u2019s structure."
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[2].definition
+      value: The strong edge of the tire that sits on the wheel rim to keep the tire
+        sealed and in place
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[3].definition
+      value: How much air is inside the tire. Correct pressure improves safety, grip,
+        and tire life.
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[4].definition
+      value: Moving tires to different positions on the car so they wear evenly and
+        last longer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
+      propertyPath: allPairs.Array.data[5].definition
+      value: Moving tires to different positions on the car so they wear evenly and
+        last longer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
