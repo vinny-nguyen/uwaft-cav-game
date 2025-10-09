@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821792c7c2ab6384882ef2bab84059ce, type: 3}
+  m_Name: MapConfig
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  minMoveDuration: 0.1
+  popScaleUp: 1.05
+  popDuration: 0.2
+  shakeDuration: 0.2
+  shakeMagnitude: 5
+  tStart: 0.2
+  tEnd: 0.8
+  nodeSpriteFolder: Sprites/Nodes
+  popupFadeDuration: 0.3
+  slideTransitionDuration: 0.2
+  carBounceFrequency: 5
+  carBounceAmplitude: 0.05
+  carRotationDuration: 0.3
+  wheelSpinSpeed: 360

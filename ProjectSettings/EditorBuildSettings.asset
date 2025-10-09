@@ -33,5 +33,6 @@ EditorBuildSettings:
     path: Assets/Scenes/NodeMapFullHD.unity
     guid: db768426cee1e0f4cb3fed4d41f4b23b
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 841df3f2a3e70c04e848847b84ed4f51, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
