@@ -47,3 +47,5 @@ MonoBehaviour:
     slidePrefab: {fileID: 8928204831618388235, guid: caa15ce5fe830f642a2b05af7bceb77a, type: 3}
   - key: TiresSlide17
     slidePrefab: {fileID: 8928204831618388235, guid: 5f5db11e7d2e6f34692d43681fe75cff, type: 3}
+  - key: TiresSlide17
+    slidePrefab: {fileID: 8928204831618388235, guid: d7ec6a04b0911834fbd590e37334ef23, type: 3}
