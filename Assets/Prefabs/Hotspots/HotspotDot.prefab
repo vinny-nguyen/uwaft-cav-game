@@ -133,8 +133,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123d0b16b1047074ab782936a61b4135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
-  body: 
+  title: Thread
+  body: "The outermost layer of the tire that makes direct contact with the road.\u200B\r\n\nDesigned
+    with grooves and patterns to provide grip, traction, and water evacuation.\u200B\r\n\nDifferent
+    tread designs optimize performance for various conditions (e.g., all-season,
+    winter, summer, off-road).\r\n"
   icon: {fileID: 0}
   offset: {x: 18, y: 18}
   rect: {fileID: 1616870696709788879}
