@@ -11,20 +11,26 @@ public class Main_menu : MonoBehaviour
 
     public void PlayGame()
     {
-        // Tell the loading screen what scene to load next
         PlayerPrefs.SetString("TargetScene", gameSceneName);
         SceneManager.LoadScene(loadingSceneName);
     }
 
     public void OpenTutorial()
     {
-        PlayerPrefs.SetString("TargetScene", gameSceneName);
+        PlayerPrefs.SetString("TargetScene", tutorialSceneName);
         SceneManager.LoadScene(tutorialSceneName);
     }
+
     public void OpenLeaderboard()
     {
         PlayerPrefs.SetString("PreviousScene", SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(leaderSceneName);
+    }
+
+    public void ReturnToPreviousScene()
+    {
+        var previous = PlayerPrefs.GetString("PreviousScene", "MainMenu");
+        SceneManager.LoadScene(previous);
     }
 
     public void QuitGame()
@@ -36,11 +42,4 @@ public class Main_menu : MonoBehaviour
         Application.Quit();
 #endif
     }
-
-    public void ReturnToPreviousScene()
-    {
-        string previousScene = PlayerPrefs.GetString("PreviousScene", "MainMenu");
-        SceneManager.LoadScene(previousScene);
-    }
 }
-
