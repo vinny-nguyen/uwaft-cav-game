@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DriveCar: MonoBehaviour {
+    // Serialize fields to be assigned in Unity Inspector:
     [SerializeField] private Rigidbody2D _Front_TireRB;
     [SerializeField] private Rigidbody2D _Rear_TireRB;
     [SerializeField] private Rigidbody2D _CarRB;
@@ -10,6 +11,9 @@ public class DriveCar: MonoBehaviour {
     [SerializeField] private float _Rotation_Speed = 300f;
     [SerializeField] float _Flip_Angle_Threshold = 0f;
     [SerializeField] float _Required_Flip_Duration = 3.0f;
+    [SerializeField] private PedalController _Pedal_Controller;
+    [SerializeField] float airResistance = 0.5f;
+    [SerializeField] Vector2 windForce = new Vector2(-5f, 0f);
 
     private float _Flip_Timer = 0f;
     private float _Move_Input;
@@ -38,7 +42,15 @@ void DetectFlip() {
     private void Update() {
 
         if (!_Can_Control) return; // Disables input when false
-        _Move_Input = Input.GetAxisRaw("Horizontal");
+        if (_Pedal_Controller != null)
+        {
+            if (_Pedal_Controller.IsAccelerating) _Move_Input = 1f;
+            else if (_Pedal_Controller.IsBraking) _Move_Input = -1f;
+            else _Move_Input = 0f;
+        } else
+        {
+            _Move_Input = Input.GetAxisRaw("Horizontal");
+        }
         DetectFlip();
     }
 
@@ -46,5 +58,10 @@ void DetectFlip() {
         _Front_TireRB.AddTorque(-(_Move_Input) * _Speed * Time.fixedDeltaTime); // Torque
         _Rear_TireRB.AddTorque(-(_Move_Input) * _Speed * Time.fixedDeltaTime);
         _CarRB.AddTorque(-(_Move_Input) * _Rotation_Speed * Time.fixedDeltaTime);
+
+        // Air Resistance (for Node 2):
+        Vector2 drag = -_CarRB.linearVelocity.normalized * airResistance;
+        _CarRB.AddForce(drag);
+        // OR: Increase Rigidbody2D.drag for Node 2.
     }
 }
