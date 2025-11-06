@@ -1,76 +1,119 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.Services.Authentication;
 using Unity.Services.Core;
-using System.Threading.Tasks;
+using Unity.Services.Authentication;
 using UnityEngine.SceneManagement;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 public class AuthManager : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] Button signUpButton;
-    [SerializeField] Button nextButton;
-    [SerializeField] TextMeshProUGUI usernameDisplay;
-    [SerializeField] TextMeshProUGUI playerIdDisplay; // New field for Player ID
+    [SerializeField] private Button signUpButton;          // "Sign In" / first button
+    [SerializeField] private Button nextButton;            // "Continue" button
+    [SerializeField] private TextMeshProUGUI usernameDisplay;
+    [SerializeField] private TextMeshProUGUI playerIdDisplay; // Optional; leave unassigned to hide
 
-    void Start()
+    private bool busy;
+
+    private void Start()
     {
-        signUpButton.onClick.AddListener(OnSignUpClicked);
-        nextButton.onClick.AddListener(OnNextClicked);
-        nextButton.gameObject.SetActive(false);
-        playerIdDisplay.gameObject.SetActive(false); // Hide initially
-        usernameDisplay.text = "";
-
+        if (nextButton) nextButton.gameObject.SetActive(false);
+        if (usernameDisplay) usernameDisplay.text = "Welcome:";
+        if (signUpButton) signUpButton.onClick.AddListener(OnSignUpClicked);
+        if (nextButton) nextButton.onClick.AddListener(OnNextClicked);
+        _ = SafeInitAsync(); // still runs asynchronously; Start itself isn’t async
+        if (playerIdDisplay) playerIdDisplay.gameObject.SetActive(false);
     }
 
-    public async void OnSignUpClicked()
+    private async Task SafeInitAsync()
     {
-        signUpButton.interactable = false;
-        usernameDisplay.text = "Generating your identity...";
-
-        string username = await InitializeAndLogin();
-
-        // Update both displays
-        usernameDisplay.text = $"Welcome:\n{username}";
-        AuthenticationService.Instance.UpdatePlayerNameAsync(username); // updating the leaderboard ID to username
-        playerIdDisplay.text = $"ID:\n{AuthenticationService.Instance.PlayerId}";
-        playerIdDisplay.gameObject.SetActive(true); // Show Player ID
-
-        signUpButton.gameObject.SetActive(false);
-        nextButton.gameObject.SetActive(true);
+        if (UnityServices.State == ServicesInitializationState.Initialized) return;
+        try { await UnityServices.InitializeAsync(); }
+        catch { /* ignore; handled on click path */ }
     }
 
-    async Task<string> InitializeAndLogin()
+    private async void OnSignUpClicked()
     {
-        await UnityServices.InitializeAsync();
+        if (busy) return;
+        busy = true;
+
+        if (signUpButton) signUpButton.interactable = false;
+        if (usernameDisplay) usernameDisplay.text = "Generating your identity...";
+
+        try
+        {
+            await EnsureSignedInAsync();
+
+            // Generate or load cached username
+            var name = Sanitize(GetOrGenerateUsername());
+
+            // Update Unity player name (await so it actually sticks)
+            await AuthenticationService.Instance.UpdatePlayerNameAsync(name);
+
+            // UI updates
+            if (usernameDisplay) usernameDisplay.text = $"Welcome:\n{name}";
+
+            if (playerIdDisplay)
+            {
+                playerIdDisplay.text = AuthenticationService.Instance.PlayerId;
+                playerIdDisplay.gameObject.SetActive(false); // keep hidden for kids; flip to true if you want it visible
+            }
+
+            if (signUpButton) signUpButton.gameObject.SetActive(false);
+            if (nextButton) nextButton.gameObject.SetActive(true);
+        }
+        catch
+        {
+            if (usernameDisplay) usernameDisplay.text = "Network hiccup. Try again.";
+            if (signUpButton) signUpButton.interactable = true;
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+
+    private void OnNextClicked()
+    {
+        // Change this to your next scene name
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    private static async Task EnsureSignedInAsync()
+    {
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+            await UnityServices.InitializeAsync();
+
         if (!AuthenticationService.Instance.IsSignedIn)
-        {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-        return GetOrGenerateUsername();
     }
 
-    string GetOrGenerateUsername()
+    private static string Sanitize(string raw)
     {
-        string username = PlayerPrefs.GetString("GeneratedUsername");
-        if (string.IsNullOrEmpty(username))
-        {
-            username = GenerateRandomUsername();
-            //AuthenticationService.Instance.UpdatePlayerNameAsync(username); // updating the leaderboard ID to username
-            PlayerPrefs.SetString("GeneratedUsername", username);
-        }
-        return username;
+        if (string.IsNullOrWhiteSpace(raw)) return "Player" + Random.Range(100, 999);
+        var s = raw.Trim();
+        s = Regex.Replace(s, @"\s+", "");                 // remove spaces
+        s = Regex.Replace(s, @"[^A-Za-z0-9_\-]", "");     // safe chars only
+        if (s.Length > 16) s = s[..16];
+        if (s.Length < 3) s += Random.Range(100, 999);
+        return s;
     }
 
-    void OnNextClicked() => SceneManager.LoadScene("MainMenu");
-
-    string GenerateRandomUsername()
+    private string GetOrGenerateUsername()
     {
+        var cached = PlayerPrefs.GetString("GeneratedUsername", "");
+        if (!string.IsNullOrEmpty(cached)) return cached;
+
         string[] prefixes = { "Cosmic", "Neon", "Quantum", "Steel", "Phantom" };
         string[] suffixes = { "Fox", "Raptor", "Wizard", "Pioneer", "Samurai" };
-        return $"{prefixes[Random.Range(0, prefixes.Length)]}" +
-               $"{suffixes[Random.Range(0, suffixes.Length)]}" +
-               $"{Random.Range(100, 999)}";
+        var name = $"{prefixes[Random.Range(0, prefixes.Length)]}" +
+                   $"{suffixes[Random.Range(0, suffixes.Length)]}" +
+                   $"{Random.Range(100, 999)}";
+
+        PlayerPrefs.SetString("GeneratedUsername", name);
+        PlayerPrefs.Save();
+        return name;
     }
 }
