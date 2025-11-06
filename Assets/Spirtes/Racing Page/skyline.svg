@@ -1,0 +1,38 @@
+<svg width="620" height="320" viewBox="0 0 620 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_449_3)">
+<rect width="620" height="320" fill="url(#paint0_linear_449_3)"/>
+<rect x="64" y="112" width="33" height="90" fill="#020203"/>
+<rect x="89" y="84" width="33" height="90" fill="#101F32"/>
+<rect x="112" y="101" width="64" height="90" fill="#020203"/>
+<rect width="33" height="90" transform="matrix(-1 0 0 1 371 132)" fill="#020203"/>
+<rect width="33" height="90" transform="matrix(-1 0 0 1 346 104)" fill="#101F32"/>
+<rect width="31" height="90" transform="matrix(-1 0 0 1 270 104)" fill="#101F32"/>
+<rect width="64" height="90" transform="matrix(-1 0 0 1 323 121)" fill="#020203"/>
+<rect x="64" y="112" width="33" height="90" fill="#020203"/>
+<rect x="89" y="84" width="33" height="90" fill="#101F32"/>
+<rect x="179" y="94" width="64" height="90" fill="#020203"/>
+<rect x="33" y="125" width="31" height="90" fill="#101F32"/>
+<rect x="-20" y="142" width="64" height="90" fill="#020203"/>
+<rect width="33" height="90" transform="matrix(-1 0 0 1 559 128)" fill="#020203"/>
+<rect width="33" height="90" transform="matrix(-1 0 0 1 534 100)" fill="#101F32"/>
+<rect width="33" height="90" transform="matrix(-1 0 0 1 617 145)" fill="#020203"/>
+<rect width="33" height="90" transform="matrix(-1 0 0 1 592 117)" fill="#101F32"/>
+<rect width="64" height="90" transform="matrix(-1 0 0 1 506 142)" fill="#020203"/>
+<rect x="33" y="125" width="31" height="90" fill="#101F32"/>
+<rect x="362" y="115" width="64" height="90" fill="#020203"/>
+<rect width="31" height="90" transform="matrix(-1 0 0 1 453 125)" fill="#101F32"/>
+<line x1="436.5" y1="129" x2="436.5" y2="108" stroke="#101F32" stroke-width="3"/>
+<rect x="165" y="84" width="31" height="90" fill="#101F32"/>
+<rect x="165" y="84" width="31" height="90" fill="#101F32"/>
+<line x1="181.5" y1="93" x2="181.5" y2="72" stroke="#101F32" stroke-width="3"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_449_3" x1="310" y1="0" x2="310" y2="178" gradientUnits="userSpaceOnUse">
+<stop stop-color="#170F2A"/>
+<stop offset="1" stop-color="#165ED5"/>
+</linearGradient>
+<clipPath id="clip0_449_3">
+<rect width="620" height="320" fill="white"/>
+</clipPath>
+</defs>
+</svg>
