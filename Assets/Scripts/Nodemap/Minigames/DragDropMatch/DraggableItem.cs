@@ -11,6 +11,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private CanvasGroup _cg;
     private Transform _startParent;
     private Vector2 _startAnchoredPos;
+    private Vector2 _startAnchorMin;
+    private Vector2 _startAnchorMax;
+    private Vector2 _startPivot;
     private bool _locked;
 
     public void Init(string key, DragDropController controller, Canvas rootCanvas, CanvasGroup cg, RectTransform rt)
@@ -22,6 +25,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         RectTransform = rt;
         _startParent = rt.parent;
         _startAnchoredPos = rt.anchoredPosition;
+        // Store original anchor and pivot settings
+        _startAnchorMin = rt.anchorMin;
+        _startAnchorMax = rt.anchorMax;
+        _startPivot = rt.pivot;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -46,6 +53,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void ResetToStart()
     {
         RectTransform.SetParent(_startParent);
+        // Restore original anchor and pivot settings
+        RectTransform.anchorMin = _startAnchorMin;
+        RectTransform.anchorMax = _startAnchorMax;
+        RectTransform.pivot = _startPivot;
         RectTransform.anchoredPosition = _startAnchoredPos;
     }
 

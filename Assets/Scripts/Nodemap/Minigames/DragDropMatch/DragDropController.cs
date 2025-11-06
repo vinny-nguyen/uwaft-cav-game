@@ -88,20 +88,35 @@ public class DragDropController : MonoBehaviour
         var results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
+        Debug.Log($"TryPlace: {item.Key} - Found {results.Count} raycast results");
+
         foreach (var r in results)
         {
+            // Check both the object itself and its parents for DropZone
             var zone = r.gameObject.GetComponent<DropZone>();
-            if (zone != null && zone.Key == item.Key && !zone.IsLocked)
+            if (zone == null)
             {
-                // Snap & lock
-                zone.LockToZone(item.RectTransform);
-                _lockedCount++;
-                item.Lock();
-                CheckComplete();
-                return;
+                zone = r.gameObject.GetComponentInParent<DropZone>();
+            }
+
+            if (zone != null)
+            {
+                Debug.Log($"Found zone: {zone.Key}, Item: {item.Key}, Locked: {zone.IsLocked}, Match: {zone.Key == item.Key}");
+                
+                if (zone.Key == item.Key && !zone.IsLocked)
+                {
+                    Debug.Log($"✓ Locking {item.Key} to zone!");
+                    // Snap & lock
+                    zone.LockToZone(item.RectTransform);
+                    _lockedCount++;
+                    item.Lock();
+                    CheckComplete();
+                    return;
+                }
             }
         }
 
+        Debug.Log($"✗ No valid zone found for {item.Key} - resetting to start");
         // No valid zone: return to original parent/anchored position
         item.ResetToStart();
     }

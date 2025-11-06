@@ -22,7 +22,7 @@ public class Loading_screen : MonoBehaviour
     private void Start()
     {
         // Get target scene from PlayerPrefs
-        targetSceneName = PlayerPrefs.GetString("TargetScene", "NodeMapFullHD");
+        targetSceneName = PlayerPrefs.GetString("TargetScene", "UpdatedNodemap");
 
         // Show random tip
         if (tipText != null && loadingTips.Length > 0)

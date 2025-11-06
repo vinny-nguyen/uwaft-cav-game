@@ -25,6 +25,8 @@ MonoBehaviour:
     slidePrefab: {fileID: 7753260813759224794, guid: 150897b8826f76644b6d30f4db842b7c, type: 3}
   - key: TiresSlide6
     slidePrefab: {fileID: 7753260813759224794, guid: a05998a4212dd8344b1686a6c0aa1e60, type: 3}
+  - key: TiresSlide16
+    slidePrefab: {fileID: 8928204831618388235, guid: caa15ce5fe830f642a2b05af7bceb77a, type: 3}
   - key: TiresSlide7
     slidePrefab: {fileID: 8928204831618388235, guid: c84ecfebadeedbe4699e539bace5267a, type: 3}
   - key: TiresSlide8
@@ -33,6 +35,8 @@ MonoBehaviour:
     slidePrefab: {fileID: 7753260813759224794, guid: b78adb11a0684bd489c7782ce5ee8d5e, type: 3}
   - key: TiresSlide10
     slidePrefab: {fileID: 7753260813759224794, guid: c1d3256b5afee5b40b7169b64509c010, type: 3}
+  - key: TiresSlide17
+    slidePrefab: {fileID: 8928204831618388235, guid: 5f5db11e7d2e6f34692d43681fe75cff, type: 3}
   - key: TiresSlide11
     slidePrefab: {fileID: 8928204831618388235, guid: 5de58a9c4ae147e45810d29739a20299, type: 3}
   - key: TiresSlide12
@@ -41,11 +45,7 @@ MonoBehaviour:
     slidePrefab: {fileID: 7753260813759224794, guid: 72480649afd6fa540805b0c267e5582a, type: 3}
   - key: TiresSlide14
     slidePrefab: {fileID: 7753260813759224794, guid: 4f96d5d6e34c6cc4eb963aedb03f1316, type: 3}
-  - key: TiresSlide15
-    slidePrefab: {fileID: 8928204831618388235, guid: f8f68a88529ae2748aa8ff872e8003e6, type: 3}
-  - key: TiresSlide16
-    slidePrefab: {fileID: 8928204831618388235, guid: caa15ce5fe830f642a2b05af7bceb77a, type: 3}
-  - key: TiresSlide17
-    slidePrefab: {fileID: 8928204831618388235, guid: 5f5db11e7d2e6f34692d43681fe75cff, type: 3}
   - key: TiresSlide17
     slidePrefab: {fileID: 8928204831618388235, guid: d7ec6a04b0911834fbd590e37334ef23, type: 3}
+  - key: TiresSlide15
+    slidePrefab: {fileID: 8928204831618388235, guid: f8f68a88529ae2748aa8ff872e8003e6, type: 3}
