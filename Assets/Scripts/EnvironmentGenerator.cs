@@ -10,8 +10,8 @@ public class EnvironmentGenerator : MonoBehaviour
     public SpriteShapeController _Sprite_Shape_Controller;
 
     [Range(3f, 100f)] public int _Level_Length = 50; // Range for Level Length
-    [Range(1f, 50f)] public float _X_Multiplier = 2f; // Stretches the Width (x-direction) of the map/level
-    [Range(1f, 50f)] public float _Y_Multiplier = 2f; // Stretches the Height (y-direction) of the map/level
+    [Range(1f, 50f)] public float _X_Multiplier = 8f; // Stretches the Width (x-direction) of the map/level
+    [Range(1f, 50f)] public float _Y_Multiplier = 3f; // Stretches the Height (y-direction) of the map/level
     [Range(0f, 1f)] public float _Curve_Smoothness = 0.5f; // Smoothness of the curves and edges on the terrain
     public float _Noise_Step = 0.5f; // Constantly randomizes map generation
     public float _Bottom = 10f; // How thick the ground is
