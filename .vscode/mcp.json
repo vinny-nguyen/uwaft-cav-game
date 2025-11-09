@@ -4,6 +4,11 @@
       "type": "http",
       "url": "https://mcp.exa.ai/mcp",
       "headers": {}
+    },
+    "upstash_context7": {
+      "type": "http",
+      "url": "https://mcp.context7.dev/mcp",
+      "headers": {}
     }
   }
 }

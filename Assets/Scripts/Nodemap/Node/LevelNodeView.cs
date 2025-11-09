@@ -23,14 +23,7 @@ public class LevelNodeView : MonoBehaviour
     public void PlayShake()
     {
         if (_anim != null)
-            StartCoroutine(_anim.Shake());
-    }
-
-    // OPTIONAL: if you want a helper for state-change pop animation too:
-    public void PlayStatePop(NodeState state)
-    {
-        if (_anim != null)
-            StartCoroutine(_anim.AnimateStateChange(state));
+            _anim.PlayShake();
     }
 
     public int Index { get; private set; }       // 1..6
@@ -44,12 +37,9 @@ public class LevelNodeView : MonoBehaviour
     public void SetState(NodeState state, bool animate)
     {
         _currentState = state;
-        var animator = GetComponent<NodeStateAnimation>();
-        if (animator != null && animate)
-        {
-            animator.StopAllCoroutines();
-            StartCoroutine(animator.AnimateStateChange(state));
-        }
+        
+        if (animate && _anim != null)
+            _anim.PlayPop();
 
         LoadAndSetSprite(state, Index);
         // button.interactable = state == NodeState.Active;

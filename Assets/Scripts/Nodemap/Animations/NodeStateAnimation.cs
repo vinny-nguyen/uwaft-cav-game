@@ -19,7 +19,10 @@ public class NodeStateAnimation : MonoBehaviour
     [Header("Shake Animation - Overridden by MapConfig")]
     [SerializeField] private float shakeDuration = 0.2f;
     [SerializeField] private float shakeMagnitude = 5f;
-    private bool isShaking;
+    
+    // Track active animations to prevent overlapping
+    private bool _isShaking;
+    private Coroutine _popCoroutine;
 
     private void Awake()
     {
@@ -40,10 +43,31 @@ public class NodeStateAnimation : MonoBehaviour
     private float GetShakeDuration() => GetConfigValue(c => c.shakeDuration, shakeDuration);
     private float GetShakeMagnitude() => GetConfigValue(c => c.shakeMagnitude, shakeMagnitude);
 
-    public IEnumerator Shake()
+    /// <summary>
+    /// Play shake animation (when node is locked).
+    /// Safe to call multiple times - won't stack.
+    /// </summary>
+    public void PlayShake()
     {
-        if (isShaking) yield break;
-        isShaking = true;
+        if (!_isShaking)
+            StartCoroutine(ShakeRoutine());
+    }
+
+    /// <summary>
+    /// Play pop animation (when node state changes).
+    /// Cancels previous pop if still running.
+    /// </summary>
+    public void PlayPop()
+    {
+        if (_popCoroutine != null)
+            StopCoroutine(_popCoroutine);
+        
+        _popCoroutine = StartCoroutine(PopRoutine());
+    }
+
+    private IEnumerator ShakeRoutine()
+    {
+        _isShaking = true;
 
         float elapsed = 0f;
         var rect = GetComponent<RectTransform>();
@@ -67,17 +91,17 @@ public class NodeStateAnimation : MonoBehaviour
         if (rect) rect.anchoredPosition = (Vector2)startPos;
         else      transform.localPosition = startPos;
 
-        isShaking = false;
+        _isShaking = false;
     }
 
-    public IEnumerator AnimateStateChange(NodeState _)
+    private IEnumerator PopRoutine()
     {
-        // scale pop only; no color tint
         float elapsed = 0f;
         float configScaleUp = GetScaleUp();
         float configDuration = GetDuration();
         Vector3 targetScale = originalScale * configScaleUp;
 
+        // Scale up
         while (elapsed < configDuration)
         {
             elapsed += Time.deltaTime;
@@ -86,6 +110,7 @@ public class NodeStateAnimation : MonoBehaviour
             yield return null;
         }
 
+        // Scale down
         elapsed = 0f;
         while (elapsed < configDuration)
         {
@@ -96,5 +121,6 @@ public class NodeStateAnimation : MonoBehaviour
         }
 
         transform.localScale = originalScale;
+        _popCoroutine = null;
     }
 }
