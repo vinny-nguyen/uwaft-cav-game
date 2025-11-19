@@ -151,7 +151,7 @@ namespace Nodemap.Core
                 PlayerPrefs.SetInt($"NodeCompleted_{i}", _completedNodes[i] ? 1 : 0);
             }
             PlayerPrefs.SetInt("CurrentCarNode", _currentCarNodeId.Value);
-            PlayerPrefs.SetInt("ActiveNode", _activeNodeId.Value);
+            // Note: ActiveNode is calculated from unlocked nodes, not saved
             PlayerPrefs.Save();
         }
 
@@ -164,10 +164,19 @@ namespace Nodemap.Core
             }
             
             int carNode = PlayerPrefs.GetInt("CurrentCarNode", 0);
-            int activeNode = PlayerPrefs.GetInt("ActiveNode", 0);
-            
             _currentCarNodeId = new NodeId(Mathf.Clamp(carNode, 0, _nodeCount - 1));
-            _activeNodeId = new NodeId(Mathf.Clamp(activeNode, 0, _nodeCount - 1));
+            
+            // Find the last unlocked node to set as active
+            int lastUnlockedIndex = 0;
+            for (int i = _nodeCount - 1; i >= 0; i--)
+            {
+                if (_unlockedNodes[i])
+                {
+                    lastUnlockedIndex = i;
+                    break;
+                }
+            }
+            _activeNodeId = new NodeId(lastUnlockedIndex);
         }
 
         #endregion

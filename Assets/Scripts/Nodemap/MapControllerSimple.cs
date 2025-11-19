@@ -54,10 +54,11 @@ namespace Nodemap
             // Initialize components
             nodeManager?.Initialize();
             
-            // Position car at loaded state
+            // Start car at spawn position and drive to active node
             if (carController != null && nodeManager != null)
             {
-                carController.SnapToNode(mapState.CurrentCarNodeId, nodeManager);
+                // Car stays at spawn position (beginning of path) initially
+                // Then we'll drive it to the active node after initial state is set
             }
         }
 
@@ -66,7 +67,7 @@ namespace Nodemap
             // State change notification
             if (mapState != null)
             {
-                mapState.OnStateChanged += RefreshAllVisuals;
+                mapState.OnStateChanged += OnMapStateChanged;
             }
 
             // Component events
@@ -80,6 +81,12 @@ namespace Nodemap
         private void SetInitialState()
         {
             RefreshAllVisuals();
+            
+            // Drive car from spawn position to the active node
+            if (carController != null && nodeManager != null && mapState != null)
+            {
+                carController.MoveToNode(mapState.ActiveNodeId, nodeManager);
+            }
         }
 
         #endregion
@@ -98,21 +105,43 @@ namespace Nodemap
                     popupController.Open(nodeData, isCompleted);
                 }
             }
-            else
-            {
-                // Shake locked node
-                nodeManager.ShakeNode(nodeId);
-            }
+            // Locked nodes do nothing when clicked
         }
 
         private void HandleCarArrived(NodeId nodeId)
         {
-            // Move car when state changes
-            if (carController != null && nodeManager != null)
+            // Update the car's position in state when it arrives
+            // We temporarily unsubscribe from state changes to avoid triggering auto-movement
+            if (mapState != null)
             {
-                carController.MoveToNode(mapState.CurrentCarNodeId, nodeManager);
+                mapState.OnStateChanged -= OnMapStateChanged;
+                mapState.TryMoveCarTo(nodeId);
+                mapState.SaveToPlayerPrefs();
+                mapState.OnStateChanged += OnMapStateChanged;
+                
+                // Manually refresh visuals without triggering movement
+                RefreshAllVisuals();
             }
-            mapState?.SaveToPlayerPrefs();
+        }
+
+        private void OnMapStateChanged()
+        {
+            // Refresh visuals when state changes
+            RefreshAllVisuals();
+            
+            // Auto-move car only when active node changes (e.g., node completion unlocks new node)
+            // This is indicated by the active node being different from where the car currently is
+            if (carController != null && nodeManager != null && mapState != null)
+            {
+                NodeId targetNode = mapState.ActiveNodeId;
+                NodeId currentCarNode = mapState.CurrentCarNodeId;
+                
+                // Only auto-move if a new node was unlocked and became active
+                if (!currentCarNode.Equals(targetNode) && mapState.IsNodeCompleted(currentCarNode))
+                {
+                    carController.MoveToNode(targetNode, nodeManager);
+                }
+            }
         }
 
         #endregion
@@ -121,7 +150,7 @@ namespace Nodemap
 
         private void HandleKeyboardInput()
         {
-            if (mapState == null) return;
+            if (mapState == null || carController == null || nodeManager == null) return;
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
@@ -131,7 +160,8 @@ namespace Nodemap
                     var nextNode = new NodeId(nextIndex);
                     if (mapState.IsNodeUnlocked(nextNode))
                     {
-                        mapState.TryMoveCarTo(nextNode);
+                        // Directly move the car (it will update state when it arrives)
+                        carController.MoveToNode(nextNode, nodeManager);
                     }
                 }
             }
@@ -143,7 +173,8 @@ namespace Nodemap
                     var prevNode = new NodeId(prevIndex);
                     if (mapState.IsNodeUnlocked(prevNode))
                     {
-                        mapState.TryMoveCarTo(prevNode);
+                        // Directly move the car (it will update state when it arrives)
+                        carController.MoveToNode(prevNode, nodeManager);
                     }
                 }
             }
@@ -232,7 +263,7 @@ namespace Nodemap
             // Unsubscribe from events
             if (mapState != null)
             {
-                mapState.OnStateChanged -= RefreshAllVisuals;
+                mapState.OnStateChanged -= OnMapStateChanged;
             }
 
             if (nodeManager != null)

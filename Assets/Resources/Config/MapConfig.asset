@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821792c7c2ab6384882ef2bab84059ce, type: 3}
   m_Name: MapConfig
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  minMoveDuration: 0.1
+  moveSpeed: 1
+  minMoveDuration: 0.2
   popScaleUp: 1.05
   popDuration: 0.2
   shakeDuration: 0.2
   shakeMagnitude: 5
   tStart: 0.2
   tEnd: 0.8
+  nodeCount: 6
   nodeSpriteFolder: Sprites/Nodes
   popupFadeDuration: 0.3
   slideTransitionDuration: 0.2

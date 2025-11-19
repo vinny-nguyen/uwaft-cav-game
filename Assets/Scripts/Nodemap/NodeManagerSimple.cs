@@ -73,18 +73,6 @@ namespace Nodemap
             UpdateNodeVisual(nodeId, state, isCarHere);
         }
 
-        public void ShakeNode(NodeId nodeId)
-        {
-            var nodeView = GetNodeView(nodeId);
-            nodeView?.PlayShake();
-        }
-
-        // Overload for backward compatibility
-        public void ShakeNode(int nodeIndex)
-        {
-            ShakeNode(new NodeId(nodeIndex));
-        }
-
         public NodeData GetNodeData(NodeId nodeId)
         {
             int index = nodeId.Value;

@@ -67,26 +67,9 @@ namespace Nodemap.Car
         }
 
         /// <summary>
-        /// Instantly snaps car to specified node.
-        /// </summary>
-        public void SnapToNode(NodeId nodeId, NodeManagerSimple nodeManager)
-        {
-            if (nodeManager == null) return;
-            
-            float targetT = nodeManager.GetSplineT(nodeId);
-            SnapToPosition(targetT);
-            currentNodeId = nodeId;
-        }
-
-        /// <summary>
         /// Gets current node position of the car.
         /// </summary>
         public NodeId GetCurrentNode() => currentNodeId;
-
-        /// <summary>
-        /// Gets current normalized position on spline.
-        /// </summary>
-        public float GetNormalizedPosition() => currentNormalizedT;
 
         #endregion
 
@@ -144,16 +127,8 @@ namespace Nodemap.Car
         {
             if (spline == null) return;
 
-            // Get base position and add bounce
+            // Get position on spline (bounce animation removed)
             Vector3 worldPos = spline.EvaluatePosition(currentNormalizedT);
-            
-            if (isMoving)
-            {
-                float bounceFreq = config ? config.carBounceFrequency : 5f;
-                float bounceAmp = config ? config.carBounceAmplitude : 0.05f;
-                worldPos.y += Mathf.Sin(Time.time * bounceFreq) * bounceAmp;
-            }
-            
             transform.position = worldPos;
 
             // Update rotation to follow spline
