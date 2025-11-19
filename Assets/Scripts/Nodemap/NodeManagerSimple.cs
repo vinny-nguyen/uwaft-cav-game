@@ -13,7 +13,7 @@ namespace Nodemap
     public class NodeManagerSimple : MonoBehaviour
     {
         [Header("Configuration")]
-        [SerializeField] private MapConfig config;
+        private MapConfig config; // Auto-loaded via singleton
         
         [Header("Node Management")]
         [SerializeField] private List<NodeData> nodeData;

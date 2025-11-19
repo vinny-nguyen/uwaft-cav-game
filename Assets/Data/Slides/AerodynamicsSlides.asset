@@ -12,4 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc8aab07a6e3ab40bd82c7b0ca4cf33, type: 3}
   m_Name: AerodynamicsSlides
   m_EditorClassIdentifier: 
-  slides: []
+  slides:
+  - key: AerodynamicsSlide1
+    slidePrefab: {fileID: 4380449926511804746, guid: f617e8cb980b4b84f966f62c8f7f3428, type: 3}
+  - key: AerodynamicsSlide2
+    slidePrefab: {fileID: 8873776689881491106, guid: 55cf15d6a1c41d340a35216d80ded2ba, type: 3}
+  - key: AerodynamicsSlide3
+    slidePrefab: {fileID: 2230361591977943881, guid: 3e84577edbff4bf4dbe8692ec6104889, type: 3}
+  - key: AerodynamicsSlide4
+    slidePrefab: {fileID: 7275750660760231273, guid: 89df0c040b7d3764c91800c67baba2d7, type: 3}
+  - key: AerodynamicsSlide5
+    slidePrefab: {fileID: 3385634303345058595, guid: 56d9375638cbbe240b5c2cb87331efa3, type: 3}
+  - key: AerodynamicsSlide6
+    slidePrefab: {fileID: 2617614411218562479, guid: be707a3ef6e3bb548b726f28378829bc, type: 3}
+  - key: AerodynamicsSlide7
+    slidePrefab: {fileID: 2631712550311389078, guid: 6b94b2b710b66154b9b592e2ef65e896, type: 3}
+  - key: AerodynamicsSlide8
+    slidePrefab: {fileID: 6201808066630424379, guid: 218a3c942b0010542bf8c60fc96579e0, type: 3}
+  - key: AerodynamicsSlide9
+    slidePrefab: {fileID: 5625659568488963829, guid: 372673a2a5ad05241b4a7eb9ddcf64ac, type: 3}
+  - key: AerodynamicsSlide10
+    slidePrefab: {fileID: 82910940399725370, guid: 1ccbdbc36ff308c4eaa5ea281b6ad9a4, type: 3}
+  - key: AerodynamicsSlide11
+    slidePrefab: {fileID: 4284183728291878412, guid: 024d89392bb36c34bb3a26a9e6513bdd, type: 3}
+  - key: AerodynamicsSlide12
+    slidePrefab: {fileID: 3289412494054705065, guid: a2edd1759978fe54ebaa4ffc25f37186, type: 3}
+  - key: AerodynamicsSlide13
+    slidePrefab: {fileID: 1154733334627888861, guid: db1343f362925424da3fa20fb5309ca3, type: 3}
+  - key: AerodynamicsSlide14
+    slidePrefab: {fileID: 1412641022328181989, guid: c8a6d2ea8cb49934e97e06f88aaf6c63, type: 3}
+  - key: AerodynamicsSlide15
+    slidePrefab: {fileID: 9011944146944408537, guid: b7539a93e591be4499f24cfdf172da6f, type: 3}

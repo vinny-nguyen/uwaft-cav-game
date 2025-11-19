@@ -6,8 +6,8 @@ using TMPro;
 
 public class PopupController : MonoBehaviour
 {
-    [Header("Configuration")]
-    [SerializeField] private MapConfig mapConfig;
+    // MapConfig accessed via singleton - no need to assign
+    private MapConfig mapConfig;
     
     [Header("Popup Background References")]
     public GameObject popupPanel;

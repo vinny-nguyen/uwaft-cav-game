@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   title: 
-  slideDeck: {fileID: 0}
+  slideDeck: {fileID: 11400000, guid: 49f590c56081a3346ad58325859e654e, type: 2}
   quizJson: {fileID: 0}
   miniGamePrefabs: []
   upgradeText: 

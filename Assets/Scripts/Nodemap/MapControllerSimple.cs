@@ -12,7 +12,7 @@ namespace Nodemap
     public class MapControllerSimple : MonoBehaviour
     {
         [Header("Configuration")]
-        [SerializeField] private MapConfig config;
+        private MapConfig config; // Auto-loaded via singleton
         
         [Header("Component References")]
         [SerializeField] private NodeManagerSimple nodeManager;

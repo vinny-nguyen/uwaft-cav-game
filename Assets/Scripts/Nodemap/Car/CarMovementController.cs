@@ -14,7 +14,7 @@ namespace Nodemap.Car
     public class CarMovementController : MonoBehaviour
     {
         [Header("Configuration")]
-        [SerializeField] private MapConfig config;
+        private MapConfig config; // Auto-loaded via singleton
         
         [Header("References")]
         [SerializeField] private SplineContainer spline;
