@@ -11,8 +11,11 @@ namespace Nodemap.Car
     /// Unified car movement system. Combines responsibilities of CarController and CarPathFollower
     /// into a single, focused class. Handles both movement and visual updates.
     /// </summary>
-    public class CarMovementController : ConfigurableComponent, IDisposable
+    public class CarMovementController : MonoBehaviour
     {
+        [Header("Configuration")]
+        [SerializeField] private MapConfig config;
+        
         [Header("References")]
         [SerializeField] private SplineContainer spline;
         [SerializeField] private Transform tireFront;
@@ -30,13 +33,12 @@ namespace Nodemap.Car
 
         // Events - simple and focused
         public event Action<NodeId> OnArrivedAtNode;
-        public event Action<NodeId> OnStartedMovingToNode;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
+            if (config == null) config = MapConfig.Instance;
             currentNormalizedT = spawnNormalizedT;
-            currentNodeId = NodeId.First;
+            currentNodeId = new NodeId(0);
         }
 
         private void Start()
@@ -93,7 +95,6 @@ namespace Nodemap.Car
         private IEnumerator MovementCoroutine(NodeId targetNodeId, float targetT)
         {
             isMoving = true;
-            OnStartedMovingToNode?.Invoke(targetNodeId);
 
             float startT = currentNormalizedT;
             wheelSpinDirection = targetT >= startT ? 1 : -1;
@@ -104,8 +105,8 @@ namespace Nodemap.Car
             Vector3 endPos = spline.EvaluatePosition(targetT);
             float distance = Vector3.Distance(startPos, endPos);
             
-            float moveSpeed = GetConfig(c => c.moveSpeed, 2f);
-            float minDuration = GetConfig(c => c.minMoveDuration, 0.1f);
+            float moveSpeed = config ? config.moveSpeed : 2f;
+            float minDuration = config ? config.minMoveDuration : 0.1f;
             float duration = Mathf.Max(distance / moveSpeed, minDuration);
 
             // Animate movement
@@ -148,8 +149,8 @@ namespace Nodemap.Car
             
             if (isMoving)
             {
-                float bounceFreq = GetConfig(c => c.carBounceFrequency, 5f);
-                float bounceAmp = GetConfig(c => c.carBounceAmplitude, 0.05f);
+                float bounceFreq = config ? config.carBounceFrequency : 5f;
+                float bounceAmp = config ? config.carBounceAmplitude : 0.05f;
                 worldPos.y += Mathf.Sin(Time.time * bounceFreq) * bounceAmp;
             }
             
@@ -182,7 +183,7 @@ namespace Nodemap.Car
         {
             if (!isSpinning) return;
 
-            float spinSpeed = GetConfig(c => c.wheelSpinSpeed, 360f);
+            float spinSpeed = config ? config.wheelSpinSpeed : 360f;
             float deltaRotation = Time.deltaTime * spinSpeed * wheelSpinDirection;
             
             if (tireFront != null)
@@ -205,16 +206,10 @@ namespace Nodemap.Car
 
         #region Lifecycle
 
-        public void Dispose()
+        private void OnDestroy()
         {
             StopAllCoroutines();
             OnArrivedAtNode = null;
-            OnStartedMovingToNode = null;
-        }
-
-        private void OnDestroy()
-        {
-            Dispose();
         }
 
         #endregion

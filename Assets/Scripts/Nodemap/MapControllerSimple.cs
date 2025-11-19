@@ -8,10 +8,12 @@ namespace Nodemap
     /// <summary>
     /// Drop-in replacement for MapController that uses improved architecture
     /// but maintains compatibility with existing prefab setup.
-    /// Much cleaner than original but works with current Unity setup.
     /// </summary>
-    public class MapControllerSimple : ConfigurableComponent, System.IDisposable
+    public class MapControllerSimple : MonoBehaviour
     {
+        [Header("Configuration")]
+        [SerializeField] private MapConfig config;
+        
         [Header("Component References")]
         [SerializeField] private NodeManagerSimple nodeManager;
         [SerializeField] private CarMovementController carController;
@@ -20,9 +22,9 @@ namespace Nodemap
         // Core systems
         private MapState mapState;
         
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
+            if (config == null) config = MapConfig.Instance;
             InitializeState();
         }
 
@@ -42,7 +44,7 @@ namespace Nodemap
 
         private void InitializeState()
         {
-            int nodeCount = GetConfig(c => c.nodeCount, 6);
+            int nodeCount = config ? config.nodeCount : 6;
             mapState = new MapState(nodeCount);
             mapState.LoadFromPlayerPrefs();
         }
@@ -61,12 +63,10 @@ namespace Nodemap
 
         private void SubscribeToEvents()
         {
-            // State events
+            // State change notification
             if (mapState != null)
             {
-                mapState.OnCarNodeChanged += HandleCarNodeChanged;
-                mapState.OnNodeCompletedChanged += HandleNodeCompletionChanged;
-                mapState.OnNodeUnlockedChanged += HandleNodeUnlockedChanged;
+                mapState.OnStateChanged += RefreshAllVisuals;
             }
 
             // Component events
@@ -105,30 +105,13 @@ namespace Nodemap
             }
         }
 
-        private void HandleCarNodeChanged(NodeId nodeId)
-        {
-            if (carController != null && nodeManager != null)
-            {
-                carController.MoveToNode(nodeId, nodeManager);
-            }
-            RefreshNodeVisual(nodeId);
-        }
-
         private void HandleCarArrived(NodeId nodeId)
         {
-            RefreshNodeVisual(nodeId);
-            mapState?.SaveToPlayerPrefs();
-        }
-
-        private void HandleNodeCompletionChanged(NodeId nodeId, bool completed)
-        {
-            RefreshNodeVisual(nodeId);
-            mapState?.SaveToPlayerPrefs();
-        }
-
-        private void HandleNodeUnlockedChanged(NodeId nodeId, bool unlocked)
-        {
-            RefreshNodeVisual(nodeId);
+            // Move car when state changes
+            if (carController != null && nodeManager != null)
+            {
+                carController.MoveToNode(mapState.CurrentCarNodeId, nodeManager);
+            }
             mapState?.SaveToPlayerPrefs();
         }
 
@@ -142,18 +125,26 @@ namespace Nodemap
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                var nextNode = mapState.CurrentCarNodeId.GetNext(mapState.NodeCount);
-                if (nextNode.HasValue && mapState.IsNodeUnlocked(nextNode.Value))
+                int nextIndex = mapState.CurrentCarNodeId.Value + 1;
+                if (nextIndex < mapState.NodeCount)
                 {
-                    mapState.TryMoveCarTo(nextNode.Value);
+                    var nextNode = new NodeId(nextIndex);
+                    if (mapState.IsNodeUnlocked(nextNode))
+                    {
+                        mapState.TryMoveCarTo(nextNode);
+                    }
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                var prevNode = mapState.CurrentCarNodeId.GetPrevious();
-                if (prevNode.HasValue && mapState.IsNodeUnlocked(prevNode.Value))
+                int prevIndex = mapState.CurrentCarNodeId.Value - 1;
+                if (prevIndex >= 0)
                 {
-                    mapState.TryMoveCarTo(prevNode.Value);
+                    var prevNode = new NodeId(prevIndex);
+                    if (mapState.IsNodeUnlocked(prevNode))
+                    {
+                        mapState.TryMoveCarTo(prevNode);
+                    }
                 }
             }
         }
@@ -236,15 +227,12 @@ namespace Nodemap
 
         #region Lifecycle
 
-        public void Dispose()
+        private void OnDestroy()
         {
             // Unsubscribe from events
             if (mapState != null)
             {
-                mapState.OnCarNodeChanged -= HandleCarNodeChanged;
-                mapState.OnNodeCompletedChanged -= HandleNodeCompletionChanged;
-                mapState.OnNodeUnlockedChanged -= HandleNodeUnlockedChanged;
-                mapState.Dispose();
+                mapState.OnStateChanged -= RefreshAllVisuals;
             }
 
             if (nodeManager != null)
@@ -252,11 +240,6 @@ namespace Nodemap
 
             if (carController != null)
                 carController.OnArrivedAtNode -= HandleCarArrived;
-        }
-
-        private void OnDestroy()
-        {
-            Dispose();
         }
 
         #endregion

@@ -10,8 +10,11 @@ namespace Nodemap
     /// Simplified NodeManager that works with existing LevelNodeView.
     /// Uses NodeId consistently but keeps compatibility with current code.
     /// </summary>
-    public class NodeManagerSimple : ConfigurableComponent, IDisposable
+    public class NodeManagerSimple : MonoBehaviour
     {
+        [Header("Configuration")]
+        [SerializeField] private MapConfig config;
+        
         [Header("Node Management")]
         [SerializeField] private List<NodeData> nodeData;
         [SerializeField] private LevelNodeView nodePrefab;
@@ -27,6 +30,11 @@ namespace Nodemap
         
         // Events
         public event Action<NodeId> OnNodeClicked;
+
+        private void Awake()
+        {
+            if (config == null) config = MapConfig.Instance;
+        }
 
         #region Public API
 
@@ -92,10 +100,10 @@ namespace Nodemap
         public float GetSplineT(NodeId nodeId)
         {
             if (nodeViews.Count <= 1) 
-                return GetConfig(c => c.tStart, 0.2f);
+                return config ? config.tStart : 0.2f;
 
-            float tStart = GetConfig(c => c.tStart, 0.2f);
-            float tEnd = GetConfig(c => c.tEnd, 0.8f);
+            float tStart = config ? config.tStart : 0.2f;
+            float tEnd = config ? config.tEnd : 0.8f;
             
             return Mathf.Lerp(tStart, tEnd, (float)nodeId.Value / (nodeViews.Count - 1));
         }
@@ -200,15 +208,10 @@ namespace Nodemap
 
         #region Lifecycle
 
-        public void Dispose()
+        private void OnDestroy()
         {
             OnNodeClicked = null;
             ClearNodes();
-        }
-
-        private void OnDestroy()
-        {
-            Dispose();
         }
 
         #endregion

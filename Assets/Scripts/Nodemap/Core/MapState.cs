@@ -6,9 +6,8 @@ namespace Nodemap.Core
     /// <summary>
     /// Centralized state management for the map system.
     /// Single source of truth for all node states, car position, and progression.
-    /// Implements proper event-driven updates with clear data flow.
     /// </summary>
-    public class MapState : IDisposable
+    public class MapState
     {
         // Core state data
         private NodeId _currentCarNodeId;
@@ -17,12 +16,8 @@ namespace Nodemap.Core
         private readonly bool[] _completedNodes;
         private readonly int _nodeCount;
         
-        // State change events - unidirectional flow
-        public event Action<NodeId> OnCarNodeChanged;
-        public event Action<NodeId> OnActiveNodeChanged;
-        public event Action<NodeId, bool> OnNodeUnlockedChanged;
-        public event Action<NodeId, bool> OnNodeCompletedChanged;
-        public event Action OnStateReset;
+        // Simple state change notification
+        public event Action OnStateChanged;
 
         public MapState(int nodeCount)
         {
@@ -76,7 +71,7 @@ namespace Nodemap.Core
                 return true; // Already there
             
             _currentCarNodeId = nodeId;
-            OnCarNodeChanged?.Invoke(nodeId);
+            OnStateChanged?.Invoke();
             return true;
         }
 
@@ -89,7 +84,7 @@ namespace Nodemap.Core
                 return true; // Already completed
             
             _completedNodes[nodeId.Value] = true;
-            OnNodeCompletedChanged?.Invoke(nodeId, true);
+            OnStateChanged?.Invoke();
             
             // Auto-unlock next node if all previous are completed
             TryUnlockNextNode(nodeId);
@@ -109,7 +104,7 @@ namespace Nodemap.Core
             _currentCarNodeId = new NodeId(0);
             _activeNodeId = new NodeId(0);
             
-            OnStateReset?.Invoke();
+            OnStateChanged?.Invoke();
         }
 
         #endregion
@@ -118,7 +113,7 @@ namespace Nodemap.Core
 
         private bool IsValidNodeId(NodeId nodeId)
         {
-            return nodeId.IsValid(_nodeCount);
+            return nodeId.Value >= 0 && nodeId.Value < _nodeCount;
         }
 
         private void TryUnlockNextNode(NodeId completedNodeId)
@@ -139,10 +134,8 @@ namespace Nodemap.Core
             if (!_unlockedNodes[nextNodeId.Value])
             {
                 _unlockedNodes[nextNodeId.Value] = true;
-                OnNodeUnlockedChanged?.Invoke(nextNodeId, true);
-                
                 _activeNodeId = nextNodeId;
-                OnActiveNodeChanged?.Invoke(nextNodeId);
+                OnStateChanged?.Invoke();
             }
         }
 
@@ -178,15 +171,5 @@ namespace Nodemap.Core
         }
 
         #endregion
-
-        public void Dispose()
-        {
-            // Clear all event subscriptions to prevent memory leaks
-            OnCarNodeChanged = null;
-            OnActiveNodeChanged = null;
-            OnNodeUnlockedChanged = null;
-            OnNodeCompletedChanged = null;
-            OnStateReset = null;
-        }
     }
 }
