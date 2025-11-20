@@ -31,24 +31,21 @@ public class QuizCompletionHandler : MonoBehaviour
     /// Called when a quiz is completed successfully.
     /// This method should be wired to QuizController.OnQuizCompleted event.
     /// </summary>
-    public void OnQuizCompleted()
+    public void OnQuizCompleted(int nodeIndex)
     {
         if (mapController == null)
         {
             Debug.LogError("[QuizCompletionHandler] Cannot complete node - MapController is null!");
             return;
         }
-
-        // Get the current active node index
-        int currentNodeIndex = mapController.GetCurrentActiveNodeIndex();
         
-        Debug.Log($"[QuizCompletionHandler] Quiz completed for node {currentNodeIndex}");
+        Debug.Log($"[QuizCompletionHandler] Quiz completed for node {nodeIndex}");
 
         // Apply car upgrade visuals
-        ApplyCarUpgrade(currentNodeIndex);
+        ApplyCarUpgrade(nodeIndex);
         
         // Complete the node (this unlocks the next node and moves the car)
-        mapController.CompleteNode(currentNodeIndex);
+        mapController.CompleteNode(nodeIndex);
     }
 
     private void ApplyCarUpgrade(int nodeIndex)

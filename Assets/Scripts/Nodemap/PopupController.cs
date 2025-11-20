@@ -307,7 +307,7 @@ public class PopupController : MonoBehaviour
         var quizController = currentQuizInstance.GetComponent<QuizController>();
         if (quizController != null)
         {
-            quizController.Initialize(currentNodeData.quizJson, currentNodeData);
+            quizController.Initialize(currentNodeData.quizJson, currentNodeData, currentNodeData.id);
             
             // Auto-wire completion event to QuizCompletionHandler
             var completionHandler = FindFirstObjectByType<QuizCompletionHandler>();

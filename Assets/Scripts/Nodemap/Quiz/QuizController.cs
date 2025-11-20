@@ -31,7 +31,7 @@ public class QuizController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image afterTireImage;
 
     [Header("Events")]
-    public UnityEvent OnQuizCompleted;
+    public UnityEvent<int> OnQuizCompleted; // Passes the node index
 
     [Header("Colors")]
     [SerializeField] private Color correctColor = new Color(0.11f, 0.73f, 0.33f); // #1BBB55
@@ -40,6 +40,7 @@ public class QuizController : MonoBehaviour
     private QuizData quizData;
     private PopupController popupController;
     private NodeData currentNodeData;
+    private int currentNodeIndex = -1; // Store which node this quiz is for
     private int currentQuestionIndex = 0;
     private readonly List<Button> optionButtons = new();
     private bool questionAnswered = false;
@@ -66,7 +67,7 @@ public class QuizController : MonoBehaviour
     /// <summary>
     /// Initialize the quiz with data from a TextAsset JSON file.
     /// </summary>
-    public void Initialize(TextAsset quizJsonAsset, NodeData nodeData)
+    public void Initialize(TextAsset quizJsonAsset, NodeData nodeData, int nodeIndex)
     {
         if (quizJsonAsset == null)
         {
@@ -75,6 +76,7 @@ public class QuizController : MonoBehaviour
         }
 
         currentNodeData = nodeData;
+        currentNodeIndex = nodeIndex;
 
         try
         {
@@ -206,10 +208,10 @@ public class QuizController : MonoBehaviour
     {
         if (popupController != null)
         {
-            Debug.Log("[QuizController] Completing node and closing popup.");
+            Debug.Log($"[QuizController] Completing node {currentNodeIndex} and closing popup.");
             
             // Trigger the quiz completion event (which completes the node)
-            OnQuizCompleted?.Invoke();
+            OnQuizCompleted?.Invoke(currentNodeIndex);
             
             // Close the popup
             popupController.Hide();
