@@ -18,5 +18,5 @@ MonoBehaviour:
   quizJson: {fileID: 0}
   miniGamePrefabs: []
   upgradeText: 
-  upgradeFrame: {fileID: 0}
-  upgradeTire: {fileID: 0}
+  upgradeFrame: {fileID: -980750134191345388, guid: 923b6faeee841e54aaee97dadba0f88d, type: 3}
+  upgradeTire: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}

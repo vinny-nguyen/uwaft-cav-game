@@ -82,6 +82,9 @@ namespace Nodemap
         {
             RefreshAllVisuals();
             
+            // Apply accumulated upgrades to the car based on completed nodes
+            ApplyAccumulatedUpgrades();
+            
             // Drive car from spawn position to the active node
             if (carController != null && nodeManager != null && mapState != null)
             {
@@ -252,6 +255,38 @@ namespace Nodemap
                              (isUnlocked ? NodeState.Active : NodeState.Inactive);
             
             nodeManager.UpdateNodeVisual(nodeId, state, isCarHere);
+        }
+
+        /// <summary>
+        /// Applies all upgrades from completed nodes to the car.
+        /// Called on game load to restore the car's visual state.
+        /// </summary>
+        private void ApplyAccumulatedUpgrades()
+        {
+            if (nodeManager == null || mapState == null)
+                return;
+
+            var carVisual = FindFirstObjectByType<CarVisual>();
+            if (carVisual == null)
+            {
+                Debug.LogWarning("[MapControllerSimple] CarVisual not found - cannot apply upgrades");
+                return;
+            }
+
+            // Apply upgrades from all completed nodes in order
+            for (int i = 0; i < mapState.NodeCount; i++)
+            {
+                var nodeId = new NodeId(i);
+                if (mapState.IsNodeCompleted(nodeId))
+                {
+                    var nodeData = nodeManager.GetNodeData(nodeId);
+                    if (nodeData != null && (nodeData.upgradeFrame != null || nodeData.upgradeTire != null))
+                    {
+                        Debug.Log($"[MapControllerSimple] Applying upgrade from completed node {i}");
+                        carVisual.ApplyUpgrade(nodeData.upgradeFrame, nodeData.upgradeTire);
+                    }
+                }
+            }
         }
 
         #endregion
