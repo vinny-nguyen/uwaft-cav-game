@@ -6,6 +6,7 @@ using Unity.Services.Authentication;
 using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 public class AuthManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class AuthManager : MonoBehaviour
 
     private bool busy;
 
+    private const string PlayerNameKey = "PlayerDisplayName";
+    private const string PlayerIdKey = "PlayerId";
+
+    public static string LocalPlayerName => PlayerPrefs.GetString(PlayerNameKey, "Player");
+    public static string LocalPlayerId => PlayerPrefs.GetString(PlayerIdKey, "");
     private void Start()
     {
         if (nextButton) nextButton.gameObject.SetActive(false);
@@ -51,6 +57,13 @@ public class AuthManager : MonoBehaviour
 
             // Update Unity player name (await so it actually sticks)
             await AuthenticationService.Instance.UpdatePlayerNameAsync(name);
+
+            ProfileHUD.Instance?.SetName(name);
+
+            // Save identity locally for other systems (friends, UI, etc.)
+            PlayerPrefs.SetString(PlayerNameKey, name);
+            PlayerPrefs.SetString(PlayerIdKey, AuthenticationService.Instance.PlayerId);
+            PlayerPrefs.Save();
 
             // UI updates
             if (usernameDisplay) usernameDisplay.text = $"Welcome:\n{name}";

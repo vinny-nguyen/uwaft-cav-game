@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class WordUnscrambleController : MonoBehaviour
 {
@@ -45,6 +46,13 @@ public class WordUnscrambleController : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnCompleted; // Hook to your progression / popup close
 
+    [Header("Scoring")]
+    [SerializeField] private string levelId = "Mini3";
+    [SerializeField] private string miniGameId = "WordUnscramble";
+    [SerializeField] private int pointsPerWord = 10;
+
+    private int _solvedCount = 0;   // runtime counter
+
     private int _currentIndex = -1;
     private List<int> _order = new();
     private bool _roundSolved = false;
@@ -60,6 +68,8 @@ public class WordUnscrambleController : MonoBehaviour
         nextButton.interactable = false;
         SetFeedback("");
 
+        _solvedCount = 0;
+        
         PrepareOrder();
         LoadNextRound();
     }
@@ -152,8 +162,11 @@ public class WordUnscrambleController : MonoBehaviour
         if (correct)
         {
             _roundSolved = true;
+            _solvedCount++;
             SetFeedback("<color=#1BBB55>Correct!</color>");
             nextButton.interactable = true;
+
+            UpdateScoreAndUpload();
         }
         else
         {
@@ -214,8 +227,66 @@ public class WordUnscrambleController : MonoBehaviour
     public void ResetGame()
     {
         _currentIndex = -1;
+        _solvedCount = 0;
         if (winBanner) winBanner.SetActive(false);
         PrepareOrder();
         LoadNextRound();
+    }
+
+    private int CalculateScore()
+    {
+        // simple scoring: X points per correctly solved word
+        return _solvedCount * Mathf.Max(1, pointsPerWord);
+    }
+
+    private void UpdateScoreAndUpload()
+    {
+        int score = CalculateScore();
+
+        try
+        {
+            if (global::ScoreManager.Instance != null)
+            {
+                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, score);
+            }
+            else
+            {
+                Debug.LogWarning("[WordUnscramble] ScoreManager.Instance is null. Skipping score report.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[WordUnscramble] Reporting score failed: {ex.Message}");
+        }
+
+        try
+        {
+            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
+            if (uploader != null)
+            {
+                _ = RunUploadAsync(uploader);
+            }
+            else
+            {
+                Debug.LogWarning("[WordUnscramble] TotalScoreUploader not found. Skipping upload.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[WordUnscramble] Upload failed: {ex.Message}");
+        }
+    }
+
+    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
+    {
+        try
+        {
+            await uploader.UploadScoreAsync();
+            Debug.Log("[WordUnscramble] Total score uploaded successfully.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[WordUnscramble] Total score upload failed: {ex.Message}");
+        }
     }
 }

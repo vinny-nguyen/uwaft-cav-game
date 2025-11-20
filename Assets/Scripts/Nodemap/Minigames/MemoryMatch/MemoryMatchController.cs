@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class MemoryMatchController : MonoBehaviour
 {
@@ -52,6 +53,11 @@ public class MemoryMatchController : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnCompleted;
 
+    [Header("Scoring (configurable)")]
+    [SerializeField] private string levelId = "Mini2";
+    [SerializeField] private string miniGameId = "MemoryMatch";
+    [SerializeField] private int pointsPerPair = 10;
+
     // runtime
     private List<MemoryCard> _cards = new();
     private MemoryCard _first;
@@ -59,6 +65,7 @@ public class MemoryMatchController : MonoBehaviour
     private int _matches;
     private int _moves;
     private bool _inputLocked;
+    private bool _ended = false;
 
     void Awake()
     {
@@ -99,6 +106,8 @@ public class MemoryMatchController : MonoBehaviour
         // Shuffle deck positions
         Shuffle(deck);
 
+        Debug.Log($"[MemoryMatch] Deck built. deckCount={deck.Count}, pairsToUse={pairsToUse}, chosenPairs={chosen.Count}");
+
         // Clear grid & reset state
         foreach (Transform c in gridRoot) Destroy(c.gameObject);
         _cards.Clear();
@@ -106,6 +115,7 @@ public class MemoryMatchController : MonoBehaviour
         _moves = 0;
         _first = _second = null;
         _inputLocked = false;
+        _ended = false;
 
         // Spawn cards
         foreach (var spec in deck)
@@ -114,6 +124,8 @@ public class MemoryMatchController : MonoBehaviour
             card.InitWordDef(spec.key, spec.displayText, spec.icon, spec.isTerm, this);
             _cards.Add(card);
         }
+
+        Debug.Log($"[MemoryMatch] Spawned cards: {_cards.Count}");
     }
 
     public void OnCardClicked(MemoryCard card)
@@ -143,12 +155,18 @@ public class MemoryMatchController : MonoBehaviour
                 _first.SetMatched();
                 _second.SetMatched();
                 _matches++;
+                Debug.Log($"[MemoryMatch] Matched {_matches}/{pairsToUse} (cardsSpawned={_cards.Count})");
                 _first = _second = null;
+
+                // Update score and upload incrementally on each successful match
+                UpdateScoreAndUpload();
 
                 if (_matches >= pairsToUse)
                 {
                     if (winBanner) winBanner.SetActive(true);
                     OnCompleted?.Invoke();
+                    // Final wrap-up
+                    EndGame();
                 }
             }
             else
@@ -205,5 +223,107 @@ public class MemoryMatchController : MonoBehaviour
         if (winBanner) winBanner.SetActive(false);
         BuildBoard();
         UpdateHUD();
+    }
+
+    // scoring / upload
+    public void EndGame()
+    {
+        if (_ended) return;
+        _ended = true;
+
+        int finalScore = CalculateFinalScore();
+
+        Debug.Log($"[MemoryMatch] EndGame called finalScore={finalScore}");
+
+        try
+        {
+            if (global::ScoreManager.Instance != null)
+            {
+                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, finalScore);
+                Debug.Log($"[MemoryMatch] Reported score. LevelTotal={ScoreManager.Instance.GetLevelTotal(levelId)}, OverallTotal={ScoreManager.Instance.GetOverallTotal()}");
+            }
+            else
+            {
+                Debug.LogWarning("ScoreManager.Instance is null. Skipping mini-game score report.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Reporting mini-game score failed: {ex.Message}");
+        }
+
+        try
+        {
+            var uploader = UnityEngine.Object.FindFirstObjectByType< global:: TotalScoreUploader>();
+            Debug.Log($"[MemoryMatch] TotalScoreUploader found={uploader != null}");
+            if (uploader != null)
+                _ = RunUploadAsync(uploader);
+            else
+                Debug.LogWarning("TotalScoreUploader not found in scene. Skipping total upload.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Total score upload failed: {ex.Message}");
+        }
+    }
+
+    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
+    {
+        try
+        {
+            await uploader.UploadScoreAsync();
+            Debug.Log("Total score uploaded successfully.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Total score upload failed: {ex.Message}");
+        }
+    }
+
+    private int CalculateFinalScore()
+    {
+        // default scoring: points per matched pair
+        return _matches * Mathf.Max(1, pointsPerPair);
+    }
+
+    // New: update score and upload on every successful match
+    private void UpdateScoreAndUpload()
+    {
+        int currentScore = CalculateFinalScore();
+
+        try
+        {
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, currentScore);
+                Debug.Log($"[MemoryMatch] UpdateScoreAndUpload reported currentScore={currentScore}");
+            }
+            else
+            {
+                Debug.LogWarning("[MemoryMatch] ScoreManager.Instance is null. Skipping score report.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[MemoryMatch] Reporting score failed: {ex.Message}");
+        }
+
+        try
+        {
+            var uploader = UnityEngine.Object.FindFirstObjectByType<TotalScoreUploader>();
+            Debug.Log($"[MemoryMatch] UpdateScoreAndUpload uploader found={uploader != null}");
+            if (uploader != null)
+            {
+                _ = RunUploadAsync(uploader);
+            }
+            else
+            {
+                Debug.LogWarning("[MemoryMatch] TotalScoreUploader not found. Skipping upload.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[MemoryMatch] Upload failed: {ex.Message}");
+        }
     }
 }
