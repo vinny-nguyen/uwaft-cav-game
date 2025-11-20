@@ -2888,7 +2888,7 @@ GameObject:
   - component: {fileID: 120688066}
   - component: {fileID: 120688065}
   m_Layer: 5
-  m_Name: TiresOver
+  m_Name: 1Over
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3815,8 +3815,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1730370329}
-        m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+      - m_Target: {fileID: 1730370332}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: SendtoNodeMap
         m_Mode: 1
         m_Arguments:
@@ -5667,6 +5667,7 @@ GameObject:
   - component: {fileID: 1730370328}
   - component: {fileID: 1730370327}
   - component: {fileID: 1730370329}
+  - component: {fileID: 1730370332}
   - component: {fileID: 1730370330}
   - component: {fileID: 1730370331}
   m_Layer: 0
@@ -5743,7 +5744,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730370326}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 460208bf92c9d9c46b5ff1586a8cf63b, type: 3}
   m_Name: 
@@ -5784,6 +5785,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleratorVisual: {fileID: 1538592204}
   brakeVisual: {fileID: 1469866250}
+--- !u!114 &1730370332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730370326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5d2d60290abcf4c86d4d87784ad447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  _TutorialOver: {fileID: 120688064}
 --- !u!1001 &1764938612
 PrefabInstance:
   m_ObjectHideFlags: 0
