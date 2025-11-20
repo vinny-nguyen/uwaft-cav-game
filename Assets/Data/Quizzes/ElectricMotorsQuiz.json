@@ -1,0 +1,48 @@
+{
+  "questions": [
+    {
+      "question": "What is the main advantage of electric motors over combustion engines?",
+      "options": [
+        "They are always cheaper to manufacture",
+        "They provide instant torque and are more efficient",
+        "They make more noise",
+        "They require more maintenance"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "ElectricMotorsSlide_1"
+    },
+    {
+      "question": "What does motor efficiency mean?",
+      "options": [
+        "How loud the motor is",
+        "How much electrical energy is converted to mechanical energy",
+        "The motor's weight",
+        "The motor's color options"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "ElectricMotorsSlide_2"
+    },
+    {
+      "question": "What is torque in an electric motor?",
+      "options": [
+        "The maximum speed of the vehicle",
+        "The rotational force that causes acceleration",
+        "The battery capacity",
+        "The motor's temperature"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "ElectricMotorsSlide_3"
+    },
+    {
+      "question": "Why do electric motors require less maintenance than combustion engines?",
+      "options": [
+        "They have fewer moving parts",
+        "They are made of stronger materials",
+        "They never wear out",
+        "They are smaller in size"
+      ],
+      "correctIndex": 0,
+      "relatedSlideKey": "ElectricMotorsSlide_4"
+    }
+  ]
+}

@@ -482,7 +482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6083b817a1e0e9468abe5c396d3849f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 9772f78232bab2b4fa01e785607a28d5, type: 2}
   spline: {fileID: 2076594156}
   tireFront: {fileID: 1892978979}
   tireRear: {fileID: 1714232117}
@@ -1249,6 +1248,7 @@ GameObject:
   - component: {fileID: 1146175852}
   - component: {fileID: 1146175853}
   - component: {fileID: 1146175854}
+  - component: {fileID: 1146175855}
   m_Layer: 0
   m_Name: MapController
   m_TagString: Untagged
@@ -1295,10 +1295,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a5cf51842f75a4f82c762469851842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
   nodeManager: {fileID: 1843448232}
   carController: {fileID: 341622341}
   popupController: {fileID: 5946706274004397185}
+--- !u!114 &1146175855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146175851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9419c1e26f0cfd4ab61a66a9ee9d310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1296319975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,7 +1751,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b5837d0df86734cb570efeefd8f89c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
   nodeData:
   - {fileID: 11400000, guid: 5cc087ab6af269b47bbd29c568c83376, type: 2}
   - {fileID: 11400000, guid: eb94eb89179d7c34b9828fe8346970ff, type: 2}
@@ -3236,7 +3246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a79edfe18bef34daa59a86d0dd14f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapConfig: {fileID: 11400000, guid: 9772f78232bab2b4fa01e785607a28d5, type: 2}
   popupPanel: {fileID: 5946706274004397184}
   popupBackground: {fileID: 4260548420834447502}
   defaultBackgroundSprite: {fileID: -7922815710990514042, guid: 13332865258c3574689fbbca970280d5, type: 3}
@@ -3250,6 +3259,8 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 803932974476197269, guid: 0a14ce014f0d0b44ea830135fed528eb, type: 3}
   activeIndicatorSprite: {fileID: 5677458557214616210, guid: 15e2ed41856a26a4eb7f48a06d55c0e1, type: 3}
   inactiveIndicatorSprite: {fileID: 1747843013659402779, guid: a55250d6017884c4db8506711ebf7d16, type: 3}
+  quizPrefab: {fileID: 3388571063688592771, guid: e3e719c2b6ae9dc41a1604cdecb74f38, type: 3}
+  quizContainer: {fileID: 0}
 --- !u!224 &6100043110755244776
 RectTransform:
   m_ObjectHideFlags: 0

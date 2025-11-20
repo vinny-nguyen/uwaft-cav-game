@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 0
   title: Tires
   slideDeck: {fileID: 11400000, guid: dd9e8f4b4567aa24fa8483e51bac85cd, type: 2}
-  quizJson: {fileID: 0}
+  quizJson: {fileID: 4900000, guid: c4a85e5f26371cd4191bfd9eccd7dbd1, type: 3}
   miniGamePrefabs: []
   upgradeText: 
   upgradeFrame: {fileID: 0}

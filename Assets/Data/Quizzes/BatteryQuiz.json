@@ -1,0 +1,59 @@
+{
+  "questions": [
+    {
+      "question": "What type of battery is most commonly used in modern EVs?",
+      "options": [
+        "Lead-acid batteries",
+        "Lithium-ion batteries",
+        "Nickel-metal hydride batteries",
+        "Alkaline batteries"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "BatterySlide_1"
+    },
+    {
+      "question": "What is battery capacity measured in?",
+      "options": [
+        "Horsepower (HP)",
+        "Kilowatt-hours (kWh)",
+        "Revolutions per minute (RPM)",
+        "Miles per gallon (MPG)"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "BatterySlide_2"
+    },
+    {
+      "question": "How does temperature affect EV battery performance?",
+      "options": [
+        "Temperature has no effect on batteries",
+        "Extreme cold or heat can reduce range and charging speed",
+        "Batteries only work in cold temperatures",
+        "Hot weather always improves battery performance"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "BatterySlide_3"
+    },
+    {
+      "question": "What is battery degradation?",
+      "options": [
+        "When the battery completely stops working overnight",
+        "The gradual loss of battery capacity over time",
+        "A manufacturing defect in all batteries",
+        "The process of charging a battery"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "BatterySlide_4"
+    },
+    {
+      "question": "What is the purpose of a Battery Management System (BMS)?",
+      "options": [
+        "To make the battery heavier",
+        "To monitor and protect the battery from damage",
+        "To reduce the battery's capacity",
+        "To change the battery's color"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "BatterySlide_5"
+    }
+  ]
+}

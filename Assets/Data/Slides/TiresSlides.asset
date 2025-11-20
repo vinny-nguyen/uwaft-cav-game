@@ -45,7 +45,9 @@ MonoBehaviour:
     slidePrefab: {fileID: 7753260813759224794, guid: 72480649afd6fa540805b0c267e5582a, type: 3}
   - key: TiresSlide14
     slidePrefab: {fileID: 7753260813759224794, guid: 4f96d5d6e34c6cc4eb963aedb03f1316, type: 3}
-  - key: TiresSlide17
+  - key: TiresSlide18
     slidePrefab: {fileID: 8928204831618388235, guid: d7ec6a04b0911834fbd590e37334ef23, type: 3}
   - key: TiresSlide15
     slidePrefab: {fileID: 8928204831618388235, guid: f8f68a88529ae2748aa8ff872e8003e6, type: 3}
+  - key: QuizTransition
+    slidePrefab: {fileID: 5786661652796473427, guid: 1fb6d9f2b371a3f46a147f36609ffe03, type: 3}
