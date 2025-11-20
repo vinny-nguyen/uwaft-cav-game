@@ -50,6 +50,10 @@ public class PopupController : MonoBehaviour
     private bool isQuizMode = false;
     private GameObject currentQuizInstance;
     private NodeData currentNodeData;
+    
+    // Minigame completion tracking
+    private bool _isMinigameSlide = false;
+    private bool _minigameCompleted = false;
 
     void Awake()
     {
@@ -211,6 +215,9 @@ public class PopupController : MonoBehaviour
                 else sb.OnExit();
             }
         }
+        
+        // Check if current slide has a minigame and update navigation
+        CheckMinigameOnCurrentSlide();
     }
 
     public void JumpToSlideByKey(string key)
@@ -283,6 +290,83 @@ public class PopupController : MonoBehaviour
         currentSlideIndex = index;
         UpdateSlides();
         UpdateIndicators();
+    }
+    
+    /// <summary>
+    /// Check if the current slide contains a minigame and lock navigation accordingly.
+    /// </summary>
+    private void CheckMinigameOnCurrentSlide()
+    {
+        _isMinigameSlide = false;
+        _minigameCompleted = false;
+        
+        if (currentSlideIndex < 0 || currentSlideIndex >= slides.Count)
+        {
+            UpdateNavigationButtons();
+            return;
+        }
+        
+        var currentSlide = slides[currentSlideIndex];
+        if (currentSlide == null)
+        {
+            UpdateNavigationButtons();
+            return;
+        }
+        
+        // Check for any minigame controller types
+        var wordUnscramble = currentSlide.GetComponentInChildren<WordUnscrambleController>();
+        var memoryMatch = currentSlide.GetComponentInChildren<MemoryMatchController>();
+        var dragDrop = currentSlide.GetComponentInChildren<DragDropController>();
+        
+        if (wordUnscramble != null)
+        {
+            _isMinigameSlide = true;
+            // Subscribe to completion event
+            wordUnscramble.OnCompleted.RemoveListener(OnMinigameCompleted);
+            wordUnscramble.OnCompleted.AddListener(OnMinigameCompleted);
+        }
+        else if (memoryMatch != null)
+        {
+            _isMinigameSlide = true;
+            memoryMatch.OnCompleted.RemoveListener(OnMinigameCompleted);
+            memoryMatch.OnCompleted.AddListener(OnMinigameCompleted);
+        }
+        else if (dragDrop != null)
+        {
+            _isMinigameSlide = true;
+            dragDrop.OnCompleted.RemoveListener(OnMinigameCompleted);
+            dragDrop.OnCompleted.AddListener(OnMinigameCompleted);
+        }
+        
+        UpdateNavigationButtons();
+    }
+    
+    /// <summary>
+    /// Called when a minigame is completed.
+    /// </summary>
+    private void OnMinigameCompleted()
+    {
+        _minigameCompleted = true;
+        UpdateNavigationButtons();
+    }
+    
+    /// <summary>
+    /// Update navigation button states based on minigame completion.
+    /// </summary>
+    private void UpdateNavigationButtons()
+    {
+        if (_isMinigameSlide && !_minigameCompleted)
+        {
+            // Lock navigation when on a minigame slide that hasn't been completed
+            if (nextSlideButton != null) nextSlideButton.interactable = false;
+            if (previousSlideButton != null) previousSlideButton.interactable = false;
+        }
+        else
+        {
+            // Enable navigation normally
+            if (nextSlideButton != null) nextSlideButton.interactable = (currentSlideIndex < slides.Count - 1);
+            if (previousSlideButton != null) previousSlideButton.interactable = (currentSlideIndex > 0);
+        }
     }
 
     #region Quiz Mode
