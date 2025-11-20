@@ -5352,9 +5352,9 @@ MonoBehaviour:
   _Front_TireRB: {fileID: 852283503}
   _Rear_TireRB: {fileID: 101367726}
   _CarRB: {fileID: 1293554635}
-  _Speed: 60
-  _Rotation_Speed: 120
-  _Can_Control: 1
+  _Speed: 75
+  _Rotation_Speed: 125
+  _Can_Control: 0
 --- !u!1 &1359406766
 GameObject:
   m_ObjectHideFlags: 0
@@ -6092,7 +6092,6 @@ GameObject:
   - component: {fileID: 1814443457}
   - component: {fileID: 1814443461}
   - component: {fileID: 1814443460}
-  - component: {fileID: 1814443459}
   - component: {fileID: 1814443458}
   m_Layer: 5
   m_Name: Speedometer
@@ -6132,22 +6131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d84f2e92d2921244a79d0833cc293ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Speedometer
-  carRB: {fileID: 0}
+  carRB: {fileID: 1293554635}
   speedometerText: {fileID: 1814443460}
---- !u!114 &1814443459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1814443456}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 167b5f0cbab20cd4096874d6e79119a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Distance_Text: {fileID: 1814443460}
-  _Player_Transform: {fileID: 0}
 --- !u!114 &1814443460
 MonoBehaviour:
   m_ObjectHideFlags: 0
