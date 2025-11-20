@@ -20,4 +20,4 @@ MonoBehaviour:
   upgradeText: Upgraded the tires for better friction and traction
   upgradeFrame: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
   upgradeTire: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}
-  drivingSceneName: MainMenu
+  drivingSceneName: 1Scene

@@ -35,6 +35,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NodeMapFullHD.unity
     guid: db768426cee1e0f4cb3fed4d41f4b23b
+  - enabled: 1
+    path: Assets/Scenes/UpdatedNodemap.unity
+    guid: d39d26d66b60f904dae60071e451a8b9
+  - enabled: 1
+    path: Assets/Scenes/1Scene.unity
+    guid: ae294c7b948cbf0439f34aa5129cbf76
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 841df3f2a3e70c04e848847b84ed4f51, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

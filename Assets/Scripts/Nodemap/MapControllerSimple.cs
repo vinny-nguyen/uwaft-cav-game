@@ -250,7 +250,8 @@ namespace Nodemap
             NodeId currentCarNode = mapState.CurrentCarNodeId;
             
             // Check if current node is completed
-            if (!mapState.IsNodeCompleted(currentCarNode)) return false;
+            if (!mapState.IsNodeCompleted(currentCarNode))
+                return false;
             
             // Check if node has driving scene assigned
             NodeData nodeData = nodeManager.GetNodeData(currentCarNode);

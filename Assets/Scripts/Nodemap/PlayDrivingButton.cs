@@ -35,6 +35,10 @@ namespace Nodemap
         
         private void Start()
         {
+            // Force hide button initially until we check state
+            if (buttonObject != null)
+                buttonObject.SetActive(false);
+            
             if (mapController != null)
             {
                 mapController.SubscribeToStateChanges(UpdateButtonVisibility);
@@ -61,8 +65,8 @@ namespace Nodemap
         {
             bool shouldShow = ShouldShowButton();
             
-            // Only update if visibility changed (avoid redundant SetActive calls)
-            if (shouldShow != lastVisibilityState)
+            // Always update on first call, then only update if visibility changed
+            if (shouldShow != lastVisibilityState || Time.frameCount < 2)
             {
                 if (buttonObject != null)
                 {

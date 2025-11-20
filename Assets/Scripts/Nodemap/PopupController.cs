@@ -259,8 +259,30 @@ public class PopupController : MonoBehaviour
             var img = dot.GetComponent<Image>();
             if (img)
                 img.sprite = (i == currentSlideIndex) ? activeIndicatorSprite : inactiveIndicatorSprite;
+            
+            // Make indicator clickable to jump to that slide
+            var button = dot.GetComponent<Button>();
+            if (button == null)
+                button = dot.AddComponent<Button>();
+            
+            int slideIndex = i; // Capture for lambda
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => JumpToSlide(slideIndex));
+            
             indicatorObjects.Add(dot);
         }
+    }
+    
+    /// <summary>
+    /// Jump to a specific slide by index.
+    /// </summary>
+    private void JumpToSlide(int index)
+    {
+        if (index < 0 || index >= slides.Count) return;
+        
+        currentSlideIndex = index;
+        UpdateSlides();
+        UpdateIndicators();
     }
 
     #region Quiz Mode
