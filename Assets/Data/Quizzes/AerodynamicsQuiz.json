@@ -1,0 +1,48 @@
+{
+  "questions": [
+    {
+      "question": "What is aerodynamic drag?",
+      "options": [
+        "The weight of the vehicle",
+        "Air resistance that opposes the vehicle's motion",
+        "The force that keeps tires on the road",
+        "A type of racing competition"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "AerodynamicsSlide_1"
+    },
+    {
+      "question": "Why is aerodynamics especially important for EVs?",
+      "options": [
+        "It's not important for EVs",
+        "Better aerodynamics reduces energy consumption and extends range",
+        "It only affects the car's appearance",
+        "It makes the car heavier"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "AerodynamicsSlide_2"
+    },
+    {
+      "question": "What is the coefficient of drag (Cd)?",
+      "options": [
+        "A measure of engine power",
+        "A number representing how aerodynamic a vehicle's shape is",
+        "The battery capacity rating",
+        "The tire pressure recommendation"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "AerodynamicsSlide_3"
+    },
+    {
+      "question": "How do spoilers and air dams affect aerodynamics?",
+      "options": [
+        "They only serve a decorative purpose",
+        "They manage airflow to reduce drag and improve stability",
+        "They increase fuel consumption",
+        "They make the vehicle slower"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "AerodynamicsSlide_4"
+    }
+  ]
+}

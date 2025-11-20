@@ -8,10 +8,12 @@ namespace Nodemap
     /// <summary>
     /// Drop-in replacement for MapController that uses improved architecture
     /// but maintains compatibility with existing prefab setup.
-    /// Much cleaner than original but works with current Unity setup.
     /// </summary>
-    public class MapControllerSimple : ConfigurableComponent, System.IDisposable
+    public class MapControllerSimple : MonoBehaviour
     {
+        [Header("Configuration")]
+        private MapConfig config; // Auto-loaded via singleton
+        
         [Header("Component References")]
         [SerializeField] private NodeManagerSimple nodeManager;
         [SerializeField] private CarMovementController carController;
@@ -20,9 +22,9 @@ namespace Nodemap
         // Core systems
         private MapState mapState;
         
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
+            if (config == null) config = MapConfig.Instance;
             InitializeState();
         }
 
@@ -42,7 +44,7 @@ namespace Nodemap
 
         private void InitializeState()
         {
-            int nodeCount = GetConfig(c => c.nodeCount, 6);
+            int nodeCount = config ? config.nodeCount : 6;
             mapState = new MapState(nodeCount);
             mapState.LoadFromPlayerPrefs();
         }
@@ -52,21 +54,20 @@ namespace Nodemap
             // Initialize components
             nodeManager?.Initialize();
             
-            // Position car at loaded state
+            // Start car at spawn position and drive to active node
             if (carController != null && nodeManager != null)
             {
-                carController.SnapToNode(mapState.CurrentCarNodeId, nodeManager);
+                // Car stays at spawn position (beginning of path) initially
+                // Then we'll drive it to the active node after initial state is set
             }
         }
 
         private void SubscribeToEvents()
         {
-            // State events
+            // State change notification
             if (mapState != null)
             {
-                mapState.OnCarNodeChanged += HandleCarNodeChanged;
-                mapState.OnNodeCompletedChanged += HandleNodeCompletionChanged;
-                mapState.OnNodeUnlockedChanged += HandleNodeUnlockedChanged;
+                mapState.OnStateChanged += OnMapStateChanged;
             }
 
             // Component events
@@ -80,6 +81,15 @@ namespace Nodemap
         private void SetInitialState()
         {
             RefreshAllVisuals();
+            
+            // Apply accumulated upgrades to the car based on completed nodes
+            ApplyAccumulatedUpgrades();
+            
+            // Drive car from spawn position to the active node
+            if (carController != null && nodeManager != null && mapState != null)
+            {
+                carController.MoveToNode(mapState.ActiveNodeId, nodeManager);
+            }
         }
 
         #endregion
@@ -98,38 +108,43 @@ namespace Nodemap
                     popupController.Open(nodeData, isCompleted);
                 }
             }
-            else
-            {
-                // Shake locked node
-                nodeManager.ShakeNode(nodeId);
-            }
-        }
-
-        private void HandleCarNodeChanged(NodeId nodeId)
-        {
-            if (carController != null && nodeManager != null)
-            {
-                carController.MoveToNode(nodeId, nodeManager);
-            }
-            RefreshNodeVisual(nodeId);
+            // Locked nodes do nothing when clicked
         }
 
         private void HandleCarArrived(NodeId nodeId)
         {
-            RefreshNodeVisual(nodeId);
-            mapState?.SaveToPlayerPrefs();
+            // Update the car's position in state when it arrives
+            // We temporarily unsubscribe from state changes to avoid triggering auto-movement
+            if (mapState != null)
+            {
+                mapState.OnStateChanged -= OnMapStateChanged;
+                mapState.TryMoveCarTo(nodeId);
+                mapState.SaveToPlayerPrefs();
+                mapState.OnStateChanged += OnMapStateChanged;
+                
+                // Manually refresh visuals without triggering movement
+                RefreshAllVisuals();
+            }
         }
 
-        private void HandleNodeCompletionChanged(NodeId nodeId, bool completed)
+        private void OnMapStateChanged()
         {
-            RefreshNodeVisual(nodeId);
-            mapState?.SaveToPlayerPrefs();
-        }
-
-        private void HandleNodeUnlockedChanged(NodeId nodeId, bool unlocked)
-        {
-            RefreshNodeVisual(nodeId);
-            mapState?.SaveToPlayerPrefs();
+            // Refresh visuals when state changes
+            RefreshAllVisuals();
+            
+            // Auto-move car only when active node changes (e.g., node completion unlocks new node)
+            // This is indicated by the active node being different from where the car currently is
+            if (carController != null && nodeManager != null && mapState != null)
+            {
+                NodeId targetNode = mapState.ActiveNodeId;
+                NodeId currentCarNode = mapState.CurrentCarNodeId;
+                
+                // Only auto-move if a new node was unlocked and became active
+                if (!currentCarNode.Equals(targetNode) && mapState.IsNodeCompleted(currentCarNode))
+                {
+                    carController.MoveToNode(targetNode, nodeManager);
+                }
+            }
         }
 
         #endregion
@@ -138,22 +153,32 @@ namespace Nodemap
 
         private void HandleKeyboardInput()
         {
-            if (mapState == null) return;
+            if (mapState == null || carController == null || nodeManager == null) return;
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                var nextNode = mapState.CurrentCarNodeId.GetNext(mapState.NodeCount);
-                if (nextNode.HasValue && mapState.IsNodeUnlocked(nextNode.Value))
+                int nextIndex = mapState.CurrentCarNodeId.Value + 1;
+                if (nextIndex < mapState.NodeCount)
                 {
-                    mapState.TryMoveCarTo(nextNode.Value);
+                    var nextNode = new NodeId(nextIndex);
+                    if (mapState.IsNodeUnlocked(nextNode))
+                    {
+                        // Directly move the car (it will update state when it arrives)
+                        carController.MoveToNode(nextNode, nodeManager);
+                    }
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                var prevNode = mapState.CurrentCarNodeId.GetPrevious();
-                if (prevNode.HasValue && mapState.IsNodeUnlocked(prevNode.Value))
+                int prevIndex = mapState.CurrentCarNodeId.Value - 1;
+                if (prevIndex >= 0)
                 {
-                    mapState.TryMoveCarTo(prevNode.Value);
+                    var prevNode = new NodeId(prevIndex);
+                    if (mapState.IsNodeUnlocked(prevNode))
+                    {
+                        // Directly move the car (it will update state when it arrives)
+                        carController.MoveToNode(prevNode, nodeManager);
+                    }
                 }
             }
         }
@@ -203,6 +228,69 @@ namespace Nodemap
             return mapState?.IsNodeCompleted(new NodeId(nodeIndex)) ?? false;
         }
 
+        /// <summary>
+        /// Get the current node where the car is located
+        /// </summary>
+        public int GetCurrentCarNodeIndex()
+        {
+            return mapState?.CurrentCarNodeId.Value ?? 0;
+        }
+
+        /// <summary>
+        /// Check if the car is currently at a completed node that has a driving scene
+        /// </summary>
+        public bool IsCarAtCompletedNodeWithDriving()
+        {
+            if (mapState == null || nodeManager == null) return false;
+            
+            // Don't show button if car is currently moving
+            if (carController != null && carController.IsMoving)
+                return false;
+            
+            NodeId currentCarNode = mapState.CurrentCarNodeId;
+            
+            // Check if current node is completed
+            if (!mapState.IsNodeCompleted(currentCarNode)) return false;
+            
+            // Check if node has driving scene assigned
+            NodeData nodeData = nodeManager.GetNodeData(currentCarNode);
+            return nodeData != null && !string.IsNullOrEmpty(nodeData.drivingSceneName);
+        }
+
+        /// <summary>
+        /// Get the driving scene name for the current car node
+        /// </summary>
+        public string GetCurrentNodeDrivingScene()
+        {
+            if (nodeManager == null || mapState == null) return null;
+            
+            NodeId currentCarNode = mapState.CurrentCarNodeId;
+            NodeData nodeData = nodeManager.GetNodeData(currentCarNode);
+            return nodeData?.drivingSceneName;
+        }
+
+        /// <summary>
+        /// Subscribe to state changes (for UI elements that need to react)
+        /// </summary>
+        public void SubscribeToStateChanges(System.Action callback)
+        {
+            if (mapState != null)
+            {
+                mapState.OnStateChanged += callback;
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribe from state changes
+        /// </summary>
+        public void UnsubscribeFromStateChanges(System.Action callback)
+        {
+            if (mapState != null)
+            {
+                mapState.OnStateChanged -= callback;
+            }
+        }
+
         #endregion
 
         #region Visual Updates
@@ -232,19 +320,48 @@ namespace Nodemap
             nodeManager.UpdateNodeVisual(nodeId, state, isCarHere);
         }
 
+        /// <summary>
+        /// Applies all upgrades from completed nodes to the car.
+        /// Called on game load to restore the car's visual state.
+        /// </summary>
+        private void ApplyAccumulatedUpgrades()
+        {
+            if (nodeManager == null || mapState == null)
+                return;
+
+            var carVisual = FindFirstObjectByType<CarVisual>();
+            if (carVisual == null)
+            {
+                Debug.LogWarning("[MapControllerSimple] CarVisual not found - cannot apply upgrades");
+                return;
+            }
+
+            // Apply upgrades from all completed nodes in order
+            for (int i = 0; i < mapState.NodeCount; i++)
+            {
+                var nodeId = new NodeId(i);
+                if (mapState.IsNodeCompleted(nodeId))
+                {
+                    var nodeData = nodeManager.GetNodeData(nodeId);
+                    if (nodeData != null && (nodeData.upgradeFrame != null || nodeData.upgradeTire != null))
+                    {
+                        Debug.Log($"[MapControllerSimple] Applying upgrade from completed node {i}");
+                        carVisual.ApplyUpgrade(nodeData.upgradeFrame, nodeData.upgradeTire);
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Lifecycle
 
-        public void Dispose()
+        private void OnDestroy()
         {
             // Unsubscribe from events
             if (mapState != null)
             {
-                mapState.OnCarNodeChanged -= HandleCarNodeChanged;
-                mapState.OnNodeCompletedChanged -= HandleNodeCompletionChanged;
-                mapState.OnNodeUnlockedChanged -= HandleNodeUnlockedChanged;
-                mapState.Dispose();
+                mapState.OnStateChanged -= OnMapStateChanged;
             }
 
             if (nodeManager != null)
@@ -252,11 +369,6 @@ namespace Nodemap
 
             if (carController != null)
                 carController.OnArrivedAtNode -= HandleCarArrived;
-        }
-
-        private void OnDestroy()
-        {
-            Dispose();
         }
 
         #endregion

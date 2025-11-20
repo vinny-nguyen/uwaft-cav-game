@@ -1,0 +1,48 @@
+{
+  "questions": [
+    {
+      "question": "What is the main function of tire tread?",
+      "options": [
+        "Improve grip on the road surface",
+        "Make the tire look better",
+        "Reduce vehicle weight",
+        "Increase top speed"
+      ],
+      "correctIndex": 0,
+      "relatedSlideKey": "TiresSlide4"
+    },
+    {
+      "question": "How do tire compounds affect performance?",
+      "options": [
+        "They determine the tire's color",
+        "They affect grip, durability, and temperature resistance",
+        "They only affect the tire's price",
+        "They have no impact on performance"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "TiresSlide6"
+    },
+    {
+      "question": "What happens to tire performance in wet conditions?",
+      "options": [
+        "Performance remains exactly the same",
+        "Tires provide better grip when wet",
+        "Tread channels water away to maintain contact with the road",
+        "Wet conditions only affect tire appearance"
+      ],
+      "correctIndex": 2,
+      "relatedSlideKey": "TiresSlide8"
+    },
+    {
+      "question": "Why is tire pressure important for EVs?",
+      "options": [
+        "It only affects tire wear",
+        "Proper pressure improves efficiency, range, and handling",
+        "Tire pressure doesn't matter for electric vehicles",
+        "It only affects comfort"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "TiresSlide9"
+    }
+  ]
+}

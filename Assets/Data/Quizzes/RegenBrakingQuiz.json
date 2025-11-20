@@ -1,0 +1,59 @@
+{
+  "questions": [
+    {
+      "question": "What is regenerative braking?",
+      "options": [
+        "A type of brake pad material",
+        "Converting kinetic energy back into electrical energy during braking",
+        "A system that replaces brake fluid",
+        "A way to make brakes last forever"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "RegenBrakingSlide_1"
+    },
+    {
+      "question": "How does regenerative braking improve EV range?",
+      "options": [
+        "It doesn't affect range at all",
+        "It recovers energy that would otherwise be lost as heat",
+        "It makes the car lighter",
+        "It reduces tire wear only"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "RegenBrakingSlide_2"
+    },
+    {
+      "question": "When does regenerative braking work most effectively?",
+      "options": [
+        "Only when the car is parked",
+        "During gradual deceleration and coasting",
+        "Only at maximum speed",
+        "When the battery is fully charged"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "RegenBrakingSlide_3"
+    },
+    {
+      "question": "Do EVs still need traditional friction brakes?",
+      "options": [
+        "No, regenerative braking replaces them completely",
+        "Yes, for emergency stops and when the battery is full",
+        "Only in cold weather",
+        "Only for show"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "RegenBrakingSlide_4"
+    },
+    {
+      "question": "What happens to the recovered energy from regenerative braking?",
+      "options": [
+        "It is wasted as noise",
+        "It is stored back in the battery for later use",
+        "It is used to power the air conditioning only",
+        "It is released into the atmosphere"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "RegenBrakingSlide_5"
+    }
+  ]
+}

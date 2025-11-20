@@ -6,8 +6,8 @@ using TMPro;
 
 public class PopupController : MonoBehaviour
 {
-    [Header("Configuration")]
-    [SerializeField] private MapConfig mapConfig;
+    // MapConfig accessed via singleton - no need to assign
+    private MapConfig mapConfig;
     
     [Header("Popup Background References")]
     public GameObject popupPanel;
@@ -37,9 +37,19 @@ public class PopupController : MonoBehaviour
     [SerializeField] private Sprite activeIndicatorSprite;
     [SerializeField] private Sprite inactiveIndicatorSprite;
 
+    [Header("Quiz References")]
+    [SerializeField] private GameObject quizPrefab;
+    [SerializeField] private Transform quizContainer;
+
     private readonly List<GameObject> slides = new();
+    private readonly List<string> slideKeys = new(); // Store keys from SlideDeck
     private readonly List<GameObject> indicatorObjects = new();
     private int currentSlideIndex = 0;
+    
+    // Quiz mode state
+    private bool isQuizMode = false;
+    private GameObject currentQuizInstance;
+    private NodeData currentNodeData;
 
     void Awake()
     {
@@ -66,7 +76,7 @@ public class PopupController : MonoBehaviour
     /// <summary>
     /// Internal method to set header and create slides from slide objects.
     /// </summary>
-    private void SetupHeaderAndSlides(string header, List<GameObject> slideObjects)
+    private void SetupHeaderAndSlides(string header, List<GameObject> slideObjects, List<string> keys)
     {
         // Set header
         if (headerText != null)
@@ -75,12 +85,18 @@ public class PopupController : MonoBehaviour
         // Clear previous content first
         ClearSlides();
 
-        // Add new slides
-        foreach (var slideObj in slideObjects)
+        // Add new slides and store their keys
+        for (int i = 0; i < slideObjects.Count; i++)
         {
-            var slide = Instantiate(slideObj, slidesContainer);
+            var slide = Instantiate(slideObjects[i], slidesContainer);
             slide.SetActive(false);
             slides.Add(slide);
+            
+            // Store the key from SlideDeck
+            if (keys != null && i < keys.Count)
+                slideKeys.Add(keys[i]);
+            else
+                slideKeys.Add(""); // Fallback to empty if no key provided
         }
         
         // Initialize to first slide
@@ -97,14 +113,18 @@ public class PopupController : MonoBehaviour
     {
         if (!popupPanel || node == null) return;
 
+        // Store node data for quiz mode
+        currentNodeData = node;
+
         // Set background based on completion state
         SetBackground(isCompleted);
 
         // Set header text
         string headerText = string.IsNullOrEmpty(node.title) ? "Lesson" : node.title;
         
-        // Prepare slide objects from the node's slide deck
+        // Prepare slide objects and keys from the node's slide deck
         List<GameObject> slideObjects = new List<GameObject>();
+        List<string> keys = new List<string>();
         if (node.slideDeck != null && node.slideDeck.slides != null)
         {
             foreach (var slideRef in node.slideDeck.slides)
@@ -112,18 +132,22 @@ public class PopupController : MonoBehaviour
                 if (slideRef?.slidePrefab != null)
                 {
                     slideObjects.Add(slideRef.slidePrefab);
+                    keys.Add(slideRef.key); // Store the key from SlideDeck
                 }
             }
         }
 
         // Setup all popup content
-        SetupHeaderAndSlides(headerText, slideObjects);
+        SetupHeaderAndSlides(headerText, slideObjects, keys);
 
         // Log warning if no slides found (for debugging)
         if (slides.Count == 0)
         {
             Debug.LogWarning($"[PopupController] No slides found in SlideDeck for node: {node.name}");
         }
+
+        // Ensure we're not in quiz mode when opening
+        isQuizMode = false;
 
         // Show the popup
         Show();
@@ -142,6 +166,12 @@ public class PopupController : MonoBehaviour
     /// </summary>
     public void Hide()
     {
+        // Clean up quiz mode if active
+        if (isQuizMode)
+        {
+            ExitQuizMode();
+        }
+        
         popupPanel.SetActive(false);
     }
 
@@ -187,10 +217,10 @@ public class PopupController : MonoBehaviour
     {
         if (string.IsNullOrEmpty(key) || slides.Count == 0) return;
 
-        for (int i = 0; i < slides.Count; i++)
+        // Search using the keys from SlideDeck instead of SlideBase component
+        for (int i = 0; i < slideKeys.Count; i++)
         {
-            var sb = slides[i].GetComponent<SlideBase>();
-            if (sb != null && sb.Key == key)
+            if (slideKeys[i] == key)
             {
                 currentSlideIndex = i;
                 UpdateSlides();
@@ -206,6 +236,7 @@ public class PopupController : MonoBehaviour
         foreach (var s in slides)
             if (s) Destroy(s);
         slides.Clear();
+        slideKeys.Clear(); // Clear keys as well
 
         foreach (var dot in indicatorObjects)
             if (dot) Destroy(dot);
@@ -231,6 +262,98 @@ public class PopupController : MonoBehaviour
             indicatorObjects.Add(dot);
         }
     }
+
+    #region Quiz Mode
+
+    /// <summary>
+    /// Enter quiz mode - hide slide navigation and show quiz UI.
+    /// </summary>
+    public void EnterQuizMode()
+    {
+        if (isQuizMode || currentNodeData == null)
+        {
+            Debug.LogWarning("[PopupController] Cannot enter quiz mode - already in quiz mode or no node data!");
+            return;
+        }
+
+        if (currentNodeData.quizJson == null)
+        {
+            Debug.LogError($"[PopupController] No quiz JSON assigned for node: {currentNodeData.name}");
+            return;
+        }
+
+        if (quizPrefab == null)
+        {
+            Debug.LogError("[PopupController] Quiz prefab not assigned in PopupController!");
+            return;
+        }
+
+        // Hide slide navigation buttons and indicators
+        if (nextSlideButton != null) nextSlideButton.gameObject.SetActive(false);
+        if (previousSlideButton != null) previousSlideButton.gameObject.SetActive(false);
+        if (slideIndicators != null) slideIndicators.gameObject.SetActive(false);
+
+        // Hide all slides
+        foreach (var slide in slides)
+        {
+            if (slide != null) slide.SetActive(false);
+        }
+
+        // Instantiate quiz UI
+        Transform container = quizContainer != null ? quizContainer : slidesContainer;
+        currentQuizInstance = Instantiate(quizPrefab, container);
+
+        // Initialize quiz with data
+        var quizController = currentQuizInstance.GetComponent<QuizController>();
+        if (quizController != null)
+        {
+            quizController.Initialize(currentNodeData.quizJson, currentNodeData, currentNodeData.id);
+            
+            // Auto-wire completion event to QuizCompletionHandler
+            var completionHandler = FindFirstObjectByType<QuizCompletionHandler>();
+            if (completionHandler != null)
+            {
+                quizController.OnQuizCompleted.AddListener(completionHandler.OnQuizCompleted);
+            }
+            else
+            {
+                Debug.LogWarning("[PopupController] QuizCompletionHandler not found! Quiz completion won't trigger node completion.");
+            }
+        }
+        else
+        {
+            Debug.LogError("[PopupController] QuizController component not found on quiz prefab!");
+        }
+
+        isQuizMode = true;
+    }
+
+    /// <summary>
+    /// Exit quiz mode - restore slide navigation and destroy quiz UI.
+    /// </summary>
+    public void ExitQuizMode()
+    {
+        if (!isQuizMode) return;
+
+        // Destroy quiz instance
+        if (currentQuizInstance != null)
+        {
+            Destroy(currentQuizInstance);
+            currentQuizInstance = null;
+        }
+
+        // Restore slide navigation
+        if (nextSlideButton != null) nextSlideButton.gameObject.SetActive(true);
+        if (previousSlideButton != null) previousSlideButton.gameObject.SetActive(true);
+        if (slideIndicators != null) slideIndicators.gameObject.SetActive(true);
+
+        // Show current slide
+        UpdateSlides();
+
+        isQuizMode = false;
+    }
+
+    #endregion
 
     private void OnDestroy()
     {

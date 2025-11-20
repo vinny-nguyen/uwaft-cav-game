@@ -1,0 +1,7098 @@
+fileFormatVersion: 2
+guid: 69001db7d44e72041a2fe8a539fc52c7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3607932763249123673
+    second: Slide7_0
+  - first:
+      213: 5993215475920590455
+    second: Slide7_1
+  - first:
+      213: 8774723000265492285
+    second: Slide7_2
+  - first:
+      213: 1887251969261039603
+    second: Slide7_3
+  - first:
+      213: -4179209597636674404
+    second: Slide7_4
+  - first:
+      213: 5532575499596968810
+    second: Slide7_5
+  - first:
+      213: -2287970046170851829
+    second: Slide7_6
+  - first:
+      213: 1172044349541198658
+    second: Slide7_7
+  - first:
+      213: -3165697615251924642
+    second: Slide7_8
+  - first:
+      213: 5096508575908662907
+    second: Slide7_9
+  - first:
+      213: 2131717712914225997
+    second: Slide7_10
+  - first:
+      213: -1995527336022482163
+    second: Slide7_11
+  - first:
+      213: -7014322956561926636
+    second: Slide7_12
+  - first:
+      213: 385012044865594723
+    second: Slide7_13
+  - first:
+      213: -2330224289966330794
+    second: Slide7_14
+  - first:
+      213: -2036273571765180816
+    second: Slide7_15
+  - first:
+      213: -4822726698591912824
+    second: Slide7_16
+  - first:
+      213: -2236318317353468281
+    second: Slide7_17
+  - first:
+      213: 3220877623023981174
+    second: Slide7_18
+  - first:
+      213: -1172853498253583188
+    second: Slide7_19
+  - first:
+      213: 1307175837435761622
+    second: Slide7_20
+  - first:
+      213: 5004301116631734386
+    second: Slide7_21
+  - first:
+      213: -7717796785278884492
+    second: Slide7_22
+  - first:
+      213: 2746785605328797287
+    second: Slide7_23
+  - first:
+      213: 7434943565003433791
+    second: Slide7_24
+  - first:
+      213: -404075891972925371
+    second: Slide7_25
+  - first:
+      213: 7391502409290365060
+    second: Slide7_26
+  - first:
+      213: 5331670381790959751
+    second: Slide7_27
+  - first:
+      213: -2617725807760850963
+    second: Slide7_28
+  - first:
+      213: 2056194775043682723
+    second: Slide7_29
+  - first:
+      213: -2783020965472053166
+    second: Slide7_30
+  - first:
+      213: 2663977098481365452
+    second: Slide7_31
+  - first:
+      213: 3829886413426364691
+    second: Slide7_32
+  - first:
+      213: -7515086360389875647
+    second: Slide7_33
+  - first:
+      213: 8609816609702913956
+    second: Slide7_34
+  - first:
+      213: 3884625767894723942
+    second: Slide7_35
+  - first:
+      213: -341846052837605908
+    second: Slide7_36
+  - first:
+      213: -8593455006730706031
+    second: Slide7_37
+  - first:
+      213: 5505965876092344057
+    second: Slide7_38
+  - first:
+      213: 7884893349556918779
+    second: Slide7_39
+  - first:
+      213: -6211673623964220112
+    second: Slide7_40
+  - first:
+      213: 6451479611663958646
+    second: Slide7_41
+  - first:
+      213: 2944942802385283108
+    second: Slide7_42
+  - first:
+      213: -7762011282109307005
+    second: Slide7_43
+  - first:
+      213: -3359064517284676757
+    second: Slide7_44
+  - first:
+      213: 7557124144070164143
+    second: Slide7_45
+  - first:
+      213: -8000523164497477734
+    second: Slide7_46
+  - first:
+      213: -9192196089660527806
+    second: Slide7_47
+  - first:
+      213: 5567563619998762558
+    second: Slide7_48
+  - first:
+      213: -4407246049653845663
+    second: Slide7_49
+  - first:
+      213: 8858607548818243407
+    second: Slide7_50
+  - first:
+      213: -4123927677845175212
+    second: Slide7_51
+  - first:
+      213: 4341046408383401004
+    second: Slide7_52
+  - first:
+      213: 860522918044146502
+    second: Slide7_53
+  - first:
+      213: -8799896244287262633
+    second: Slide7_54
+  - first:
+      213: 8977051631455734368
+    second: Slide7_55
+  - first:
+      213: 7785410487034004236
+    second: Slide7_56
+  - first:
+      213: -476869616525191721
+    second: Slide7_57
+  - first:
+      213: 1405589867817450082
+    second: Slide7_58
+  - first:
+      213: -3607951645703927532
+    second: Slide7_59
+  - first:
+      213: 6705084272601903761
+    second: Slide7_60
+  - first:
+      213: 1374850345239940651
+    second: Slide7_61
+  - first:
+      213: -3544321580617497133
+    second: Slide7_62
+  - first:
+      213: -5986322056816571310
+    second: Slide7_63
+  - first:
+      213: 1517338733738337454
+    second: Slide7_64
+  - first:
+      213: 5347102294001041051
+    second: Slide7_65
+  - first:
+      213: -8274596965692920001
+    second: Slide7_66
+  - first:
+      213: 7682354857490812470
+    second: Slide7_67
+  - first:
+      213: -6135919252099642834
+    second: Slide7_68
+  - first:
+      213: 5820822102010898103
+    second: Slide7_69
+  - first:
+      213: -8777417379674428760
+    second: Slide7_70
+  - first:
+      213: -2349824471656355736
+    second: Slide7_71
+  - first:
+      213: -6963715939944352634
+    second: Slide7_72
+  - first:
+      213: 7073533705541762314
+    second: Slide7_73
+  - first:
+      213: 6026040492535785542
+    second: Slide7_74
+  - first:
+      213: -1786959810890788504
+    second: Slide7_75
+  - first:
+      213: 2485060864390063371
+    second: Slide7_76
+  - first:
+      213: -6369887647624058500
+    second: Slide7_77
+  - first:
+      213: -1352012554067800050
+    second: Slide7_78
+  - first:
+      213: -3626792994023873625
+    second: Slide7_79
+  - first:
+      213: -3115973028961771920
+    second: Slide7_80
+  - first:
+      213: -8828067889372634643
+    second: Slide7_81
+  - first:
+      213: -3310876474405448574
+    second: Slide7_82
+  - first:
+      213: 3357881989187734572
+    second: Slide7_83
+  - first:
+      213: -8928431111583285781
+    second: Slide7_84
+  - first:
+      213: -986225459835203401
+    second: Slide7_85
+  - first:
+      213: -6298992245499167952
+    second: Slide7_86
+  - first:
+      213: -1592963764876096391
+    second: Slide7_87
+  - first:
+      213: -5603305316609390931
+    second: Slide7_88
+  - first:
+      213: 2424012636266674248
+    second: Slide7_89
+  - first:
+      213: 3709795004139717917
+    second: Slide7_90
+  - first:
+      213: 2358650431220407853
+    second: Slide7_91
+  - first:
+      213: -4542296537661658806
+    second: Slide7_92
+  - first:
+      213: -4134927941259891992
+    second: Slide7_93
+  - first:
+      213: -5630643367833231638
+    second: Slide7_94
+  - first:
+      213: -4471241584235224327
+    second: Slide7_95
+  - first:
+      213: -2842643741895328713
+    second: Slide7_96
+  - first:
+      213: -7283438165980579141
+    second: Slide7_97
+  - first:
+      213: 810872373068954257
+    second: Slide7_98
+  - first:
+      213: -5633497758268679972
+    second: Slide7_99
+  - first:
+      213: 3357837619171510279
+    second: Slide7_100
+  - first:
+      213: 5295143113642712953
+    second: Slide7_101
+  - first:
+      213: 6454878619483453503
+    second: Slide7_102
+  - first:
+      213: 3847824530251372485
+    second: Slide7_103
+  - first:
+      213: -2080292079795262215
+    second: Slide7_104
+  - first:
+      213: 2207651142291945613
+    second: Slide7_105
+  - first:
+      213: -8468442157764717377
+    second: Slide7_106
+  - first:
+      213: 2726001870716431537
+    second: Slide7_107
+  - first:
+      213: 5300297229938214646
+    second: Slide7_108
+  - first:
+      213: 9216755005119521355
+    second: Slide7_109
+  - first:
+      213: 7961338985747750882
+    second: Slide7_110
+  - first:
+      213: 4447203395270797843
+    second: Slide7_111
+  - first:
+      213: 7069682295000960688
+    second: Slide7_112
+  - first:
+      213: -92807195645999750
+    second: Slide7_113
+  - first:
+      213: -6950647850837160133
+    second: Slide7_114
+  - first:
+      213: 4157260900883511131
+    second: Slide7_115
+  - first:
+      213: 8846222507313755032
+    second: Slide7_116
+  - first:
+      213: -7979901584301288338
+    second: Slide7_117
+  - first:
+      213: 3776732596089507014
+    second: Slide7_118
+  - first:
+      213: 3478201735231252818
+    second: Slide7_119
+  - first:
+      213: -4195644700429308677
+    second: Slide7_120
+  - first:
+      213: 6587844255656803287
+    second: Slide7_121
+  - first:
+      213: -4314449163466723731
+    second: Slide7_122
+  - first:
+      213: -6463584807495484201
+    second: Slide7_123
+  - first:
+      213: 5613060904093640895
+    second: Slide7_124
+  - first:
+      213: 3405863388414169839
+    second: Slide7_125
+  - first:
+      213: 6240885255507349666
+    second: Slide7_126
+  - first:
+      213: -1045702539159113070
+    second: Slide7_127
+  - first:
+      213: -6716315450410218318
+    second: Slide7_128
+  - first:
+      213: -4667086356896260184
+    second: Slide7_129
+  - first:
+      213: -6520211337669508772
+    second: Slide7_130
+  - first:
+      213: -1721711509435847964
+    second: Slide7_131
+  - first:
+      213: -4737576131442580557
+    second: Slide7_132
+  - first:
+      213: -1328162173191201637
+    second: Slide7_133
+  - first:
+      213: 7886209098848413333
+    second: Slide7_134
+  - first:
+      213: -5296297783587110943
+    second: Slide7_135
+  - first:
+      213: 5167450343000507871
+    second: Slide7_136
+  - first:
+      213: 5812910996002899218
+    second: Slide7_137
+  - first:
+      213: -9207748060541234572
+    second: Slide7_138
+  - first:
+      213: -8274167799025481943
+    second: Slide7_139
+  - first:
+      213: 7203904822282326918
+    second: Slide7_140
+  - first:
+      213: 5396488979707414462
+    second: Slide7_141
+  - first:
+      213: 2113123993510399632
+    second: Slide7_142
+  - first:
+      213: 7471397617931810192
+    second: Slide7_143
+  - first:
+      213: 381717294514870471
+    second: Slide7_144
+  - first:
+      213: -2674790283912657483
+    second: Slide7_145
+  - first:
+      213: 8904805706309228346
+    second: Slide7_146
+  - first:
+      213: -166727966598042612
+    second: Slide7_147
+  - first:
+      213: 915090875680550503
+    second: Slide7_148
+  - first:
+      213: -3751492712112288960
+    second: Slide7_149
+  - first:
+      213: 4263714162842533213
+    second: Slide7_150
+  - first:
+      213: 4444382783994040261
+    second: Slide7_151
+  - first:
+      213: 1052798947149118722
+    second: Slide7_152
+  - first:
+      213: -5425827027199527944
+    second: Slide7_153
+  - first:
+      213: -5793488853250493412
+    second: Slide7_154
+  - first:
+      213: 3794403173880426814
+    second: Slide7_155
+  - first:
+      213: 3749945984266893503
+    second: Slide7_156
+  - first:
+      213: 2346209644395001437
+    second: Slide7_157
+  - first:
+      213: -8733223118437963989
+    second: Slide7_158
+  - first:
+      213: 4460996944349715386
+    second: Slide7_159
+  - first:
+      213: 2419735677303583069
+    second: Slide7_160
+  - first:
+      213: -2707790609603138457
+    second: Slide7_161
+  - first:
+      213: -6055159274225439699
+    second: Slide7_162
+  - first:
+      213: -9126902393320339911
+    second: Slide7_163
+  - first:
+      213: -6844649464714237406
+    second: Slide7_164
+  - first:
+      213: -2417291683020248030
+    second: Slide7_165
+  - first:
+      213: -4153554091339767733
+    second: Slide7_166
+  - first:
+      213: 7579820707753089257
+    second: Slide7_167
+  - first:
+      213: -5428015554635613413
+    second: Slide7_168
+  - first:
+      213: 5445993634149220555
+    second: Slide7_169
+  - first:
+      213: 2680703815488468079
+    second: Slide7_170
+  - first:
+      213: -1226764438305656399
+    second: Slide7_171
+  - first:
+      213: 5365811134330722526
+    second: Slide7_172
+  - first:
+      213: 1923549495692467821
+    second: Slide7_173
+  - first:
+      213: -881315862683767481
+    second: Slide7_174
+  - first:
+      213: 2584021115112447772
+    second: Slide7_175
+  - first:
+      213: -2169322418686661434
+    second: Slide7_176
+  - first:
+      213: 599976770881749423
+    second: Slide7_177
+  - first:
+      213: -1545538729870887808
+    second: Slide7_178
+  - first:
+      213: 7904321132099630336
+    second: Slide7_179
+  - first:
+      213: 2968653858352379474
+    second: Slide7_180
+  - first:
+      213: 374467226613247519
+    second: Slide7_181
+  - first:
+      213: 6926592233088398437
+    second: Slide7_182
+  - first:
+      213: -3508444191439219586
+    second: Slide7_183
+  - first:
+      213: -7981885383523908337
+    second: Slide7_184
+  - first:
+      213: -2090375995530118352
+    second: Slide7_185
+  - first:
+      213: -1424640689706594131
+    second: Slide7_186
+  - first:
+      213: -8662417389405501862
+    second: Slide7_187
+  - first:
+      213: 867332572877765170
+    second: Slide7_188
+  - first:
+      213: 5493875527914570304
+    second: Slide7_189
+  - first:
+      213: 5145809886067652748
+    second: Slide7_190
+  - first:
+      213: -5395217554690446846
+    second: Slide7_191
+  - first:
+      213: -8915842760879981758
+    second: Slide7_192
+  - first:
+      213: -6260826667322105403
+    second: Slide7_193
+  - first:
+      213: -3301433379002162902
+    second: Slide7_194
+  - first:
+      213: 3948635053111234668
+    second: Slide7_195
+  - first:
+      213: 1152108045421961699
+    second: Slide7_196
+  - first:
+      213: -6225058583875092118
+    second: Slide7_197
+  - first:
+      213: 2507196361634405609
+    second: Slide7_198
+  - first:
+      213: 72581264557110535
+    second: Slide7_199
+  - first:
+      213: -8625093923520952058
+    second: Slide7_200
+  - first:
+      213: 4583369220702459151
+    second: Slide7_201
+  - first:
+      213: -8583589144300131609
+    second: Slide7_202
+  - first:
+      213: -4355397405876847064
+    second: Slide7_203
+  - first:
+      213: 7925949245698921277
+    second: Slide7_204
+  - first:
+      213: -5553419138385402703
+    second: Slide7_205
+  - first:
+      213: -6982585582024291051
+    second: Slide7_206
+  - first:
+      213: -6120659531101315152
+    second: Slide7_207
+  - first:
+      213: -2382128547549538039
+    second: Slide7_208
+  - first:
+      213: -4535847979625516689
+    second: Slide7_209
+  - first:
+      213: 6378563255661818259
+    second: Slide7_210
+  - first:
+      213: 5290371995145929158
+    second: Slide7_211
+  - first:
+      213: 5023593205902345258
+    second: Slide7_212
+  - first:
+      213: -7064088924545883327
+    second: Slide7_213
+  - first:
+      213: -3162684909114304359
+    second: Slide7_214
+  - first:
+      213: -6784809822798915014
+    second: Slide7_215
+  - first:
+      213: 4226055710784707793
+    second: Slide7_216
+  - first:
+      213: -5060325833768587577
+    second: Slide7_217
+  - first:
+      213: 675748572203183935
+    second: Slide7_218
+  - first:
+      213: -6999969415948077179
+    second: Slide7_219
+  - first:
+      213: -7226875150789589649
+    second: Slide7_220
+  - first:
+      213: 6649215481012622654
+    second: Slide7_221
+  - first:
+      213: -3254573103284344162
+    second: Slide7_222
+  - first:
+      213: -7141046765550962803
+    second: Slide7_223
+  - first:
+      213: -2443968504912301527
+    second: Slide7_224
+  - first:
+      213: -132816100101170666
+    second: Slide7_225
+  - first:
+      213: 2408109619860200388
+    second: Slide7_226
+  - first:
+      213: 1158124147210785267
+    second: Slide7_227
+  - first:
+      213: -5090797186415523137
+    second: Slide7_228
+  - first:
+      213: 9037771210473830552
+    second: Slide7_229
+  - first:
+      213: -2797300884800934489
+    second: Slide7_230
+  - first:
+      213: -8614098131413878124
+    second: Slide7_231
+  - first:
+      213: 7421051527768983277
+    second: Slide7_232
+  - first:
+      213: -4681020377483112110
+    second: Slide7_233
+  - first:
+      213: 7062603571670084754
+    second: Slide7_234
+  - first:
+      213: -7577871836663808219
+    second: Slide7_235
+  - first:
+      213: -5375337328124207415
+    second: Slide7_236
+  - first:
+      213: 6351903710143161881
+    second: Slide7_237
+  - first:
+      213: 9222357378786664592
+    second: Slide7_238
+  - first:
+      213: -927491385076429966
+    second: Slide7_239
+  - first:
+      213: -7684912667388946429
+    second: Slide7_240
+  - first:
+      213: -1044781685056731748
+    second: Slide7_241
+  - first:
+      213: 878573937731661060
+    second: Slide7_242
+  - first:
+      213: -6901571460540354152
+    second: Slide7_243
+  - first:
+      213: 3800821498757405566
+    second: Slide7_244
+  - first:
+      213: 7878607231585063132
+    second: Slide7_245
+  - first:
+      213: 1873172184545776065
+    second: Slide7_246
+  - first:
+      213: 8210783785493330553
+    second: Slide7_247
+  - first:
+      213: 7661623605233753312
+    second: Slide7_248
+  - first:
+      213: -887368108654276614
+    second: Slide7_249
+  - first:
+      213: 278525810205507339
+    second: Slide7_250
+  - first:
+      213: -5301184779824835490
+    second: Slide7_251
+  - first:
+      213: 5558948922769187722
+    second: Slide7_252
+  - first:
+      213: 3379344290413843656
+    second: Slide7_253
+  - first:
+      213: 1912356847390153703
+    second: Slide7_254
+  - first:
+      213: -9044251721840147123
+    second: Slide7_255
+  - first:
+      213: 2719145552802149233
+    second: Slide7_256
+  - first:
+      213: 7285559131171091600
+    second: Slide7_257
+  - first:
+      213: 1859621104108952
+    second: Slide7_258
+  - first:
+      213: 5720770276457379150
+    second: Slide7_259
+  - first:
+      213: 4588555207866642200
+    second: Slide7_260
+  - first:
+      213: 2204790295604795835
+    second: Slide7_261
+  - first:
+      213: -564599816010955477
+    second: Slide7_262
+  - first:
+      213: -1047579276162097651
+    second: Slide7_263
+  - first:
+      213: -6744987726260873058
+    second: Slide7_264
+  - first:
+      213: 4376989743895653461
+    second: Slide7_265
+  - first:
+      213: 7080650580118033838
+    second: Slide7_266
+  - first:
+      213: 4917778777560216656
+    second: Slide7_267
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slide7_0
+      rect:
+        serializedVersion: 2
+        x: 1243
+        y: 1799
+        width: 106
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95125f68bb3f11230800000000000000
+      internalID: 3607932763249123673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_1
+      rect:
+        serializedVersion: 2
+        x: 1479
+        y: 1799
+        width: 30
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 776de90d8bd2c2350800000000000000
+      internalID: 5993215475920590455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_2
+      rect:
+        serializedVersion: 2
+        x: 1533
+        y: 1799
+        width: 30
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d374649041416c970800000000000000
+      internalID: 8774723000265492285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_3
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 1917
+        width: 35
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ffe57dbaadd03a10800000000000000
+      internalID: 1887251969261039603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_4
+      rect:
+        serializedVersion: 2
+        x: 1914
+        y: 1799
+        width: 106
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9c76fa63077006c0800000000000000
+      internalID: -4179209597636674404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_5
+      rect:
+        serializedVersion: 2
+        x: 2229
+        y: 1917
+        width: 34
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a63b182aa18a7cc40800000000000000
+      internalID: 5532575499596968810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_6
+      rect:
+        serializedVersion: 2
+        x: 2359
+        y: 1797
+        width: 71
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b06904d7d5f7f30e0800000000000000
+      internalID: -2287970046170851829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_7
+      rect:
+        serializedVersion: 2
+        x: 1355
+        y: 1797
+        width: 106
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24b286b4020f34010800000000000000
+      internalID: 1172044349541198658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_8
+      rect:
+        serializedVersion: 2
+        x: 1587
+        y: 1799
+        width: 30
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e599b90aace2114d0800000000000000
+      internalID: -3165697615251924642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_9
+      rect:
+        serializedVersion: 2
+        x: 1640
+        y: 1799
+        width: 95
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7e84cd1c8f6ab640800000000000000
+      internalID: 5096508575908662907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_10
+      rect:
+        serializedVersion: 2
+        x: 1748
+        y: 1760
+        width: 100
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4b19af27f1659d10800000000000000
+      internalID: 2131717712914225997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_11
+      rect:
+        serializedVersion: 2
+        x: 2027
+        y: 1797
+        width: 98
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d036ccce5767e44e0800000000000000
+      internalID: -1995527336022482163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_12
+      rect:
+        serializedVersion: 2
+        x: 2138
+        y: 1797
+        width: 76
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 416324a3f6e18ae90800000000000000
+      internalID: -7014322956561926636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_13
+      rect:
+        serializedVersion: 2
+        x: 2231
+        y: 1799
+        width: 30
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 365e5783a66d75500800000000000000
+      internalID: 385012044865594723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_14
+      rect:
+        serializedVersion: 2
+        x: 2279
+        y: 1797
+        width: 77
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65ce195ba5169afd0800000000000000
+      internalID: -2330224289966330794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_15
+      rect:
+        serializedVersion: 2
+        x: 2438
+        y: 1797
+        width: 91
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 076ab61a9f3bdb3e0800000000000000
+      internalID: -2036273571765180816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_16
+      rect:
+        serializedVersion: 2
+        x: 2553
+        y: 1799
+        width: 95
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88cf2a99e9b321db0800000000000000
+      internalID: -4822726698591912824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_17
+      rect:
+        serializedVersion: 2
+        x: 2665
+        y: 1797
+        width: 82
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78e7271c65007f0e0800000000000000
+      internalID: -2236318317353468281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_18
+      rect:
+        serializedVersion: 2
+        x: 2758
+        y: 1797
+        width: 97
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6725959122bd2bc20800000000000000
+      internalID: 3220877623023981174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_19
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 1251
+        width: 4052
+        height: 411
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cac550715ff29bfe0800000000000000
+      internalID: -1172853498253583188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_20
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 1007
+        width: 48
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d315599f75042210800000000000000
+      internalID: 1307175837435761622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_21
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1007
+        width: 45
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 278dce50a59d27540800000000000000
+      internalID: 5004301116631734386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_22
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 1007
+        width: 14
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 475ecc4e6b0e4e490800000000000000
+      internalID: -7717796785278884492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_23
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 1007
+        width: 14
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76e77c774fa8e1620800000000000000
+      internalID: 2746785605328797287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_24
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 1056
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f372b15c7c93e2760800000000000000
+      internalID: 7434943565003433791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_25
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 1007
+        width: 46
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54897acfd1f646af0800000000000000
+      internalID: -404075891972925371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_26
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 1056
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48832368744e39660800000000000000
+      internalID: 7391502409290365060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_27
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 1006
+        width: 31
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7881f1eb6f5edf940800000000000000
+      internalID: 5331670381790959751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_28
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 1007
+        width: 82
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: defba054f38fbabd0800000000000000
+      internalID: -2617725807760850963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_29
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 1007
+        width: 40
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a13e73f042198c10800000000000000
+      internalID: 2056194775043682723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_30
+      rect:
+        serializedVersion: 2
+        x: 1919
+        y: 14
+        width: 2153
+        height: 1110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 258d29e4d29b069d0800000000000000
+      internalID: -2783020965472053166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_31
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 1006
+        width: 45
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc1f1c48e0958f420800000000000000
+      internalID: 2663977098481365452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_32
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 1007
+        width: 68
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3119f52c66d762530800000000000000
+      internalID: 3829886413426364691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_33
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 1006
+        width: 45
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 148049895cc05b790800000000000000
+      internalID: -7515086360389875647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_34
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 1007
+        width: 14
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a7a99af6963c7770800000000000000
+      internalID: 8609816609702913956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_35
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 1007
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66da1b4ed86f8e530800000000000000
+      internalID: 3884625767894723942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_36
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 991
+        width: 43
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cedbebc73d4814bf0800000000000000
+      internalID: -341846052837605908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_37
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 1006
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 193a382933aedb880800000000000000
+      internalID: -8593455006730706031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_38
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 1006
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f618eddace196c40800000000000000
+      internalID: 5505965876092344057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_39
+      rect:
+        serializedVersion: 2
+        x: 668
+        y: 1007
+        width: 14
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf91e28b9b4cc6d60800000000000000
+      internalID: 7884893349556918779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_40
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 1006
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03503f6ffb3bbc9a0800000000000000
+      internalID: -6211673623964220112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_41
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 1006
+        width: 39
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 672c7e08682488950800000000000000
+      internalID: 6451479611663958646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_42
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 1007
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 428a40430e98ed820800000000000000
+      internalID: 2944942802385283108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_43
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 1006
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 387ec432ddbc74490800000000000000
+      internalID: -7762011282109307005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_44
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 1006
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6bb0ad5e943261d0800000000000000
+      internalID: -3359064517284676757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_45
+      rect:
+        serializedVersion: 2
+        x: 1034
+        y: 1006
+        width: 45
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fae74d2ae5c40e860800000000000000
+      internalID: 7557124144070164143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_46
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 1007
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9ff7da029e68f090800000000000000
+      internalID: -8000523164497477734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_47
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 1006
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24bac0adb52ce6080800000000000000
+      internalID: -9192196089660527806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_48
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 863
+        width: 52
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e360a6a3d95f34d40800000000000000
+      internalID: 5567563619998762558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_49
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 862
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16193a4811156d2c0800000000000000
+      internalID: -4407246049653845663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_50
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 914
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4fb7e771a810fa70800000000000000
+      internalID: 8858607548818243407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_51
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 863
+        width: 10
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45403a260add4c6c0800000000000000
+      internalID: -4123927677845175212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_52
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 863
+        width: 10
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2c8d2565be7e3c30800000000000000
+      internalID: 4341046408383401004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_53
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 914
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64b9a13e80131fb00800000000000000
+      internalID: 860522918044146502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_54
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 862
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 750b6fa5dfc70e580800000000000000
+      internalID: -8799896244287262633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_55
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 862
+        width: 43
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06a824775e4e49c70800000000000000
+      internalID: 8977051631455734368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_56
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 863
+        width: 32
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c03434ec6955b0c60800000000000000
+      internalID: 7785410487034004236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_57
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 862
+        width: 43
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d5d6de3c91d169f0800000000000000
+      internalID: -476869616525191721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_58
+      rect:
+        serializedVersion: 2
+        x: 1236
+        y: 863
+        width: 32
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26ab523a988a18310800000000000000
+      internalID: 1405589867817450082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_59
+      rect:
+        serializedVersion: 2
+        x: 1270
+        y: 863
+        width: 14
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 419080f081bfdedc0800000000000000
+      internalID: -3607951645703927532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_60
+      rect:
+        serializedVersion: 2
+        x: 1547
+        y: 863
+        width: 38
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 192be71fe9e3d0d50800000000000000
+      internalID: 6705084272601903761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_61
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 884
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2e895fca13741310800000000000000
+      internalID: 1374850345239940651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_62
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 862
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d50b811d4a00dec0800000000000000
+      internalID: -3544321580617497133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_63
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 862
+        width: 36
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25ccc546ecf4ceca0800000000000000
+      internalID: -5986322056816571310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_64
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 863
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea42a640a8bae0510800000000000000
+      internalID: 1517338733738337454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_65
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 863
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9ebb9bc439b43a40800000000000000
+      internalID: 5347102294001041051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_66
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 862
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3f295086e9ba2d80800000000000000
+      internalID: -8274596965692920001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_67
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 863
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63e8c3f3a053d9a60800000000000000
+      internalID: 7682354857490812470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_68
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 862
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2ace1023f5d8daa0800000000000000
+      internalID: -6135919252099642834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_69
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 862
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b62a1b9cd6b7c050800000000000000
+      internalID: 5820822102010898103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_70
+      rect:
+        serializedVersion: 2
+        x: 668
+        y: 863
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aa6a2fd569503680800000000000000
+      internalID: -8777417379674428760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_71
+      rect:
+        serializedVersion: 2
+        x: 786
+        y: 862
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 868276ac71fb36fd0800000000000000
+      internalID: -2349824471656355736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_72
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 862
+        width: 46
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68434ea7f39eb5f90800000000000000
+      internalID: -6963715939944352634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_73
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 863
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0db1919d6d3a2260800000000000000
+      internalID: 7073533705541762314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_74
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 863
+        width: 67
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64827bf86ebc0a350800000000000000
+      internalID: 6026040492535785542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_75
+      rect:
+        serializedVersion: 2
+        x: 1016
+        y: 862
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86194fb05817337e0800000000000000
+      internalID: -1786959810890788504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_76
+      rect:
+        serializedVersion: 2
+        x: 1074
+        y: 862
+        width: 39
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b05e13390b5bc7220800000000000000
+      internalID: 2485060864390063371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_77
+      rect:
+        serializedVersion: 2
+        x: 1122
+        y: 863
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7928300fec9997a0800000000000000
+      internalID: -6369887647624058500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_78
+      rect:
+        serializedVersion: 2
+        x: 1290
+        y: 862
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e009beecebfac3de0800000000000000
+      internalID: -1352012554067800050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_79
+      rect:
+        serializedVersion: 2
+        x: 1333
+        y: 863
+        width: 42
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a3e45dccfa0badc0800000000000000
+      internalID: -3626792994023873625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_80
+      rect:
+        serializedVersion: 2
+        x: 1375
+        y: 862
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07e190f0a07d1c4d0800000000000000
+      internalID: -3115973028961771920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_81
+      rect:
+        serializedVersion: 2
+        x: 1421
+        y: 862
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de169e817076c7580800000000000000
+      internalID: -8828067889372634643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_82
+      rect:
+        serializedVersion: 2
+        x: 1478
+        y: 863
+        width: 64
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2849dd763676d02d0800000000000000
+      internalID: -3310876474405448574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_83
+      rect:
+        serializedVersion: 2
+        x: 1593
+        y: 862
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2c873bd0e7999e20800000000000000
+      internalID: 3357881989187734572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_84
+      rect:
+        serializedVersion: 2
+        x: 1641
+        y: 863
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bed38887537d71480800000000000000
+      internalID: -8928431111583285781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_85
+      rect:
+        serializedVersion: 2
+        x: 1670
+        y: 862
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b093166b293052f0800000000000000
+      internalID: -986225459835203401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_86
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 850
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03bf41c1deb7598a0800000000000000
+      internalID: -6298992245499167952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_87
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 814
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97ccd7e45e7a4e9e0800000000000000
+      internalID: -1592963764876096391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_88
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 762
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da6807b808f0d32b0800000000000000
+      internalID: -5603305316609390931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_89
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 762
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 848bbb356a2d3a120800000000000000
+      internalID: 2424012636266674248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_90
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 763
+        width: 38
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d154443a6e6db7330800000000000000
+      internalID: 3709795004139717917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_91
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 762
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2ed63e021c9bb020800000000000000
+      internalID: 2358650431220407853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_92
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 763
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a49a0387d5586f0c0800000000000000
+      internalID: -4542296537661658806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_93
+      rect:
+        serializedVersion: 2
+        x: 893
+        y: 762
+        width: 40
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eaed59f1f8cd96c0800000000000000
+      internalID: -4134927941259891992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_94
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 763
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aee146b70bfebd1b0800000000000000
+      internalID: -5630643367833231638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_95
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 762
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f264b20875f2f1c0800000000000000
+      internalID: -4471241584235224327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_96
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 762
+        width: 37
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73c7755e396ec88d0800000000000000
+      internalID: -2842643741895328713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_97
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 762
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bba743dc3970cea90800000000000000
+      internalID: -7283438165980579141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_98
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 762
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19af3fa802cc04b00800000000000000
+      internalID: 810872373068954257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_99
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 762
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd89f6be2abc1d1b0800000000000000
+      internalID: -5633497758268679972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_100
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 762
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7084928268f699e20800000000000000
+      internalID: 3357837619171510279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_101
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 746
+        width: 41
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97f97836b902c7940800000000000000
+      internalID: 5295143113642712953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_102
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 763
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f38339ea7e5549950800000000000000
+      internalID: 6454878619483453503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_103
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 762
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c7daab0608366530800000000000000
+      internalID: 3847824530251372485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_104
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 762
+        width: 37
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fcaeb210615123e0800000000000000
+      internalID: -2080292079795262215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_105
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 763
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d88fb4c640723ae10800000000000000
+      internalID: 2207651142291945613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_106
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 763
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb4dd79a9bc0a7a80800000000000000
+      internalID: -8468442157764717377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_107
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 619
+        width: 46
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bc6a192244b4d520800000000000000
+      internalID: 2726001870716431537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_108
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 619
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f6447a9f307e8940800000000000000
+      internalID: 5300297229938214646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_109
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 670
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b42e3fd38dd78ef70800000000000000
+      internalID: 9216755005119521355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_110
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 618
+        width: 40
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ef96f560ab5c7e60800000000000000
+      internalID: 7961338985747750882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_111
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 619
+        width: 30
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31ae60bfce3a7bd30800000000000000
+      internalID: 4447203395270797843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_112
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 618
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0be866c279e8c1260800000000000000
+      internalID: 7069682295000960688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_113
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 670
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a758be6e85846bef0800000000000000
+      internalID: -92807195645999750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_114
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 619
+        width: 14
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3fc4041b965a8f90800000000000000
+      internalID: -6950647850837160133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_115
+      rect:
+        serializedVersion: 2
+        x: 1514
+        y: 670
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5738c363ce81b930800000000000000
+      internalID: 4157260900883511131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_116
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 618
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8937088408814ca70800000000000000
+      internalID: 8846222507313755032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_117
+      rect:
+        serializedVersion: 2
+        x: 1636
+        y: 619
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e641525d9c1b14190800000000000000
+      internalID: -7979901584301288338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_118
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 640
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cccd814946a96430800000000000000
+      internalID: 3776732596089507014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_119
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 619
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2592b95cc0e054030800000000000000
+      internalID: 3478201735231252818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_120
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 618
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfc292bdf5316c5c0800000000000000
+      internalID: -4195644700429308677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_121
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 618
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7db75065279bc6b50800000000000000
+      internalID: 6587844255656803287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_122
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 618
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6ea512485fff14c0800000000000000
+      internalID: -4314449163466723731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_123
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 619
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dcbe95fcdbbc46a0800000000000000
+      internalID: -6463584807495484201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_124
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 619
+        width: 63
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb8622b272995ed40800000000000000
+      internalID: 5613060904093640895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_125
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 618
+        width: 36
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe25febe4be044f20800000000000000
+      internalID: 3405863388414169839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_126
+      rect:
+        serializedVersion: 2
+        x: 661
+        y: 619
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a01d7203141c9650800000000000000
+      internalID: 6240885255507349666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_127
+      rect:
+        serializedVersion: 2
+        x: 679
+        y: 618
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29272bcb41bec71f0800000000000000
+      internalID: -1045702539159113070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_128
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 619
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bcc4d2beaadac2a0800000000000000
+      internalID: -6716315450410218318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_129
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 618
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8af50298fad2b3fb0800000000000000
+      internalID: -4667086356896260184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_130
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 618
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c510cbd755e8385a0800000000000000
+      internalID: -6520211337669508772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_131
+      rect:
+        serializedVersion: 2
+        x: 881
+        y: 618
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4eaef5211804b18e0800000000000000
+      internalID: -1721711509435847964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_132
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 618
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b3eef4fb9fb04eb0800000000000000
+      internalID: -4737576131442580557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_133
+      rect:
+        serializedVersion: 2
+        x: 963
+        y: 618
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9cd3d65a8b619de0800000000000000
+      internalID: -1328162173191201637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_134
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 618
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59620597461717d60800000000000000
+      internalID: 7886209098848413333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_135
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 618
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eff9901a35cf76b0800000000000000
+      internalID: -5296297783587110943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_136
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 619
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd5040965b876b740800000000000000
+      internalID: 5167450343000507871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_137
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 618
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21507b3b0cb9ba050800000000000000
+      internalID: 5812910996002899218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_138
+      rect:
+        serializedVersion: 2
+        x: 1209
+        y: 619
+        width: 29
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 472d5267ce1873080800000000000000
+      internalID: -9207748060541234572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_139
+      rect:
+        serializedVersion: 2
+        x: 1236
+        y: 603
+        width: 43
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9274c17a9304c2d80800000000000000
+      internalID: -8274167799025481943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_140
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 603
+        width: 44
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6839cd7944969f360800000000000000
+      internalID: 7203904822282326918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_141
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 618
+        width: 46
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb745cd922e24ea40800000000000000
+      internalID: 5396488979707414462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_142
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 618
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09eca878313535d10800000000000000
+      internalID: 2113123993510399632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_143
+      rect:
+        serializedVersion: 2
+        x: 1454
+        y: 618
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09576806c8cbfa760800000000000000
+      internalID: 7471397617931810192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_144
+      rect:
+        serializedVersion: 2
+        x: 1515
+        y: 619
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c89e206bd12c4500800000000000000
+      internalID: 381717294514870471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_145
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 619
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b548be886c31ead0800000000000000
+      internalID: -2674790283912657483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_146
+      rect:
+        serializedVersion: 2
+        x: 1681
+        y: 618
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a37de663c99349b70800000000000000
+      internalID: 8904805706309228346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_147
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 521
+        width: 30
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0cecc83cc9afadf0800000000000000
+      internalID: -166727966598042612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_148
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 520
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76ee3269d4e03bc00800000000000000
+      internalID: 915090875680550503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_149
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 521
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04b841d214500fbc0800000000000000
+      internalID: -3751492712112288960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_150
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 521
+        width: 63
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5df704e071cb2b30800000000000000
+      internalID: 4263714162842533213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_151
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 520
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cf83dd389e9dad30800000000000000
+      internalID: 4444382783994040261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_152
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 521
+        width: 30
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20d7ab0801b4c9e00800000000000000
+      internalID: 1052798947149118722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_153
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 521
+        width: 38
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f3fe07e01793b4b0800000000000000
+      internalID: -5425827027199527944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_154
+      rect:
+        serializedVersion: 2
+        x: 486
+        y: 520
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c14b1db4594699fa0800000000000000
+      internalID: -5793488853250493412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_155
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 520
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e31f1c1459d68a430800000000000000
+      internalID: 3794403173880426814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_156
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 520
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb8712f210c7a0430800000000000000
+      internalID: 3749945984266893503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_157
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 521
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5672c6ad396f8020800000000000000
+      internalID: 2346209644395001437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_158
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 376
+        width: 46
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b27a64928db5dc680800000000000000
+      internalID: -8733223118437963989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_159
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 376
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abb5114e515a8ed30800000000000000
+      internalID: 4460996944349715386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_160
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 376
+        width: 10
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d51f40837c0a49120800000000000000
+      internalID: 2419735677303583069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_161
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 375
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76c677c79cefb6ad0800000000000000
+      internalID: -2707790609603138457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_162
+      rect:
+        serializedVersion: 2
+        x: 970
+        y: 375
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2c6161c8b0c7fba0800000000000000
+      internalID: -6055159274225439699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_163
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 376
+        width: 38
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9368a7231aab65180800000000000000
+      internalID: -9126902393320339911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_164
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 376
+        width: 41
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22ae3ab839be201a0800000000000000
+      internalID: -6844649464714237406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_165
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 425
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22c621b850e047ed0800000000000000
+      internalID: -2417291683020248030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_166
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 376
+        width: 41
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b40a2567f8c9b56c0800000000000000
+      internalID: -4153554091339767733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_167
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 375
+        width: 31
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e8d5ca26cee03960800000000000000
+      internalID: 7579820707753089257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_168
+      rect:
+        serializedVersion: 2
+        x: 1416
+        y: 376
+        width: 41
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1b36a6ac90dba4b0800000000000000
+      internalID: -5428015554635613413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_169
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 397
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc0c08c2b5e049b40800000000000000
+      internalID: 5445993634149220555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_170
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 375
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f64793ecae5c33520800000000000000
+      internalID: 2680703815488468079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_171
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 376
+        width: 63
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b1b5b73e38a9fee0800000000000000
+      internalID: -1226764438305656399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_172
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 375
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed85e912cc0377a40800000000000000
+      internalID: 5365811134330722526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_173
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 376
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6e91ae2312d1ba10800000000000000
+      internalID: 1923549495692467821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_174
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 375
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74d21dd64efe4c3f0800000000000000
+      internalID: -881315862683767481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_175
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 375
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1fd26273894cd320800000000000000
+      internalID: 2584021115112447772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_176
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 376
+        width: 37
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cce3e6f0c405e1e0800000000000000
+      internalID: -2169322418686661434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_177
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 375
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa184edb1bb835800800000000000000
+      internalID: 599976770881749423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_178
+      rect:
+        serializedVersion: 2
+        x: 661
+        y: 376
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 084ff6bb6b42d8ae0800000000000000
+      internalID: -1545538729870887808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_179
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 359
+        width: 41
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0057965d03ac1bd60800000000000000
+      internalID: 7904321132099630336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_180
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 359
+        width: 41
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 256bf20a4f6c23920800000000000000
+      internalID: 2968653858352379474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_181
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 375
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1eee4665ff523500800000000000000
+      internalID: 374467226613247519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_182
+      rect:
+        serializedVersion: 2
+        x: 863
+        y: 375
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 564b635ffe2302060800000000000000
+      internalID: 6926592233088398437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_183
+      rect:
+        serializedVersion: 2
+        x: 1052
+        y: 375
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e749bfea8908f4fc0800000000000000
+      internalID: -3508444191439219586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_184
+      rect:
+        serializedVersion: 2
+        x: 1169
+        y: 376
+        width: 14
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f05cc259885aa3190800000000000000
+      internalID: -7981885383523908337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_185
+      rect:
+        serializedVersion: 2
+        x: 1187
+        y: 360
+        width: 43
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03b7c6b7b1e7df2e0800000000000000
+      internalID: -2090375995530118352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_186
+      rect:
+        serializedVersion: 2
+        x: 1282
+        y: 375
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da0987d37d8aa3ce0800000000000000
+      internalID: -1424640689706594131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_187
+      rect:
+        serializedVersion: 2
+        x: 1331
+        y: 376
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a568150a749e8c780800000000000000
+      internalID: -8662417389405501862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_188
+      rect:
+        serializedVersion: 2
+        x: 1462
+        y: 375
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23a31843162690c00800000000000000
+      internalID: 867332572877765170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_189
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 363
+        width: 18
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0424f815faa2e3c40800000000000000
+      internalID: 5493875527914570304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_190
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 277
+        width: 14
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8871c4e3d6996740800000000000000
+      internalID: 5145809886067652748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_191
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 277
+        width: 14
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20a69b618365025b0800000000000000
+      internalID: -5395217554690446846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_192
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 326
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24bb2844f30944480800000000000000
+      internalID: -8915842760879981758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_193
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 326
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c129fd31531d19a0800000000000000
+      internalID: -6260826667322105403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_194
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 276
+        width: 31
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2165f265d3fe22d0800000000000000
+      internalID: -3301433379002162902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_195
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 277
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c60d958f8ae5cc630800000000000000
+      internalID: 3948635053111234668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_196
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 328
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e1ee36c92c1dff00800000000000000
+      internalID: 1152108045421961699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_197
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 277
+        width: 38
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a61012223362c99a0800000000000000
+      internalID: -6225058583875092118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_198
+      rect:
+        serializedVersion: 2
+        x: 1245
+        y: 328
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ecde55aec95bc220800000000000000
+      internalID: 2507196361634405609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_199
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 277
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 705764b864cd10100800000000000000
+      internalID: 72581264557110535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_200
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 276
+        width: 46
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 609472636c28d4880800000000000000
+      internalID: -8625093923520952058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_201
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 277
+        width: 14
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f05dd62c5066b9f30800000000000000
+      internalID: 4583369220702459151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_202
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 277
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ea671ca627f0e880800000000000000
+      internalID: -8583589144300131609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_203
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 261
+        width: 43
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82e7d0f92258e83c0800000000000000
+      internalID: -4355397405876847064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_204
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 277
+        width: 29
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d33d8a178d0aefd60800000000000000
+      internalID: 7925949245698921277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_205
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 276
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b4aea787ba4ee2b0800000000000000
+      internalID: -5553419138385402703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_206
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 276
+        width: 33
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51d8da1986fd81f90800000000000000
+      internalID: -6982585582024291051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_207
+      rect:
+        serializedVersion: 2
+        x: 518
+        y: 277
+        width: 14
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bfd899c59c0f0ba0800000000000000
+      internalID: -6120659531101315152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_208
+      rect:
+        serializedVersion: 2
+        x: 538
+        y: 276
+        width: 33
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9091ef105baf0fed0800000000000000
+      internalID: -2382128547549538039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_209
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 276
+        width: 39
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f617f336b4e6d01c0800000000000000
+      internalID: -4535847979625516689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_210
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 277
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 391f4176c75358850800000000000000
+      internalID: 6378563255661818259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_211
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 276
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c1095ccc4d2b6940800000000000000
+      internalID: 5290371995145929158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_212
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 276
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2400e5976367b540800000000000000
+      internalID: 5023593205902345258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_213
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 264
+        width: 18
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 143ebaedc8057fd90800000000000000
+      internalID: -7064088924545883327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_214
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 277
+        width: 64
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 998d0cfe4d2eb14d0800000000000000
+      internalID: -3162684909114304359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_215
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 277
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3a5d73e96387d1a0800000000000000
+      internalID: -6784809822798915014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_216
+      rect:
+        serializedVersion: 2
+        x: 963
+        y: 276
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dc55524747f5aa30800000000000000
+      internalID: 4226055710784707793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_217
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 277
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cead76077c16c9b0800000000000000
+      internalID: -5060325833768587577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_218
+      rect:
+        serializedVersion: 2
+        x: 1101
+        y: 276
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3fe5a30fbdb06900800000000000000
+      internalID: 675748572203183935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_219
+      rect:
+        serializedVersion: 2
+        x: 1147
+        y: 260
+        width: 40
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 587f0d357ec1bde90800000000000000
+      internalID: -6999969415948077179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_220
+      rect:
+        serializedVersion: 2
+        x: 1198
+        y: 276
+        width: 37
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f65c619075bf4bb90800000000000000
+      internalID: -7226875150789589649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_221
+      rect:
+        serializedVersion: 2
+        x: 1246
+        y: 277
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3519cc3042c64c50800000000000000
+      internalID: 6649215481012622654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_222
+      rect:
+        serializedVersion: 2
+        x: 1267
+        y: 277
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9a223b810f65d2d0800000000000000
+      internalID: -3254573103284344162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_223
+      rect:
+        serializedVersion: 2
+        x: 1295
+        y: 276
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d87f1e63dc7e5ec90800000000000000
+      internalID: -7141046765550962803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_224
+      rect:
+        serializedVersion: 2
+        x: 1341
+        y: 276
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 922b57ee797451ed0800000000000000
+      internalID: -2443968504912301527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_225
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 277
+        width: 63
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61a540de574282ef0800000000000000
+      internalID: -132816100101170666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_226
+      rect:
+        serializedVersion: 2
+        x: 1471
+        y: 276
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cbd7f7c0f25b6120800000000000000
+      internalID: 2408109619860200388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_227
+      rect:
+        serializedVersion: 2
+        x: 1522
+        y: 277
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f11d40a6cb721010800000000000000
+      internalID: 1158124147210785267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_228
+      rect:
+        serializedVersion: 2
+        x: 1550
+        y: 276
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fba05206eead959b0800000000000000
+      internalID: -5090797186415523137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_229
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 162
+        width: 19
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8987b81280d9c6d70800000000000000
+      internalID: 9037771210473830552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_230
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 177
+        width: 40
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7aded8f7aadfd29d0800000000000000
+      internalID: -2797300884800934489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_231
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 178
+        width: 30
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49a38b09363947880800000000000000
+      internalID: -8614098131413878124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_232
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 178
+        width: 10
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de64a8ccb0fdcf660800000000000000
+      internalID: 7421051527768983277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_233
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 162
+        width: 19
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25111cd84cca90fb0800000000000000
+      internalID: -4681020377483112110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_234
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 177
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29cecc67788630260800000000000000
+      internalID: 7062603571670084754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_235
+      rect:
+        serializedVersion: 2
+        x: 882
+        y: 178
+        width: 36
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52f773eb6bdf5d690800000000000000
+      internalID: -7577871836663808219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_236
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 177
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ce52490e27f665b0800000000000000
+      internalID: -5375337328124207415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_237
+      rect:
+        serializedVersion: 2
+        x: 1112
+        y: 178
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 916a19245ce762850800000000000000
+      internalID: 6351903710143161881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_238
+      rect:
+        serializedVersion: 2
+        x: 1313
+        y: 178
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09028428c256cff70800000000000000
+      internalID: 9222357378786664592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_239
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 229
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27bc844df73e023f0800000000000000
+      internalID: -927491385076429966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_240
+      rect:
+        serializedVersion: 2
+        x: 1421
+        y: 178
+        width: 10
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 308d16a35a4b95590800000000000000
+      internalID: -7684912667388946429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_241
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 161
+        width: 40
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c950c5ac7903081f0800000000000000
+      internalID: -1044781685056731748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_242
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 177
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40d696b6752513c00800000000000000
+      internalID: 878573937731661060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_243
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 178
+        width: 64
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 891b48e9251b830a0800000000000000
+      internalID: -6901571460540354152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_244
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7b5a18f30b3fb430800000000000000
+      internalID: 3800821498757405566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_245
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 178
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd09373d88f665d60800000000000000
+      internalID: 7878607231585063132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_246
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 177
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c15ef66d28def910800000000000000
+      internalID: 1873172184545776065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_247
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 178
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97afddda95092f170800000000000000
+      internalID: 8210783785493330553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_248
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 177
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ec94b0731e835a60800000000000000
+      internalID: 7661623605233753312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_249
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: affc6aa186f6fa3f0800000000000000
+      internalID: -887368108654276614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_250
+      rect:
+        serializedVersion: 2
+        x: 810
+        y: 177
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0fb31aafb58dd300800000000000000
+      internalID: 278525810205507339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_251
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5455d597886e66b0800000000000000
+      internalID: -5301184779824835490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_252
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a83a23ab79a552d40800000000000000
+      internalID: 5558948922769187722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_253
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 161
+        width: 40
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c49cd34ab7d5ee20800000000000000
+      internalID: 3379344290413843656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_254
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ebd97cab6e0a8a10800000000000000
+      internalID: 1912356847390153703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_255
+      rect:
+        serializedVersion: 2
+        x: 1222
+        y: 178
+        width: 41
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d45c08c3afc5c7280800000000000000
+      internalID: -9044251721840147123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_256
+      rect:
+        serializedVersion: 2
+        x: 1264
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 173fa5f39785cb520800000000000000
+      internalID: 2719145552802149233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_257
+      rect:
+        serializedVersion: 2
+        x: 1361
+        y: 178
+        width: 10
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0947e83ed618b1560800000000000000
+      internalID: 7285559131171091600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_258
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 177
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 895c357c05b960000800000000000000
+      internalID: 1859621104108952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_259
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 177
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e45fad9a142446f40800000000000000
+      internalID: 5720770276457379150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_260
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 130
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81fe82d76a2ddaf30800000000000000
+      internalID: 4588555207866642200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_261
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 79
+        width: 62
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb990c5a71df89e10800000000000000
+      internalID: 2204790295604795835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_262
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 78
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b258a6e65732a28f0800000000000000
+      internalID: -564599816010955477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_263
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 79
+        width: 41
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0e1c4ad2304671f0800000000000000
+      internalID: -1047579276162097651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_264
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 79
+        width: 11
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e98d9d1466df462a0800000000000000
+      internalID: -6744987726260873058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_265
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 79
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55cad665bf03ebc30800000000000000
+      internalID: 4376989743895653461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_266
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 62
+        width: 41
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea5599e0036834260800000000000000
+      internalID: 7080650580118033838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slide7_267
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 79
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0547e602eb57f3440800000000000000
+      internalID: 4917778777560216656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Slide7_0: 3607932763249123673
+      Slide7_1: 5993215475920590455
+      Slide7_10: 2131717712914225997
+      Slide7_100: 3357837619171510279
+      Slide7_101: 5295143113642712953
+      Slide7_102: 6454878619483453503
+      Slide7_103: 3847824530251372485
+      Slide7_104: -2080292079795262215
+      Slide7_105: 2207651142291945613
+      Slide7_106: -8468442157764717377
+      Slide7_107: 2726001870716431537
+      Slide7_108: 5300297229938214646
+      Slide7_109: 9216755005119521355
+      Slide7_11: -1995527336022482163
+      Slide7_110: 7961338985747750882
+      Slide7_111: 4447203395270797843
+      Slide7_112: 7069682295000960688
+      Slide7_113: -92807195645999750
+      Slide7_114: -6950647850837160133
+      Slide7_115: 4157260900883511131
+      Slide7_116: 8846222507313755032
+      Slide7_117: -7979901584301288338
+      Slide7_118: 3776732596089507014
+      Slide7_119: 3478201735231252818
+      Slide7_12: -7014322956561926636
+      Slide7_120: -4195644700429308677
+      Slide7_121: 6587844255656803287
+      Slide7_122: -4314449163466723731
+      Slide7_123: -6463584807495484201
+      Slide7_124: 5613060904093640895
+      Slide7_125: 3405863388414169839
+      Slide7_126: 6240885255507349666
+      Slide7_127: -1045702539159113070
+      Slide7_128: -6716315450410218318
+      Slide7_129: -4667086356896260184
+      Slide7_13: 385012044865594723
+      Slide7_130: -6520211337669508772
+      Slide7_131: -1721711509435847964
+      Slide7_132: -4737576131442580557
+      Slide7_133: -1328162173191201637
+      Slide7_134: 7886209098848413333
+      Slide7_135: -5296297783587110943
+      Slide7_136: 5167450343000507871
+      Slide7_137: 5812910996002899218
+      Slide7_138: -9207748060541234572
+      Slide7_139: -8274167799025481943
+      Slide7_14: -2330224289966330794
+      Slide7_140: 7203904822282326918
+      Slide7_141: 5396488979707414462
+      Slide7_142: 2113123993510399632
+      Slide7_143: 7471397617931810192
+      Slide7_144: 381717294514870471
+      Slide7_145: -2674790283912657483
+      Slide7_146: 8904805706309228346
+      Slide7_147: -166727966598042612
+      Slide7_148: 915090875680550503
+      Slide7_149: -3751492712112288960
+      Slide7_15: -2036273571765180816
+      Slide7_150: 4263714162842533213
+      Slide7_151: 4444382783994040261
+      Slide7_152: 1052798947149118722
+      Slide7_153: -5425827027199527944
+      Slide7_154: -5793488853250493412
+      Slide7_155: 3794403173880426814
+      Slide7_156: 3749945984266893503
+      Slide7_157: 2346209644395001437
+      Slide7_158: -8733223118437963989
+      Slide7_159: 4460996944349715386
+      Slide7_16: -4822726698591912824
+      Slide7_160: 2419735677303583069
+      Slide7_161: -2707790609603138457
+      Slide7_162: -6055159274225439699
+      Slide7_163: -9126902393320339911
+      Slide7_164: -6844649464714237406
+      Slide7_165: -2417291683020248030
+      Slide7_166: -4153554091339767733
+      Slide7_167: 7579820707753089257
+      Slide7_168: -5428015554635613413
+      Slide7_169: 5445993634149220555
+      Slide7_17: -2236318317353468281
+      Slide7_170: 2680703815488468079
+      Slide7_171: -1226764438305656399
+      Slide7_172: 5365811134330722526
+      Slide7_173: 1923549495692467821
+      Slide7_174: -881315862683767481
+      Slide7_175: 2584021115112447772
+      Slide7_176: -2169322418686661434
+      Slide7_177: 599976770881749423
+      Slide7_178: -1545538729870887808
+      Slide7_179: 7904321132099630336
+      Slide7_18: 3220877623023981174
+      Slide7_180: 2968653858352379474
+      Slide7_181: 374467226613247519
+      Slide7_182: 6926592233088398437
+      Slide7_183: -3508444191439219586
+      Slide7_184: -7981885383523908337
+      Slide7_185: -2090375995530118352
+      Slide7_186: -1424640689706594131
+      Slide7_187: -8662417389405501862
+      Slide7_188: 867332572877765170
+      Slide7_189: 5493875527914570304
+      Slide7_19: -1172853498253583188
+      Slide7_190: 5145809886067652748
+      Slide7_191: -5395217554690446846
+      Slide7_192: -8915842760879981758
+      Slide7_193: -6260826667322105403
+      Slide7_194: -3301433379002162902
+      Slide7_195: 3948635053111234668
+      Slide7_196: 1152108045421961699
+      Slide7_197: -6225058583875092118
+      Slide7_198: 2507196361634405609
+      Slide7_199: 72581264557110535
+      Slide7_2: 8774723000265492285
+      Slide7_20: 1307175837435761622
+      Slide7_200: -8625093923520952058
+      Slide7_201: 4583369220702459151
+      Slide7_202: -8583589144300131609
+      Slide7_203: -4355397405876847064
+      Slide7_204: 7925949245698921277
+      Slide7_205: -5553419138385402703
+      Slide7_206: -6982585582024291051
+      Slide7_207: -6120659531101315152
+      Slide7_208: -2382128547549538039
+      Slide7_209: -4535847979625516689
+      Slide7_21: 5004301116631734386
+      Slide7_210: 6378563255661818259
+      Slide7_211: 5290371995145929158
+      Slide7_212: 5023593205902345258
+      Slide7_213: -7064088924545883327
+      Slide7_214: -3162684909114304359
+      Slide7_215: -6784809822798915014
+      Slide7_216: 4226055710784707793
+      Slide7_217: -5060325833768587577
+      Slide7_218: 675748572203183935
+      Slide7_219: -6999969415948077179
+      Slide7_22: -7717796785278884492
+      Slide7_220: -7226875150789589649
+      Slide7_221: 6649215481012622654
+      Slide7_222: -3254573103284344162
+      Slide7_223: -7141046765550962803
+      Slide7_224: -2443968504912301527
+      Slide7_225: -132816100101170666
+      Slide7_226: 2408109619860200388
+      Slide7_227: 1158124147210785267
+      Slide7_228: -5090797186415523137
+      Slide7_229: 9037771210473830552
+      Slide7_23: 2746785605328797287
+      Slide7_230: -2797300884800934489
+      Slide7_231: -8614098131413878124
+      Slide7_232: 7421051527768983277
+      Slide7_233: -4681020377483112110
+      Slide7_234: 7062603571670084754
+      Slide7_235: -7577871836663808219
+      Slide7_236: -5375337328124207415
+      Slide7_237: 6351903710143161881
+      Slide7_238: 9222357378786664592
+      Slide7_239: -927491385076429966
+      Slide7_24: 7434943565003433791
+      Slide7_240: -7684912667388946429
+      Slide7_241: -1044781685056731748
+      Slide7_242: 878573937731661060
+      Slide7_243: -6901571460540354152
+      Slide7_244: 3800821498757405566
+      Slide7_245: 7878607231585063132
+      Slide7_246: 1873172184545776065
+      Slide7_247: 8210783785493330553
+      Slide7_248: 7661623605233753312
+      Slide7_249: -887368108654276614
+      Slide7_25: -404075891972925371
+      Slide7_250: 278525810205507339
+      Slide7_251: -5301184779824835490
+      Slide7_252: 5558948922769187722
+      Slide7_253: 3379344290413843656
+      Slide7_254: 1912356847390153703
+      Slide7_255: -9044251721840147123
+      Slide7_256: 2719145552802149233
+      Slide7_257: 7285559131171091600
+      Slide7_258: 1859621104108952
+      Slide7_259: 5720770276457379150
+      Slide7_26: 7391502409290365060
+      Slide7_260: 4588555207866642200
+      Slide7_261: 2204790295604795835
+      Slide7_262: -564599816010955477
+      Slide7_263: -1047579276162097651
+      Slide7_264: -6744987726260873058
+      Slide7_265: 4376989743895653461
+      Slide7_266: 7080650580118033838
+      Slide7_267: 4917778777560216656
+      Slide7_27: 5331670381790959751
+      Slide7_28: -2617725807760850963
+      Slide7_29: 2056194775043682723
+      Slide7_3: 1887251969261039603
+      Slide7_30: -2783020965472053166
+      Slide7_31: 2663977098481365452
+      Slide7_32: 3829886413426364691
+      Slide7_33: -7515086360389875647
+      Slide7_34: 8609816609702913956
+      Slide7_35: 3884625767894723942
+      Slide7_36: -341846052837605908
+      Slide7_37: -8593455006730706031
+      Slide7_38: 5505965876092344057
+      Slide7_39: 7884893349556918779
+      Slide7_4: -4179209597636674404
+      Slide7_40: -6211673623964220112
+      Slide7_41: 6451479611663958646
+      Slide7_42: 2944942802385283108
+      Slide7_43: -7762011282109307005
+      Slide7_44: -3359064517284676757
+      Slide7_45: 7557124144070164143
+      Slide7_46: -8000523164497477734
+      Slide7_47: -9192196089660527806
+      Slide7_48: 5567563619998762558
+      Slide7_49: -4407246049653845663
+      Slide7_5: 5532575499596968810
+      Slide7_50: 8858607548818243407
+      Slide7_51: -4123927677845175212
+      Slide7_52: 4341046408383401004
+      Slide7_53: 860522918044146502
+      Slide7_54: -8799896244287262633
+      Slide7_55: 8977051631455734368
+      Slide7_56: 7785410487034004236
+      Slide7_57: -476869616525191721
+      Slide7_58: 1405589867817450082
+      Slide7_59: -3607951645703927532
+      Slide7_6: -2287970046170851829
+      Slide7_60: 6705084272601903761
+      Slide7_61: 1374850345239940651
+      Slide7_62: -3544321580617497133
+      Slide7_63: -5986322056816571310
+      Slide7_64: 1517338733738337454
+      Slide7_65: 5347102294001041051
+      Slide7_66: -8274596965692920001
+      Slide7_67: 7682354857490812470
+      Slide7_68: -6135919252099642834
+      Slide7_69: 5820822102010898103
+      Slide7_7: 1172044349541198658
+      Slide7_70: -8777417379674428760
+      Slide7_71: -2349824471656355736
+      Slide7_72: -6963715939944352634
+      Slide7_73: 7073533705541762314
+      Slide7_74: 6026040492535785542
+      Slide7_75: -1786959810890788504
+      Slide7_76: 2485060864390063371
+      Slide7_77: -6369887647624058500
+      Slide7_78: -1352012554067800050
+      Slide7_79: -3626792994023873625
+      Slide7_8: -3165697615251924642
+      Slide7_80: -3115973028961771920
+      Slide7_81: -8828067889372634643
+      Slide7_82: -3310876474405448574
+      Slide7_83: 3357881989187734572
+      Slide7_84: -8928431111583285781
+      Slide7_85: -986225459835203401
+      Slide7_86: -6298992245499167952
+      Slide7_87: -1592963764876096391
+      Slide7_88: -5603305316609390931
+      Slide7_89: 2424012636266674248
+      Slide7_9: 5096508575908662907
+      Slide7_90: 3709795004139717917
+      Slide7_91: 2358650431220407853
+      Slide7_92: -4542296537661658806
+      Slide7_93: -4134927941259891992
+      Slide7_94: -5630643367833231638
+      Slide7_95: -4471241584235224327
+      Slide7_96: -2842643741895328713
+      Slide7_97: -7283438165980579141
+      Slide7_98: 810872373068954257
+      Slide7_99: -5633497758268679972
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
