@@ -4,6 +4,22 @@
       "type": "http",
       "url": "https://mcp.exa.ai/mcp",
       "headers": {}
+    },
+    "UnityMCP": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "C:\\Users\\amanz\\AppData\\Local\\UnityMCP\\UnityMcpServer\\src",
+        "server.py"
+      ]
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-7a000c0e-6bb7-4224-a564-dcf69a42d075"
+      }
     }
   }
 }

@@ -1,0 +1,48 @@
+{
+  "questions": [
+    {
+      "question": "What is the primary function of a vehicle's suspension system?",
+      "options": [
+        "To make the car go faster",
+        "To absorb shocks and maintain tire contact with the road",
+        "To improve fuel efficiency only",
+        "To control the radio volume"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "SuspensionSlide_1"
+    },
+    {
+      "question": "How does suspension affect EV handling?",
+      "options": [
+        "It has no effect on handling",
+        "It helps maintain stability and control during turns and bumps",
+        "It only affects comfort, not handling",
+        "It reduces battery range"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "SuspensionSlide_2"
+    },
+    {
+      "question": "What are springs in a suspension system used for?",
+      "options": [
+        "To store electrical energy",
+        "To absorb bumps and support the vehicle's weight",
+        "To generate power for the motor",
+        "To cool the battery"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "SuspensionSlide_3"
+    },
+    {
+      "question": "Why is suspension tuning important for EVs?",
+      "options": [
+        "EVs don't need suspension tuning",
+        "To compensate for the weight of batteries and maintain optimal handling",
+        "Only for aesthetic reasons",
+        "To make the car louder"
+      ],
+      "correctIndex": 1,
+      "relatedSlideKey": "SuspensionSlide_4"
+    }
+  ]
+}

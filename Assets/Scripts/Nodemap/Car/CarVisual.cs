@@ -38,4 +38,20 @@ public class CarVisual : MonoBehaviour
         }
         // Optional: add pop/fade effect for polish
     }
+
+    /// <summary>
+    /// Get the current frame sprite for before/after comparison.
+    /// </summary>
+    public Sprite GetCurrentFrameSprite()
+    {
+        return frameRenderer != null ? frameRenderer.sprite : null;
+    }
+
+    /// <summary>
+    /// Get the current tire sprite for before/after comparison.
+    /// </summary>
+    public Sprite GetCurrentTireSprite()
+    {
+        return tireFrontRenderer != null ? tireFrontRenderer.sprite : null;
+    }
 }

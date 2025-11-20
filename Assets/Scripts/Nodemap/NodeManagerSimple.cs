@@ -10,8 +10,11 @@ namespace Nodemap
     /// Simplified NodeManager that works with existing LevelNodeView.
     /// Uses NodeId consistently but keeps compatibility with current code.
     /// </summary>
-    public class NodeManagerSimple : ConfigurableComponent, IDisposable
+    public class NodeManagerSimple : MonoBehaviour
     {
+        [Header("Configuration")]
+        private MapConfig config; // Auto-loaded via singleton
+        
         [Header("Node Management")]
         [SerializeField] private List<NodeData> nodeData;
         [SerializeField] private LevelNodeView nodePrefab;
@@ -27,6 +30,11 @@ namespace Nodemap
         
         // Events
         public event Action<NodeId> OnNodeClicked;
+
+        private void Awake()
+        {
+            if (config == null) config = MapConfig.Instance;
+        }
 
         #region Public API
 
@@ -65,22 +73,15 @@ namespace Nodemap
             UpdateNodeVisual(nodeId, state, isCarHere);
         }
 
-        public void ShakeNode(NodeId nodeId)
-        {
-            var nodeView = GetNodeView(nodeId);
-            nodeView?.PlayShake();
-        }
-
-        // Overload for backward compatibility
-        public void ShakeNode(int nodeIndex)
-        {
-            ShakeNode(new NodeId(nodeIndex));
-        }
-
         public NodeData GetNodeData(NodeId nodeId)
         {
             int index = nodeId.Value;
-            return index >= 0 && index < nodeData.Count ? nodeData[index] : null;
+            if (index < 0 || index >= nodeData.Count)
+            {
+                Debug.LogWarning($"[NodeManagerSimple] Node data not found for index {index}");
+                return null;
+            }
+            return nodeData[index];
         }
 
         // Overload for backward compatibility
@@ -92,10 +93,10 @@ namespace Nodemap
         public float GetSplineT(NodeId nodeId)
         {
             if (nodeViews.Count <= 1) 
-                return GetConfig(c => c.tStart, 0.2f);
+                return config ? config.tStart : 0.2f;
 
-            float tStart = GetConfig(c => c.tStart, 0.2f);
-            float tEnd = GetConfig(c => c.tEnd, 0.8f);
+            float tStart = config ? config.tStart : 0.2f;
+            float tEnd = config ? config.tEnd : 0.8f;
             
             return Mathf.Lerp(tStart, tEnd, (float)nodeId.Value / (nodeViews.Count - 1));
         }
@@ -200,15 +201,10 @@ namespace Nodemap
 
         #region Lifecycle
 
-        public void Dispose()
+        private void OnDestroy()
         {
             OnNodeClicked = null;
             ClearNodes();
-        }
-
-        private void OnDestroy()
-        {
-            Dispose();
         }
 
         #endregion

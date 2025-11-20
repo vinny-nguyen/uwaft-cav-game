@@ -30,7 +30,7 @@ namespace Nodemap.Commands
 
         protected bool ValidateNodeId(int nodeCount)
         {
-            return nodeId.IsValid(nodeCount);
+            return nodeId.Value >= 0 && nodeId.Value < nodeCount;
         }
     }
 
