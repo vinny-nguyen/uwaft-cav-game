@@ -228,6 +228,69 @@ namespace Nodemap
             return mapState?.IsNodeCompleted(new NodeId(nodeIndex)) ?? false;
         }
 
+        /// <summary>
+        /// Get the current node where the car is located
+        /// </summary>
+        public int GetCurrentCarNodeIndex()
+        {
+            return mapState?.CurrentCarNodeId.Value ?? 0;
+        }
+
+        /// <summary>
+        /// Check if the car is currently at a completed node that has a driving scene
+        /// </summary>
+        public bool IsCarAtCompletedNodeWithDriving()
+        {
+            if (mapState == null || nodeManager == null) return false;
+            
+            // Don't show button if car is currently moving
+            if (carController != null && carController.IsMoving)
+                return false;
+            
+            NodeId currentCarNode = mapState.CurrentCarNodeId;
+            
+            // Check if current node is completed
+            if (!mapState.IsNodeCompleted(currentCarNode)) return false;
+            
+            // Check if node has driving scene assigned
+            NodeData nodeData = nodeManager.GetNodeData(currentCarNode);
+            return nodeData != null && !string.IsNullOrEmpty(nodeData.drivingSceneName);
+        }
+
+        /// <summary>
+        /// Get the driving scene name for the current car node
+        /// </summary>
+        public string GetCurrentNodeDrivingScene()
+        {
+            if (nodeManager == null || mapState == null) return null;
+            
+            NodeId currentCarNode = mapState.CurrentCarNodeId;
+            NodeData nodeData = nodeManager.GetNodeData(currentCarNode);
+            return nodeData?.drivingSceneName;
+        }
+
+        /// <summary>
+        /// Subscribe to state changes (for UI elements that need to react)
+        /// </summary>
+        public void SubscribeToStateChanges(System.Action callback)
+        {
+            if (mapState != null)
+            {
+                mapState.OnStateChanged += callback;
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribe from state changes
+        /// </summary>
+        public void UnsubscribeFromStateChanges(System.Action callback)
+        {
+            if (mapState != null)
+            {
+                mapState.OnStateChanged -= callback;
+            }
+        }
+
         #endregion
 
         #region Visual Updates

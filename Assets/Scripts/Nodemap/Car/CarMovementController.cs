@@ -71,6 +71,11 @@ namespace Nodemap.Car
         /// </summary>
         public NodeId GetCurrentNode() => currentNodeId;
 
+        /// <summary>
+        /// Check if the car is currently moving between nodes.
+        /// </summary>
+        public bool IsMoving => isMoving;
+
         #endregion
 
         #region Movement Implementation

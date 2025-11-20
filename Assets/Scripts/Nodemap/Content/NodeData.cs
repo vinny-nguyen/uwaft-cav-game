@@ -14,7 +14,11 @@ public class NodeData : ScriptableObject
     public List<GameObject> miniGamePrefabs; // 0–N mini-game prefabs
 
     [Header("Upgrade Info (optional)")]
-    public string upgradeText;           // “Upgraded tires improve grip...”
+    public string upgradeText;           // "Upgraded tires improve grip..."
     public Sprite upgradeFrame;          // Frame sprite to swap on upgrade
     public Sprite upgradeTire;           // Tire sprite to swap on upgrade
+    
+    [Header("Driving Experience")]
+    [Tooltip("Name of the driving scene to load for this node (e.g., 'DrivingScene1')")]
+    public string drivingSceneName;      // Scene to load when playing this node's driving game
 }
