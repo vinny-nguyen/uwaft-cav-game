@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Threading.Tasks;
 
 public class DragDropController : MonoBehaviour
 {
@@ -33,9 +34,17 @@ public class DragDropController : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnCompleted; // Hook into your ProgressionController
 
+
+
     private int _lockedCount = 0;
     private readonly Dictionary<string, DropZone> _zonesByKey = new();
     private Canvas _rootCanvas;
+    private bool _ended = false;
+
+    // Use string identifiers to match ScoreManager API
+    [SerializeField] private string levelId = "Mini1";
+    [SerializeField] private string miniGameId = "DragDrop";
+    [SerializeField] private int pointsPerItem = 10;
 
     void Awake()
     {
@@ -123,10 +132,77 @@ public class DragDropController : MonoBehaviour
 
     private void CheckComplete()
     {
+        if (_ended) return;
+
         if (_lockedCount >= _zonesByKey.Count && _zonesByKey.Count > 0)
         {
+            _ended = true;
             if (winBanner != null) winBanner.SetActive(true);
             OnCompleted?.Invoke();
+            EndGame();
         }
+    }
+
+    public void EndGame()
+    {
+        if (!_ended) _ended = true;
+
+        int finalScore = CalculateFinalScore();
+
+        // Report mini-game score if ScoreManager exists
+        try
+        {
+            // reference the type explicitly to avoid name resolution issues
+            if (global::ScoreManager.Instance != null)
+            {
+                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, finalScore);
+            }
+            else
+            {
+                Debug.LogWarning("ScoreManager.Instance is null. Skipping mini-game score report.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Reporting mini-game score failed: {ex.Message}");
+        }
+
+        // Fire-and-forget upload of total score
+        try
+        {
+            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
+            if (uploader != null)
+            {
+                _ = RunUploadAsync(uploader);
+            }
+            else
+            {
+                Debug.LogWarning("TotalScoreUploader not found in scene. Skipping total upload.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Total score upload failed: {ex.Message}");
+        }
+    }
+
+    // Add RunUploadAsync helper
+    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
+    {
+        try
+        {
+            await uploader.UploadScoreAsync();
+            Debug.Log("Total score uploaded successfully.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Total score upload failed: {ex.Message}");
+        }
+    }
+
+    private int CalculateFinalScore()
+    {
+        // Simple and backward-compatible formula — adjust if you want other rules
+        return _lockedCount * Mathf.Max(1, pointsPerItem);
     }
 }

@@ -4,15 +4,16 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public enum BoardTab { Weekly, Friends, Overall }
 
 public class LeaderboardController : MonoBehaviour
 {
     [Header("UGS / Boards")]
-    [SerializeField] private string weeklyBoardId = "UWAFT_CAV_Game";
-    [SerializeField] private string friendsBoardId = "UWAFT_CAV_Game";
-    [SerializeField] private string overallBoardId = "UWAFT_CAV_Game";
+    [SerializeField] private string weeklyBoardId = "UWAFT_CAV_Weekly";
+    [SerializeField] private string friendsBoardId = "UWAFT_CAV_Overall";
+    [SerializeField] private string overallBoardId = "UWAFT_CAV_Overall";
     [SerializeField] private int fetchLimit = 50;
 
     [Header("Tabs")]
@@ -43,9 +44,13 @@ public class LeaderboardController : MonoBehaviour
     [SerializeField] private LeaderboardRow rowPrefab;    // the prefab
     [SerializeField] private TMP_Text statusText;         // optional "Loading…"
 
+    [Header("Friends UI")]
+    [SerializeField] private GameObject friendsOnlyUI;
+
+
     private readonly List<GameObject> _spawned = new();
     private ILeaderboardData _data;
-    private BoardTab _current = BoardTab.Weekly;
+    private BoardTab _current = BoardTab.Overall;
     private CancellationTokenSource _cts;
 
     void Awake()
@@ -58,7 +63,10 @@ public class LeaderboardController : MonoBehaviour
 
     async void OnEnable()
     {
+        _current = BoardTab.Overall; // default
         ApplyTabVisuals();
+        if (friendsOnlyUI)
+            friendsOnlyUI.SetActive(_current == BoardTab.Friends);
         await RefreshAsync();
     }
 
@@ -74,6 +82,11 @@ public class LeaderboardController : MonoBehaviour
         if (_current == t) return;
         _current = t;
         ApplyTabVisuals();
+
+        // Show only when Friends tab is active
+        if (friendsOnlyUI)
+            friendsOnlyUI.SetActive(_current == BoardTab.Friends);
+
         _ = RefreshAsync();
     }
 
@@ -103,13 +116,37 @@ public class LeaderboardController : MonoBehaviour
             BindPodium(null);
 
             var list = await _data.GetTopAsync(CurrentBoardId(), fetchLimit, ct);
-            if (list == null || list.Count == 0) { SetStatus("No scores yet."); return; }
+            if (list == null || list.Count == 0)
+            {
+                SetStatus("No scores yet.");
+                return;
+            }
+
+            // Friends tab: filter to only players in local friends list
+            if (_current == BoardTab.Friends)
+            {
+                var friends = LoadFriendsFromPrefs();
+                if (friends == null || friends.Count == 0)
+                {
+                    SetStatus("No friends added yet.");
+                    return;
+                }
+
+                list = list.Where(e => friends.Contains(e.Name)).ToList();
+
+                if (list.Count == 0)
+                {
+                    SetStatus("No scores from your friends yet.");
+                    return;
+                }
+            }
+
             SetStatus("");
 
-            // Podium
+            // Podium (top 3)
             BindPodium(list);
 
-            // Rows (from index 3)
+            // Rows (from 4th onward)
             for (int i = 3; i < list.Count; i++)
             {
                 var dto = list[i];
@@ -128,6 +165,27 @@ public class LeaderboardController : MonoBehaviour
             SetStatus("Connection error");
         }
     }
+
+    private List<string> LoadFriendsFromPrefs()
+    {
+        const string key = "FriendsList";
+        if (!PlayerPrefs.HasKey(key)) return new List<string>();
+        var json = PlayerPrefs.GetString(key);
+        if (string.IsNullOrEmpty(json)) return new List<string>();
+
+        try
+        {
+            var wrapper = JsonUtility.FromJson<FriendsSaveDataWrapper>(json);
+            return wrapper?.friends ?? new List<string>();
+        }
+        catch
+        {
+            return new List<string>();
+        }
+    }
+
+    [System.Serializable]
+    private class FriendsSaveDataWrapper { public List<string> friends = new(); }
 
     private static string TrimName(string s, int max = 12)
     {

@@ -2721,7 +2721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingSceneName: Loading Screen
-  gameSceneName: NodeMapFullHD
+  gameSceneName: UpdatedNodemap
   leaderSceneName: LeaderBoard2.0
   tutorialSceneName: GameStart
 --- !u!1 &1459641785
