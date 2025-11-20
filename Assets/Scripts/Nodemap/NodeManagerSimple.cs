@@ -76,7 +76,12 @@ namespace Nodemap
         public NodeData GetNodeData(NodeId nodeId)
         {
             int index = nodeId.Value;
-            return index >= 0 && index < nodeData.Count ? nodeData[index] : null;
+            if (index < 0 || index >= nodeData.Count)
+            {
+                Debug.LogWarning($"[NodeManagerSimple] Node data not found for index {index}");
+                return null;
+            }
+            return nodeData[index];
         }
 
         // Overload for backward compatibility

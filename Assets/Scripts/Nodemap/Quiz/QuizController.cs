@@ -20,6 +20,15 @@ public class QuizController : MonoBehaviour
     [SerializeField] private Button reviewSlideButton;
     [SerializeField] private GameObject completionPanel;
     [SerializeField] private TMP_Text completionText;
+    [SerializeField] private Button closeButton;
+
+    [Header("Upgrade Display")]
+    [SerializeField] private GameObject upgradeContainer;
+    [SerializeField] private TMP_Text upgradeText;
+    [SerializeField] private UnityEngine.UI.Image beforeFrameImage;
+    [SerializeField] private UnityEngine.UI.Image afterFrameImage;
+    [SerializeField] private UnityEngine.UI.Image beforeTireImage;
+    [SerializeField] private UnityEngine.UI.Image afterTireImage;
 
     [Header("Events")]
     public UnityEvent OnQuizCompleted;
@@ -30,6 +39,7 @@ public class QuizController : MonoBehaviour
 
     private QuizData quizData;
     private PopupController popupController;
+    private NodeData currentNodeData;
     private int currentQuestionIndex = 0;
     private readonly List<Button> optionButtons = new();
     private bool questionAnswered = false;
@@ -44,6 +54,9 @@ public class QuizController : MonoBehaviour
         if (reviewSlideButton != null)
             reviewSlideButton.onClick.AddListener(OnReviewSlideClicked);
 
+        if (closeButton != null)
+            closeButton.onClick.AddListener(OnCloseClicked);
+
         if (completionPanel != null)
             completionPanel.SetActive(false);
 
@@ -53,13 +66,15 @@ public class QuizController : MonoBehaviour
     /// <summary>
     /// Initialize the quiz with data from a TextAsset JSON file.
     /// </summary>
-    public void Initialize(TextAsset quizJsonAsset)
+    public void Initialize(TextAsset quizJsonAsset, NodeData nodeData)
     {
         if (quizJsonAsset == null)
         {
             Debug.LogError("[QuizController] No quiz JSON asset provided!");
             return;
         }
+
+        currentNodeData = nodeData;
 
         try
         {
@@ -110,7 +125,7 @@ public class QuizController : MonoBehaviour
         {
             int optionIndex = i; // Capture for lambda
             Button btn = Instantiate(optionButtonPrefab, optionsContainer);
-            
+
             // Set button text
             TMP_Text btnText = btn.GetComponentInChildren<TMP_Text>();
             if (btnText != null)
@@ -118,7 +133,7 @@ public class QuizController : MonoBehaviour
 
             // Add click listener
             btn.onClick.AddListener(() => OnOptionSelected(optionIndex));
-            
+
             optionButtons.Add(btn);
         }
 
@@ -140,7 +155,7 @@ public class QuizController : MonoBehaviour
         {
             // Correct answer
             SetFeedback("Correct!", correctColor);
-            
+
             if (nextQuestionButton != null)
             {
                 nextQuestionButton.gameObject.SetActive(true);
@@ -151,7 +166,7 @@ public class QuizController : MonoBehaviour
         {
             // Incorrect answer
             SetFeedback("Incorrect. Review the material and try again.", incorrectColor);
-            
+
             if (reviewSlideButton != null)
             {
                 reviewSlideButton.gameObject.SetActive(true);
@@ -175,7 +190,7 @@ public class QuizController : MonoBehaviour
         }
 
         QuizQuestion question = quizData.questions[currentQuestionIndex];
-        
+
         if (string.IsNullOrEmpty(question.relatedSlideKey))
         {
             Debug.LogWarning($"[QuizController] No related slide key for question {currentQuestionIndex}");
@@ -185,6 +200,20 @@ public class QuizController : MonoBehaviour
         // Exit quiz mode and jump to the related slide
         popupController.ExitQuizMode();
         popupController.JumpToSlideByKey(question.relatedSlideKey);
+    }
+
+    private void OnCloseClicked()
+    {
+        if (popupController != null)
+        {
+            Debug.Log("[QuizController] Completing node and closing popup.");
+            
+            // Trigger the quiz completion event (which completes the node)
+            OnQuizCompleted?.Invoke();
+            
+            // Close the popup
+            popupController.Hide();
+        }
     }
 
     private void ShowCompletion()
@@ -205,10 +234,78 @@ public class QuizController : MonoBehaviour
             {
                 completionText.text = "Congratulations! You've completed the quiz!";
             }
+
+            // Display upgrade visuals if node data has upgrade info
+            DisplayUpgrade();
         }
 
-        // Trigger completion event
-        OnQuizCompleted?.Invoke();
+        // Don't trigger OnQuizCompleted here anymore - wait for user to click "Complete Node" button
+    }    private void DisplayUpgrade()
+    {
+        if (currentNodeData == null || upgradeContainer == null)
+            return;
+
+        bool hasFrameUpgrade = currentNodeData.upgradeFrame != null;
+        bool hasTireUpgrade = currentNodeData.upgradeTire != null;
+
+        if (!hasFrameUpgrade && !hasTireUpgrade)
+        {
+            // No upgrades to show
+            if (upgradeContainer != null)
+                upgradeContainer.SetActive(false);
+            return;
+        }
+
+        upgradeContainer.SetActive(true);
+
+        // Set upgrade text
+        if (upgradeText != null && !string.IsNullOrEmpty(currentNodeData.upgradeText))
+        {
+            upgradeText.text = currentNodeData.upgradeText;
+        }
+
+        // Get current sprites from the car to show "before"
+        var carVisual = FindFirstObjectByType<CarVisual>();
+
+        // Display frame upgrade
+        if (hasFrameUpgrade)
+        {
+            if (beforeFrameImage != null && carVisual != null)
+            {
+                beforeFrameImage.sprite = carVisual.GetCurrentFrameSprite();
+                beforeFrameImage.gameObject.SetActive(true);
+            }
+            if (afterFrameImage != null)
+            {
+                afterFrameImage.sprite = currentNodeData.upgradeFrame;
+                afterFrameImage.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (beforeFrameImage != null) beforeFrameImage.gameObject.SetActive(false);
+            if (afterFrameImage != null) afterFrameImage.gameObject.SetActive(false);
+        }
+
+        // Display tire upgrade
+        if (hasTireUpgrade)
+        {
+            if (beforeTireImage != null && carVisual != null)
+            {
+                beforeTireImage.sprite = carVisual.GetCurrentTireSprite();
+                beforeTireImage.gameObject.SetActive(true);
+            }
+            if (afterTireImage != null)
+            {
+                afterTireImage.sprite = currentNodeData.upgradeTire;
+                afterTireImage.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (beforeTireImage != null) beforeTireImage.gameObject.SetActive(false);
+            if (afterTireImage != null) afterTireImage.gameObject.SetActive(false);
+        }
     }
 
     private void ClearOptionButtons()
@@ -234,7 +331,7 @@ public class QuizController : MonoBehaviour
     {
         if (nextQuestionButton != null)
             nextQuestionButton.gameObject.SetActive(false);
-        
+
         if (reviewSlideButton != null)
             reviewSlideButton.gameObject.SetActive(false);
     }
@@ -245,14 +342,14 @@ public class QuizController : MonoBehaviour
     public void ResetQuiz()
     {
         currentQuestionIndex = 0;
-        
+
         // Show quiz UI elements again
         if (questionText != null) questionText.gameObject.SetActive(true);
         if (progressText != null) progressText.gameObject.SetActive(true);
         if (feedbackText != null) feedbackText.gameObject.SetActive(true);
         if (optionsContainer != null) optionsContainer.gameObject.SetActive(true);
         if (completionPanel != null) completionPanel.SetActive(false);
-        
+
         DisplayCurrentQuestion();
     }
 
@@ -260,10 +357,13 @@ public class QuizController : MonoBehaviour
     {
         if (nextQuestionButton != null)
             nextQuestionButton.onClick.RemoveListener(OnNextQuestionClicked);
-        
+
         if (reviewSlideButton != null)
             reviewSlideButton.onClick.RemoveListener(OnReviewSlideClicked);
-        
+
+        if (closeButton != null)
+            closeButton.onClick.RemoveListener(OnCloseClicked);
+
         ClearOptionButtons();
     }
 }

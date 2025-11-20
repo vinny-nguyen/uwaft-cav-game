@@ -17,6 +17,6 @@ MonoBehaviour:
   slideDeck: {fileID: 11400000, guid: dd9e8f4b4567aa24fa8483e51bac85cd, type: 2}
   quizJson: {fileID: 4900000, guid: c4a85e5f26371cd4191bfd9eccd7dbd1, type: 3}
   miniGamePrefabs: []
-  upgradeText: 
-  upgradeFrame: {fileID: 0}
-  upgradeTire: {fileID: 0}
+  upgradeText: Upgraded the tires for better friction and traction
+  upgradeFrame: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
+  upgradeTire: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}
