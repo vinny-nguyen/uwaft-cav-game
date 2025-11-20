@@ -103,15 +103,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6121319688065457729, guid: 10a8c8f900a115345be5142560175b72, type: 3}
+    - {fileID: 3978618127124903028, guid: 10a8c8f900a115345be5142560175b72, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4446753946059908756, guid: 10a8c8f900a115345be5142560175b72, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 2533621288131353737, guid: 10a8c8f900a115345be5142560175b72, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8947538144377450421}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10a8c8f900a115345be5142560175b72, type: 3}
---- !u!224 &1594005745839568844 stripped
+--- !u!224 &612555262031203793 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4446753946059908756, guid: 10a8c8f900a115345be5142560175b72, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2533621288131353737, guid: 10a8c8f900a115345be5142560175b72, type: 3}
   m_PrefabInstance: {fileID: 3146046779532071256}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7014575633677930834
@@ -120,8 +121,20 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1594005745839568844}
+    m_TransformParent: {fileID: 612555262031203793}
     m_Modifications:
+    - target: {fileID: 108504625468736331, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108504625468736331, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108504625468736331, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 313379429344327211, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -137,6 +150,26 @@ PrefabInstance:
     - target: {fileID: 313379429344327211, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1103273054636943827, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814337821156685814, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814337821156685814, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814337821156685814, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814337821156685814, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2122547647609568999, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_Pivot.x
@@ -188,15 +221,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2122547647609568999, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2122547647609568999, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2122547647609568999, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2122547647609568999, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -216,6 +249,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2122547647609568999, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050702155105821796, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050702155105821796, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050702155105821796, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050702155105821796, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
@@ -246,6 +295,58 @@ PrefabInstance:
       propertyPath: entries.Array.data[2].answer
       value: Pressure
       objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: entries.Array.data[3].answer
+      value: Pressure
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: entries.Array.data[0].hints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: entries.Array.data[1].hints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: entries.Array.data[2].hints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[0].hints.Array.data[0]'
+      value: This is a part of a tire
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[0].hints.Array.data[1]'
+      value: It makes contact with the road surface
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[0].hints.Array.data[2]'
+      value: It provides grip and traction when driving
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[1].hints.Array.data[0]'
+      value: This is found on the side of a tire
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[1].hints.Array.data[1]'
+      value: It connects the tread to the wheel rim
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[1].hints.Array.data[2]'
+      value: Contains information like tire size and pressure
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[2].hints.Array.data[0]'
+      value: This is measured in PSI or kPa
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[2].hints.Array.data[1]'
+      value: Tires need the right amount of this for safety
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: 'entries.Array.data[2].hints.Array.data[2]'
+      value: Too much or too little affects tire performance
+      objectReference: {fileID: 0}
     - target: {fileID: 3766078244493985916, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -253,6 +354,10 @@ PrefabInstance:
     - target: {fileID: 3766078244493985916, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3962528064035726129, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -616
       objectReference: {fileID: 0}
     - target: {fileID: 4738355786848016803, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_Name
@@ -273,6 +378,30 @@ PrefabInstance:
     - target: {fileID: 6178310394633264560, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6212775385852997788, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6212775385852997788, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221570107765251751, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221570107765251751, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221570107765251751, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221570107765251751, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

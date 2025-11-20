@@ -14,8 +14,8 @@ public class WordUnscrambleController : MonoBehaviour
     {
         [Tooltip("Correct answer, e.g., TREAD")]
         public string answer;
-        [Tooltip("Optional hint/clue, e.g., 'Part of the tire that touches the road'")]
-        public string hint;
+        [Tooltip("Array of hints (up to 3), shown progressively when hint button is clicked")]
+        public string[] hints = new string[3];
         [Tooltip("Override scrambled display (optional). Leave blank to auto-scramble.")]
         public string customScramble;
     }
@@ -30,6 +30,7 @@ public class WordUnscrambleController : MonoBehaviour
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Button skipButton;
     [SerializeField] private Button nextButton;
+    [SerializeField] private Button hintButton;
     [SerializeField] private GameObject winBanner; // panel shown on completion
 
     [Header("Config")]
@@ -56,6 +57,7 @@ public class WordUnscrambleController : MonoBehaviour
     private int _currentIndex = -1;
     private List<int> _order = new();
     private bool _roundSolved = false;
+    private int _currentHintIndex = 0; // Tracks which hint to show next (0-2)
 
     void Awake()
     {
@@ -63,6 +65,7 @@ public class WordUnscrambleController : MonoBehaviour
         checkButton.onClick.AddListener(HandleCheck);
         if (skipButton) skipButton.onClick.AddListener(HandleSkip);
         nextButton.onClick.AddListener(HandleNext);
+        if (hintButton) hintButton.onClick.AddListener(HandleHint);
 
         if (winBanner) winBanner.SetActive(false);
         nextButton.interactable = false;
@@ -91,6 +94,7 @@ public class WordUnscrambleController : MonoBehaviour
     {
         _currentIndex++;
         _roundSolved = false;
+        _currentHintIndex = 0; // Reset hint index for new round
         nextButton.interactable = false;
         answerInput.text = "";
         SetFeedback("");
@@ -105,8 +109,8 @@ public class WordUnscrambleController : MonoBehaviour
 
         var e = entries[_order[_currentIndex]];
 
-        // Display hint
-        if (hintText) hintText.text = string.IsNullOrWhiteSpace(e.hint) ? "" : e.hint;
+        // Display first hint and update hint button state
+        UpdateHintDisplay();
 
         // Display scrambled
         string display = string.IsNullOrWhiteSpace(e.customScramble)
@@ -165,6 +169,7 @@ public class WordUnscrambleController : MonoBehaviour
             _solvedCount++;
             SetFeedback("<color=#1BBB55>Correct!</color>");
             nextButton.interactable = true;
+            if (hintButton) hintButton.interactable = false; // Disable hint button after solving
 
             UpdateScoreAndUpload();
         }
@@ -191,6 +196,55 @@ public class WordUnscrambleController : MonoBehaviour
     {
         if (!_roundSolved) return;
         LoadNextRound();
+    }
+
+    private void HandleHint()
+    {
+        if (_roundSolved) return; // No hints after solving
+        if (_currentIndex < 0 || _currentIndex >= _order.Count) return;
+
+        var e = entries[_order[_currentIndex]];
+        
+        // Show next hint if available
+        if (_currentHintIndex < e.hints.Length && _currentHintIndex < 3)
+        {
+            _currentHintIndex++;
+            UpdateHintDisplay();
+        }
+    }
+
+    private void UpdateHintDisplay()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _order.Count)
+        {
+            if (hintText) hintText.text = "";
+            if (hintButton) hintButton.interactable = false;
+            return;
+        }
+
+        var e = entries[_order[_currentIndex]];
+        
+        // Show only the current hint (not accumulated)
+        string hintDisplay = "";
+        if (_currentHintIndex > 0 && _currentHintIndex <= e.hints.Length && _currentHintIndex <= 3)
+        {
+            int hintIdx = _currentHintIndex - 1; // Convert to 0-based index
+            if (!string.IsNullOrWhiteSpace(e.hints[hintIdx]))
+            {
+                hintDisplay = $"Hint {_currentHintIndex}: {e.hints[hintIdx]}";
+            }
+        }
+
+        if (hintText) hintText.text = hintDisplay;
+
+        // Disable hint button if all 3 hints shown or no more hints available
+        if (hintButton)
+        {
+            bool hasMoreHints = _currentHintIndex < 3 && 
+                                _currentHintIndex < e.hints.Length && 
+                                !string.IsNullOrWhiteSpace(e.hints[_currentHintIndex]);
+            hintButton.interactable = hasMoreHints && !_roundSolved;
+        }
     }
 
     private void SetFeedback(string msg)
