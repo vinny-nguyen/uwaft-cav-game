@@ -31,10 +31,16 @@ public class PedalController : MonoBehaviour
 
     void Update()
     {
-        // Keyboard ASDW:
-        if (Input.GetKeyDown(KeyCode.W)) OnAccelerateDown();
-        if (Input.GetKeyUp(KeyCode.W)) OnAccelerateUp();
-        if (Input.GetKeyDown(KeyCode.S)) OnBrakeDown();
-        if (Input.GetKeyUp(KeyCode.S)) OnBrakeUp();
+        // Accelerator pedal (D key)
+        if (Input.GetKeyDown(KeyCode.D))
+            acceleratorVisual.SetPressed(true);
+        if (Input.GetKeyUp(KeyCode.D))
+            acceleratorVisual.SetPressed(false);
+    
+        // Brake pedal (A key)
+        if (Input.GetKeyDown(KeyCode.A))
+            brakeVisual.SetPressed(true);
+        if (Input.GetKeyUp(KeyCode.A))
+            brakeVisual.SetPressed(false);
     }
 }
