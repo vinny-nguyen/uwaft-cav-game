@@ -24,6 +24,9 @@ namespace Nodemap
         
         private void Awake()
         {
+            // Ensure time is running normally
+            Time.timeScale = 1f;
+            
             if (config == null) config = MapConfig.Instance;
             InitializeState();
         }

@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
     public void SendtoNodeMap() {
         Debug.Log("SendtoNodeMap method called");
         Time.timeScale = 1f;
-        SceneManager.LoadScene("NodeMapFullHD");
+        SceneManager.LoadScene("UpdatedNodemap");
     }
 
     // public void RestartGame() {
