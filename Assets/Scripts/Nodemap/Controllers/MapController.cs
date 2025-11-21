@@ -1,21 +1,22 @@
 using UnityEngine;
 using Nodemap.Core;
 using Nodemap.Car;
+using Nodemap.UI;
 
-namespace Nodemap
+namespace Nodemap.Controllers
 {
     /// <summary>
     /// Drop-in replacement for MapController that uses improved architecture
     /// but maintains compatibility with existing prefab setup.
     /// </summary>
-    public class MapControllerSimple : MonoBehaviour
+    public class MapController : MonoBehaviour
     {
         [Header("Configuration")]
         private MapConfig config; // Auto-loaded via singleton
         
         [Header("Component References")]
-        [SerializeField] private NodeManagerSimple nodeManager;
-        [SerializeField] private CarMovementController carController;
+        [SerializeField] private NodeManager nodeManager;
+        [SerializeField] private CarController carController;
         [SerializeField] private PopupController popupController;
 
         // Core systems

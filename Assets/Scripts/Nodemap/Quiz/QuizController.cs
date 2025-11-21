@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Nodemap.Controllers;
 
 /// <summary>
 /// Controller for the quiz system. Displays questions one at a time,

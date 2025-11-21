@@ -1,13 +1,14 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections;
 
-public enum NodeState { Inactive, Active, Completed }
+namespace Nodemap.UI
+{
+    public enum NodeState { Inactive, Active, Completed }
 
-public class LevelNodeView : MonoBehaviour
+    public class NodeView : MonoBehaviour
 {
     private Image icon;
     private Button button;
@@ -70,7 +71,7 @@ public class LevelNodeView : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"[LevelNodeView] Failed to load sprite at address: {address}. Using fallback.");
+                Debug.LogWarning($"[NodeView] Failed to load sprite at address: {address}. Using fallback.");
                 // Use a simple colored sprite as fallback
                 CreateFallbackSprite(state);
             }
@@ -113,4 +114,5 @@ public class LevelNodeView : MonoBehaviour
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => _onClick?.Invoke());
     }
+}
 }

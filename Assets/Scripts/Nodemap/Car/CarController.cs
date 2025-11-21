@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Splines;
 using Nodemap.Core;
-using Nodemap;
+using Nodemap.Controllers;
 
 namespace Nodemap.Car
 {
@@ -11,7 +11,7 @@ namespace Nodemap.Car
     /// Unified car movement system. Combines responsibilities of CarController and CarPathFollower
     /// into a single, focused class. Handles both movement and visual updates.
     /// </summary>
-    public class CarMovementController : MonoBehaviour
+    public class CarController : MonoBehaviour
     {
         [Header("Configuration")]
         private MapConfig config; // Auto-loaded via singleton
@@ -56,7 +56,7 @@ namespace Nodemap.Car
         /// <summary>
         /// Moves car to specified node. Returns false if movement is not possible.
         /// </summary>
-        public bool MoveToNode(NodeId nodeId, NodeManagerSimple nodeManager)
+        public bool MoveToNode(NodeId nodeId, NodeManager nodeManager)
         {
             if (isMoving || nodeManager == null)
                 return false;

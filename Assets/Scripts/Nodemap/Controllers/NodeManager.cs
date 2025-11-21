@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 using Nodemap.Core;
+using Nodemap.UI;
 
-namespace Nodemap
+namespace Nodemap.Controllers
 {
     /// <summary>
-    /// Simplified NodeManager that works with existing LevelNodeView.
+    /// Simplified NodeManager that works with existing NodeView.
     /// Uses NodeId consistently but keeps compatibility with current code.
     /// </summary>
-    public class NodeManagerSimple : MonoBehaviour
+    public class NodeManager : MonoBehaviour
     {
         [Header("Configuration")]
         private MapConfig config; // Auto-loaded via singleton
         
         [Header("Node Management")]
         [SerializeField] private List<NodeData> nodeData;
-        [SerializeField] private LevelNodeView nodePrefab;
+        [SerializeField] private NodeView nodePrefab;
         [SerializeField] private RectTransform nodesParent;
         
         [Header("Positioning")]
@@ -26,7 +27,7 @@ namespace Nodemap
         [SerializeField] private RectTransform canvasRect;
 
         // State
-        private readonly List<LevelNodeView> nodeViews = new();
+        private readonly List<NodeView> nodeViews = new();
         
         // Events
         public event Action<NodeId> OnNodeClicked;
@@ -125,13 +126,13 @@ namespace Nodemap
             }
         }
 
-        private LevelNodeView CreateSingleNode(NodeId nodeId)
+        private NodeView CreateSingleNode(NodeId nodeId)
         {
             var nodeObject = Instantiate(nodePrefab, nodesParent);
-            var nodeView = nodeObject.GetComponent<LevelNodeView>();
+            var nodeView = nodeObject.GetComponent<NodeView>();
             
             // Initialize using existing API
-            nodeView.BindIndex(nodeId.Value + 1); // LevelNodeView expects 1-based index
+            nodeView.BindIndex(nodeId.Value + 1); // NodeView expects 1-based index
             nodeView.SetOnClick(() => OnNodeClicked?.Invoke(nodeId));
             
             return nodeView;
@@ -152,7 +153,7 @@ namespace Nodemap
             }
         }
 
-        private void PositionSingleNode(LevelNodeView nodeView, NodeId nodeId)
+        private void PositionSingleNode(NodeView nodeView, NodeId nodeId)
         {
             var worldPos = spline.EvaluatePosition(GetSplineT(nodeId));
             var screenPos = uiCamera.WorldToScreenPoint(worldPos);
@@ -172,7 +173,7 @@ namespace Nodemap
 
         #region Helpers
 
-        private LevelNodeView GetNodeView(NodeId nodeId)
+        private NodeView GetNodeView(NodeId nodeId)
         {
             int index = nodeId.Value;
             return index >= 0 && index < nodeViews.Count ? nodeViews[index] : null;

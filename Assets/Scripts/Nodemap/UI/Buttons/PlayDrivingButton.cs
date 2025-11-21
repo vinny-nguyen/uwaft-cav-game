@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Nodemap.Controllers;
 
-namespace Nodemap
+namespace Nodemap.UI
 {
     /// <summary>
     /// Button that launches the driving experience for the current node.
@@ -13,7 +14,7 @@ namespace Nodemap
     public class PlayDrivingButton : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private MapControllerSimple mapController;
+        [SerializeField] private Controllers.MapController mapController;
         
         [Header("UI")]
         [SerializeField] private GameObject buttonObject;

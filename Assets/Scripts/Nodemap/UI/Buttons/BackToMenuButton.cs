@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Nodemap
+namespace Nodemap.UI
 {
     /// <summary>
     /// Simple back button that returns to the main menu.

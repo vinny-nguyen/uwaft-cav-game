@@ -1,5 +1,5 @@
 using UnityEngine;
-using Nodemap;
+using Nodemap.Controllers;
 
 /// <summary>
 /// Centralized service locator for the nodemap system.
@@ -32,8 +32,8 @@ public class GameServices : MonoBehaviour
     }
 
     // Core nodemap services
-    public MapControllerSimple MapController { get; private set; }
-    public NodeManagerSimple NodeManager { get; private set; }
+    public MapController MapController { get; private set; }
+    public NodeManager NodeManager { get; private set; }
     public PopupController PopupController { get; private set; }
     public QuizCompletionHandler QuizCompletionHandler { get; private set; }
     
@@ -68,8 +68,8 @@ public class GameServices : MonoBehaviour
         Debug.Log("[GameServices] Registering services...");
         
         // Core nodemap systems
-        MapController = FindFirstObjectByType<MapControllerSimple>();
-        NodeManager = FindFirstObjectByType<NodeManagerSimple>();
+        MapController = FindFirstObjectByType<MapController>();
+        NodeManager = FindFirstObjectByType<NodeManager>();
         PopupController = FindFirstObjectByType<PopupController>();
         QuizCompletionHandler = FindFirstObjectByType<QuizCompletionHandler>();
         
@@ -87,7 +87,7 @@ public class GameServices : MonoBehaviour
     {
         // Critical services - log errors if missing
         if (MapController == null)
-            Debug.LogError("[GameServices] MapControllerSimple not found in scene!");
+            Debug.LogError("[GameServices] MapController not found in scene!");
         
         if (NodeManager == null)
             Debug.LogError("[GameServices] NodeManagerSimple not found in scene!");

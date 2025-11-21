@@ -1,6 +1,8 @@
 using UnityEngine;
 
-public class SlideBase : MonoBehaviour
+namespace Nodemap.UI
+{
+    public class SlideBase : MonoBehaviour
 {
     [SerializeField] private string key;   // auto-filled from prefab name
     public string Key => key;
@@ -18,4 +20,5 @@ public class SlideBase : MonoBehaviour
 
     public virtual void OnEnter() {}
     public virtual void OnExit() {}
+}
 }

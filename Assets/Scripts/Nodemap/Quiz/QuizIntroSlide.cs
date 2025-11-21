@@ -1,11 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Nodemap.UI;
+using Nodemap.Controllers;
 
-/// <summary>
-/// Script for the final slide that transitions to the quiz.
-/// This slide displays a congratulatory message and a "Take Quiz" button.
-/// </summary>
-public class QuizTransitionSlide : SlideBase
+namespace Nodemap
+{
+    /// <summary>
+    /// Script for the final slide that transitions to the quiz.
+    /// This slide displays a congratulatory message and a "Take Quiz" button.
+    /// </summary>
+    public class QuizIntroSlide : SlideBase
 {
     [Header("UI References")]
     [SerializeField] private Button takeQuizButton;
@@ -60,4 +64,5 @@ public class QuizTransitionSlide : SlideBase
             takeQuizButton.onClick.RemoveListener(OnTakeQuizClicked);
         }
     }
+}
 }
