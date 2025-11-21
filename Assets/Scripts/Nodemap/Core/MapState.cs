@@ -147,10 +147,10 @@ namespace Nodemap.Core
         {
             for (int i = 0; i < _nodeCount; i++)
             {
-                PlayerPrefs.SetInt($"NodeUnlocked_{i}", _unlockedNodes[i] ? 1 : 0);
-                PlayerPrefs.SetInt($"NodeCompleted_{i}", _completedNodes[i] ? 1 : 0);
+                PlayerPrefs.SetInt(PlayerPrefsKeys.NodeUnlocked(i), _unlockedNodes[i] ? 1 : 0);
+                PlayerPrefs.SetInt(PlayerPrefsKeys.NodeCompleted(i), _completedNodes[i] ? 1 : 0);
             }
-            PlayerPrefs.SetInt("CurrentCarNode", _currentCarNodeId.Value);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.CurrentCarNode, _currentCarNodeId.Value);
             // Note: ActiveNode is calculated from unlocked nodes, not saved
             PlayerPrefs.Save();
         }
@@ -159,11 +159,11 @@ namespace Nodemap.Core
         {
             for (int i = 0; i < _nodeCount; i++)
             {
-                _unlockedNodes[i] = PlayerPrefs.GetInt($"NodeUnlocked_{i}", i == 0 ? 1 : 0) == 1;
-                _completedNodes[i] = PlayerPrefs.GetInt($"NodeCompleted_{i}", 0) == 1;
+                _unlockedNodes[i] = PlayerPrefs.GetInt(PlayerPrefsKeys.NodeUnlocked(i), i == 0 ? 1 : 0) == 1;
+                _completedNodes[i] = PlayerPrefs.GetInt(PlayerPrefsKeys.NodeCompleted(i), 0) == 1;
             }
             
-            int carNode = PlayerPrefs.GetInt("CurrentCarNode", 0);
+            int carNode = PlayerPrefs.GetInt(PlayerPrefsKeys.CurrentCarNode, 0);
             _currentCarNodeId = new NodeId(Mathf.Clamp(carNode, 0, _nodeCount - 1));
             
             // Find the last unlocked node to set as active
