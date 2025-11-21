@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Threading.Tasks;
 
 public class DragDropController : MonoBehaviour
 {
@@ -148,61 +147,18 @@ public class DragDropController : MonoBehaviour
         if (!_ended) _ended = true;
 
         int finalScore = CalculateFinalScore();
-
-        // Report mini-game score if ScoreManager exists
-        try
-        {
-            // reference the type explicitly to avoid name resolution issues
-            if (GameServices.Instance?.ScoreManager != null)
-            {
-                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, finalScore);
-            }
-            else
-            {
-                Debug.LogWarning("ScoreManager not found in GameServices. Skipping mini-game score report.");
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Reporting mini-game score failed: {ex.Message}");
-        }
-
-        // Fire-and-forget upload of total score
-        try
-        {
-            var uploader = GameServices.Instance?.ScoreUploader;
-            if (uploader != null)
-            {
-                _ = RunUploadAsync(uploader);
-            }
-            else
-            {
-                Debug.LogWarning("TotalScoreUploader not found in GameServices. Skipping total upload.");
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Total score upload failed: {ex.Message}");
-        }
-    }
-
-    // Add RunUploadAsync helper
-    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
-    {
-        try
-        {
-            await uploader.UploadScoreAsync();
-            Debug.Log("Total score uploaded successfully.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Total score upload failed: {ex.Message}");
-        }
+        MinigameScoreHelper.ReportAndUpload(levelId, miniGameId, finalScore);
     }
 
     private int CalculateFinalScore()
     {
         // Simple and backward-compatible formula — adjust if you want other rules
         return _lockedCount * Mathf.Max(1, pointsPerItem);
+    }
+
+    private void OnDestroy()
+    {
+        // Clean up event listeners to prevent memory leaks
+        OnCompleted?.RemoveAllListeners();
     }
 }

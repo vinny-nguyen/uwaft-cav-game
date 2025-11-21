@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 
 public class WordUnscrambleController : MonoBehaviour
 {
@@ -296,51 +295,22 @@ public class WordUnscrambleController : MonoBehaviour
     private void UpdateScoreAndUpload()
     {
         int score = CalculateScore();
-
-        try
-        {
-            if (GameServices.Instance?.ScoreManager != null)
-            {
-                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, score);
-            }
-            else
-            {
-                Debug.LogWarning("[WordUnscramble] ScoreManager not found in GameServices. Skipping score report.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[WordUnscramble] Reporting score failed: {ex.Message}");
-        }
-
-        try
-        {
-            var uploader = GameServices.Instance?.ScoreUploader;
-            if (uploader != null)
-            {
-                _ = RunUploadAsync(uploader);
-            }
-            else
-            {
-                Debug.LogWarning("[WordUnscramble] TotalScoreUploader not found in GameServices. Skipping upload.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[WordUnscramble] Upload failed: {ex.Message}");
-        }
+        MinigameScoreHelper.ReportAndUpload(levelId, miniGameId, score);
     }
 
-    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
+    private void OnDestroy()
     {
-        try
-        {
-            await uploader.UploadScoreAsync();
-            Debug.Log("[WordUnscramble] Total score uploaded successfully.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[WordUnscramble] Total score upload failed: {ex.Message}");
-        }
+        // Clean up button listeners
+        if (checkButton != null)
+            checkButton.onClick.RemoveListener(HandleCheck);
+        if (skipButton != null)
+            skipButton.onClick.RemoveListener(HandleSkip);
+        if (nextButton != null)
+            nextButton.onClick.RemoveListener(HandleNext);
+        if (hintButton != null)
+            hintButton.onClick.RemoveListener(HandleHint);
+        
+        // Clean up event listeners
+        OnCompleted?.RemoveAllListeners();
     }
 }

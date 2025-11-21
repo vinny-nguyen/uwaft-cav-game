@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 
 public class MemoryMatchController : MonoBehaviour
 {
@@ -232,52 +231,9 @@ public class MemoryMatchController : MonoBehaviour
         _ended = true;
 
         int finalScore = CalculateFinalScore();
-
         Debug.Log($"[MemoryMatch] EndGame called finalScore={finalScore}");
 
-        try
-        {
-            if (GameServices.Instance?.ScoreManager != null)
-            {
-                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, finalScore);
-                Debug.Log($"[MemoryMatch] Reported score. LevelTotal={GameServices.Instance.ScoreManager.GetLevelTotal(levelId)}, OverallTotal={GameServices.Instance.ScoreManager.GetOverallTotal()}");
-            }
-            else
-            {
-                Debug.LogWarning("ScoreManager not found in GameServices. Skipping mini-game score report.");
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Reporting mini-game score failed: {ex.Message}");
-        }
-
-        try
-        {
-            var uploader = GameServices.Instance?.ScoreUploader;
-            Debug.Log($"[MemoryMatch] TotalScoreUploader found={uploader != null}");
-            if (uploader != null)
-                _ = RunUploadAsync(uploader);
-            else
-                Debug.LogWarning("TotalScoreUploader not found in GameServices. Skipping total upload.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Total score upload failed: {ex.Message}");
-        }
-    }
-
-    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
-    {
-        try
-        {
-            await uploader.UploadScoreAsync();
-            Debug.Log("Total score uploaded successfully.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Total score upload failed: {ex.Message}");
-        }
+        MinigameScoreHelper.ReportAndUpload(levelId, miniGameId, finalScore);
     }
 
     private int CalculateFinalScore()
@@ -290,40 +246,12 @@ public class MemoryMatchController : MonoBehaviour
     private void UpdateScoreAndUpload()
     {
         int currentScore = CalculateFinalScore();
+        MinigameScoreHelper.ReportAndUpload(levelId, miniGameId, currentScore);
+    }
 
-        try
-        {
-            if (GameServices.Instance?.ScoreManager != null)
-            {
-                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, currentScore);
-                Debug.Log($"[MemoryMatch] UpdateScoreAndUpload reported currentScore={currentScore}");
-            }
-            else
-            {
-                Debug.LogWarning("[MemoryMatch] ScoreManager not found in GameServices. Skipping score report.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[MemoryMatch] Reporting score failed: {ex.Message}");
-        }
-
-        try
-        {
-            var uploader = GameServices.Instance?.ScoreUploader;
-            Debug.Log($"[MemoryMatch] UpdateScoreAndUpload uploader found={uploader != null}");
-            if (uploader != null)
-            {
-                _ = RunUploadAsync(uploader);
-            }
-            else
-            {
-                Debug.LogWarning("[MemoryMatch] TotalScoreUploader not found in GameServices. Skipping upload.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[MemoryMatch] Upload failed: {ex.Message}");
-        }
+    private void OnDestroy()
+    {
+        // Clean up event listeners to prevent memory leaks
+        OnCompleted?.RemoveAllListeners();
     }
 }
