@@ -4,10 +4,7 @@ using Nodemap.UI;
 
 namespace Nodemap.Core
 {
-    /// <summary>
-    /// Centralized state management for the map system.
-    /// Single source of truth for all node states, car position, and progression.
-    /// </summary>
+    // Centralized state management for the map system (single source of truth)
     public class MapState
     {
         // Core state data

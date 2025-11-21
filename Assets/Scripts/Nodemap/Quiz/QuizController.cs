@@ -5,10 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Nodemap.Controllers;
 
-/// <summary>
-/// Controller for the quiz system. Displays questions one at a time,
-/// validates answers, and allows reviewing related slides on incorrect answers.
-/// </summary>
+// Quiz controller that displays questions, validates answers, and allows slide review
 public class QuizController : MonoBehaviour
 {
     [Header("UI References")]
@@ -69,9 +66,7 @@ public class QuizController : MonoBehaviour
         HideActionButtons();
     }
 
-    /// <summary>
-    /// Initialize the quiz with data from a TextAsset JSON file.
-    /// </summary>
+    // Initialize the quiz with data from a TextAsset JSON file
     public void Initialize(TextAsset quizJsonAsset, NodeData nodeData, int nodeIndex)
     {
         if (quizJsonAsset == null)
@@ -343,9 +338,7 @@ public class QuizController : MonoBehaviour
             reviewSlideButton.gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// Reset the quiz to the first question (for when re-entering quiz mode).
-    /// </summary>
+    // Reset the quiz to the first question (for when re-entering quiz mode)
     public void ResetQuiz()
     {
         currentQuestionIndex = 0;

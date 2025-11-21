@@ -1,8 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Handles car sprite visuals and upgrades.
-/// </summary>
+// Handles car sprite visuals and upgrades
 public class CarVisual : MonoBehaviour
 {
     [Header("Renderers")]
@@ -25,9 +23,7 @@ public class CarVisual : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Applies upgrade sprites to the car. Pass null to keep current sprite.
-    /// </summary>
+    // Applies upgrade sprites to the car (pass null to keep current sprite)
     public void ApplyUpgrade(Sprite newFrame, Sprite newTire)
     {
         if (newFrame) frameRenderer.sprite = newFrame;
@@ -39,17 +35,13 @@ public class CarVisual : MonoBehaviour
         // Optional: add pop/fade effect for polish
     }
 
-    /// <summary>
-    /// Get the current frame sprite for before/after comparison.
-    /// </summary>
+    // Get the current frame sprite for before/after comparison
     public Sprite GetCurrentFrameSprite()
     {
         return frameRenderer != null ? frameRenderer.sprite : null;
     }
 
-    /// <summary>
-    /// Get the current tire sprite for before/after comparison.
-    /// </summary>
+    // Get the current tire sprite for before/after comparison
     public Sprite GetCurrentTireSprite()
     {
         return tireFrontRenderer != null ? tireFrontRenderer.sprite : null;

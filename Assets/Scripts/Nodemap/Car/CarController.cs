@@ -7,10 +7,7 @@ using Nodemap.Controllers;
 
 namespace Nodemap.Car
 {
-    /// <summary>
-    /// Unified car movement system. Combines responsibilities of CarController and CarPathFollower
-    /// into a single, focused class. Handles both movement and visual updates.
-    /// </summary>
+    // Unified car movement system handling both movement and visual updates
     public class CarController : MonoBehaviour
     {
         [Header("Configuration")]
@@ -53,9 +50,7 @@ namespace Nodemap.Car
 
         #region Public API
 
-        /// <summary>
-        /// Moves car to specified node. Returns false if movement is not possible.
-        /// </summary>
+        // Moves car to specified node (returns false if movement is not possible)
         public bool MoveToNode(NodeId nodeId, NodeManager nodeManager)
         {
             if (isMoving || nodeManager == null)
@@ -66,14 +61,10 @@ namespace Nodemap.Car
             return true;
         }
 
-        /// <summary>
-        /// Gets current node position of the car.
-        /// </summary>
+        // Gets current node position of the car
         public NodeId GetCurrentNode() => currentNodeId;
 
-        /// <summary>
-        /// Check if the car is currently moving between nodes.
-        /// </summary>
+        // Check if the car is currently moving between nodes
         public bool IsMoving => isMoving;
 
         #endregion

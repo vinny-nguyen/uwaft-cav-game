@@ -17,9 +17,7 @@ namespace Nodemap.Controllers
         public Sprite defaultBackgroundSprite; // Assign your default background sprite
         public Sprite completedBackgroundSprite; // Assign your green completed background sprite
 
-        /// <summary>
-        /// Sets the background sprite based on completion state.
-        /// </summary>
+        // Sets the background sprite based on completion state
         private void SetBackground(bool isCompleted)
         {
             if (popupBackground != null)
@@ -79,9 +77,7 @@ namespace Nodemap.Controllers
         private float GetSlideTransitionDuration() => GetConfigValue(c => c.slideTransitionDuration, 0.2f);
         private string GetNodeSpriteFolder() => GetConfigValue(c => c.nodeSpriteFolder, "Sprites/Nodes");
 
-        /// <summary>
-        /// Internal method to set header and create slides from slide objects.
-        /// </summary>
+        // Internal method to set header and create slides from slide objects
         private void SetupHeaderAndSlides(string header, List<GameObject> slideObjects, List<string> keys)
         {
             // Set header
@@ -111,10 +107,7 @@ namespace Nodemap.Controllers
             UpdateIndicators();
         }
 
-        /// <summary>
-        /// Opens the popup with the specified node data and completion state.
-        /// This is the main public entry point for opening popups.
-        /// </summary>
+        // Opens the popup with the specified node data and completion state
         public void Open(NodeData node, bool isCompleted)
         {
             if (!popupPanel || node == null) return;
@@ -159,17 +152,13 @@ namespace Nodemap.Controllers
             Show();
         }
 
-        /// <summary>
-        /// Shows the popup panel.
-        /// </summary>
+        // Shows the popup panel
         private void Show()
         {
             popupPanel.SetActive(true);
         }
 
-        /// <summary>
-        /// Hides the popup panel. Public for close button functionality.
-        /// </summary>
+        // Hides the popup panel (public for close button functionality)
         public void Hide()
         {
             // Clean up quiz mode if active
@@ -282,9 +271,7 @@ namespace Nodemap.Controllers
             }
         }
 
-        /// <summary>
-        /// Jump to a specific slide by index.
-        /// </summary>
+        // Jump to a specific slide by index
         private void JumpToSlide(int index)
         {
             if (index < 0 || index >= slides.Count) return;
@@ -294,9 +281,7 @@ namespace Nodemap.Controllers
             UpdateIndicators();
         }
 
-        /// <summary>
-        /// Check if the current slide contains a minigame and lock navigation accordingly.
-        /// </summary>
+        // Check if the current slide contains a minigame and lock navigation accordingly
         private void CheckMinigameOnCurrentSlide()
         {
             _isMinigameSlide = false;
@@ -343,18 +328,14 @@ namespace Nodemap.Controllers
             UpdateNavigationButtons();
         }
 
-        /// <summary>
-        /// Called when a minigame is completed.
-        /// </summary>
+        // Called when a minigame is completed
         private void OnMinigameCompleted()
         {
             _minigameCompleted = true;
             UpdateNavigationButtons();
         }
 
-        /// <summary>
-        /// Update navigation button states based on minigame completion.
-        /// </summary>
+        // Update navigation button states based on minigame completion
         private void UpdateNavigationButtons()
         {
             if (_isMinigameSlide && !_minigameCompleted)
@@ -373,9 +354,7 @@ namespace Nodemap.Controllers
 
         #region Quiz Mode
 
-        /// <summary>
-        /// Enter quiz mode - hide slide navigation and show quiz UI.
-        /// </summary>
+        // Enter quiz mode - hide slide navigation and show quiz UI
         public void EnterQuizMode()
         {
             if (isQuizMode || currentNodeData == null)
@@ -436,9 +415,7 @@ namespace Nodemap.Controllers
             isQuizMode = true;
         }
 
-        /// <summary>
-        /// Exit quiz mode - restore slide navigation and destroy quiz UI.
-        /// </summary>
+        // Exit quiz mode - restore slide navigation and destroy quiz UI
         public void ExitQuizMode()
         {
             if (!isQuizMode) return;

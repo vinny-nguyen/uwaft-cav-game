@@ -1,20 +1,12 @@
 using UnityEngine;
 using Nodemap.Controllers;
 
-/// <summary>
-/// Centralized service locator for the nodemap system.
-/// Provides fast, single-point access to commonly-needed services
-/// instead of repeatedly searching the scene with FindFirstObjectByType.
-/// 
-/// Usage: GameServices.Instance.MapController.CompleteNode(0);
-/// </summary>
+// Centralized service locator providing fast access to nodemap services
 public class GameServices : MonoBehaviour
 {
     private static GameServices _instance;
     
-    /// <summary>
-    /// Singleton instance accessible from anywhere.
-    /// </summary>
+    // Singleton instance accessible from anywhere
     public static GameServices Instance
     {
         get

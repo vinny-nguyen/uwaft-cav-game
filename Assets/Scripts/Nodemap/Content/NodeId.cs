@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// Type-safe node identifier that prevents mixing node indices with other integers.
-/// </summary>
+// Type-safe node identifier that prevents mixing node indices with other integers
 [System.Serializable]
 public struct NodeId : IEquatable<NodeId>
 {

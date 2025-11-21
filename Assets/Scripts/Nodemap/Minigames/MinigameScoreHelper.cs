@@ -1,27 +1,17 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Utility class to handle minigame score reporting and uploading.
-/// Eliminates code duplication across all minigame controllers.
-/// </summary>
+// Utility class to handle minigame score reporting and uploading
 public static class MinigameScoreHelper
 {
-    /// <summary>
-    /// Reports the minigame score to ScoreManager and uploads the total score.
-    /// </summary>
-    /// <param name="levelId">The level identifier (e.g., "Mini1", "Mini2")</param>
-    /// <param name="miniGameId">The minigame identifier (e.g., "DragDrop", "MemoryMatch")</param>
-    /// <param name="score">The score to report</param>
+    // Reports the minigame score to ScoreManager and uploads the total score
     public static void ReportAndUpload(string levelId, string miniGameId, int score)
     {
         ReportScore(levelId, miniGameId, score);
         UploadTotalScore();
     }
 
-    /// <summary>
-    /// Reports the minigame score to ScoreManager.
-    /// </summary>
+    // Reports the minigame score to ScoreManager
     private static void ReportScore(string levelId, string miniGameId, int score)
     {
         try
@@ -43,10 +33,7 @@ public static class MinigameScoreHelper
         }
     }
 
-    /// <summary>
-    /// Uploads the total score using TotalScoreUploader.
-    /// Fire-and-forget async operation.
-    /// </summary>
+    // Uploads the total score using TotalScoreUploader (fire-and-forget async)
     private static void UploadTotalScore()
     {
         try
@@ -67,9 +54,7 @@ public static class MinigameScoreHelper
         }
     }
 
-    /// <summary>
-    /// Async upload helper method.
-    /// </summary>
+    // Async upload helper method
     private static async Task UploadAsync(TotalScoreUploader uploader)
     {
         try

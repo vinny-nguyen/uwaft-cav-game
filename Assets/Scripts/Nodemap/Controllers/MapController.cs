@@ -5,10 +5,7 @@ using Nodemap.UI;
 
 namespace Nodemap.Controllers
 {
-    /// <summary>
-    /// Drop-in replacement for MapController that uses improved architecture
-    /// but maintains compatibility with existing prefab setup.
-    /// </summary>
+    // Drop-in replacement for MapController with improved architecture while maintaining compatibility
     public class MapController : MonoBehaviour
     {
         [Header("Configuration")]
@@ -190,58 +187,44 @@ namespace Nodemap.Controllers
 
         #region Public API (for external systems)
 
-        /// <summary>
-        /// Called by quiz/minigame systems when a node is completed
-        /// </summary>
+        // Called by quiz/minigame systems when a node is completed
         public void CompleteNode(int nodeIndex)
         {
             var nodeId = new NodeId(nodeIndex);
             mapState?.TryCompleteNode(nodeId);
         }
 
-        /// <summary>
-        /// Reset all progression
-        /// </summary>
+        // Reset all progression
         public void ResetProgression()
         {
             mapState?.ResetProgression();
         }
 
-        /// <summary>
-        /// Get current active node index (for backward compatibility)
-        /// </summary>
+        // Get current active node index (for backward compatibility)
         public int GetCurrentActiveNodeIndex()
         {
             return mapState?.ActiveNodeId.Value ?? 0;
         }
 
-        /// <summary>
-        /// Check if node is unlocked (for backward compatibility)
-        /// </summary>
+        // Check if node is unlocked (for backward compatibility)
         public bool IsUnlocked(int nodeIndex)
         {
             return mapState?.IsNodeUnlocked(new NodeId(nodeIndex)) ?? false;
         }
 
-        /// <summary>
-        /// Check if node is completed (for backward compatibility)
-        /// </summary>
+        // Check if node is completed (for backward compatibility)
         public bool IsCompleted(int nodeIndex)
         {
             return mapState?.IsNodeCompleted(new NodeId(nodeIndex)) ?? false;
         }
 
-        /// <summary>
-        /// Get the current node where the car is located
-        /// </summary>
+        // Get the current node where the car is located
         public int GetCurrentCarNodeIndex()
         {
             return mapState?.CurrentCarNodeId.Value ?? 0;
         }
 
-        /// <summary>
-        /// Check if the car is currently at a completed node that has a driving scene
-        /// </summary>
+        // Check if the car is currently at a completed node that has a driving scene
         public bool IsCarAtCompletedNodeWithDriving()
         {
             if (mapState == null || nodeManager == null) return false;
@@ -261,9 +244,7 @@ namespace Nodemap.Controllers
             return nodeData != null && !string.IsNullOrEmpty(nodeData.drivingSceneName);
         }
 
-        /// <summary>
-        /// Get the driving scene name for the current car node
-        /// </summary>
+        // Get the driving scene name for the current car node
         public string GetCurrentNodeDrivingScene()
         {
             if (nodeManager == null || mapState == null) return null;
@@ -273,9 +254,7 @@ namespace Nodemap.Controllers
             return nodeData?.drivingSceneName;
         }
 
-        /// <summary>
-        /// Subscribe to state changes (for UI elements that need to react)
-        /// </summary>
+        // Subscribe to state changes (for UI elements that need to react)
         public void SubscribeToStateChanges(System.Action callback)
         {
             if (mapState != null)
@@ -284,9 +263,7 @@ namespace Nodemap.Controllers
             }
         }
 
-        /// <summary>
-        /// Unsubscribe from state changes
-        /// </summary>
+        // Unsubscribe from state changes
         public void UnsubscribeFromStateChanges(System.Action callback)
         {
             if (mapState != null)
@@ -324,10 +301,7 @@ namespace Nodemap.Controllers
             nodeManager.UpdateNodeVisual(nodeId, state, isCarHere);
         }
 
-        /// <summary>
-        /// Applies all upgrades from completed nodes to the car.
-        /// Called on game load to restore the car's visual state.
-        /// </summary>
+        // Applies all upgrades from completed nodes to the car on game load
         private void ApplyAccumulatedUpgrades()
         {
             if (nodeManager == null || mapState == null)

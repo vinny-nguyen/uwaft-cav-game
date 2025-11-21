@@ -7,10 +7,7 @@ using Nodemap.UI;
 
 namespace Nodemap.Controllers
 {
-    /// <summary>
-    /// Simplified NodeManager that works with existing NodeView.
-    /// Uses NodeId consistently but keeps compatibility with current code.
-    /// </summary>
+    // Simplified NodeManager working with NodeView and maintaining compatibility
     public class NodeManager : MonoBehaviour
     {
         [Header("Configuration")]

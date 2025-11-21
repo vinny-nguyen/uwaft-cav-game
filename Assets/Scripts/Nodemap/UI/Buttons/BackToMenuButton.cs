@@ -4,10 +4,7 @@ using UnityEngine.UI;
 
 namespace Nodemap.UI
 {
-    /// <summary>
-    /// Simple back button that returns to the main menu.
-    /// Attach this to a UI Button in the NodeMap scene.
-    /// </summary>
+    // Simple back button that returns to the main menu
     [RequireComponent(typeof(Button))]
     public class BackToMenuButton : MonoBehaviour
     {

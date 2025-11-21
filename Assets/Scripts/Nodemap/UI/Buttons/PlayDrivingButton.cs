@@ -5,11 +5,7 @@ using Nodemap.Controllers;
 
 namespace Nodemap.UI
 {
-    /// <summary>
-    /// Button that launches the driving experience for the current node.
-    /// Only visible when the car is at a completed node that has a driving scene assigned.
-    /// Attach this to a UI Button on the NodesCanvas.
-    /// </summary>
+    // Button that launches the driving experience for completed nodes with driving scenes
     [RequireComponent(typeof(Button))]
     public class PlayDrivingButton : MonoBehaviour
     {

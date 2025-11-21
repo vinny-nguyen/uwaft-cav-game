@@ -5,10 +5,7 @@ using Nodemap.Controllers;
 
 namespace Nodemap
 {
-    /// <summary>
-    /// Script for the final slide that transitions to the quiz.
-    /// This slide displays a congratulatory message and a "Take Quiz" button.
-    /// </summary>
+    // Final slide that displays a message and "Take Quiz" button to transition to quiz mode
     public class QuizIntroSlide : SlideBase
 {
     [Header("UI References")]

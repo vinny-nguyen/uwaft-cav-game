@@ -1,17 +1,10 @@
 using UnityEngine;
 using Nodemap;
 
-/// <summary>
-/// Handles quiz completion events and connects them to the map controller
-/// to complete nodes and unlock progression.
-/// Attach this to the MapController GameObject.
-/// </summary>
+// Handles quiz completion events and connects them to the map controller for node progression
 public class QuizCompletionHandler : MonoBehaviour
 {
-    /// <summary>
-    /// Called when a quiz is completed successfully.
-    /// This method should be wired to QuizController.OnQuizCompleted event.
-    /// </summary>
+    // Called when a quiz is completed successfully (wired to QuizController.OnQuizCompleted)
     public void OnQuizCompleted(int nodeIndex)
     {
         var mapController = GameServices.Instance?.MapController;
