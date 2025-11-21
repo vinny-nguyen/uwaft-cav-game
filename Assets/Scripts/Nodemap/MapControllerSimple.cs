@@ -333,7 +333,7 @@ namespace Nodemap
             if (nodeManager == null || mapState == null)
                 return;
 
-            var carVisual = FindFirstObjectByType<CarVisual>();
+            var carVisual = GameServices.Instance?.CarVisual;
             if (carVisual == null)
             {
                 Debug.LogWarning("[MapControllerSimple] CarVisual not found - cannot apply upgrades");

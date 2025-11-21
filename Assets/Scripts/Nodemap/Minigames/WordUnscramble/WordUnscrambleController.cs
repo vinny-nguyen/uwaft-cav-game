@@ -299,13 +299,13 @@ public class WordUnscrambleController : MonoBehaviour
 
         try
         {
-            if (global::ScoreManager.Instance != null)
+            if (GameServices.Instance?.ScoreManager != null)
             {
-                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, score);
+                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, score);
             }
             else
             {
-                Debug.LogWarning("[WordUnscramble] ScoreManager.Instance is null. Skipping score report.");
+                Debug.LogWarning("[WordUnscramble] ScoreManager not found in GameServices. Skipping score report.");
             }
         }
         catch (Exception ex)
@@ -315,14 +315,14 @@ public class WordUnscrambleController : MonoBehaviour
 
         try
         {
-            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
+            var uploader = GameServices.Instance?.ScoreUploader;
             if (uploader != null)
             {
                 _ = RunUploadAsync(uploader);
             }
             else
             {
-                Debug.LogWarning("[WordUnscramble] TotalScoreUploader not found. Skipping upload.");
+                Debug.LogWarning("[WordUnscramble] TotalScoreUploader not found in GameServices. Skipping upload.");
             }
         }
         catch (Exception ex)

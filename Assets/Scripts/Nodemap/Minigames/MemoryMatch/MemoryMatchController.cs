@@ -237,14 +237,14 @@ public class MemoryMatchController : MonoBehaviour
 
         try
         {
-            if (global::ScoreManager.Instance != null)
+            if (GameServices.Instance?.ScoreManager != null)
             {
-                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, finalScore);
-                Debug.Log($"[MemoryMatch] Reported score. LevelTotal={ScoreManager.Instance.GetLevelTotal(levelId)}, OverallTotal={ScoreManager.Instance.GetOverallTotal()}");
+                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, finalScore);
+                Debug.Log($"[MemoryMatch] Reported score. LevelTotal={GameServices.Instance.ScoreManager.GetLevelTotal(levelId)}, OverallTotal={GameServices.Instance.ScoreManager.GetOverallTotal()}");
             }
             else
             {
-                Debug.LogWarning("ScoreManager.Instance is null. Skipping mini-game score report.");
+                Debug.LogWarning("ScoreManager not found in GameServices. Skipping mini-game score report.");
             }
         }
         catch (System.Exception ex)
@@ -254,12 +254,12 @@ public class MemoryMatchController : MonoBehaviour
 
         try
         {
-            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
+            var uploader = GameServices.Instance?.ScoreUploader;
             Debug.Log($"[MemoryMatch] TotalScoreUploader found={uploader != null}");
             if (uploader != null)
                 _ = RunUploadAsync(uploader);
             else
-                Debug.LogWarning("TotalScoreUploader not found in scene. Skipping total upload.");
+                Debug.LogWarning("TotalScoreUploader not found in GameServices. Skipping total upload.");
         }
         catch (System.Exception ex)
         {
@@ -293,14 +293,14 @@ public class MemoryMatchController : MonoBehaviour
 
         try
         {
-            if (ScoreManager.Instance != null)
+            if (GameServices.Instance?.ScoreManager != null)
             {
-                ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, currentScore);
+                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, currentScore);
                 Debug.Log($"[MemoryMatch] UpdateScoreAndUpload reported currentScore={currentScore}");
             }
             else
             {
-                Debug.LogWarning("[MemoryMatch] ScoreManager.Instance is null. Skipping score report.");
+                Debug.LogWarning("[MemoryMatch] ScoreManager not found in GameServices. Skipping score report.");
             }
         }
         catch (Exception ex)
@@ -310,7 +310,7 @@ public class MemoryMatchController : MonoBehaviour
 
         try
         {
-            var uploader = UnityEngine.Object.FindFirstObjectByType<TotalScoreUploader>();
+            var uploader = GameServices.Instance?.ScoreUploader;
             Debug.Log($"[MemoryMatch] UpdateScoreAndUpload uploader found={uploader != null}");
             if (uploader != null)
             {
@@ -318,7 +318,7 @@ public class MemoryMatchController : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("[MemoryMatch] TotalScoreUploader not found. Skipping upload.");
+                Debug.LogWarning("[MemoryMatch] TotalScoreUploader not found in GameServices. Skipping upload.");
             }
         }
         catch (Exception ex)

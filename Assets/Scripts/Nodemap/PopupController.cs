@@ -416,14 +416,14 @@ public class PopupController : MonoBehaviour
             quizController.Initialize(currentNodeData.quizJson, currentNodeData, currentNodeData.id);
             
             // Auto-wire completion event to QuizCompletionHandler
-            var completionHandler = FindFirstObjectByType<QuizCompletionHandler>();
+            var completionHandler = GameServices.Instance?.QuizCompletionHandler;
             if (completionHandler != null)
             {
                 quizController.OnQuizCompleted.AddListener(completionHandler.OnQuizCompleted);
             }
             else
             {
-                Debug.LogWarning("[PopupController] QuizCompletionHandler not found! Quiz completion won't trigger node completion.");
+                Debug.LogWarning("[PopupController] QuizCompletionHandler not found in GameServices! Quiz completion won't trigger node completion.");
             }
         }
         else

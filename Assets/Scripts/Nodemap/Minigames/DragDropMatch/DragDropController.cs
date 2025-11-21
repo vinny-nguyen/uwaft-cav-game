@@ -153,13 +153,13 @@ public class DragDropController : MonoBehaviour
         try
         {
             // reference the type explicitly to avoid name resolution issues
-            if (global::ScoreManager.Instance != null)
+            if (GameServices.Instance?.ScoreManager != null)
             {
-                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, finalScore);
+                GameServices.Instance.ScoreManager.ReportMiniGameScore(levelId, miniGameId, finalScore);
             }
             else
             {
-                Debug.LogWarning("ScoreManager.Instance is null. Skipping mini-game score report.");
+                Debug.LogWarning("ScoreManager not found in GameServices. Skipping mini-game score report.");
             }
         }
         catch (System.Exception ex)
@@ -170,14 +170,14 @@ public class DragDropController : MonoBehaviour
         // Fire-and-forget upload of total score
         try
         {
-            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
+            var uploader = GameServices.Instance?.ScoreUploader;
             if (uploader != null)
             {
                 _ = RunUploadAsync(uploader);
             }
             else
             {
-                Debug.LogWarning("TotalScoreUploader not found in scene. Skipping total upload.");
+                Debug.LogWarning("TotalScoreUploader not found in GameServices. Skipping total upload.");
             }
         }
         catch (System.Exception ex)

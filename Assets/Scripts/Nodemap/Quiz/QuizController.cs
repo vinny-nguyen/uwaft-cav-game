@@ -47,7 +47,11 @@ public class QuizController : MonoBehaviour
 
     private void Awake()
     {
-        popupController = FindFirstObjectByType<PopupController>();
+        popupController = GameServices.Instance?.PopupController;
+        if (popupController == null)
+        {
+            Debug.LogWarning("[QuizController] PopupController not found in GameServices!");
+        }
 
         if (nextQuestionButton != null)
             nextQuestionButton.onClick.AddListener(OnNextQuestionClicked);
@@ -267,7 +271,7 @@ public class QuizController : MonoBehaviour
         }
 
         // Get current sprites from the car to show "before"
-        var carVisual = FindFirstObjectByType<CarVisual>();
+        var carVisual = GameServices.Instance?.CarVisual;
 
         // Display frame upgrade
         if (hasFrameUpgrade)

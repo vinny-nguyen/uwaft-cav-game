@@ -27,7 +27,7 @@ namespace Nodemap
             button.onClick.AddListener(OnPlayDrivingClicked);
             
             if (mapController == null)
-                mapController = FindFirstObjectByType<MapControllerSimple>();
+                mapController = GameServices.Instance?.MapController;
                 
             if (buttonObject == null)
                 buttonObject = gameObject;

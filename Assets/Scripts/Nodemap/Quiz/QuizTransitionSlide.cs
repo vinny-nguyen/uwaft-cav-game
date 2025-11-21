@@ -14,8 +14,12 @@ public class QuizTransitionSlide : SlideBase
 
     private void Awake()
     {
-        // Find the PopupController in the scene
-        popupController = FindFirstObjectByType<PopupController>();
+        // Get PopupController from GameServices
+        popupController = GameServices.Instance?.PopupController;
+        if (popupController == null)
+        {
+            Debug.LogWarning("[QuizTransitionSlide] PopupController not found in GameServices!");
+        }
 
         if (takeQuizButton != null)
         {
