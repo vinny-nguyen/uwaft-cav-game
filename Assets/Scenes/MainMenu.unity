@@ -2723,7 +2723,7 @@ MonoBehaviour:
   loadingSceneName: Loading Screen
   gameSceneName: UpdatedNodemap
   leaderSceneName: LeaderBoard2.0
-  tutorialSceneName: GameStart
+  tutorialSceneName: TutorialScene
 --- !u!1 &1459641785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2987,7 +2987,7 @@ MonoBehaviour:
   loadingSceneName: Loading Screen
   gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard2.0
-  tutorialSceneName: GameStart
+  tutorialSceneName: TutorialScene
 --- !u!114 &1551496387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3003,7 +3003,7 @@ MonoBehaviour:
   loadingSceneName: Loading Screen
   gameSceneName: NodeMapFullHD
   leaderSceneName: LeaderBoard2.0
-  tutorialSceneName: GameStart
+  tutorialSceneName: TutorialScene
 --- !u!1 &1717356926
 GameObject:
   m_ObjectHideFlags: 0
