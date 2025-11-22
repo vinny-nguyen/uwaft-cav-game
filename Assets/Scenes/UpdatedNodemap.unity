@@ -809,7 +809,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -200, y: 100}
-  m_SizeDelta: {x: 325, y: 125}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &590557831
 MonoBehaviour:
@@ -868,15 +868,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.8431373, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -9033793090227403889, guid: 9c6d10a185fe58d45b47c5dd57f788cc, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1177,8 +1177,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 5}
-  m_SizeDelta: {x: -50, y: -30}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &989069714
 MonoBehaviour:
@@ -1209,8 +1209,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4282457088
+  m_fontColor: {r: 0, g: 0.10980393, b: 0.25490198, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1228,9 +1228,9 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontSize: 36
-  m_fontSizeBase: 28
+  m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 14
   m_fontSizeMax: 36
   m_fontStyle: 1
@@ -2822,23 +2822,41 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: -9.78
-        y: -0.88
+        x: -10.964
+        y: -0.598
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.091241404
+        z: -0.11427379
       TangentOut:
         x: 0
         y: 0
-        z: 0.091241404
+        z: 0.11427379
       Rotation:
         value:
-          x: 0.4570561
+          x: 0.43970197
+          y: -0.5537709
+          z: 0.55377084
+          w: -0.43970197
+    - Position:
+        x: -9.851
+        y: -0.857
+        z: 0
+      TangentIn:
+        x: 0.000000074505806
+        y: 0.000000014901161
+        z: -0.21669832
+      TangentOut:
+        x: -0.000000014901161
+        y: -0.000000007450581
+        z: 0.21669832
+      Rotation:
+        value:
+          x: 0.45705605
           y: -0.53953665
-          z: 0.53953665
-          w: -0.45705605
+          z: 0.5395367
+          w: -0.45705593
     - Position:
         x: -8.88
         y: -1.03
@@ -3458,19 +3476,39 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -0.1321968
+        z: -0.46603733
       TangentOut:
         x: 0
         y: 0
-        z: 0.1321968
+        z: 0.52399725
       Rotation:
         value:
-          x: -0.4523418
-          y: 0.54349506
-          z: -0.54349506
-          w: 0.45234185
+          x: 0.079311386
+          y: 0.70264477
+          z: -0.079311386
+          w: 0.70264477
+    - Position:
+        x: 10.182
+        y: 0.989
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.1671235
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.1671235
+      Rotation:
+        value:
+          x: 0.09413232
+          y: 0.70081323
+          z: -0.09413232
+          w: 0.70081323
     m_MetaData:
     - Mode: 0
+      Tension: 0.5
+    - Mode: 4
       Tension: 0.5
     - Mode: 1
       Tension: 0.5
@@ -3493,6 +3531,8 @@ MonoBehaviour:
     - Mode: 0
       Tension: 0.5
     - Mode: 4
+      Tension: 0.5
+    - Mode: 0
       Tension: 0.5
     - Mode: 0
       Tension: 0.5
