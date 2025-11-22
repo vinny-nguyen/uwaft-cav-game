@@ -11,20 +11,9 @@ namespace Nodemap.Controllers
         // MapConfig accessed via singleton - no need to assign
         private MapConfig mapConfig;
 
-        [Header("Popup Background References")]
-        public GameObject popupPanel;
-        public Image popupBackground; // Assign the Image component for the popup background
-        public Sprite defaultBackgroundSprite; // Assign your default background sprite
-        public Sprite completedBackgroundSprite; // Assign your green completed background sprite
-
-        // Sets the background sprite based on completion state
-        private void SetBackground(bool isCompleted)
-        {
-            if (popupBackground != null)
-                popupBackground.sprite = isCompleted ? completedBackgroundSprite : defaultBackgroundSprite;
-        }
-
         [Header("Popup UI References")]
+        public GameObject popupPanel;
+        public GameObject backgroundOverlay;
         public Button nextSlideButton;
         public Button previousSlideButton;
         public Button closeButton;
@@ -34,8 +23,8 @@ namespace Nodemap.Controllers
         [Header("Indicators")]
         [SerializeField] private Transform slideIndicators;
         [SerializeField] private GameObject indicatorPrefab;
-        [SerializeField] private Sprite activeIndicatorSprite;
-        [SerializeField] private Sprite inactiveIndicatorSprite;
+        [SerializeField] private SpriteRenderer activeIndicatorSprite;
+        [SerializeField] private SpriteRenderer inactiveIndicatorSprite;
 
         [Header("Quiz References")]
         [SerializeField] private GameObject quizPrefab;
@@ -115,9 +104,6 @@ namespace Nodemap.Controllers
             // Store node data for quiz mode
             currentNodeData = node;
 
-            // Set background based on completion state
-            SetBackground(isCompleted);
-
             // Set header text
             string headerText = string.IsNullOrEmpty(node.title) ? "Lesson" : node.title;
 
@@ -155,6 +141,8 @@ namespace Nodemap.Controllers
         // Shows the popup panel
         private void Show()
         {
+            if (backgroundOverlay != null)
+                backgroundOverlay.SetActive(true);
             popupPanel.SetActive(true);
         }
 
@@ -168,6 +156,8 @@ namespace Nodemap.Controllers
             }
 
             popupPanel.SetActive(false);
+            if (backgroundOverlay != null)
+                backgroundOverlay.SetActive(false);
         }
 
         public void NextSlide()
@@ -254,18 +244,22 @@ namespace Nodemap.Controllers
             for (int i = 0; i < slides.Count; i++)
             {
                 var dot = Instantiate(indicatorPrefab, slideIndicators);
-                var img = dot.GetComponent<Image>();
-                if (img)
-                    img.sprite = (i == currentSlideIndex) ? activeIndicatorSprite : inactiveIndicatorSprite;
+                var spriteRenderer = dot.GetComponent<SpriteRenderer>();
+                if (spriteRenderer)
+                {
+                    var sourceSprite = (i == currentSlideIndex) ? activeIndicatorSprite : inactiveIndicatorSprite;
+                    if (sourceSprite != null && sourceSprite.sprite != null)
+                        spriteRenderer.sprite = sourceSprite.sprite;
+                }
 
-                // Make indicator clickable to jump to that slide
+                // Button already exists on prefab, just wire up the click event
                 var button = dot.GetComponent<Button>();
-                if (button == null)
-                    button = dot.AddComponent<Button>();
-
-                int slideIndex = i; // Capture for lambda
-                button.onClick.RemoveAllListeners();
-                button.onClick.AddListener(() => JumpToSlide(slideIndex));
+                if (button != null)
+                {
+                    int slideIndex = i; // Capture for lambda
+                    button.onClick.RemoveAllListeners();
+                    button.onClick.AddListener(() => JumpToSlide(slideIndex));
+                }
 
                 indicatorObjects.Add(dot);
             }

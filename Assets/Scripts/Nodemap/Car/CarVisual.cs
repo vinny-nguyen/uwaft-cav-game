@@ -9,30 +9,29 @@ public class CarVisual : MonoBehaviour
     [SerializeField] private SpriteRenderer tireRearRenderer;
 
     [Header("Default Art (optional)")]
-    [SerializeField] private Sprite defaultFrame;
-    [SerializeField] private Sprite defaultTire;
+    [SerializeField] private SpriteRenderer defaultFrame;
+    [SerializeField] private SpriteRenderer defaultTire;
 
     private void Awake()
     {
         // Set defaults on load
-        if (defaultFrame) frameRenderer.sprite = defaultFrame;
+        if (defaultFrame) frameRenderer.sprite = defaultFrame.sprite;
         if (defaultTire)
         {
-            tireFrontRenderer.sprite = defaultTire;
-            tireRearRenderer.sprite = defaultTire;
+            tireFrontRenderer.sprite = defaultTire.sprite;
+            tireRearRenderer.sprite = defaultTire.sprite;
         }
     }
 
     // Applies upgrade sprites to the car (pass null to keep current sprite)
-    public void ApplyUpgrade(Sprite newFrame, Sprite newTire)
+    public void ApplyUpgrade(SpriteRenderer newFrame, SpriteRenderer newTire)
     {
-        if (newFrame) frameRenderer.sprite = newFrame;
-        if (newTire)
+        if (newFrame && newFrame.sprite) frameRenderer.sprite = newFrame.sprite;
+        if (newTire && newTire.sprite)
         {
-            tireFrontRenderer.sprite = newTire;
-            tireRearRenderer.sprite = newTire;
+            tireFrontRenderer.sprite = newTire.sprite;
+            tireRearRenderer.sprite = newTire.sprite;
         }
-        // Optional: add pop/fade effect for polish
     }
 
     // Get the current frame sprite for before/after comparison

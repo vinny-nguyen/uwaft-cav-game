@@ -279,7 +279,7 @@ public class QuizController : MonoBehaviour
             }
             if (afterFrameImage != null)
             {
-                afterFrameImage.sprite = currentNodeData.upgradeFrame;
+                afterFrameImage.sprite = currentNodeData.upgradeFrame?.sprite;
                 afterFrameImage.gameObject.SetActive(true);
             }
         }
@@ -299,7 +299,7 @@ public class QuizController : MonoBehaviour
             }
             if (afterTireImage != null)
             {
-                afterTireImage.sprite = currentNodeData.upgradeTire;
+                afterTireImage.sprite = currentNodeData.upgradeTire?.sprite;
                 afterTireImage.gameObject.SetActive(true);
             }
         }

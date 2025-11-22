@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TiresSlide18
       objectReference: {fileID: 0}
+    - target: {fileID: 8449745505017075273, guid: 10a8c8f900a115345be5142560175b72, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6121319688065457729, guid: 10a8c8f900a115345be5142560175b72, type: 3}

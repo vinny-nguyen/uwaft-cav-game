@@ -398,7 +398,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 551d39c66a358ed4387661aaba3e73f4, type: 3}
     - target: {fileID: 5786661652796473427, guid: 10a8c8f900a115345be5142560175b72, type: 3}
       propertyPath: m_Name
-      value: TiresSlide16
+      value: DragDrop
+      objectReference: {fileID: 0}
+    - target: {fileID: 8449745505017075273, guid: 10a8c8f900a115345be5142560175b72, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8449745505017075273, guid: 10a8c8f900a115345be5142560175b72, type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
