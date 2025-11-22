@@ -1,26 +1,39 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Nodemap.UI.Menus;
 
 namespace Nodemap.UI
 {
-    // Simple back button that returns to the main menu
+    /// <summary>
+    /// Hamburger menu button that opens a popup menu with multiple navigation options
+    /// </summary>
     [RequireComponent(typeof(Button))]
-    public class BackToMenuButton : MonoBehaviour
+    public class HamburgerMenuButton : MonoBehaviour
     {
-        [SerializeField] private string mainMenuSceneName = "MainMenu";
+        [SerializeField] private HamburgerMenuController menuController;
         
         private void Start()
         {
-            GetComponent<Button>().onClick.AddListener(OnBackClicked);
+            GetComponent<Button>().onClick.AddListener(OnButtonClicked);
+            
+            // Try to find menu controller if not assigned
+            if (menuController == null)
+            {
+                menuController = FindFirstObjectByType<HamburgerMenuController>();
+                
+                if (menuController == null)
+                {
+                    Debug.LogError("[HamburgerMenuButton] No HamburgerMenuController found in scene! Please assign one.");
+                }
+            }
         }
         
-        private void OnBackClicked()
+        private void OnButtonClicked()
         {
-            // Optional: Save current progress before going back
-            // PlayerPrefs.Save();
-            
-            SceneManager.LoadScene(mainMenuSceneName);
+            if (menuController != null)
+            {
+                menuController.ToggleMenu();
+            }
         }
     }
 }
