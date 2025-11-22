@@ -14,7 +14,7 @@ public class QuizController : MonoBehaviour
     [SerializeField] private TMP_Text feedbackText;
     [SerializeField] private Transform optionsContainer;
     [SerializeField] private Button optionButtonPrefab;
-    [SerializeField] private Button nextQuestionButton;
+    
     [SerializeField] private Button reviewSlideButton;
     [SerializeField] private GameObject completionPanel;
     [SerializeField] private TMP_Text completionText;
@@ -51,8 +51,7 @@ public class QuizController : MonoBehaviour
             Debug.LogWarning("[QuizController] PopupController not found in GameServices!");
         }
 
-        if (nextQuestionButton != null)
-            nextQuestionButton.onClick.AddListener(OnNextQuestionClicked);
+            // Next button intentionally not wired: quiz auto-advances on correct answers
 
         if (reviewSlideButton != null)
             reviewSlideButton.onClick.AddListener(OnReviewSlideClicked);
@@ -157,12 +156,8 @@ public class QuizController : MonoBehaviour
         {
             // Correct answer
             SetFeedback("Correct!", correctColor);
-
-            if (nextQuestionButton != null)
-            {
-                nextQuestionButton.gameObject.SetActive(true);
-                nextQuestionButton.interactable = true;
-            }
+            // Auto-advance after a short pause so the player sees the feedback
+            StartCoroutine(AdvanceAfterCorrect());
         }
         else
         {
@@ -177,8 +172,10 @@ public class QuizController : MonoBehaviour
         }
     }
 
-    private void OnNextQuestionClicked()
+    private System.Collections.IEnumerator AdvanceAfterCorrect()
     {
+        yield return new WaitForSeconds(2f);
+        // Advance using the existing display method
         currentQuestionIndex++;
         DisplayCurrentQuestion();
     }
@@ -331,9 +328,6 @@ public class QuizController : MonoBehaviour
 
     private void HideActionButtons()
     {
-        if (nextQuestionButton != null)
-            nextQuestionButton.gameObject.SetActive(false);
-
         if (reviewSlideButton != null)
             reviewSlideButton.gameObject.SetActive(false);
     }
@@ -355,9 +349,6 @@ public class QuizController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (nextQuestionButton != null)
-            nextQuestionButton.onClick.RemoveListener(OnNextQuestionClicked);
-
         if (reviewSlideButton != null)
             reviewSlideButton.onClick.RemoveListener(OnReviewSlideClicked);
 

@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: TiresSlides
   m_EditorClassIdentifier: 
   slides:
-  - key: TransitionSlide
-    slidePrefab: {fileID: 5786661652796473427, guid: 1fb6d9f2b371a3f46a147f36609ffe03, type: 3}
   - key: TiresSlide1
     slidePrefab: {fileID: 7824264209871244033, guid: cbf3339bc379ddb40b90012c0fa61e2d, type: 3}
   - key: TiresSlide2
@@ -46,8 +44,10 @@ MonoBehaviour:
   - key: TiresSlide15
     slidePrefab: {fileID: 927695200696148694, guid: f8f68a88529ae2748aa8ff872e8003e6, type: 3}
   - key: TiresSlide16
-    slidePrefab: {fileID: 8928204831618388235, guid: caa15ce5fe830f642a2b05af7bceb77a, type: 3}
+    slidePrefab: {fileID: 670431174155483712, guid: 601df750a321d944eb13862b10bf8ba9, type: 3}
   - key: TiresSlide17
-    slidePrefab: {fileID: 8928204831618388235, guid: 5f5db11e7d2e6f34692d43681fe75cff, type: 3}
+    slidePrefab: {fileID: 1626506018006977724, guid: e425b932153c50e4d831e51f1e3af8fb, type: 3}
   - key: TiresSlide18
-    slidePrefab: {fileID: 8928204831618388235, guid: d7ec6a04b0911834fbd590e37334ef23, type: 3}
+    slidePrefab: {fileID: 9173542327605835278, guid: 441804002c9f4fc46b30bf17954c477e, type: 3}
+  - key: TransitionSlide
+    slidePrefab: {fileID: 5786661652796473427, guid: 1fb6d9f2b371a3f46a147f36609ffe03, type: 3}
