@@ -125,6 +125,12 @@ namespace Nodemap.Controllers
                 // Manually refresh visuals without triggering movement
                 RefreshAllVisuals();
             }
+
+            // Show tutorial when car arrives at a node (if not already completed)
+            if (MapTutorialManager.Instance != null)
+            {
+                MapTutorialManager.Instance.StartTutorial();
+            }
         }
 
         private void OnMapStateChanged()
