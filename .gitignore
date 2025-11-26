@@ -17,7 +17,6 @@ Assets/Scripts/March 8 2025*
 Assets/Scripts/CarConfiguration.cs
 Assets/Scripts/GameUIManager.cs
 Assets/Scripts/LevelConfiguration.cs
-Assets/Scripts/LevelManager.cs
 Assets/Scripts/ProgressionManager.cs
 
 # =============== #
