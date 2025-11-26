@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Collections;
 using Unity.Services.Leaderboards;
 using Unity.Services.Leaderboards.Models;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
+using TMPro;
 
 public class LeaderDist : MonoBehaviour
 {
@@ -21,6 +24,10 @@ public class LeaderDist : MonoBehaviour
     [SerializeField] private float _totalDistance;
     [SerializeField] private float _distanceUpdateInterval = 5f;
     private float _nextUpdateThreshold;
+
+    private float _maxSpeed = 0f;
+    public float MaxSpeed => _maxSpeed;
+    public float TotalDistance => _totalDistance;
 
     [Header("Leaderboard")]
     [SerializeField] private string _leaderboardId = "UWAFT_CAV_Game";
@@ -50,6 +57,14 @@ public class LeaderDist : MonoBehaviour
         if (!_Can_Control || !_isInitialized) return;
 
         _Move_Input = Input.GetAxisRaw("Horizontal");
+
+        // Track max speed
+        float currentSpeed = _CarRB.linearVelocity.magnitude * 3.6f; // m/s to km/h
+        if (currentSpeed > _maxSpeed)
+        {
+            _maxSpeed = currentSpeed;
+        }
+
         TrackDistance();
     }
 
