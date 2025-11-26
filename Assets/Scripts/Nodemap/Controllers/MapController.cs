@@ -126,8 +126,8 @@ namespace Nodemap.Controllers
                 RefreshAllVisuals();
             }
 
-            // Show tutorial when car arrives at a node (if not already completed)
-            if (MapTutorialManager.Instance != null)
+            // Show tutorial when car arrives at a node, but only if not already completed
+            if (MapTutorialManager.Instance != null && PlayerPrefs.GetInt("HasSeenTutorial", 0) != 1)
             {
                 MapTutorialManager.Instance.StartTutorial();
             }

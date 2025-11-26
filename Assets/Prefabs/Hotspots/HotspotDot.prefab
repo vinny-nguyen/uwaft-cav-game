@@ -134,11 +134,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123d0b16b1047074ab782936a61b4135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Thread
-  body: "The outermost layer of the tire that makes direct contact with the road.\u200B\r\n"
+  title: 
+  body: '
+
+'
   icon: {fileID: 0}
-  offset: {x: 18, y: 18}
-  rect: {fileID: 1616870696709788879}
+  offset: {x: 0, y: 0}
+  rect: {fileID: 0}
+  pulseEnabled: 1
+  pulseScale: 1.3
+  pulseSpeed: 7
 --- !u!212 &5181565699327141543
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -185,7 +190,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1111924565
   m_SortingLayer: 4
-  m_SortingOrder: 5
+  m_SortingOrder: 1
   m_Sprite: {fileID: 3286163911610860551, guid: 1c0b4d2e6ec7e8948b4a19d33c1b4a8e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

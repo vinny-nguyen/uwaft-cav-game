@@ -29,7 +29,7 @@ public class WordUnscrambleController : MonoBehaviour
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Button skipButton;
     [SerializeField] private Button hintButton;
-    [SerializeField] private GameObject winBanner; // panel shown on completion
+    [SerializeField] private ParticleSystem confettiFX;
 
     [Header("Config")]
     [SerializeField] private List<Entry> entries = new();
@@ -64,11 +64,11 @@ public class WordUnscrambleController : MonoBehaviour
         if (skipButton) skipButton.onClick.AddListener(HandleSkip);
         if (hintButton) hintButton.onClick.AddListener(HandleHint);
 
-        if (winBanner) winBanner.SetActive(false);
+        if (confettiFX != null) confettiFX.gameObject.SetActive(false);
         SetFeedback("");
 
         _solvedCount = 0;
-        
+
         PrepareOrder();
         LoadNextRound();
     }
@@ -97,7 +97,11 @@ public class WordUnscrambleController : MonoBehaviour
         if (_currentIndex >= _order.Count || entries.Count == 0)
         {
             // Done!
-            if (winBanner) winBanner.SetActive(true);
+            if (confettiFX != null)
+            {
+                confettiFX.gameObject.SetActive(true);
+                confettiFX.Play();
+            }
             OnCompleted?.Invoke();
             return;
         }
@@ -154,7 +158,7 @@ public class WordUnscrambleController : MonoBehaviour
         var e = entries[_order[_currentIndex]];
 
         string user = answerInput.text ?? "";
-        string ans  = e.answer ?? "";
+        string ans = e.answer ?? "";
 
         bool correct = AnswersMatch(user, ans);
 
@@ -187,7 +191,7 @@ public class WordUnscrambleController : MonoBehaviour
         LoadNextRound();
     }
 
-    
+
 
     private void HandleHint()
     {
@@ -195,7 +199,7 @@ public class WordUnscrambleController : MonoBehaviour
         if (_currentIndex < 0 || _currentIndex >= _order.Count) return;
 
         var e = entries[_order[_currentIndex]];
-        
+
         // Show next hint if available
         if (_currentHintIndex < e.hints.Length && _currentHintIndex < 3)
         {
@@ -214,7 +218,7 @@ public class WordUnscrambleController : MonoBehaviour
         }
 
         var e = entries[_order[_currentIndex]];
-        
+
         // Show only the current hint (not accumulated)
         string hintDisplay = "";
         if (_currentHintIndex > 0 && _currentHintIndex <= e.hints.Length && _currentHintIndex <= 3)
@@ -243,8 +247,8 @@ public class WordUnscrambleController : MonoBehaviour
         // Disable hint button if all 3 hints shown or no more hints available
         if (hintButton)
         {
-            bool hasMoreHints = _currentHintIndex < 3 && 
-                                _currentHintIndex < e.hints.Length && 
+            bool hasMoreHints = _currentHintIndex < 3 &&
+                                _currentHintIndex < e.hints.Length &&
                                 !string.IsNullOrWhiteSpace(e.hints[_currentHintIndex]);
             hintButton.interactable = hasMoreHints && !_roundSolved;
         }
@@ -285,7 +289,7 @@ public class WordUnscrambleController : MonoBehaviour
     {
         _currentIndex = -1;
         _solvedCount = 0;
-        if (winBanner) winBanner.SetActive(false);
+        if (confettiFX != null) confettiFX.gameObject.SetActive(false);
         PrepareOrder();
         LoadNextRound();
     }
@@ -312,7 +316,7 @@ public class WordUnscrambleController : MonoBehaviour
         // nextButton removed from UI; no cleanup needed
         if (hintButton != null)
             hintButton.onClick.RemoveListener(HandleHint);
-        
+
         // Clean up event listeners
         OnCompleted?.RemoveAllListeners();
     }

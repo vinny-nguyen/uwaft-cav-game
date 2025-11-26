@@ -31,7 +31,7 @@ public class MemoryMatchController : MonoBehaviour
     [SerializeField] private RectTransform gridRoot;
     [SerializeField] private TMP_Text movesText;
     [SerializeField] private TMP_Text progressText;
-    [SerializeField] private GameObject winBanner;
+    [SerializeField] private ParticleSystem confettiFX;
 
     [Header("Prefabs")]
     [SerializeField] private MemoryCard cardPrefab;
@@ -68,7 +68,7 @@ public class MemoryMatchController : MonoBehaviour
 
     void Awake()
     {
-        if (winBanner) winBanner.SetActive(false);
+        if (confettiFX) confettiFX.gameObject.SetActive(false);
         BuildBoard();
         UpdateHUD();
     }
@@ -162,7 +162,11 @@ public class MemoryMatchController : MonoBehaviour
 
                 if (_matches >= pairsToUse)
                 {
-                    if (winBanner) winBanner.SetActive(true);
+                    if (confettiFX != null)
+                    {
+                        confettiFX.gameObject.SetActive(true);
+                        confettiFX.Play();
+                    }
                     OnCompleted?.Invoke();
                     // Final wrap-up
                     EndGame();
@@ -219,7 +223,7 @@ public class MemoryMatchController : MonoBehaviour
     // Public API (optional)
     public void ResetGame()
     {
-        if (winBanner) winBanner.SetActive(false);
+        if (confettiFX != null) confettiFX.gameObject.SetActive(false);
         BuildBoard();
         UpdateHUD();
     }

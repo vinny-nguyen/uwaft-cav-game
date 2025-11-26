@@ -878,6 +878,7 @@ MonoBehaviour:
     highlightObject: {fileID: 1064942734}
   panelGroup: {fileID: 1898332200}
   messageText: {fileID: 27943254}
+  backgroundOverlay: {fileID: 524933523}
   prevArrow: {fileID: 1482316540}
   nextArrow: {fileID: 392021747}
   completeButton: {fileID: 77619836}
@@ -1460,7 +1461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &524933522
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5701,7 +5702,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6351617318852302439, guid: 75e0a6b653406d34e927e71a2e01a4ce, type: 3}
+  m_Sprite: {fileID: -6351617318852302439, guid: 23f82983a9ea7a64082c7d84683367b8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
