@@ -3,11 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Nodemap.Controllers;
 
-/// <summary>
-/// Controller for the quiz system. Displays questions one at a time,
-/// validates answers, and allows reviewing related slides on incorrect answers.
-/// </summary>
+// Quiz controller that displays questions, validates answers, and allows slide review
 public class QuizController : MonoBehaviour
 {
     [Header("UI References")]
@@ -16,7 +14,7 @@ public class QuizController : MonoBehaviour
     [SerializeField] private TMP_Text feedbackText;
     [SerializeField] private Transform optionsContainer;
     [SerializeField] private Button optionButtonPrefab;
-    [SerializeField] private Button nextQuestionButton;
+    
     [SerializeField] private Button reviewSlideButton;
     [SerializeField] private GameObject completionPanel;
     [SerializeField] private TMP_Text completionText;
@@ -47,10 +45,13 @@ public class QuizController : MonoBehaviour
 
     private void Awake()
     {
-        popupController = FindFirstObjectByType<PopupController>();
+        popupController = GameServices.Instance?.PopupController;
+        if (popupController == null)
+        {
+            Debug.LogWarning("[QuizController] PopupController not found in GameServices!");
+        }
 
-        if (nextQuestionButton != null)
-            nextQuestionButton.onClick.AddListener(OnNextQuestionClicked);
+            // Next button intentionally not wired: quiz auto-advances on correct answers
 
         if (reviewSlideButton != null)
             reviewSlideButton.onClick.AddListener(OnReviewSlideClicked);
@@ -64,9 +65,7 @@ public class QuizController : MonoBehaviour
         HideActionButtons();
     }
 
-    /// <summary>
-    /// Initialize the quiz with data from a TextAsset JSON file.
-    /// </summary>
+    // Initialize the quiz with data from a TextAsset JSON file
     public void Initialize(TextAsset quizJsonAsset, NodeData nodeData, int nodeIndex)
     {
         if (quizJsonAsset == null)
@@ -157,12 +156,8 @@ public class QuizController : MonoBehaviour
         {
             // Correct answer
             SetFeedback("Correct!", correctColor);
-
-            if (nextQuestionButton != null)
-            {
-                nextQuestionButton.gameObject.SetActive(true);
-                nextQuestionButton.interactable = true;
-            }
+            // Auto-advance after a short pause so the player sees the feedback
+            StartCoroutine(AdvanceAfterCorrect());
         }
         else
         {
@@ -177,8 +172,10 @@ public class QuizController : MonoBehaviour
         }
     }
 
-    private void OnNextQuestionClicked()
+    private System.Collections.IEnumerator AdvanceAfterCorrect()
     {
+        yield return new WaitForSeconds(2f);
+        // Advance using the existing display method
         currentQuestionIndex++;
         DisplayCurrentQuestion();
     }
@@ -267,7 +264,7 @@ public class QuizController : MonoBehaviour
         }
 
         // Get current sprites from the car to show "before"
-        var carVisual = FindFirstObjectByType<CarVisual>();
+        var carVisual = GameServices.Instance?.CarVisual;
 
         // Display frame upgrade
         if (hasFrameUpgrade)
@@ -279,7 +276,7 @@ public class QuizController : MonoBehaviour
             }
             if (afterFrameImage != null)
             {
-                afterFrameImage.sprite = currentNodeData.upgradeFrame;
+                afterFrameImage.sprite = currentNodeData.upgradeFrame?.sprite;
                 afterFrameImage.gameObject.SetActive(true);
             }
         }
@@ -299,7 +296,7 @@ public class QuizController : MonoBehaviour
             }
             if (afterTireImage != null)
             {
-                afterTireImage.sprite = currentNodeData.upgradeTire;
+                afterTireImage.sprite = currentNodeData.upgradeTire?.sprite;
                 afterTireImage.gameObject.SetActive(true);
             }
         }
@@ -331,16 +328,11 @@ public class QuizController : MonoBehaviour
 
     private void HideActionButtons()
     {
-        if (nextQuestionButton != null)
-            nextQuestionButton.gameObject.SetActive(false);
-
         if (reviewSlideButton != null)
             reviewSlideButton.gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// Reset the quiz to the first question (for when re-entering quiz mode).
-    /// </summary>
+    // Reset the quiz to the first question (for when re-entering quiz mode)
     public void ResetQuiz()
     {
         currentQuestionIndex = 0;
@@ -357,9 +349,6 @@ public class QuizController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (nextQuestionButton != null)
-            nextQuestionButton.onClick.RemoveListener(OnNextQuestionClicked);
-
         if (reviewSlideButton != null)
             reviewSlideButton.onClick.RemoveListener(OnReviewSlideClicked);
 

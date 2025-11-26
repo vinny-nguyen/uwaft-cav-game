@@ -2,18 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Data structure for quiz questions loaded from JSON.
-/// </summary>
+// Data structure for quiz questions loaded from JSON
 [Serializable]
 public class QuizData
 {
     public List<QuizQuestion> questions = new();
 }
 
-/// <summary>
-/// Represents a single multiple-choice quiz question.
-/// </summary>
+// Represents a single multiple-choice quiz question
 [Serializable]
 public class QuizQuestion
 {

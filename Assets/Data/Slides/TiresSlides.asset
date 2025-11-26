@@ -14,40 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slides:
   - key: TiresSlide1
-    slidePrefab: {fileID: 7753260813759224794, guid: cbf3339bc379ddb40b90012c0fa61e2d, type: 3}
+    slidePrefab: {fileID: 7824264209871244033, guid: cbf3339bc379ddb40b90012c0fa61e2d, type: 3}
   - key: TiresSlide2
-    slidePrefab: {fileID: 7753260813759224794, guid: ebca48b9764c2db4086126745c878270, type: 3}
+    slidePrefab: {fileID: 3781525142315591893, guid: ebca48b9764c2db4086126745c878270, type: 3}
   - key: TiresSlide3
-    slidePrefab: {fileID: 8928204831618388235, guid: 79764e6ff193f1b40b60b5183c226687, type: 3}
+    slidePrefab: {fileID: 3430334724034616053, guid: 79764e6ff193f1b40b60b5183c226687, type: 3}
   - key: TiresSlide4
-    slidePrefab: {fileID: 2504787704703891544, guid: ea1b18cd79eceb746bea54917e9fd9e2, type: 3}
+    slidePrefab: {fileID: 7482028861339324013, guid: ea1b18cd79eceb746bea54917e9fd9e2, type: 3}
   - key: TiresSlide5
-    slidePrefab: {fileID: 7753260813759224794, guid: 150897b8826f76644b6d30f4db842b7c, type: 3}
+    slidePrefab: {fileID: 1789593707945853067, guid: 150897b8826f76644b6d30f4db842b7c, type: 3}
   - key: TiresSlide6
-    slidePrefab: {fileID: 7753260813759224794, guid: a05998a4212dd8344b1686a6c0aa1e60, type: 3}
+    slidePrefab: {fileID: 1600414704004270537, guid: a05998a4212dd8344b1686a6c0aa1e60, type: 3}
   - key: TiresSlide16
-    slidePrefab: {fileID: 8928204831618388235, guid: caa15ce5fe830f642a2b05af7bceb77a, type: 3}
+    slidePrefab: {fileID: 670431174155483712, guid: 601df750a321d944eb13862b10bf8ba9, type: 3}
   - key: TiresSlide7
-    slidePrefab: {fileID: 8928204831618388235, guid: c84ecfebadeedbe4699e539bace5267a, type: 3}
+    slidePrefab: {fileID: 4351644930473712797, guid: c84ecfebadeedbe4699e539bace5267a, type: 3}
   - key: TiresSlide8
-    slidePrefab: {fileID: 2504787704703891544, guid: 56f615efacaef604299554a0154bdf1f, type: 3}
+    slidePrefab: {fileID: 4359297543926945228, guid: 56f615efacaef604299554a0154bdf1f, type: 3}
   - key: TiresSlide9
-    slidePrefab: {fileID: 7753260813759224794, guid: b78adb11a0684bd489c7782ce5ee8d5e, type: 3}
+    slidePrefab: {fileID: 5935459455790328184, guid: b78adb11a0684bd489c7782ce5ee8d5e, type: 3}
   - key: TiresSlide10
-    slidePrefab: {fileID: 7753260813759224794, guid: c1d3256b5afee5b40b7169b64509c010, type: 3}
-  - key: TiresSlide17
-    slidePrefab: {fileID: 8928204831618388235, guid: 5f5db11e7d2e6f34692d43681fe75cff, type: 3}
-  - key: TiresSlide11
-    slidePrefab: {fileID: 8928204831618388235, guid: 5de58a9c4ae147e45810d29739a20299, type: 3}
-  - key: TiresSlide12
-    slidePrefab: {fileID: 2504787704703891544, guid: c4285352472c4a946b197660fb7f1b90, type: 3}
-  - key: TiresSlide13
-    slidePrefab: {fileID: 7753260813759224794, guid: 72480649afd6fa540805b0c267e5582a, type: 3}
-  - key: TiresSlide14
-    slidePrefab: {fileID: 7753260813759224794, guid: 4f96d5d6e34c6cc4eb963aedb03f1316, type: 3}
+    slidePrefab: {fileID: 6689125359806336623, guid: c1d3256b5afee5b40b7169b64509c010, type: 3}
   - key: TiresSlide18
-    slidePrefab: {fileID: 8928204831618388235, guid: d7ec6a04b0911834fbd590e37334ef23, type: 3}
+    slidePrefab: {fileID: 9173542327605835278, guid: 441804002c9f4fc46b30bf17954c477e, type: 3}
+  - key: TiresSlide11
+    slidePrefab: {fileID: 3596552291286680923, guid: 5de58a9c4ae147e45810d29739a20299, type: 3}
+  - key: TiresSlide12
+    slidePrefab: {fileID: 2249256020732238129, guid: c4285352472c4a946b197660fb7f1b90, type: 3}
+  - key: TiresSlide13
+    slidePrefab: {fileID: 3392058191134419145, guid: 72480649afd6fa540805b0c267e5582a, type: 3}
+  - key: TiresSlide17
+    slidePrefab: {fileID: 1626506018006977724, guid: e425b932153c50e4d831e51f1e3af8fb, type: 3}
+  - key: TiresSlide14
+    slidePrefab: {fileID: 5705042792214202, guid: 4f96d5d6e34c6cc4eb963aedb03f1316, type: 3}
   - key: TiresSlide15
-    slidePrefab: {fileID: 8928204831618388235, guid: f8f68a88529ae2748aa8ff872e8003e6, type: 3}
-  - key: QuizTransition
+    slidePrefab: {fileID: 927695200696148694, guid: f8f68a88529ae2748aa8ff872e8003e6, type: 3}
+  - key: TransitionSlide
     slidePrefab: {fileID: 5786661652796473427, guid: 1fb6d9f2b371a3f46a147f36609ffe03, type: 3}

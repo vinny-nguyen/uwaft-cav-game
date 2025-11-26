@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// ScriptableObject that centralizes all tunables for the map system.
-/// Includes speeds, durations, easing parameters, and asset folders.
-/// </summary>
+// ScriptableObject that centralizes all tunables for the map system
 [CreateAssetMenu(fileName = "MapConfig", menuName = "Game/MapConfig")]
 public class MapConfig : ScriptableObject
 {
@@ -43,10 +40,7 @@ public class MapConfig : ScriptableObject
     [Tooltip("Wheel spin speed (degrees per second)")]
     public float wheelSpinSpeed = 360f;
 
-    /// <summary>
-    /// Returns a singleton instance of MapConfig. 
-    /// If no instance exists, creates one with default values.
-    /// </summary>
+    // Returns a singleton instance of MapConfig (creates one with defaults if not found)
     private static MapConfig _instance;
     public static MapConfig Instance
     {
@@ -65,9 +59,7 @@ public class MapConfig : ScriptableObject
         }
     }
 
-    /// <summary>
-    /// Validates configuration values on load to ensure they're within reasonable ranges.
-    /// </summary>
+    // Validates configuration values on load to ensure they're within reasonable ranges
     private void OnValidate()
     {
         // Ensure positive values for durations and speeds

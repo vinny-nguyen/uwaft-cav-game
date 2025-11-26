@@ -1,8 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Handles car sprite visuals and upgrades.
-/// </summary>
+// Handles car sprite visuals and upgrades
 public class CarVisual : MonoBehaviour
 {
     [Header("Renderers")]
@@ -11,45 +9,38 @@ public class CarVisual : MonoBehaviour
     [SerializeField] private SpriteRenderer tireRearRenderer;
 
     [Header("Default Art (optional)")]
-    [SerializeField] private Sprite defaultFrame;
-    [SerializeField] private Sprite defaultTire;
+    [SerializeField] private SpriteRenderer defaultFrame;
+    [SerializeField] private SpriteRenderer defaultTire;
 
     private void Awake()
     {
         // Set defaults on load
-        if (defaultFrame) frameRenderer.sprite = defaultFrame;
+        if (defaultFrame) frameRenderer.sprite = defaultFrame.sprite;
         if (defaultTire)
         {
-            tireFrontRenderer.sprite = defaultTire;
-            tireRearRenderer.sprite = defaultTire;
+            tireFrontRenderer.sprite = defaultTire.sprite;
+            tireRearRenderer.sprite = defaultTire.sprite;
         }
     }
 
-    /// <summary>
-    /// Applies upgrade sprites to the car. Pass null to keep current sprite.
-    /// </summary>
-    public void ApplyUpgrade(Sprite newFrame, Sprite newTire)
+    // Applies upgrade sprites to the car (pass null to keep current sprite)
+    public void ApplyUpgrade(SpriteRenderer newFrame, SpriteRenderer newTire)
     {
-        if (newFrame) frameRenderer.sprite = newFrame;
-        if (newTire)
+        if (newFrame && newFrame.sprite) frameRenderer.sprite = newFrame.sprite;
+        if (newTire && newTire.sprite)
         {
-            tireFrontRenderer.sprite = newTire;
-            tireRearRenderer.sprite = newTire;
+            tireFrontRenderer.sprite = newTire.sprite;
+            tireRearRenderer.sprite = newTire.sprite;
         }
-        // Optional: add pop/fade effect for polish
     }
 
-    /// <summary>
-    /// Get the current frame sprite for before/after comparison.
-    /// </summary>
+    // Get the current frame sprite for before/after comparison
     public Sprite GetCurrentFrameSprite()
     {
         return frameRenderer != null ? frameRenderer.sprite : null;
     }
 
-    /// <summary>
-    /// Get the current tire sprite for before/after comparison.
-    /// </summary>
+    // Get the current tire sprite for before/after comparison
     public Sprite GetCurrentTireSprite()
     {
         return tireFrontRenderer != null ? tireFrontRenderer.sprite : null;

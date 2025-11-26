@@ -1,41 +1,16 @@
 using UnityEngine;
 using Nodemap;
 
-/// <summary>
-/// Handles quiz completion events and connects them to the map controller
-/// to complete nodes and unlock progression.
-/// Attach this to the MapController GameObject.
-/// </summary>
+// Handles quiz completion events and connects them to the map controller for node progression
 public class QuizCompletionHandler : MonoBehaviour
 {
-    private MapControllerSimple mapController;
-    private NodeManagerSimple nodeManager;
-
-    private void Awake()
-    {
-        mapController = FindFirstObjectByType<MapControllerSimple>();
-        nodeManager = FindFirstObjectByType<NodeManagerSimple>();
-        
-        if (mapController == null)
-        {
-            Debug.LogError("[QuizCompletionHandler] MapControllerSimple not found in scene!");
-        }
-
-        if (nodeManager == null)
-        {
-            Debug.LogError("[QuizCompletionHandler] NodeManagerSimple not found in scene!");
-        }
-    }
-
-    /// <summary>
-    /// Called when a quiz is completed successfully.
-    /// This method should be wired to QuizController.OnQuizCompleted event.
-    /// </summary>
+    // Called when a quiz is completed successfully (wired to QuizController.OnQuizCompleted)
     public void OnQuizCompleted(int nodeIndex)
     {
+        var mapController = GameServices.Instance?.MapController;
         if (mapController == null)
         {
-            Debug.LogError("[QuizCompletionHandler] Cannot complete node - MapController is null!");
+            Debug.LogError("[QuizCompletionHandler] Cannot complete node - MapController not found in GameServices!");
             return;
         }
         
@@ -50,9 +25,10 @@ public class QuizCompletionHandler : MonoBehaviour
 
     private void ApplyCarUpgrade(int nodeIndex)
     {
+        var nodeManager = GameServices.Instance?.NodeManager;
         if (nodeManager == null)
         {
-            Debug.LogWarning("[QuizCompletionHandler] Cannot apply upgrade - NodeManager is null!");
+            Debug.LogWarning("[QuizCompletionHandler] Cannot apply upgrade - NodeManager not found in GameServices!");
             return;
         }
 
@@ -65,10 +41,10 @@ public class QuizCompletionHandler : MonoBehaviour
         }
 
         // Find car visual component
-        var carVisual = FindFirstObjectByType<CarVisual>();
+        var carVisual = GameServices.Instance?.CarVisual;
         if (carVisual == null)
         {
-            Debug.LogWarning("[QuizCompletionHandler] CarVisual not found in scene!");
+            Debug.LogWarning("[QuizCompletionHandler] CarVisual not found in GameServices!");
             return;
         }
 
