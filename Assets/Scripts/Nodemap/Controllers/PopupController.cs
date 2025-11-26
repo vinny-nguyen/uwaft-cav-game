@@ -6,8 +6,10 @@ using Nodemap.UI;
 
 namespace Nodemap.Controllers
 {
-    public class PopupController : MonoBehaviour
-    {
+        public class PopupController : MonoBehaviour
+        {
+            // Track completed minigame slides by index
+            private HashSet<int> _completedMinigameSlides = new HashSet<int>();
         // MapConfig accessed via singleton - no need to assign
         private MapConfig mapConfig;
 
@@ -279,7 +281,8 @@ namespace Nodemap.Controllers
         private void CheckMinigameOnCurrentSlide()
         {
             _isMinigameSlide = false;
-            _minigameCompleted = false;
+            // Check if this slide was already completed
+            _minigameCompleted = _completedMinigameSlides.Contains(currentSlideIndex);
 
             if (currentSlideIndex < 0 || currentSlideIndex >= slides.Count)
             {
@@ -326,6 +329,9 @@ namespace Nodemap.Controllers
         private void OnMinigameCompleted()
         {
             _minigameCompleted = true;
+            // Mark this slide as completed
+            if (!_completedMinigameSlides.Contains(currentSlideIndex))
+                _completedMinigameSlides.Add(currentSlideIndex);
             UpdateNavigationButtons();
         }
 
@@ -336,7 +342,6 @@ namespace Nodemap.Controllers
             {
                 // Lock navigation when on a minigame slide that hasn't been completed
                 if (nextSlideButton != null) nextSlideButton.interactable = false;
-                if (previousSlideButton != null) previousSlideButton.interactable = false;
             }
             else
             {
