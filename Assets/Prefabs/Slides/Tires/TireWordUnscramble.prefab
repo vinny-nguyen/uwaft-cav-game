@@ -134,39 +134,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[0].hints.Array.data[0]'
-      value: asdfasdf
+      value: This is how much air is inside the tire.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[0].hints.Array.data[1]'
-      value: asdfzxcv
+      value: If this is too low, the tire can look squished and the car wastes energy.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[0].hints.Array.data[2]'
-      value: qweewr
+      value: You can check this with a gauge to see if the tire needs more air.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[1].hints.Array.data[0]'
-      value: zxcvzxcv
+      value: This is the side part of the tire you see when you look at it from the
+        side.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[1].hints.Array.data[1]'
-      value: asdfasdf
+      value: It helps hold the shape of the tire and flexes when the car moves.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[1].hints.Array.data[2]'
-      value: wertewrt
+      value: Important numbers and letters about the tire are printed on this area.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[2].hints.Array.data[0]'
-      value: asfdasdf
+      value: This is the part of the tire that actually touches the road
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[2].hints.Array.data[1]'
-      value: qwerqwer
+      value: It has patterns and grooves to help the car grip better.
       objectReference: {fileID: 0}
     - target: {fileID: 3108562445092156116, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: 'entries.Array.data[2].hints.Array.data[2]'
-      value: xcvbxcvb
+      value: When this gets worn down and smooth, the tire becomes unsafe.
       objectReference: {fileID: 0}
     - target: {fileID: 3766078244493985916, guid: 64f69e325d422ab44ade4db46103f056, type: 3}
       propertyPath: m_SizeDelta.x

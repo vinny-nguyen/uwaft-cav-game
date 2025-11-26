@@ -523,7 +523,7 @@ MonoBehaviour:
   - label: Home
     sceneName: MainMenu
   - label: Leaderboard
-    sceneName: Leaderboard
+    sceneName: Leaderboard2.0
   fadeInDuration: 0.2
   fadeOutDuration: 0.15
 --- !u!114 &135392813

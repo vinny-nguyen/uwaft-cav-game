@@ -144,12 +144,9 @@ namespace Nodemap.Controllers
             {
                 NodeId targetNode = mapState.ActiveNodeId;
                 NodeId currentCarNode = mapState.CurrentCarNodeId;
-                
-                // Only auto-move if a new node was unlocked and became active
-                if (!currentCarNode.Equals(targetNode) && mapState.IsNodeCompleted(currentCarNode))
-                {
-                    carController.MoveToNode(targetNode, nodeManager);
-                }
+                // NOTE: Automatic movement to the next node on state change was removed.
+                // The car will no longer auto-drive when a node is completed.
+                // If you need programmatic movement, call `carController.MoveToNode(...)` explicitly.
             }
         }
 
