@@ -6082,9 +6082,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
   _TutorialOver: {fileID: 120688064}
-  resultText: {fileID: 142254353}
-  speedText: {fileID: 1998053017}
-  distanceText: {fileID: 1102373264}
+  resultText: {fileID: 0}
+  speedText: {fileID: 0}
+  distanceText: {fileID: 0}
   playerCar: {fileID: 0}
 --- !u!1001 &1764938612
 PrefabInstance:
