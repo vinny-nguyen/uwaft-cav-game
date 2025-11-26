@@ -179,7 +179,7 @@ public class MemoryMatchController : MonoBehaviour
     private System.Collections.IEnumerator FlipBackRoutine()
     {
         _inputLocked = true;
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(3f);
         _first.FlipDown();
         _second.FlipDown();
         _first = _second = null;
@@ -254,7 +254,7 @@ public class MemoryMatchController : MonoBehaviour
 
         try
         {
-            var uploader = UnityEngine.Object.FindFirstObjectByType< global:: TotalScoreUploader>();
+            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
             Debug.Log($"[MemoryMatch] TotalScoreUploader found={uploader != null}");
             if (uploader != null)
                 _ = RunUploadAsync(uploader);
