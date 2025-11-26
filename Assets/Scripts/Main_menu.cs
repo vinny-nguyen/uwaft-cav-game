@@ -4,15 +4,14 @@ using UnityEngine.SceneManagement;
 public class Main_menu : MonoBehaviour
 {
     [Header("Scene Names")]
-    [SerializeField] private string loadingSceneName = "LoadingScreen";
     [SerializeField] private string gameSceneName = "UpdatedNodemap";
     [SerializeField] private string leaderSceneName = "LeaderBoard";
     [SerializeField] private string tutorialSceneName = "TutorialScene";
 
     public void PlayGame()
     {
-        PlayerPrefs.SetString("TargetScene", gameSceneName);
-        SceneManager.LoadScene(loadingSceneName);
+        // Directly load the game scene instead of going through a loading screen
+        SceneManager.LoadScene(gameSceneName);
     }
 
     public void OpenTutorial()
@@ -31,6 +30,14 @@ public class Main_menu : MonoBehaviour
     {
         var previous = PlayerPrefs.GetString("PreviousScene", "MainMenu");
         SceneManager.LoadScene(previous);
+    }
+
+    // New: treat Quit as a "log out" that returns player to sign-up UI without
+    // signing out from Unity Authentication (which would create a new anonymous user).
+    // Replace "SignUpScene" with the actual scene name for your sign-up / auth screen.
+    public void Logout()
+    {
+        SceneManager.LoadScene("SignUpPage2.0");
     }
 
     public void QuitGame()

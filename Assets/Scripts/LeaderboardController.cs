@@ -1,29 +1,29 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
-public enum BoardTab { Weekly, Friends, Overall }
+public enum BoardTab { Distance, Friends, Overall }
 
 public class LeaderboardController : MonoBehaviour
 {
     [Header("UGS / Boards")]
-    [SerializeField] private string weeklyBoardId = "UWAFT_CAV_Weekly";
-    [SerializeField] private string friendsBoardId = "UWAFT_CAV_Overall";
-    [SerializeField] private string overallBoardId = "UWAFT_CAV_Overall";
+    [SerializeField] private string distanceBoardId = "UWAFT_CAV_Game";     // driving distance
+    [SerializeField] private string overallBoardId  = "UWAFT_CAV_Overall";  // all game scores
     [SerializeField] private int fetchLimit = 50;
 
     [Header("Tabs")]
-    [SerializeField] private Button weeklyBtn;
+    [SerializeField] private Button distanceBtn;
     [SerializeField] private Button friendsBtn;
     [SerializeField] private Button overallBtn;
-    [SerializeField] private Image weeklyBg;
+    [SerializeField] private Image distanceBg;
     [SerializeField] private Image friendsBg;
     [SerializeField] private Image overallBg;
-    [SerializeField] private TMP_Text weeklyLabel;
+    [SerializeField] private TMP_Text distanceLabel;
     [SerializeField] private TMP_Text friendsLabel;
     [SerializeField] private TMP_Text overallLabel;
     [SerializeField] private Sprite chipActive;
@@ -40,30 +40,33 @@ public class LeaderboardController : MonoBehaviour
     [SerializeField] private TMP_Text thirdScore;
 
     [Header("Scroll List")]
-    [SerializeField] private Transform content;           // List/Viewport/Content
-    [SerializeField] private LeaderboardRow rowPrefab;    // the prefab
-    [SerializeField] private TMP_Text statusText;         // optional "Loading…"
+    [SerializeField] private Transform content;           
+    [SerializeField] private LeaderboardRow rowPrefab;    
+    [SerializeField] private TMP_Text statusText;         
 
     [Header("Friends UI")]
-    [SerializeField] private GameObject friendsOnlyUI;
-
+    [SerializeField] private GameObject friendsOnlyUI;    
 
     private readonly List<GameObject> _spawned = new();
     private ILeaderboardData _data;
     private BoardTab _current = BoardTab.Overall;
     private CancellationTokenSource _cts;
 
+    // cached names from current board (used by FriendsUI to resolve partial names)
+    private List<string> _knownNames = new();
+    public IReadOnlyList<string> KnownNames => _knownNames;
+
     void Awake()
     {
         _data = new UGSLeaderboardData();
-        if (weeklyBtn) weeklyBtn.onClick.AddListener(() => SetTab(BoardTab.Weekly));
-        if (friendsBtn) friendsBtn.onClick.AddListener(() => SetTab(BoardTab.Friends));
-        if (overallBtn) overallBtn.onClick.AddListener(() => SetTab(BoardTab.Overall));
+        if (distanceBtn) distanceBtn.onClick.AddListener(() => SetTab(BoardTab.Distance));
+        if (friendsBtn)  friendsBtn.onClick.AddListener(() => SetTab(BoardTab.Friends));
+        if (overallBtn)  overallBtn.onClick.AddListener(() => SetTab(BoardTab.Overall));
     }
 
     async void OnEnable()
     {
-        _current = BoardTab.Overall; // default
+        _current = BoardTab.Overall;
         ApplyTabVisuals();
         if (friendsOnlyUI)
             friendsOnlyUI.SetActive(_current == BoardTab.Friends);
@@ -72,9 +75,9 @@ public class LeaderboardController : MonoBehaviour
 
     string CurrentBoardId() => _current switch
     {
-        BoardTab.Weekly => weeklyBoardId,
-        BoardTab.Friends => friendsBoardId,
-        _ => overallBoardId
+        BoardTab.Distance => distanceBoardId,
+        BoardTab.Friends  => overallBoardId,   // friends = filtered view of overall
+        _                 => overallBoardId
     };
 
     void SetTab(BoardTab t)
@@ -83,7 +86,6 @@ public class LeaderboardController : MonoBehaviour
         _current = t;
         ApplyTabVisuals();
 
-        // Show only when Friends tab is active
         if (friendsOnlyUI)
             friendsOnlyUI.SetActive(_current == BoardTab.Friends);
 
@@ -92,14 +94,14 @@ public class LeaderboardController : MonoBehaviour
 
     void ApplyTabVisuals()
     {
-        SetChip(weeklyBg, weeklyLabel, _current == BoardTab.Weekly);
-        SetChip(friendsBg, friendsLabel, _current == BoardTab.Friends);
-        SetChip(overallBg, overallLabel, _current == BoardTab.Overall);
+        SetChip(distanceBg, distanceLabel, _current == BoardTab.Distance);
+        SetChip(friendsBg,  friendsLabel,  _current == BoardTab.Friends);
+        SetChip(overallBg,  overallLabel,  _current == BoardTab.Overall);
     }
 
     void SetChip(Image bg, TMP_Text label, bool active)
     {
-        if (bg) bg.sprite = active ? chipActive : chipInactive;
+        if (bg)    bg.sprite = active ? chipActive : chipInactive;
         if (label) label.color = active ? activeLabel : idleLabel;
     }
 
@@ -122,31 +124,65 @@ public class LeaderboardController : MonoBehaviour
                 return;
             }
 
-            // Friends tab: filter to only players in local friends list
+            // cache names for friend resolution
+            _knownNames = list
+                .Select(e => e.Name)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            // FRIENDS TAB
             if (_current == BoardTab.Friends)
             {
-                var friends = LoadFriendsFromPrefs();
-                if (friends == null || friends.Count == 0)
+                var friends = FriendsManager.Instance != null
+                    ? FriendsManager.Instance.GetFriends()
+                    : new List<string>();
+
+                var me = PlayerProfile.Username;  // full Name#1234
+
+                if (!string.IsNullOrWhiteSpace(me) &&
+                    !friends.Any(f => f.Equals(me, StringComparison.OrdinalIgnoreCase)))
+                {
+                    friends.Add(me);
+                }
+
+                if (friends.Count == 0)
                 {
                     SetStatus("No friends added yet.");
                     return;
                 }
 
-                list = list.Where(e => friends.Contains(e.Name)).ToList();
+                var friendSet = new HashSet<string>(friends, StringComparer.OrdinalIgnoreCase);
 
-                if (list.Count == 0)
+                var filtered = list.Where(e =>
+                        !string.IsNullOrWhiteSpace(e.Name) &&
+                        friendSet.Contains(e.Name))
+                    .ToList();
+
+                if (filtered.Count == 0)
                 {
-                    SetStatus("No scores from your friends yet.");
+                    SetStatus("No scores from you or your friends yet.");
                     return;
                 }
+
+                // put your own entry at the top if present
+                var myEntry = filtered.FirstOrDefault(e =>
+                    !string.IsNullOrWhiteSpace(e.Name) &&
+                    e.Name.Equals(me, StringComparison.OrdinalIgnoreCase));
+
+                if (!string.IsNullOrWhiteSpace(myEntry.Name))
+                {
+                    filtered.Remove(myEntry);
+                    filtered.Insert(0, myEntry);
+                }
+
+                list = filtered;
             }
 
             SetStatus("");
 
-            // Podium (top 3)
             BindPodium(list);
 
-            // Rows (from 4th onward)
             for (int i = 3; i < list.Count; i++)
             {
                 var dto = list[i];
@@ -156,42 +192,39 @@ public class LeaderboardController : MonoBehaviour
             }
 
             var sr = GetComponent<ScrollRect>();
-            if (sr) sr.verticalNormalizedPosition = 1f; // top
+            if (sr) sr.verticalNormalizedPosition = 1f;
         }
         catch (TaskCanceledException) { }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError(ex);
             SetStatus("Connection error");
         }
     }
 
-    private List<string> LoadFriendsFromPrefs()
-    {
-        const string key = "FriendsList";
-        if (!PlayerPrefs.HasKey(key)) return new List<string>();
-        var json = PlayerPrefs.GetString(key);
-        if (string.IsNullOrEmpty(json)) return new List<string>();
-
-        try
-        {
-            var wrapper = JsonUtility.FromJson<FriendsSaveDataWrapper>(json);
-            return wrapper?.friends ?? new List<string>();
-        }
-        catch
-        {
-            return new List<string>();
-        }
-    }
-
-    [System.Serializable]
-    private class FriendsSaveDataWrapper { public List<string> friends = new(); }
-
     private static string TrimName(string s, int max = 12)
     {
         if (string.IsNullOrWhiteSpace(s)) return "Anonymous";
-        s = s.Trim();
+
+        // First remove #1234 discriminator
+        s = TrimDiscriminator(s).Trim();
+
+        // Optional truncation for podium places
         return s.Length <= max ? s : s.Substring(0, max - 1) + "…";
+    }
+
+    // Remove the #1234 discriminator from UGS names for display
+    private static string TrimDiscriminator(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return "Player";
+        int idx = s.IndexOf('#');
+        return idx > 0 ? s.Substring(0, idx) : s;
+    }
+
+    // Public helper for other UI (rows) to get a pretty display name without truncation
+    public static string PrettyName(string fullName)
+    {
+        return TrimDiscriminator(fullName).Trim();
     }
 
     void BindPodium(List<ScoreEntryDTO> l)
@@ -225,5 +258,8 @@ public class LeaderboardController : MonoBehaviour
         _spawned.Clear();
     }
 
-    void SetStatus(string s) { if (statusText) statusText.text = s; }
+    void SetStatus(string s)
+    {
+        if (statusText) statusText.text = s;
+    }
 }

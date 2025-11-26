@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,24 +30,33 @@ public class FriendsManager : MonoBehaviour
 
     public List<string> GetFriends()
     {
+        // return a copy so callers can't mutate internal list by accident
         return new List<string>(data.friends);
     }
 
-    public void AddFriend(string name)
+    public void AddFriend(string fullName)
     {
-        if (string.IsNullOrWhiteSpace(name)) return;
-        name = name.Trim();
+        if (string.IsNullOrWhiteSpace(fullName)) return;
+        fullName = fullName.Trim();
 
-        if (!data.friends.Contains(name))
+        // avoid duplicates ignoring case
+        bool exists = data.friends.Exists(f =>
+            f.Equals(fullName, StringComparison.OrdinalIgnoreCase));
+
+        if (!exists)
         {
-            data.friends.Add(name);
+            data.friends.Add(fullName);
             Save();
+            Debug.Log("[FriendsManager] Added friend: " + fullName);
         }
     }
 
-    public void RemoveFriend(string name)
+    public void RemoveFriend(string fullName)
     {
-        if (data.friends.Remove(name))
+        bool removed = data.friends.RemoveAll(f =>
+            f.Equals(fullName, StringComparison.OrdinalIgnoreCase)) > 0;
+
+        if (removed)
             Save();
     }
 
@@ -63,6 +73,7 @@ public class FriendsManager : MonoBehaviour
 
         var json = PlayerPrefs.GetString(PlayerPrefsKey);
         var loaded = JsonUtility.FromJson<FriendsSaveData>(json);
-        if (loaded != null) data = loaded;
+        if (loaded != null && loaded.friends != null)
+            data = loaded;
     }
 }

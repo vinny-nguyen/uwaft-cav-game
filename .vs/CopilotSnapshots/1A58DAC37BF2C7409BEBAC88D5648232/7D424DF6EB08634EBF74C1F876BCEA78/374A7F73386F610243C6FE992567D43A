@@ -1,0 +1,265 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public enum BoardTab { Distance, Friends, Overall }
+
+public class LeaderboardController : MonoBehaviour
+{
+    [Header("UGS / Boards")]
+    [SerializeField] private string distanceBoardId = "UWAFT_CAV_Game";     // driving distance
+    [SerializeField] private string overallBoardId  = "UWAFT_CAV_Overall";  // all game scores
+    [SerializeField] private int fetchLimit = 50;
+
+    [Header("Tabs")]
+    [SerializeField] private Button distanceBtn;
+    [SerializeField] private Button friendsBtn;
+    [SerializeField] private Button overallBtn;
+    [SerializeField] private Image distanceBg;
+    [SerializeField] private Image friendsBg;
+    [SerializeField] private Image overallBg;
+    [SerializeField] private TMP_Text distanceLabel;
+    [SerializeField] private TMP_Text friendsLabel;
+    [SerializeField] private TMP_Text overallLabel;
+    [SerializeField] private Sprite chipActive;
+    [SerializeField] private Sprite chipInactive;
+    [SerializeField] private Color activeLabel = new(1f, 0.93f, 0.55f, 1f);
+    [SerializeField] private Color idleLabel = Color.white;
+
+    [Header("Podium (Top 3)")]
+    [SerializeField] private TMP_Text firstName;
+    [SerializeField] private TMP_Text firstScore;
+    [SerializeField] private TMP_Text secondName;
+    [SerializeField] private TMP_Text secondScore;
+    [SerializeField] private TMP_Text thirdName;
+    [SerializeField] private TMP_Text thirdScore;
+
+    [Header("Scroll List")]
+    [SerializeField] private Transform content;           
+    [SerializeField] private LeaderboardRow rowPrefab;    
+    [SerializeField] private TMP_Text statusText;         
+
+    [Header("Friends UI")]
+    [SerializeField] private GameObject friendsOnlyUI;    
+
+    private readonly List<GameObject> _spawned = new();
+    private ILeaderboardData _data;
+    private BoardTab _current = BoardTab.Overall;
+    private CancellationTokenSource _cts;
+
+    // cached names from current board (used by FriendsUI to resolve partial names)
+    private List<string> _knownNames = new();
+    public IReadOnlyList<string> KnownNames => _knownNames;
+
+    void Awake()
+    {
+        _data = new UGSLeaderboardData();
+        if (distanceBtn) distanceBtn.onClick.AddListener(() => SetTab(BoardTab.Distance));
+        if (friendsBtn)  friendsBtn.onClick.AddListener(() => SetTab(BoardTab.Friends));
+        if (overallBtn)  overallBtn.onClick.AddListener(() => SetTab(BoardTab.Overall));
+    }
+
+    async void OnEnable()
+    {
+        _current = BoardTab.Overall;
+        ApplyTabVisuals();
+        if (friendsOnlyUI)
+            friendsOnlyUI.SetActive(_current == BoardTab.Friends);
+        await RefreshAsync();
+    }
+
+    string CurrentBoardId() => _current switch
+    {
+        BoardTab.Distance => distanceBoardId,
+        BoardTab.Friends  => overallBoardId,   // friends = filtered view of overall
+        _                 => overallBoardId
+    };
+
+    void SetTab(BoardTab t)
+    {
+        if (_current == t) return;
+        _current = t;
+        ApplyTabVisuals();
+
+        if (friendsOnlyUI)
+            friendsOnlyUI.SetActive(_current == BoardTab.Friends);
+
+        _ = RefreshAsync();
+    }
+
+    void ApplyTabVisuals()
+    {
+        SetChip(distanceBg, distanceLabel, _current == BoardTab.Distance);
+        SetChip(friendsBg,  friendsLabel,  _current == BoardTab.Friends);
+        SetChip(overallBg,  overallLabel,  _current == BoardTab.Overall);
+    }
+
+    void SetChip(Image bg, TMP_Text label, bool active)
+    {
+        if (bg)    bg.sprite = active ? chipActive : chipInactive;
+        if (label) label.color = active ? activeLabel : idleLabel;
+    }
+
+    public async Task RefreshAsync()
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        var ct = _cts.Token;
+
+        try
+        {
+            SetStatus("Loading...");
+            ClearList();
+            BindPodium(null);
+
+            var list = await _data.GetTopAsync(CurrentBoardId(), fetchLimit, ct);
+            if (list == null || list.Count == 0)
+            {
+                SetStatus("No scores yet.");
+                return;
+            }
+
+            // cache names for friend resolution
+            _knownNames = list
+                .Select(e => e.Name)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            // FRIENDS TAB
+            if (_current == BoardTab.Friends)
+            {
+                var friends = FriendsManager.Instance != null
+                    ? FriendsManager.Instance.GetFriends()
+                    : new List<string>();
+
+                var me = PlayerProfile.Username;  // full Name#1234
+
+                if (!string.IsNullOrWhiteSpace(me) &&
+                    !friends.Any(f => f.Equals(me, StringComparison.OrdinalIgnoreCase)))
+                {
+                    friends.Add(me);
+                }
+
+                if (friends.Count == 0)
+                {
+                    SetStatus("No friends added yet.");
+                    return;
+                }
+
+                var friendSet = new HashSet<string>(friends, StringComparer.OrdinalIgnoreCase);
+
+                var filtered = list.Where(e =>
+                        !string.IsNullOrWhiteSpace(e.Name) &&
+                        friendSet.Contains(e.Name))
+                    .ToList();
+
+                if (filtered.Count == 0)
+                {
+                    SetStatus("No scores from you or your friends yet.");
+                    return;
+                }
+
+                // put your own entry at the top if present
+                var myEntry = filtered.FirstOrDefault(e =>
+                    !string.IsNullOrWhiteSpace(e.Name) &&
+                    e.Name.Equals(me, StringComparison.OrdinalIgnoreCase));
+
+                if (!string.IsNullOrWhiteSpace(myEntry.Name))
+                {
+                    filtered.Remove(myEntry);
+                    filtered.Insert(0, myEntry);
+                }
+
+                list = filtered;
+            }
+
+            SetStatus("");
+
+            BindPodium(list);
+
+            for (int i = 3; i < list.Count; i++)
+            {
+                var dto = list[i];
+                var row = Instantiate(rowPrefab, content);
+                row.Bind(dto.Rank, dto.Name, Mathf.RoundToInt((float)dto.Score));
+                _spawned.Add(row.gameObject);
+            }
+
+            var sr = GetComponent<ScrollRect>();
+            if (sr) sr.verticalNormalizedPosition = 1f;
+        }
+        catch (TaskCanceledException) { }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+            SetStatus("Connection error");
+        }
+    }
+
+    private static string TrimName(string s, int max = 12)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return "Anonymous";
+
+        // First remove #1234 discriminator
+        s = TrimDiscriminator(s).Trim();
+
+        // Optional truncation for podium places
+        return s.Length <= max ? s : s.Substring(0, max - 1) + "…";
+    }
+
+    // Remove the #1234 discriminator from UGS names for display
+    private static string TrimDiscriminator(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return "Player";
+        int idx = s.IndexOf('#');
+        return idx > 0 ? s.Substring(0, idx) : s;
+    }
+
+    // Public helper for other UI (rows) to get a pretty display name without truncation
+    public static string PrettyName(string fullName)
+    {
+        return TrimDiscriminator(fullName).Trim();
+    }
+
+    void BindPodium(List<ScoreEntryDTO> l)
+    {
+        if (l != null && l.Count > 0)
+        {
+            firstName.text = TrimName(l[0].Name, 12);
+            firstScore.text = Mathf.RoundToInt((float)l[0].Score).ToString("N0");
+        }
+        else { firstName.text = firstScore.text = ""; }
+
+        if (l != null && l.Count > 1)
+        {
+            secondName.text = TrimName(l[1].Name, 12);
+            secondScore.text = Mathf.RoundToInt((float)l[1].Score).ToString("N0");
+        }
+        else { secondName.text = secondScore.text = ""; }
+
+        if (l != null && l.Count > 2)
+        {
+            thirdName.text = TrimName(l[2].Name, 12);
+            thirdScore.text = Mathf.RoundToInt((float)l[2].Score).ToString("N0");
+        }
+        else { thirdName.text = thirdScore.text = ""; }
+    }
+
+    void ClearList()
+    {
+        for (int i = _spawned.Count - 1; i >= 0; i--)
+            Destroy(_spawned[i]);
+        _spawned.Clear();
+    }
+
+    void SetStatus(string s)
+    {
+        if (statusText) statusText.text = s;
+    }
+}

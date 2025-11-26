@@ -9,7 +9,7 @@ public class TotalScoreUploader : MonoBehaviour
 {
     [Header("Leaderboard IDs")]
     [SerializeField] private string overallBoardId = "UWAFT_CAV_Overall";
-    [SerializeField] private string weeklyBoardId = "UWAFT_CAV_Weekly";
+    [SerializeField] private string weeklyBoardId  = "UWAFT_CAV_Weekly";
 
     private async Task EnsureUGSAsync()
     {
@@ -26,12 +26,18 @@ public class TotalScoreUploader : MonoBehaviour
         {
             await EnsureUGSAsync();
 
-            int total = ScoreManager.Instance.GetOverallTotal();
+            int miniGamesTotal = ScoreManager.Instance != null
+                ? ScoreManager.Instance.GetOverallTotal()
+                : 0;
+
+            int distanceBest = PlayerProfile.BestDistance;
+
+            int total = miniGamesTotal + distanceBest;
 
             await LeaderboardsService.Instance.AddPlayerScoreAsync(overallBoardId, total);
             await LeaderboardsService.Instance.AddPlayerScoreAsync(weeklyBoardId, total);
 
-            Debug.Log("Uploaded total score: " + total);
+            Debug.Log($"Uploaded overall score: {total} (minis={miniGamesTotal}, distance={distanceBest})");
         }
         catch (Exception ex)
         {
