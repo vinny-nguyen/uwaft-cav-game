@@ -22,7 +22,7 @@ public class DragDropController : MonoBehaviour
     [SerializeField] private RectTransform targetsRoot;
     [SerializeField] private Image targetTemplate;     // disabled template
     [SerializeField] private RectTransform itemsPanel; // where item chips spawn
-    [SerializeField] private GameObject winBanner;     // set inactive initially
+    [SerializeField] private ParticleSystem confettiFX;
 
     [Header("Pairs")]
     [SerializeField] private List<Pair> pairs = new();
@@ -48,7 +48,8 @@ public class DragDropController : MonoBehaviour
     void Awake()
     {
         _rootCanvas = GetComponentInParent<Canvas>();
-        if (winBanner != null) winBanner.SetActive(false);
+        if (confettiFX != null) confettiFX.Stop();
+        if (confettiFX != null) confettiFX.gameObject.SetActive(false);
 
         // Build DropZones from targets list
         foreach (var p in pairs)
@@ -110,7 +111,7 @@ public class DragDropController : MonoBehaviour
             if (zone != null)
             {
                 Debug.Log($"Found zone: {zone.Key}, Item: {item.Key}, Locked: {zone.IsLocked}, Match: {zone.Key == item.Key}");
-                
+
                 if (zone.Key == item.Key && !zone.IsLocked)
                 {
                     Debug.Log($"✓ Locking {item.Key} to zone!");
@@ -136,7 +137,12 @@ public class DragDropController : MonoBehaviour
         if (_lockedCount >= _zonesByKey.Count && _zonesByKey.Count > 0)
         {
             _ended = true;
-            if (winBanner != null) winBanner.SetActive(true);
+            // New: play confetti
+            if (confettiFX != null)
+            {
+                confettiFX.gameObject.SetActive(true);
+                confettiFX.Play();
+            }
             OnCompleted?.Invoke();
             EndGame();
         }
