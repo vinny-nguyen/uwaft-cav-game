@@ -51,6 +51,7 @@ public class ScoreManager : MonoBehaviour
         int total = 0;
         foreach (var kvp in scores)
             total += GetLevelTotal(kvp.Key);
+            Debug.Log($"[ScoreManager] GetOverallTotal() = {total}");
         return total;
     }
 

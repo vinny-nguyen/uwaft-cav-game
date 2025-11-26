@@ -42,6 +42,7 @@ public static class MinigameScoreHelper
             if (uploader != null)
             {
                 _ = UploadAsync(uploader);
+                Debug.Log("[MinigameScoreHelper] GameServices.ScoreUploader = " + (uploader != null));
             }
             else
             {

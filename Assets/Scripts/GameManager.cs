@@ -25,6 +25,12 @@ public class GameManager : MonoBehaviour {
 
     public void GameOver() {
         Debug.Log("GameOver method called");
+        // NEW: push the final driving score
+        var dist = FindObjectOfType<LeaderDist>();
+        if (dist != null)
+            dist.SubmitFinalDistance();
+        else
+            Debug.LogWarning("[GameManager] No LeaderDist found!");
         StartCoroutine(DelayedGameOver());
     }
 

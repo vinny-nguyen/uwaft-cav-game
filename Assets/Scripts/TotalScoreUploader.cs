@@ -22,6 +22,9 @@ public class TotalScoreUploader : MonoBehaviour
 
     public async Task UploadScoreAsync()
     {
+        Debug.Log("[TotalScoreUploader] UploadScoreAsync() called.");
+        Debug.Log($"[TotalScoreUploader] miniGamesTotal = {ScoreManager.Instance?.GetOverallTotal()}");
+        Debug.Log($"[TotalScoreUploader] BestDistance = {PlayerProfile.BestDistance}");
         try
         {
             await EnsureUGSAsync();
@@ -33,6 +36,8 @@ public class TotalScoreUploader : MonoBehaviour
             int distanceBest = PlayerProfile.BestDistance;
 
             int total = miniGamesTotal + distanceBest;
+
+            Debug.Log($"[TotalScoreUploader] Final computed total = {total}");
 
             await LeaderboardsService.Instance.AddPlayerScoreAsync(overallBoardId, total);
             await LeaderboardsService.Instance.AddPlayerScoreAsync(weeklyBoardId, total);

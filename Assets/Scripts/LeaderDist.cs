@@ -99,15 +99,22 @@ public class LeaderDist : MonoBehaviour
     {
         try
         {
-            // Submit the score
             await LeaderboardsService.Instance.AddPlayerScoreAsync(_leaderboardId, _totalDistance);
             Debug.Log($"Successfully submitted score: {_totalDistance}");
 
-            // Verify by fetching the leaderboard
+            // NEW: update local best distance
+            int roundedDistance = Mathf.RoundToInt(_totalDistance);
+            if (roundedDistance > PlayerProfile.BestDistance)
+            {
+                PlayerProfile.BestDistance = roundedDistance;
+                PlayerProfile.Save();
+                Debug.Log($"[LeaderDist] New best distance stored: {roundedDistance}");
+            }
+
+            // (Optional) Verify by fetching the leaderboard...
             var scores = await LeaderboardsService.Instance.GetScoresAsync(_leaderboardId);
             Debug.Log($"Leaderboard contains {scores.Results.Count} entries");
 
-            // Check if our score appears in the results
             bool scoreFound = false;
             foreach (var entry in scores.Results)
             {
@@ -130,9 +137,28 @@ public class LeaderDist : MonoBehaviour
         }
     }
 
+
     public async void SubmitFinalDistance()
     {
+        Debug.Log("[LeaderDist] SubmitFinalDistance() called.");
+        Debug.Log($"[LeaderDist] BestDistance BEFORE upload: {PlayerProfile.BestDistance}");
+
         if (!_isInitialized) return;
+
         await SubmitDistanceToLeaderboard();
+
+        // Also push new overall score through GameServices
+        var uploader = GameServices.Instance?.ScoreUploader;
+        Debug.Log($"[LeaderDist] GameServices.ScoreUploader found? {uploader != null}");
+        if (uploader != null)
+        {
+            await uploader.UploadScoreAsync();
+            Debug.Log("[LeaderDist] Overall score uploaded after distance run.");
+        }
+        else
+        {
+            Debug.LogWarning("[LeaderDist] GameServices.ScoreUploader is null. Overall score not uploaded.");
+        }
     }
+
 }
