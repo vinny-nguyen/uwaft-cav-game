@@ -9,7 +9,7 @@
         "Increase top speed"
       ],
       "correctIndex": 0,
-      "relatedSlideKey": "TiresSlide4"
+      "relatedSlideKey": "TiresSlide3"
     },
     {
       "question": "How do tire compounds affect performance?",
@@ -20,7 +20,7 @@
         "They have no impact on performance"
       ],
       "correctIndex": 1,
-      "relatedSlideKey": "TiresSlide6"
+      "relatedSlideKey": "TiresSlide7"
     },
     {
       "question": "What happens to tire performance in wet conditions?",
@@ -31,7 +31,7 @@
         "Wet conditions only affect tire appearance"
       ],
       "correctIndex": 2,
-      "relatedSlideKey": "TiresSlide8"
+      "relatedSlideKey": "TiresSlide11"
     },
     {
       "question": "Why is tire pressure important for EVs?",
@@ -42,7 +42,7 @@
         "It only affects comfort"
       ],
       "correctIndex": 1,
-      "relatedSlideKey": "TiresSlide9"
+      "relatedSlideKey": "TiresSlide13"
     }
   ]
 }
