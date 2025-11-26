@@ -2817,7 +2817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &120688065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2936,7 +2936,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 154}
+  m_AnchoredPosition: {x: 0, y: 159}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &142254353
@@ -3740,8 +3740,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1730370329}
-        m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+      - m_Target: {fileID: 1730370332}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: SendtoNodeMap
         m_Mode: 1
         m_Arguments:
@@ -3891,14 +3891,15 @@ PolygonCollider2D:
       - {x: 0.28156877, y: -0.08536419}
       - {x: 0.29417413, y: -0.07597349}
       - {x: 0.300228, y: -0.070286915}
-      - {x: 0.30714753, y: -0.063527174}
-      - {x: 0.3117357, y: -0.05790137}
-      - {x: 0.3233481, y: -0.041329894}
-      - {x: 0.3147811, y: -0.027038591}
-      - {x: 0.3087291, y: -0.017856814}
-      - {x: 0.3041509, y: -0.011354435}
-      - {x: 0.2980098, y: -0.0038459548}
-      - {x: 0.29337618, y: 0.0009368586}
+      - {x: 0.30714753, y: -0.063730314}
+      - {x: 0.3133607, y: -0.05769826}
+      - {x: 0.32984805, y: -0.039908025}
+      - {x: 0.31884363, y: -0.025007369}
+      - {x: 0.3148228, y: -0.018872432}
+      - {x: 0.31004146, y: -0.011557559}
+      - {x: 0.30390036, y: -0.0048615728}
+      - {x: 0.29703245, y: 0.0015462294}
+      - {x: 0.28822324, y: 0.007602127}
       - {x: 0.27511388, y: 0.011996724}
   m_UseDelaunayMesh: 0
 --- !u!1 &446923369
@@ -5012,7 +5013,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 117.10004, y: 53.30003}
+  m_AnchoredPosition: {x: 116.200005, y: 77.00003}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1102373264
@@ -5035,7 +5036,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 m
+  m_text: Distance:\n0 m
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 13f905fb022c008478d1a065fccffb76, type: 2}
   m_sharedMaterial: {fileID: 7660037894469921298, guid: 13f905fb022c008478d1a065fccffb76, type: 2}
@@ -5945,7 +5946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1730370328}
   - component: {fileID: 1730370327}
-  - component: {fileID: 1730370329}
+  - component: {fileID: 1730370333}
   - component: {fileID: 1730370332}
   - component: {fileID: 1730370330}
   - component: {fileID: 1730370331}
@@ -6016,19 +6017,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1730370329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730370326}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 460208bf92c9d9c46b5ff1586a8cf63b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _TutorialOver: {fileID: 120688064}
 --- !u!114 &1730370330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6073,9 +6061,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730370326}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b5d2d60290abcf4c86d4d87784ad447, type: 3}
+  m_Script: {fileID: 11500000, guid: f52cbcf0f15e3b04ba129d5a95e9827b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  levelOver: {fileID: 120688064}
+  resultText: {fileID: 142254353}
+  speedText: {fileID: 1998053017}
+  distanceText: {fileID: 1102373264}
+  playerCar: {fileID: 0}
+--- !u!114 &1730370333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730370326}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 460208bf92c9d9c46b5ff1586a8cf63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
+  _TutorialOver: {fileID: 120688064}
+  resultText: {fileID: 142254353}
+  speedText: {fileID: 1998053017}
+  distanceText: {fileID: 1102373264}
+  playerCar: {fileID: 0}
 --- !u!1001 &1764938612
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6467,7 +6477,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -135.09998, y: 53.3}
+  m_AnchoredPosition: {x: -136, y: 77}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1998053017
@@ -6490,7 +6500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 km/h
+  m_text: Max Speed:\n0 km/h
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 13f905fb022c008478d1a065fccffb76, type: 2}
   m_sharedMaterial: {fileID: 7660037894469921298, guid: 13f905fb022c008478d1a065fccffb76, type: 2}
