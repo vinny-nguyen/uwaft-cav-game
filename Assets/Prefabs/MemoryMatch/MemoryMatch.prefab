@@ -777,7 +777,9 @@ MonoBehaviour:
   m_text: 'Welcome to your next minigame!!
 
 
-    I'
+    In this game, there will 4 pairs
+    of cards, with each pair having a term and its definition. You job is to match
+    the term and their definition while keeping in mind the location of the cards.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

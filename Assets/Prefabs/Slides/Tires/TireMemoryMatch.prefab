@@ -102,51 +102,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[0].key
-      value: asdfasdf
+      value: Traction
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[1].key
-      value: qwerqwre
+      value: Tread
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[2].key
-      value: hjlk
+      value: TirePump
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[3].key
-      value: yuouoyui
+      value: Rubber
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[0].term
-      value: qewr
+      value: Traction
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[1].term
-      value: asdf
+      value: Tread
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[2].term
-      value: hjk
+      value: Tire Pump
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[3].term
-      value: sdfg
+      value: Rubber
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[0].definition
-      value: asdfasdfasdfasdf
+      value: How well the tire can push or stop
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[1].definition
-      value: zxvxzvzxcvzxcvz
+      value: The part of the tire that touches the road
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[2].definition
-      value: vbmvbnmvbmnvbm
+      value: A tool that fills a tire with air
       objectReference: {fileID: 0}
     - target: {fileID: 3857003436948847885, guid: c8acc8c2b34860d40b2e01fe5d9fa12a, type: 3}
       propertyPath: allPairs.Array.data[3].definition
-      value: hjlkhjlkhjlkhjlhlk
+      value: The material tires are made of
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -38,11 +38,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -92,6 +92,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: body
+      value: A special layer inside the tire that keeps the air from leaking out.
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: rect
+      value: 
+      objectReference: {fileID: 938088058387727153}
     - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: title
       value: Inner Liner
@@ -144,11 +152,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -203,8 +211,25 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: body
+      value: "The long channels in the tread that push water away so the tire doesn\u2019t
+        slip."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: rect
+      value: 
+      objectReference: {fileID: 2977235567165618930}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: title
       value: Grooves
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: offset.x
+      value: -300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: offset.y
+      value: -400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -254,11 +279,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -309,8 +334,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: body
+      value: The curved edge where the tread meets the sidewall, helping the tire
+        turn smoothly.
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: rect
+      value: 
+      objectReference: {fileID: 5765403245696156576}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: title
       value: Shoulder
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: offset.x
+      value: -150
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: offset.y
+      value: -450
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -511,11 +553,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -566,8 +608,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: body
+      value: "The side of the tire that shows the tire\u2019s information and helps
+        it stay strong."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: rect
+      value: 
+      objectReference: {fileID: 4981376360418372097}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: title
       value: Sidewall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: offset.y
+      value: -300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -617,11 +672,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -675,6 +730,23 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: body
+      value: The patterned rubber on the outside of the tire that helps the car grip
+        the road
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: rect
+      value: 
+      objectReference: {fileID: 7320448699381492693}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: title
+      value: Thread
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: offset.x
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -723,11 +795,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1616870696709788879, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -777,6 +849,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5181565699327141543, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: body
+      value: A thin layer wrapped around the tire to keep it stable at higher speeds.
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
+      propertyPath: rect
+      value: 
+      objectReference: {fileID: 7142938942656482132}
     - target: {fileID: 6055331512236222105, guid: a53a19033c20f314cb3eadf177636e70, type: 3}
       propertyPath: title
       value: Cap Fly
