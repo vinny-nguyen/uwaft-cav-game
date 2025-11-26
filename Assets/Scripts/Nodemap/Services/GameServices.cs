@@ -47,7 +47,10 @@ public class GameServices : MonoBehaviour
         }
         
         _instance = this;
-        
+
+        // NEW: persist across scenes
+        DontDestroyOnLoad(gameObject);
+
         // Register all services once at startup
         RegisterServices();
         

@@ -183,11 +183,14 @@ public class LeaderboardController : MonoBehaviour
 
             BindPodium(list);
 
-            for (int i = 3; i < list.Count; i++)
-            {
+            for(int i = 3; i < list.Count; i++)
+{
                 var dto = list[i];
                 var row = Instantiate(rowPrefab, content);
-                row.Bind(dto.Rank, dto.Name, Mathf.RoundToInt((float)dto.Score));
+
+                int displayRank = i + 1; // 0-based list index ? 1-based rank
+
+                row.Bind(displayRank, dto.Name, Mathf.RoundToInt((float)dto.Score));
                 _spawned.Add(row.gameObject);
             }
 
@@ -206,11 +209,9 @@ public class LeaderboardController : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(s)) return "Anonymous";
 
-        // First remove #1234 discriminator
-        s = TrimDiscriminator(s).Trim();
-
-        // Optional truncation for podium places
-        return s.Length <= max ? s : s.Substring(0, max - 1) + "…";
+        // Remove discriminator (e.g. #1234) and return full display name for podiums.
+        // Don't truncate here so podiums show the full name like the rows.
+        return TrimDiscriminator(s).Trim();
     }
 
     // Remove the #1234 discriminator from UGS names for display
