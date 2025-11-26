@@ -24,6 +24,7 @@ public class MapTutorialManager : MonoBehaviour
     [Header("UI References")]
     public CanvasGroup panelGroup;          // TutorialPanel
     public TextMeshProUGUI messageText;     // MessageText
+    public Image backgroundOverlay;           // HighlightImage
 
     [Header("Navigation UI")]
     public Button prevArrow;            // PrevArrow button GameObject
@@ -47,6 +48,8 @@ public class MapTutorialManager : MonoBehaviour
     {
         if (panelGroup != null)
             panelGroup.gameObject.SetActive(false);
+        if (backgroundOverlay != null)
+            backgroundOverlay.gameObject.SetActive(false);
         // Tutorial is now only started when triggered externally (e.g., after car arrives at node)
     }
 
@@ -156,6 +159,9 @@ public class MapTutorialManager : MonoBehaviour
 
         if (panelGroup != null)
             panelGroup.gameObject.SetActive(false);
+
+        if (backgroundOverlay != null)
+            backgroundOverlay.gameObject.SetActive(false);
 
         PlayerPrefs.SetInt(playerPrefsKey, 1);
         PlayerPrefs.Save();
