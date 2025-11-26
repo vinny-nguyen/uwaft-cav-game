@@ -29,8 +29,14 @@ public class ProfileHUD : MonoBehaviour
 
     public void RefreshNameFromStorage()
     {
-        var name = PlayerPrefs.GetString("GeneratedUsername", "");
+        // First try the display name that AuthManager saves
+        var name = PlayerPrefs.GetString("PlayerDisplayName", "");
 
+        // Fallback to the generated username key you already use
+        if (string.IsNullOrWhiteSpace(name))
+            name = PlayerPrefs.GetString("GeneratedUsername", "");
+
+        // Fallback to Unity Services name if signed in
         if (string.IsNullOrWhiteSpace(name) &&
             AuthenticationService.Instance != null &&
             AuthenticationService.Instance.IsSignedIn)
@@ -38,6 +44,7 @@ public class ProfileHUD : MonoBehaviour
             name = AuthenticationService.Instance.PlayerName;
         }
 
+        // Last resort
         if (string.IsNullOrWhiteSpace(name))
             name = "Player";
 

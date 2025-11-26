@@ -1,0 +1,20 @@
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class LeaderboardRow : MonoBehaviour
+{
+    [Header("UI")]
+    [SerializeField] private Image avatar;        // optional circle
+    [SerializeField] private TMP_Text nameText;   // player name
+    [SerializeField] private TMP_Text scoreText;  // text inside ScorePill
+    [SerializeField] private TMP_Text rankText;   // optional: "#4"
+
+    public void Bind(int rank, string playerName, int score, Sprite avatarSprite = null)
+    {
+        if (rankText) rankText.text = $"#{rank}";
+        if (nameText) nameText.text = LeaderboardController.PrettyName(playerName);
+        if (scoreText) scoreText.text = score.ToString("N0");
+        if (avatar && avatarSprite) avatar.sprite = avatarSprite;
+    }
+}

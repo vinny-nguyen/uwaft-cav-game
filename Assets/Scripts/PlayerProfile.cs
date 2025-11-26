@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public static class PlayerProfile
+{
+    private const string UsernameKey = "Profile.Username";
+    private const string PlayerIdKey = "Profile.PlayerId";
+    private const string BestScoreKey = "Profile.BestScore";   // example
+    private const string CoinsKey = "Profile.Coins";       // example
+    private const string BestDistanceKey = "Profile.BestDistance"; // NEW
+
+    // ---------- Identity ----------
+    public static string Username
+    {
+        get => PlayerPrefs.GetString(UsernameKey, "Player");
+        set => PlayerPrefs.SetString(UsernameKey, value);
+    }
+
+    public static string PlayerId
+    {
+        get => PlayerPrefs.GetString(PlayerIdKey, "");
+        set => PlayerPrefs.SetString(PlayerIdKey, value);
+    }
+
+    // ---------- Progress / stats ----------
+    public static int BestScore
+    {
+        get => PlayerPrefs.GetInt(BestScoreKey, 0);
+        set => PlayerPrefs.SetInt(BestScoreKey, value);
+    }
+
+    public static int Coins
+    {
+        get => PlayerPrefs.GetInt(CoinsKey, 0);
+        set => PlayerPrefs.SetInt(CoinsKey, value);
+    }
+
+    // NEW: Best distance (meters or game-specific units)
+    public static int BestDistance
+    {
+        get => PlayerPrefs.GetInt(BestDistanceKey, 0);
+        set => PlayerPrefs.SetInt(BestDistanceKey, value);
+    }
+
+    public static void Save()
+    {
+        PlayerPrefs.Save();
+    }
+}
