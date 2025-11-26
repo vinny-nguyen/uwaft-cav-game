@@ -4843,6 +4843,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1293554633}
     m_Modifications:
     - target: {fileID: -7871556540511652807, guid: c07f950f8433f68429a8e017e710905c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3286163911610860551, guid: c80950f96a1fe1d4b8e8262907a6bd3c, type: 3}
+    - target: {fileID: -7871556540511652807, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_SortingOrder
       value: 2
       objectReference: {fileID: 0}
@@ -5797,7 +5801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5d2d60290abcf4c86d4d87784ad447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  _TutorialOver: {fileID: 120688064}
+  levelOver: {fileID: 0}
 --- !u!1001 &1764938612
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5806,6 +5810,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1293554633}
     m_Modifications:
+    - target: {fileID: -7871556540511652807, guid: c07f950f8433f68429a8e017e710905c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3286163911610860551, guid: c80950f96a1fe1d4b8e8262907a6bd3c, type: 3}
     - target: {fileID: -7871556540511652807, guid: c07f950f8433f68429a8e017e710905c, type: 3}
       propertyPath: m_SortingOrder
       value: 2
