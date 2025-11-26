@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Nodemap.UI;
+using UWAFT.UI.Hotspots;
+using UnityEngine.Events;
 
 namespace Nodemap.Controllers
 {
@@ -45,6 +47,8 @@ namespace Nodemap.Controllers
         // Minigame completion tracking
         private bool _isMinigameSlide = false;
         private bool _minigameCompleted = false;
+        // Hotspot group blocking (hotspots are not minigames)
+        private HotspotGroup _hotspotGroup;
 
         void Awake()
         {
@@ -302,6 +306,23 @@ namespace Nodemap.Controllers
             var memoryMatch = currentSlide.GetComponentInChildren<MemoryMatchController>();
             var dragDrop = currentSlide.GetComponentInChildren<DragDropController>();
 
+            // Treat hotspot groups as blocking minigames when configured to require all clicks
+            // Hotspot groups are NOT minigames; treat them as a separate progression blocker
+            // Unsubscribe previous hotspot group if any
+            if (_hotspotGroup != null)
+            {
+                _hotspotGroup.OnAllClicked.RemoveListener(OnHotspotGroupCompleted);
+                _hotspotGroup = null;
+            }
+
+            var hotspotGroup = currentSlide.GetComponentInChildren<HotspotGroup>();
+            if (hotspotGroup != null && hotspotGroup.RequireAllClicked)
+            {
+                _hotspotGroup = hotspotGroup;
+                _hotspotGroup.OnAllClicked.RemoveListener(OnHotspotGroupCompleted);
+                _hotspotGroup.OnAllClicked.AddListener(OnHotspotGroupCompleted);
+            }
+
             if (wordUnscramble != null)
             {
                 _isMinigameSlide = true;
@@ -335,20 +356,22 @@ namespace Nodemap.Controllers
             UpdateNavigationButtons();
         }
 
+        // Called when a hotspot group reports all hotspots viewed
+        private void OnHotspotGroupCompleted()
+        {
+            UpdateNavigationButtons();
+        }
+
         // Update navigation button states based on minigame completion
         private void UpdateNavigationButtons()
         {
-            if (_isMinigameSlide && !_minigameCompleted)
-            {
-                // Lock navigation when on a minigame slide that hasn't been completed
-                if (nextSlideButton != null) nextSlideButton.interactable = false;
-            }
-            else
-            {
-                // Enable navigation normally
-                if (nextSlideButton != null) nextSlideButton.interactable = (currentSlideIndex < slides.Count - 1);
-                if (previousSlideButton != null) previousSlideButton.interactable = (currentSlideIndex > 0);
-            }
+            bool minigameLocked = (_isMinigameSlide && !_minigameCompleted);
+            bool hotspotLocked = (_hotspotGroup != null && _hotspotGroup.RequireAllClicked && !_hotspotGroup.IsComplete);
+
+            bool allowNext = !(minigameLocked || hotspotLocked) && (currentSlideIndex < slides.Count - 1);
+
+            if (nextSlideButton != null) nextSlideButton.interactable = allowNext;
+            if (previousSlideButton != null) previousSlideButton.interactable = (currentSlideIndex > 0);
         }
 
         #region Quiz Mode
@@ -450,6 +473,13 @@ namespace Nodemap.Controllers
 
             if (closeButton != null)
                 closeButton.onClick.RemoveListener(Hide);
+
+            // Unsubscribe hotspot group listener if set
+            if (_hotspotGroup != null)
+            {
+                _hotspotGroup.OnAllClicked.RemoveListener(OnHotspotGroupCompleted);
+                _hotspotGroup = null;
+            }
         }
     }
 }
