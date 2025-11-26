@@ -15,8 +15,8 @@ public class NodeData : ScriptableObject
 
     [Header("Upgrade Info (optional)")]
     public string upgradeText;           // "Upgraded tires improve grip..."
-    public Sprite upgradeFrame;          // Frame sprite to swap on upgrade
-    public Sprite upgradeTire;           // Tire sprite to swap on upgrade
+    public SpriteRenderer upgradeFrame;  // Frame SpriteRenderer to copy sprite from on upgrade
+    public SpriteRenderer upgradeTire;   // Tire SpriteRenderer to copy sprite from on upgrade
     
     [Header("Driving Experience")]
     [Tooltip("Name of the driving scene to load for this node (e.g., 'DrivingScene1')")]

@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 
 public class WordUnscrambleController : MonoBehaviour
 {
@@ -29,7 +28,6 @@ public class WordUnscrambleController : MonoBehaviour
     [SerializeField] private TMP_Text feedbackText;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Button skipButton;
-    [SerializeField] private Button nextButton;
     [SerializeField] private Button hintButton;
     [SerializeField] private GameObject winBanner; // panel shown on completion
 
@@ -64,11 +62,9 @@ public class WordUnscrambleController : MonoBehaviour
         // Wire buttons
         checkButton.onClick.AddListener(HandleCheck);
         if (skipButton) skipButton.onClick.AddListener(HandleSkip);
-        nextButton.onClick.AddListener(HandleNext);
         if (hintButton) hintButton.onClick.AddListener(HandleHint);
 
         if (winBanner) winBanner.SetActive(false);
-        nextButton.interactable = false;
         SetFeedback("");
 
         _solvedCount = 0;
@@ -95,7 +91,6 @@ public class WordUnscrambleController : MonoBehaviour
         _currentIndex++;
         _roundSolved = false;
         _currentHintIndex = 0; // Reset hint index for new round
-        nextButton.interactable = false;
         answerInput.text = "";
         SetFeedback("");
 
@@ -168,14 +163,14 @@ public class WordUnscrambleController : MonoBehaviour
             _roundSolved = true;
             _solvedCount++;
             SetFeedback("<color=#1BBB55>Correct!</color>");
-            nextButton.interactable = true;
             if (hintButton) hintButton.interactable = false; // Disable hint button after solving
-
+            // Update score immediately then advance after a short pause so user sees feedback
             UpdateScoreAndUpload();
+            StartCoroutine(AdvanceAfterCorrect());
         }
         else
         {
-            SetFeedback("<color=#D9534F>Try again</color>");
+            SetFeedback("<color=#D9534F>Wrong — try a hint</color>");
         }
     }
 
@@ -192,11 +187,7 @@ public class WordUnscrambleController : MonoBehaviour
         LoadNextRound();
     }
 
-    private void HandleNext()
-    {
-        if (!_roundSolved) return;
-        LoadNextRound();
-    }
+    
 
     private void HandleHint()
     {
@@ -231,11 +222,23 @@ public class WordUnscrambleController : MonoBehaviour
             int hintIdx = _currentHintIndex - 1; // Convert to 0-based index
             if (!string.IsNullOrWhiteSpace(e.hints[hintIdx]))
             {
-                hintDisplay = $"Hint {_currentHintIndex}: {e.hints[hintIdx]}";
+                int totalHints = Math.Min(3, e.hints.Length);
+                hintDisplay = $"Hint {_currentHintIndex}/{totalHints}: {e.hints[hintIdx]}";
             }
         }
 
-        if (hintText) hintText.text = hintDisplay;
+        if (hintText)
+        {
+            // If no hint has been shown yet, show a gentle prompt encouraging the player
+            if (string.IsNullOrWhiteSpace(hintDisplay) && _currentHintIndex == 0)
+            {
+                hintText.text = "Stuck? Use a hint from some help";
+            }
+            else
+            {
+                hintText.text = hintDisplay;
+            }
+        }
 
         // Disable hint button if all 3 hints shown or no more hints available
         if (hintButton)
@@ -296,51 +299,27 @@ public class WordUnscrambleController : MonoBehaviour
     private void UpdateScoreAndUpload()
     {
         int score = CalculateScore();
-
-        try
-        {
-            if (global::ScoreManager.Instance != null)
-            {
-                global::ScoreManager.Instance.ReportMiniGameScore(levelId, miniGameId, score);
-            }
-            else
-            {
-                Debug.LogWarning("[WordUnscramble] ScoreManager.Instance is null. Skipping score report.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[WordUnscramble] Reporting score failed: {ex.Message}");
-        }
-
-        try
-        {
-            var uploader = UnityEngine.Object.FindFirstObjectByType<global::TotalScoreUploader>();
-            if (uploader != null)
-            {
-                _ = RunUploadAsync(uploader);
-            }
-            else
-            {
-                Debug.LogWarning("[WordUnscramble] TotalScoreUploader not found. Skipping upload.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[WordUnscramble] Upload failed: {ex.Message}");
-        }
+        MinigameScoreHelper.ReportAndUpload(levelId, miniGameId, score);
     }
 
-    private async Task RunUploadAsync(global::TotalScoreUploader uploader)
+    private void OnDestroy()
     {
-        try
-        {
-            await uploader.UploadScoreAsync();
-            Debug.Log("[WordUnscramble] Total score uploaded successfully.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[WordUnscramble] Total score upload failed: {ex.Message}");
-        }
+        // Clean up button listeners
+        if (checkButton != null)
+            checkButton.onClick.RemoveListener(HandleCheck);
+        if (skipButton != null)
+            skipButton.onClick.RemoveListener(HandleSkip);
+        // nextButton removed from UI; no cleanup needed
+        if (hintButton != null)
+            hintButton.onClick.RemoveListener(HandleHint);
+        
+        // Clean up event listeners
+        OnCompleted?.RemoveAllListeners();
+    }
+
+    private System.Collections.IEnumerator AdvanceAfterCorrect()
+    {
+        yield return new WaitForSeconds(2f);
+        LoadNextRound();
     }
 }

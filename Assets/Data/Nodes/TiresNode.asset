@@ -18,6 +18,6 @@ MonoBehaviour:
   quizJson: {fileID: 4900000, guid: c4a85e5f26371cd4191bfd9eccd7dbd1, type: 3}
   miniGamePrefabs: []
   upgradeText: Upgraded the tires for better friction and traction
-  upgradeFrame: {fileID: 1161196385231537633, guid: ca4309ed27b279746bc39f7ae25691ba, type: 3}
-  upgradeTire: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}
+  upgradeFrame: {fileID: -7871556540511652807, guid: cb86670beb2d24a47ac0619cd4d076cd, type: 3}
+  upgradeTire: {fileID: -7871556540511652807, guid: c521224bbcc2a9347a399a72bb02b61c, type: 3}
   drivingSceneName: 1Scene

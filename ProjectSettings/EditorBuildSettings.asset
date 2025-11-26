@@ -6,7 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/UpdatedNodemap.unity
+    guid: d39d26d66b60f904dae60071e451a8b9
+  - enabled: 1
     path: Assets/Scenes/1Scene.unity
     guid: ae294c7b948cbf0439f34aa5129cbf76
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 841df3f2a3e70c04e848847b84ed4f51, type: 2}
   m_UseUCBPForAssetBundles: 0

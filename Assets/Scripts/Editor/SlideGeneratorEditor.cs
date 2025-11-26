@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Nodemap.UI;
 
 /// <summary>
 /// Editor tool to automatically generate slide prefabs from images and populate SlideDeck assets.

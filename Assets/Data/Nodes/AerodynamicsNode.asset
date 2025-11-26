@@ -18,5 +18,6 @@ MonoBehaviour:
   quizJson: {fileID: 0}
   miniGamePrefabs: []
   upgradeText: 
-  upgradeFrame: {fileID: -980750134191345388, guid: 923b6faeee841e54aaee97dadba0f88d, type: 3}
-  upgradeTire: {fileID: 937003066455063984, guid: 0dbff47a1bcfd8a4296b1e971fa4fb27, type: 3}
+  upgradeFrame: {fileID: -7871556540511652807, guid: 383c29597e07abc409f9f7ad81c374e9, type: 3}
+  upgradeTire: {fileID: -7871556540511652807, guid: c521224bbcc2a9347a399a72bb02b61c, type: 3}
+  drivingSceneName: 
